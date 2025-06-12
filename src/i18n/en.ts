@@ -208,6 +208,14 @@ const en = {
   customGlobalNode: 'Custom Global Node',
   proxiesRelationship: 'Proxies Relationship',
   displayProxiesRelationship: 'Display Proxies Relationship',
+  editBackend: 'Edit Backend',
+  editBackendTitle: 'Edit Backend Configuration',
+  selectBackend: 'Select Backend',
+  backendConnectionFailed: 'Backend connection failed, please check configuration',
+  backendConfigSaved: 'Backend configuration saved successfully',
+  saveFailed: 'Save failed',
+  checking: 'Checking...',
+  secondaryPathOptional: 'Secondary Path (Optional)',
 }
 
 export type LANG_MESSAGE = typeof en

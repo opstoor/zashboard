@@ -3,7 +3,7 @@ import { ROUTE_NAME } from '@/constant'
 import { getUrlFromBackend } from '@/helper/utils'
 import router from '@/router'
 import { autoUpgradeCore, checkUpgradeCore } from '@/store/settings'
-import { activeBackend, activeUuid, removeBackend } from '@/store/setup'
+import { activeBackend, activeUuid } from '@/store/setup'
 import type { Backend, Config, DNSQuery, Proxy, ProxyProvider, Rule, RuleProvider } from '@/types'
 import axios, { AxiosError } from 'axios'
 import { debounce } from 'lodash'
@@ -26,9 +26,12 @@ axios.interceptors.response.use(
     const { showNotification } = useNotification()
 
     if (error.status === 401 && activeUuid.value) {
-      removeBackend(activeUuid.value)
+      const currentBackendUuid = activeUuid.value
       activeUuid.value = null
-      router.push({ name: ROUTE_NAME.setup })
+      router.push({
+        name: ROUTE_NAME.setup,
+        query: { editBackend: currentBackendUuid },
+      })
       nextTick(() => {
         showNotification({ content: 'unauthorizedTip' })
       })

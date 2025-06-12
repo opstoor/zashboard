@@ -207,6 +207,14 @@ const zh: LANG_MESSAGE = {
   customGlobalNode: '自定义全局节点',
   proxiesRelationship: '节点关系',
   displayProxiesRelationship: '显示节点关系',
+  editBackend: '编辑后端',
+  editBackendTitle: '修改后端配置',
+  selectBackend: '选择后端',
+  backendConnectionFailed: '后端连接失败，请检查配置信息',
+  backendConfigSaved: '后端配置保存成功',
+  saveFailed: '保存失败',
+  checking: '检查中...',
+  secondaryPathOptional: '次级路径 (可选)',
 }
 
 export default zh

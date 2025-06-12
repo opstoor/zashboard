@@ -30,6 +30,16 @@ export const addBackend = (backend: Omit<Backend, 'uuid'>) => {
   activeUuid.value = id
 }
 
+export const updateBackend = (uuid: string, backend: Omit<Backend, 'uuid'>) => {
+  const index = backendList.value.findIndex((end) => end.uuid === uuid)
+  if (index !== -1) {
+    backendList.value[index] = {
+      ...backend,
+      uuid,
+    }
+  }
+}
+
 export const removeBackend = (uuid: string) => {
   backendList.value = backendList.value.filter((end) => end.uuid !== uuid)
   sourceIPLabelList.value.forEach((label) => {

@@ -210,6 +210,14 @@ const ru: LANG_MESSAGE = {
   customGlobalNode: 'Пользовательский глобальный узел',
   proxiesRelationship: 'Отношение прокси',
   displayProxiesRelationship: 'Показать отношение прокси',
+  editBackend: 'Редактировать бэкенд',
+  editBackendTitle: 'Редактировать конфигурацию бэкенда',
+  selectBackend: 'Выберите бэкенд',
+  backendConnectionFailed: 'Не удалось подключиться к бэкенду, проверьте конфигурацию',
+  backendConfigSaved: 'Конфигурация бэкенда успешно сохранена',
+  saveFailed: 'Не удалось сохранить',
+  checking: 'Проверка...',
+  secondaryPathOptional: 'Дополнительный путь (необязательно)',
 }
 
 export default ru

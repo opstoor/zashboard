@@ -106,6 +106,12 @@
             </button>
             <button
               class="btn btn-circle btn-ghost btn-sm"
+              @click="editBackend(element)"
+            >
+              <PencilIcon class="h-4 w-4" />
+            </button>
+            <button
+              class="btn btn-circle btn-ghost btn-sm"
               @click="() => removeBackend(element.uuid)"
             >
               <TrashIcon class="h-4 w-4" />
@@ -118,12 +124,19 @@
         <ImportSettings />
       </div>
     </div>
+
+    <!-- 编辑Backend Modal -->
+    <EditBackendModal
+      v-model="showEditModal"
+      :default-backend-uuid="editingBackendUuid"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import ImportSettings from '@/components/common/ImportSettings.vue'
 import TextInput from '@/components/common/TextInput.vue'
+import EditBackendModal from '@/components/settings/EditBackendModal.vue'
 import LanguageSelect from '@/components/settings/LanguageSelect.vue'
 import { useNotification } from '@/composables/notification'
 import { ROUTE_NAME } from '@/constant'
@@ -131,8 +144,13 @@ import { getLabelFromBackend, getUrlFromBackend } from '@/helper/utils'
 import router from '@/router'
 import { activeUuid, addBackend, backendList, removeBackend } from '@/store/setup'
 import type { Backend } from '@/types'
-import { ChevronUpDownIcon, QuestionMarkCircleIcon, TrashIcon } from '@heroicons/vue/24/outline'
-import { reactive } from 'vue'
+import {
+  ChevronUpDownIcon,
+  PencilIcon,
+  QuestionMarkCircleIcon,
+  TrashIcon,
+} from '@heroicons/vue/24/outline'
+import { reactive, ref, watch } from 'vue'
 import Draggable from 'vuedraggable'
 
 const form = reactive({
@@ -146,9 +164,31 @@ const form = reactive({
 
 const { showNotification } = useNotification()
 
+const showEditModal = ref(false)
+const editingBackendUuid = ref<string>('')
+
+// 监听路由参数，自动打开编辑模态框
+watch(
+  () => router.currentRoute.value.query.editBackend,
+  (backendUuid) => {
+    if (backendUuid && typeof backendUuid === 'string') {
+      editingBackendUuid.value = backendUuid
+      showEditModal.value = true
+      // 清除路由参数以避免重复触发
+      router.replace({ query: {} })
+    }
+  },
+  { immediate: true },
+)
+
 const selectBackend = (uuid: string) => {
   activeUuid.value = uuid
   router.push({ name: ROUTE_NAME.proxies })
+}
+
+const editBackend = (backend: Backend) => {
+  editingBackendUuid.value = backend.uuid
+  showEditModal.value = true
 }
 
 const handleSubmit = async (form: Omit<Backend, 'uuid'>, quiet = false) => {
