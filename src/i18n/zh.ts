@@ -140,7 +140,7 @@ const zh: LANG_MESSAGE = {
   manual: '手动',
   tableWidthMode: '表格宽度模式',
   testFinishedTip: '{number} 测试完成',
-  testFinishedResultTip: '测试完成，{success} 测试成功，{failed} 测试超时',
+  testFinishedResultTip: '测试完成: {success} 成功，{failed} 超时',
   testFailedTip: '测速超时',
   updateFinishedTip: '{number} 更新完成',
   independentLatencyTest: '独立延迟测试',
@@ -189,8 +189,6 @@ const zh: LANG_MESSAGE = {
   sync: '同步',
   upgradeSuccess: '更新成功',
   numberOfChartsInSidebar: '侧边栏图表数量',
-  displayWeights: '显示权重',
-  flushWeights: '清空权重',
   flushSmartWeights: '清空Smart权重',
   IPInfoAPI: 'IP信息API',
   IPInfoAPITip:

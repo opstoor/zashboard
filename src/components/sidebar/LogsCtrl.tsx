@@ -153,7 +153,10 @@ export default defineComponent({
 
       const logTypeSelect = (
         <select
-          class={['join-item select select-sm', props.isLargeCtrlsBar ? 'w-36' : 'w-24 flex-1']}
+          class={[
+            'join-item select select-sm',
+            props.isLargeCtrlsBar ? 'w-36' : 'w-24 max-w-40 flex-1',
+          ]}
           v-model={logTypeFilter.value}
         >
           <option value="">{t('all')}</option>
@@ -232,22 +235,24 @@ export default defineComponent({
         return (
           <div class="flex flex-col gap-2 p-2">
             <div class="flex w-full justify-between gap-2">
-              <div class="join flex-1">
-                {levelSelect}
-                {logTypeSelect}
-              </div>
+              <div class="join flex-1">{levelSelect}</div>
               {buttons}
             </div>
-            <div>{searchInput}</div>
+            <div class="join">
+              {logTypeSelect}
+              {searchInput}
+            </div>
           </div>
         )
       }
       return (
         <div class="flex items-center justify-between gap-2 p-2">
-          <div class="join max-w-128 flex-1">
+          <div class="flex items-center gap-2">
             {levelSelect}
-            {logTypeSelect}
-            {searchInput}
+            <div class="join max-w-128">
+              {logTypeSelect}
+              {searchInput}
+            </div>
           </div>
           {buttons}
         </div>
