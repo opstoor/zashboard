@@ -13,6 +13,7 @@
       </option>
     </select>
     <button
+      v-if="isEdit"
       class="btn join-item btn-sm"
       @click="editBackend"
       :disabled="!activeBackend"
@@ -39,6 +40,10 @@ import { activeBackend, activeUuid, backendList } from '@/store/setup'
 import { PencilIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { computed, ref } from 'vue'
 import EditBackendModal from './EditBackendModal.vue'
+
+defineProps<{
+  isEdit: boolean
+}>()
 
 const opts = computed(() => {
   return backendList.value.map((b) => {

@@ -7,12 +7,13 @@
         ref="swiperRef"
       >
         <div
-          v-if="ctrlsMap[route.name as string] && isSidebarCollapsed"
+          v-if="ctrlsMap[route.name as string]"
           class="bg-base-100 ctrls-bar w-full"
+          ref="ctrlsBarRef"
         >
           <component
             :is="ctrlsMap[route.name as string]"
-            :horizontal="true"
+            :is-large-ctrls-bar="isLargeCtrlsBar"
           />
         </div>
 
@@ -98,11 +99,10 @@ import { initLogs } from '@/store/logs'
 import { initSatistic } from '@/store/overview'
 import { fetchProxies, proxiesTabShow } from '@/store/proxies'
 import { fetchRules, rulesTabShow } from '@/store/rules'
-import { isSidebarCollapsed } from '@/store/settings'
 import { activeBackend, activeUuid, backendList } from '@/store/setup'
 import type { Backend } from '@/types'
-import { useDocumentVisibility } from '@vueuse/core'
-import { ref, watch, type Component } from 'vue'
+import { useDocumentVisibility, useElementSize } from '@vueuse/core'
+import { computed, ref, watch, type Component } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
 
 const ctrlsMap: Record<string, Component> = {
@@ -119,6 +119,12 @@ const styleForSafeArea = {
 
 const router = useRouter()
 const { swiperRef } = useSwipeRouter()
+
+const ctrlsBarRef = ref<HTMLDivElement>()
+const { width: ctrlsBarWidth } = useElementSize(ctrlsBarRef)
+const isLargeCtrlsBar = computed(() => {
+  return ctrlsBarWidth.value > 720
+})
 
 watch(
   activeUuid,

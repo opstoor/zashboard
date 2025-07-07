@@ -2,7 +2,7 @@ import { updateProxyProviderAPI } from '@/api'
 import { collapsedBus } from '@/composables/bus'
 import { renderGroups } from '@/composables/proxies'
 import { PROXY_SORT_TYPE, PROXY_TAB_TYPE } from '@/constant'
-import { getMinCardWidth, isMiddleScreen } from '@/helper/utils'
+import { getMinCardWidth } from '@/helper/utils'
 import { configs, updateConfigs } from '@/store/config'
 import {
   allProxiesLatencyTest,
@@ -41,9 +41,9 @@ import TextInput from '../common/TextInput.vue'
 export default defineComponent({
   name: 'ProxiesCtrl',
   props: {
-    horizontal: {
+    isLargeCtrlsBar: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   setup(props) {
@@ -130,11 +130,7 @@ export default defineComponent({
               <a
                 role="tab"
                 key={type}
-                class={[
-                  'tab',
-                  proxiesTabShow.value === type && 'tab-active',
-                  !props.horizontal && 'flex-1',
-                ]}
+                class={['tab', proxiesTabShow.value === type && 'tab-active']}
                 onClick={() => (proxiesTabShow.value = type)}
               >
                 {t(type)} ({count})
@@ -142,18 +138,6 @@ export default defineComponent({
             )
           })}
         </div>
-      )
-      const upgradeAll = proxiesTabShow.value === PROXY_TAB_TYPE.PROVIDER && (
-        <button
-          class="btn btn-sm"
-          onClick={handlerClickUpdateAllProviders}
-        >
-          {isUpgrading.value ? (
-            <span class="loading loading-dots loading-md"></span>
-          ) : (
-            t('updateAllProviders')
-          )}
-        </button>
       )
       const upgradeAllIcon = proxiesTabShow.value === PROXY_TAB_TYPE.PROVIDER && (
         <button
@@ -165,10 +149,7 @@ export default defineComponent({
       )
       const modeSelect = configs.value && (
         <select
-          class={[
-            'select select-sm min-w-24',
-            props.horizontal ? 'inline-block max-md:flex-1 md:min-w-40' : 'w-0 flex-1',
-          ]}
+          class={['select select-sm inline-block', props.isLargeCtrlsBar ? 'min-w-40' : 'min-w-24']}
           v-model={configs.value.mode}
           onChange={handlerModeChange}
         >
@@ -235,7 +216,7 @@ export default defineComponent({
 
       const searchInput = (
         <TextInput
-          class={props.horizontal && !isMiddleScreen.value ? 'w-32 max-w-80 flex-1' : 'w-80'}
+          class={['w-32 flex-1', props.isLargeCtrlsBar && 'max-w-80']}
           v-model={proxiesFilter.value}
           placeholder={`${t('search')} | ${t('searchMultiple')}`}
           clearable={true}
@@ -319,52 +300,34 @@ export default defineComponent({
         </>
       )
 
-      if (props.horizontal) {
-        if (isMiddleScreen.value) {
-          return (
-            <div class="flex flex-col gap-2 p-2">
-              {hasProviders.value && (
-                <div class="flex gap-2">
-                  {tabs}
-                  {upgradeAllIcon}
-                </div>
-              )}
-              <div class="flex w-full gap-2">
-                {modeSelect}
-                {searchInput}
-                {settingsModal}
-                {toggleCollapseAll}
-                {latencyTestAll}
-              </div>
-            </div>
-          )
-        }
+      if (!props.isLargeCtrlsBar) {
         return (
-          <div class="flex gap-2 p-2">
-            {hasProviders.value && tabs}
-            {modeSelect}
-            <div class="flex flex-1">{searchInput}</div>
-            {upgradeAllIcon}
-            {settingsModal}
-            {toggleCollapseAll}
-            {latencyTestAll}
-          </div>
-        )
-      }
-
-      return (
-        <div class="flex flex-col gap-2 p-2">
-          {upgradeAll}
-          {hasProviders.value && tabs}
-          {
-            <div class="flex gap-2">
+          <div class="flex flex-col gap-2 p-2">
+            {hasProviders.value && (
+              <div class="flex gap-2">
+                {tabs}
+                {upgradeAllIcon}
+              </div>
+            )}
+            <div class="flex w-full gap-2">
               {modeSelect}
+              {searchInput}
               {settingsModal}
               {toggleCollapseAll}
               {latencyTestAll}
             </div>
-          }
-          {<div class="flex gap-2">{searchInput}</div>}
+          </div>
+        )
+      }
+      return (
+        <div class="flex gap-2 p-2">
+          {hasProviders.value && tabs}
+          {modeSelect}
+          <div class="flex flex-1">{searchInput}</div>
+          {upgradeAllIcon}
+          {settingsModal}
+          {toggleCollapseAll}
+          {latencyTestAll}
         </div>
       )
     }

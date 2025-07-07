@@ -1,6 +1,5 @@
 import { isSingBox } from '@/api'
 import { LOG_LEVEL } from '@/constant'
-import { isMiddleScreen } from '@/helper/utils'
 import { initLogs, isPaused, logFilter, logLevel, logTypeFilter, logs } from '@/store/logs'
 import { logRetentionLimit, logSearchHistory } from '@/store/settings'
 import {
@@ -19,9 +18,9 @@ import TextInput from '../common/TextInput.vue'
 
 export default defineComponent({
   props: {
-    horizontal: {
+    isLargeCtrlsBar: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   setup(props) {
@@ -154,10 +153,7 @@ export default defineComponent({
 
       const logTypeSelect = (
         <select
-          class={[
-            'join-item select select-sm w-24 max-md:flex-1 md:w-36',
-            !props.horizontal && 'w-full',
-          ]}
+          class={['join-item select select-sm', props.isLargeCtrlsBar ? 'w-36' : 'w-24 flex-1']}
           v-model={logTypeFilter.value}
         >
           <option value="">{t('all')}</option>
@@ -232,42 +228,28 @@ export default defineComponent({
         </div>
       )
 
-      if (props.horizontal) {
-        if (isMiddleScreen.value) {
-          return (
-            <div class="flex flex-col gap-2 p-2">
-              <div class="flex w-full justify-between gap-2">
-                <div class="join flex-1">
-                  {levelSelect}
-                  {logTypeSelect}
-                </div>
-                {buttons}
-              </div>
-              <div>{searchInput}</div>
-            </div>
-          )
-        }
+      if (!props.isLargeCtrlsBar) {
         return (
-          <div class="flex items-center justify-between gap-2 p-2">
-            <div class="join max-w-128 flex-1">
-              {levelSelect}
-              {logTypeSelect}
-              {searchInput}
+          <div class="flex flex-col gap-2 p-2">
+            <div class="flex w-full justify-between gap-2">
+              <div class="join flex-1">
+                {levelSelect}
+                {logTypeSelect}
+              </div>
+              {buttons}
             </div>
-            {buttons}
+            <div>{searchInput}</div>
           </div>
         )
       }
       return (
-        <div class="flex w-full flex-col items-center gap-2 p-2">
-          <div class="flex w-full items-center gap-2">
-            {logTypeSelect}
-            {buttons}
-          </div>
-          <div class="join w-full">
+        <div class="flex items-center justify-between gap-2 p-2">
+          <div class="join max-w-128 flex-1">
             {levelSelect}
+            {logTypeSelect}
             {searchInput}
           </div>
+          {buttons}
         </div>
       )
     }

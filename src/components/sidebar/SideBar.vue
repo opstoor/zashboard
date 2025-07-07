@@ -1,9 +1,9 @@
 <template>
   <div
     class="sidebar bg-base-200 text-base-content scrollbar-hidden h-full overflow-x-hidden p-2 transition-all"
-    :class="isSidebarCollapsed ? 'w-18 px-0' : 'w-[21rem]'"
+    :class="isSidebarCollapsed ? 'w-18 px-0' : 'w-64'"
   >
-    <div :class="twMerge('flex h-full flex-col gap-2', isSidebarCollapsed ? 'w-18' : 'w-xs')">
+    <div :class="twMerge('flex h-full flex-col gap-2', isSidebarCollapsed ? 'w-18 px-0' : 'w-60')">
       <ul class="menu w-full flex-1">
         <li
           v-for="r in renderRoutes"
@@ -43,15 +43,8 @@
         </div>
       </template>
       <template v-else>
-        <OverviewCarousel
-          v-if="route.name !== ROUTE_NAME.overview"
-          class="w-xs"
-        />
+        <OverviewCarousel v-if="route.name !== ROUTE_NAME.overview" />
         <div class="card">
-          <component
-            v-if="sidebarComp"
-            :is="sidebarComp"
-          />
           <CommonSidebar />
         </div>
       </template>
@@ -61,10 +54,6 @@
 
 <script setup lang="ts">
 import CommonSidebar from '@/components/sidebar/CommonCtrl.vue'
-import ConnectionCtrl from '@/components/sidebar/ConnectionCtrl.tsx'
-import LogsCtrl from '@/components/sidebar/LogsCtrl.tsx'
-import ProxiesCtrl from '@/components/sidebar/ProxiesCtrl.tsx'
-import RulesCtrl from '@/components/sidebar/RulesCtrl.tsx'
 import { ROUTE_ICON_MAP, ROUTE_NAME } from '@/constant'
 import { renderRoutes } from '@/helper'
 import { useTooltip } from '@/helper/tooltip'
@@ -72,7 +61,6 @@ import router from '@/router'
 import { isSidebarCollapsed, showStatisticsWhenSidebarCollapsed } from '@/store/settings'
 import { ArrowRightCircleIcon } from '@heroicons/vue/24/outline'
 import { twMerge } from 'tailwind-merge'
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import OverviewCarousel from './OverviewCarousel.vue'
@@ -87,21 +75,6 @@ const mouseenterHandler = (e: MouseEvent, r: string) => {
     placement: 'right',
   })
 }
-
-const sidebarCompMap = {
-  [ROUTE_NAME.connections]: ConnectionCtrl,
-  [ROUTE_NAME.logs]: LogsCtrl,
-  [ROUTE_NAME.proxies]: ProxiesCtrl,
-  [ROUTE_NAME.rules]: RulesCtrl,
-}
-
-const sidebarComp = computed(() => {
-  if (route.name) {
-    return sidebarCompMap[route.name as keyof typeof sidebarCompMap]
-  }
-
-  return null
-})
 
 const route = useRoute()
 </script>

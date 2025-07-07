@@ -1,6 +1,5 @@
 <template>
   <select
-    v-if="!horizontal"
     class="join-item select select-sm"
     v-model="sourceIPFilter"
   >
@@ -21,10 +20,6 @@ import { connections, sourceIPFilter } from '@/store/connections'
 import * as ipaddr from 'ipaddr.js'
 import { isEqual, uniq } from 'lodash'
 import { computed, ref, watch } from 'vue'
-
-defineProps<{
-  horizontal?: boolean
-}>()
 
 const sourceIPs = computed(() => {
   return uniq(connections.value.map((conn) => conn.metadata.sourceIP)).sort((a, b) => {

@@ -1,7 +1,6 @@
 import { updateRuleProviderAPI } from '@/api'
 import { useNotification } from '@/composables/notification'
 import { RULE_TAB_TYPE } from '@/constant'
-import { isMiddleScreen } from '@/helper/utils'
 import { fetchRules, ruleProviderList, rules, rulesFilter, rulesTabShow } from '@/store/rules'
 import { displayLatencyInRule, displayNowNodeInRule } from '@/store/settings'
 import { ArrowPathIcon, WrenchScrewdriverIcon } from '@heroicons/vue/24/outline'
@@ -13,9 +12,9 @@ import TextInput from '../common/TextInput.vue'
 export default defineComponent({
   name: 'RulesCtrl',
   props: {
-    horizontal: {
+    isLargeCtrlsBar: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   setup(props) {
@@ -78,11 +77,7 @@ export default defineComponent({
               <a
                 role="tab"
                 key={type}
-                class={[
-                  'tab',
-                  rulesTabShow.value === type && 'tab-active',
-                  !props.horizontal && 'flex-1',
-                ]}
+                class={['tab', rulesTabShow.value === type && 'tab-active']}
                 onClick={() => (rulesTabShow.value = type)}
               >
                 {t(type)} ({count})
@@ -90,18 +85,6 @@ export default defineComponent({
             )
           })}
         </div>
-      )
-      const upgradeAll = rulesTabShow.value === RULE_TAB_TYPE.PROVIDER && (
-        <button
-          class="btn btn-sm"
-          onClick={handlerClickUpgradeAllProviders}
-        >
-          {isUpgrading.value ? (
-            <span class="loading loading-dots loading-md"></span>
-          ) : (
-            t('updateAllProviders')
-          )}
-        </button>
       )
       const upgradeAllIcon = rulesTabShow.value === RULE_TAB_TYPE.PROVIDER && (
         <button
@@ -114,7 +97,7 @@ export default defineComponent({
 
       const searchInput = (
         <TextInput
-          class="w-full md:w-80"
+          class={props.isLargeCtrlsBar ? 'w-80' : 'w-32 flex-1'}
           v-model={rulesFilter.value}
           placeholder={`${t('search')} | ${t('searchMultiple')}`}
           clearable={true}
@@ -152,44 +135,29 @@ export default defineComponent({
         </>
       )
 
-      if (props.horizontal) {
-        if (isMiddleScreen.value) {
-          return (
-            <div class="flex flex-col gap-2 p-2">
-              {hasProviders.value && (
-                <div class="flex gap-2">
-                  {tabs}
-                  {upgradeAllIcon}
-                </div>
-              )}
-              <div class="flex w-full gap-2">
-                {searchInput}
-                {settingsModal}
-              </div>
-            </div>
-          )
-        }
+      if (!props.isLargeCtrlsBar) {
         return (
-          <div class="flex flex-wrap gap-2 p-2">
-            {hasProviders.value && tabs}
-            {searchInput}
-            <div class="flex-1"></div>
-            {upgradeAllIcon}
-            {settingsModal}
-          </div>
-        )
-      }
-
-      return (
-        <div class="flex flex-col gap-2 p-2">
-          {upgradeAll}
-          {hasProviders.value && tabs}
-          {
-            <div class="flex gap-2">
+          <div class="flex flex-col gap-2 p-2">
+            {hasProviders.value && (
+              <div class="flex gap-2">
+                {tabs}
+                {upgradeAllIcon}
+              </div>
+            )}
+            <div class="flex w-full gap-2">
               {searchInput}
               {settingsModal}
             </div>
-          }
+          </div>
+        )
+      }
+      return (
+        <div class="flex flex-wrap gap-2 p-2">
+          {hasProviders.value && tabs}
+          {searchInput}
+          <div class="flex-1"></div>
+          {upgradeAllIcon}
+          {settingsModal}
         </div>
       )
     }

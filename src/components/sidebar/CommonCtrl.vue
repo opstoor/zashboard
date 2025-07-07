@@ -1,22 +1,15 @@
 <template>
   <div class="flex flex-col gap-2 p-2 text-sm">
     <StatisticsStats type="ctrl" />
+    <BackendSwitch :is-edit="false" />
     <div class="flex gap-2">
-      <span class="shrink-0">
-        {{ $t('version') }}
-      </span>
-      <BackendVersion />
-    </div>
-
-    <div class="flex">
       <button
         class="btn btn-circle btn-sm"
         @click="isSidebarCollapsed = true"
       >
         <ArrowLeftCircleIcon class="h-5 w-5" />
       </button>
-      <div class="flex-1"></div>
-      <BackendSwitch />
+      <BackendVersion />
     </div>
   </div>
 </template>

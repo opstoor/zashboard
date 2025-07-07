@@ -1,7 +1,6 @@
 import { disconnectAllAPI, disconnectByIdAPI } from '@/api'
 import { SORT_DIRECTION, SORT_TYPE } from '@/constant'
 import { useTooltip } from '@/helper/tooltip'
-import { isLargeScreen, isMiddleScreen } from '@/helper/utils'
 import {
   connectionFilter,
   connections,
@@ -22,7 +21,7 @@ import {
   WrenchScrewdriverIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
-import { computed, defineComponent, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DialogWrapper from '../common/DialogWrapper.vue'
 import TextInput from '../common/TextInput.vue'
@@ -49,9 +48,9 @@ export default defineComponent({
     SourceIPFilter,
   },
   props: {
-    horizontal: {
+    isLargeCtrlsBar: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   setup(props) {
@@ -59,13 +58,9 @@ export default defineComponent({
     const settingsModel = ref(false)
     const { showTip } = useTooltip()
 
-    const isSmallScreen = computed(() => {
-      return useConnectionCard.value ? isLargeScreen.value : isMiddleScreen.value
-    })
-
     return () => {
       const sortForCards = (
-        <div class={['flex w-full items-center gap-1 text-sm', props.horizontal && 'lg:w-auto']}>
+        <div class="flex w-full items-center gap-1 text-sm lg:w-auto">
           <span class="shrink-0">{t('sortBy')}</span>
           <div class="join flex-1 max-lg:w-0">
             <select
@@ -146,7 +141,7 @@ export default defineComponent({
           placeholder={`${t('search')} | ${t('searchMultiple')}`}
           clearable={true}
           before-close={true}
-          class={props.horizontal && !isSmallScreen.value ? 'w-32 max-w-80 flex-1' : 'w-full'}
+          class={props.isLargeCtrlsBar ? 'w-32 max-w-80 flex-1' : 'w-full'}
         />
       )
 
@@ -169,58 +164,40 @@ export default defineComponent({
         </>
       )
 
-      if (props.horizontal) {
-        if (isSmallScreen.value) {
-          return (
-            <div class="flex flex-wrap items-center gap-2 p-2">
-              <div class="flex w-full items-center justify-between gap-2">
-                <ConnectionTabs />
-                {!useConnectionCard.value && (
-                  <div class="flex items-center gap-1">
-                    {settingsModal}
-                    {buttons}
-                  </div>
-                )}
-              </div>
-              {useConnectionCard.value && (
-                <div class="flex w-full items-center gap-2">
-                  {sortForCards}
+      if (!props.isLargeCtrlsBar) {
+        return (
+          <div class="flex flex-wrap items-center gap-2 p-2">
+            <div class="flex w-full items-center justify-between gap-2">
+              <ConnectionTabs />
+              {!useConnectionCard.value && (
+                <div class="flex items-center gap-1">
                   {settingsModal}
                   {buttons}
                 </div>
               )}
-              <div class="join w-full">
-                <SourceIPFilter class="w-40" />
-                {searchInput}
-              </div>
             </div>
-          )
-        }
-        return (
-          <div class="flex items-center gap-2 p-2">
-            <ConnectionTabs />
-            {useConnectionCard.value && sortForCards}
-            <SourceIPFilter class="w-40" />
-            <div class="flex flex-1">{searchInput}</div>
-            {settingsModal}
-            {buttons}
+            {useConnectionCard.value && (
+              <div class="flex w-full items-center gap-2">
+                {sortForCards}
+                {settingsModal}
+                {buttons}
+              </div>
+            )}
+            <div class="join w-full">
+              <SourceIPFilter class="w-40" />
+              {searchInput}
+            </div>
           </div>
         )
       }
-
       return (
-        <div class="flex flex-wrap items-center gap-2 p-2">
-          <ConnectionTabs
-            class="w-full"
-            horizental={false}
-          />
-          <div class="flex w-full items-center gap-2">
-            <SourceIPFilter class="w-40 flex-1" />
-            {settingsModal}
-            {buttons}
-          </div>
-          {searchInput}
+        <div class="flex items-center gap-2 p-2">
+          <ConnectionTabs />
           {useConnectionCard.value && sortForCards}
+          <SourceIPFilter class="w-40" />
+          <div class="flex flex-1">{searchInput}</div>
+          {settingsModal}
+          {buttons}
         </div>
       )
     }
