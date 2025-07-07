@@ -30,6 +30,7 @@ export const downloadTotal = ref(0)
 export const uploadTotal = ref(0)
 
 let cancel: () => void
+let previousConnectionsMap = new Map<string, Connection>()
 
 export const initConnections = () => {
   cancel?.()
@@ -37,6 +38,7 @@ export const initConnections = () => {
   closedConnections.value = []
   downloadTotal.value = 0
   uploadTotal.value = 0
+  previousConnectionsMap.clear()
 
   const ws = fetchConnectionsAPI<{
     connections: ConnectionRawMessage[]
@@ -54,18 +56,12 @@ export const initConnections = () => {
       return
     }
 
-    const activeConnsMap = activeConnections.value.reduce(
-      (acc, c) => {
-        acc[c.id] = c
-        return acc
-      },
-      {} as Record<string, Connection>,
-    )
+    const currentConnectionsMap = new Map<string, Connection>()
 
-    const activeConns =
+    activeConnections.value =
       data.connections?.map((conn) => {
         const connection = conn as Connection
-        const preConnection = activeConnsMap[connection.id]
+        const preConnection = previousConnectionsMap.get(connection.id)
 
         if (
           (connection.metadata.destinationPort === '443' || connection.metadata.sniffHost) &&
@@ -77,19 +73,20 @@ export const initConnections = () => {
         if (!preConnection) {
           connection.downloadSpeed = 0
           connection.uploadSpeed = 0
-          return connection
+        } else {
+          connection.downloadSpeed = connection.download - preConnection.download
+          connection.uploadSpeed = connection.upload - preConnection.upload
         }
 
-        delete activeConnsMap[connection.id]
-        connection.downloadSpeed = connection.download - preConnection.download
-        connection.uploadSpeed = connection.upload - preConnection.upload
+        previousConnectionsMap.delete(connection.id)
+        currentConnectionsMap.set(connection.id, connection)
         return connection
       }) ?? []
 
-    closedConnections.value = [...closedConnections.value, ...Object.values(activeConnsMap)].slice(
-      -500,
-    )
-    activeConnections.value = activeConns
+    closedConnections.value = closedConnections.value
+      .concat(Array.from(previousConnectionsMap.values()))
+      .slice(-500)
+    previousConnectionsMap = currentConnectionsMap
   })
 
   if (autoDisconnectIdleUDP.value) {
