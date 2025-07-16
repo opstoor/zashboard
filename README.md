@@ -49,14 +49,14 @@ docker run -d -p 80:80 ghcr.io/zephyruso/zashboard:latest
 1. The connection page has two layout styles: customizable cards and customizable tables. It is recommended to use tables on PC and cards on mobile devices.
 2. The connection table can be dragged with the left mouse button, and right-clicking can copy cell content.
 3. Right-clicking on a node / node group card will perform a speedtest for the node / node group.
-4. You can enable the automatic show/hide of the Global node in the settings.
+4. The proxy group sorting is based on the node order in the GLOBAL group. In Mihomo, it follows the configuration file order, while in sing-box, route.final is placed first, with the rest following the configuration file order. If you need custom ordering, you can specify the order by overriding the GLOBAL group.
 
 ## 提示
 
 1. 连接页面有两种布局样式：可自定义卡片和可自定义表格。建议在 PC 上使用表格，在移动设备上使用卡片。
 2. 连接表格可被鼠标左键拖动，右键可复制单元格内容。
 3. 右键点击节点/节点组卡片可对节点/节点组进行测速。
-4. 设置中可打开Global节点的自动显示/隐藏
+4. 面板的节点组排序是根据GLOBAL组中的节点顺序排序的，在Mihomo中会是按配置文件的顺序，在sing-box中会把route.final放到第一位，其余按照配置文件顺序，如果你需要自定义顺序，可通过覆盖GLOBAL组指定顺序
 
 ## URL params format
 
