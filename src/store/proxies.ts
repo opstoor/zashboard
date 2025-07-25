@@ -21,7 +21,6 @@ import { isProxyGroup } from '@/helper'
 import type { Proxy, ProxyProvider } from '@/types'
 import { useStorage } from '@vueuse/core'
 import { debounce, last } from 'lodash'
-import pLimit from 'p-limit'
 import { computed, ref } from 'vue'
 import { activeConnections } from './connections'
 import {
@@ -237,26 +236,19 @@ const proxyLatencyTestDebounced = async (
   return res
 }
 
-const limiter = pLimit(5)
 const testLatencyOneByOneWithTip = async (nodes: string[], url = speedtestUrl.value) => {
   let testDone = 0
   let testFailed = 0
 
   return await Promise.all(
-    nodes.map((name) =>
-      limiter(async () => {
-        const res = await proxyLatencyTestDebounced(
-          name,
-          url,
-          Math.min(3000, speedtestTimeout.value),
-        )
-        testDone++
-        if (res.status !== 200) {
-          testFailed++
-        }
-        latencyTip(testDone, nodes.length, testFailed)
-      }),
-    ),
+    nodes.map(async (name) => {
+      const res = await proxyLatencyTestDebounced(name, url, Math.min(3000, speedtestTimeout.value))
+      testDone++
+      if (res.status !== 200) {
+        testFailed++
+      }
+      latencyTip(testDone, nodes.length, testFailed)
+    }),
   )
 }
 

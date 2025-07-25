@@ -99,7 +99,7 @@ useKeyboard()
       v-if="tipShowModel"
     >
       <div
-        class="breaks-all alert flex p-2 pr-5 whitespace-normal"
+        class="alert flex p-2 pr-5 break-all whitespace-normal"
         :class="tipType"
       >
         {{ tipContent }}

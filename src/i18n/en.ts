@@ -20,6 +20,7 @@ const en = {
   noContent: 'No Content',
   flushFakeIP: 'Flush Fake IP',
   chains: 'Chains',
+  outbound: 'Outbound',
   sortBy: 'Sort By',
   rule: 'Rule',
   sourceIP: 'Source IP',

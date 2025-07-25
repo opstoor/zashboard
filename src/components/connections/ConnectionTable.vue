@@ -261,6 +261,7 @@ const columnWidthMap = useStorage('config/table-column-width', {
   [CONNECTIONS_TABLE_ACCESSOR_KEY.DlSpeed]: 80,
   [CONNECTIONS_TABLE_ACCESSOR_KEY.Upload]: 80,
   [CONNECTIONS_TABLE_ACCESSOR_KEY.UlSpeed]: 80,
+  [CONNECTIONS_TABLE_ACCESSOR_KEY.Outbound]: 80,
   [CONNECTIONS_TABLE_ACCESSOR_KEY.Type]: 150,
   [CONNECTIONS_TABLE_ACCESSOR_KEY.Process]: 150,
   [CONNECTIONS_TABLE_ACCESSOR_KEY.SourceIP]: 150,
@@ -357,6 +358,14 @@ const columns: ColumnDef<Connection>[] = [
         },
         chains,
       )
+    },
+  },
+  {
+    header: () => t(CONNECTIONS_TABLE_ACCESSOR_KEY.Outbound),
+    id: CONNECTIONS_TABLE_ACCESSOR_KEY.Outbound,
+    accessorFn: (original) => original.chains[0],
+    cell: ({ row }) => {
+      return h(ProxyName, { name: row.original.chains[0], size: 'small' })
     },
   },
   {

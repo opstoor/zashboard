@@ -1,0 +1,47 @@
+name: 功能请求
+description: 为这个项目提出一个想法
+title: '[Feature]: '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您提出功能建议！在提交之前，请搜索[现有issues](https://github.com/Zephyruso/zashboard/issues)看看您的想法是否已经被提出过。
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: 功能描述
+      description: 请提供您想要请求的功能的清晰简洁的描述
+      placeholder: '请详细描述您想要的功能'
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-needed
+    attributes:
+      label: 为什么需要这个功能？
+      description: 解释为什么这个功能很重要，以及它将如何改进项目或用户体验
+      placeholder: '解释这个功能的重要性和价值'
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: 使用场景
+      description: 列出这个功能将被应用的场景或使用案例
+      placeholder: |
+        使用场景1：
+        使用场景2：
+        使用场景3：
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 额外信息
+      description: 任何其他上下文、示例或参考资料，以帮助理解功能请求
+      placeholder: '其他相关信息、示例或参考资料'
+    validations:
+      required: false

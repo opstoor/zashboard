@@ -32,6 +32,7 @@ export enum CONNECTIONS_TABLE_ACCESSOR_KEY {
   Host = 'host',
   Rule = 'rule',
   Chains = 'chains',
+  Outbound = 'outbound',
   DlSpeed = 'dlSpeed',
   UlSpeed = 'ulSpeed',
   Download = 'dl',

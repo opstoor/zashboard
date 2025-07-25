@@ -22,6 +22,7 @@ const ru: LANG_MESSAGE = {
   noContent: 'Нет содержимого',
   flushFakeIP: 'Очистить Fake IP',
   chains: 'Цепочки',
+  outbound: 'Исходящий',
   sortBy: 'Сортировать по',
   rule: 'Правило',
   sourceIP: 'Исходный IP',

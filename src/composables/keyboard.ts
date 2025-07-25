@@ -18,7 +18,7 @@ export const useKeyboard = () => {
       return
     }
 
-    if (!activeBackend.value) {
+    if (!activeBackend.value || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
       return
     }
 

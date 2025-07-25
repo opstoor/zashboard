@@ -95,6 +95,9 @@ export default defineComponent<{
             )}
           </span>
         ),
+        [CONNECTIONS_TABLE_ACCESSOR_KEY.Outbound]: (
+          <span class="w-60 grow truncate break-all">{conn.chains[0]}</span>
+        ),
         [CONNECTIONS_TABLE_ACCESSOR_KEY.Download]: (
           <div class="flex items-center gap-1 whitespace-nowrap">
             {prettyBytesHelper(conn.download)}
