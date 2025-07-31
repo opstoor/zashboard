@@ -32,7 +32,7 @@
       <div
         class="text-base-content/60 flex items-end justify-between text-sm max-sm:flex-col max-sm:items-start"
       >
-        <div class="min-h-8">
+        <div class="min-h-10">
           <div v-if="subscriptionInfo">
             {{ subscriptionInfo.expireStr }}
           </div>

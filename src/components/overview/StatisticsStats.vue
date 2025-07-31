@@ -30,7 +30,7 @@ const classMap = {
     list: 'grid w-full grid-cols-3 gap-1 rounded-lg bg-base-200/50 p-3',
     item: 'flex flex-col items-start',
     label: 'text-xs text-base-content/70',
-    value: 'text-base',
+    value: 'text-sm',
   },
   ctrl: {
     list: 'grid w-full grid-cols-2 gap-2 rounded-lg bg-base-200/50 p-2',

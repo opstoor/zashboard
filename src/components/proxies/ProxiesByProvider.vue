@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useCalculateMaxProxies } from '@/composables/calculateMaxProxies'
-import { SCROLLABLE_PARENT_CLASS } from '@/helper/utils'
 import { handlerProxySelect, proxyProviederList } from '@/store/proxies'
 import { computed } from 'vue'
 import ProxyNodeCard from './ProxyNodeCard.vue'
@@ -42,10 +41,7 @@ const { maxProxies } = useCalculateMaxProxies()
 </script>
 
 <template>
-  <div
-    class="flex max-h-108 flex-col gap-2 overflow-x-hidden overflow-y-auto"
-    :class="SCROLLABLE_PARENT_CLASS"
-  >
+  <div class="flex flex-col gap-2">
     <div
       v-for="([providerName, proxies], index) in groupedProxies"
       :key="index"
@@ -56,7 +52,7 @@ const { maxProxies } = useCalculateMaxProxies()
       >
         {{ providerName }}
       </p>
-      <ProxyNodeGrid style="max-height: unset !important">
+      <ProxyNodeGrid>
         <ProxyNodeCard
           v-for="node in showFullContent ? proxies : proxies.slice(0, maxProxies)"
           :key="node"

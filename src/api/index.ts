@@ -67,7 +67,7 @@ watch(
       isCoreUpdateAvailable.value = await fetchBackendUpdateAvailableAPI()
 
       if (isCoreUpdateAvailable.value && autoUpgradeCore.value) {
-        upgradeCoreAPI()
+        upgradeCoreAPI('auto')
       }
     }
   },
@@ -164,6 +164,10 @@ export const flushFakeIPAPI = () => {
   return axios.post('/cache/fakeip/flush')
 }
 
+export const flushDNSCacheAPI = () => {
+  return axios.post('/cache/dns/flush')
+}
+
 export const reloadConfigsAPI = () => {
   return axios.put('/configs?reload=true', { path: '', payload: '' })
 }
@@ -176,8 +180,10 @@ export const updateGeoDataAPI = () => {
   return axios.post('/configs/geo')
 }
 
-export const upgradeCoreAPI = () => {
-  return axios.post('/upgrade')
+export const upgradeCoreAPI = (type: 'release' | 'alpha' | 'auto') => {
+  const url = type === 'auto' ? '/upgrade' : `/upgrade?channel=${type}`
+
+  return axios.post(url)
 }
 
 export const restartCoreAPI = () => {

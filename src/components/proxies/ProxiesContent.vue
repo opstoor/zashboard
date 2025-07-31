@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useCalculateMaxProxies } from '@/composables/calculateMaxProxies'
-import { SCROLLABLE_PARENT_CLASS } from '@/helper/utils'
 import { handlerProxySelect } from '@/store/proxies'
 import { computed } from 'vue'
 import ProxyNodeCard from './ProxyNodeCard.vue'
@@ -20,10 +19,7 @@ const proxies = computed(() =>
 </script>
 
 <template>
-  <ProxyNodeGrid
-    ref="grid"
-    :class="SCROLLABLE_PARENT_CLASS"
-  >
+  <ProxyNodeGrid>
     <ProxyNodeCard
       v-for="node in proxies"
       :key="node"

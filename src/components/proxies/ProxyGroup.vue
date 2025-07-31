@@ -37,7 +37,7 @@
         />
       </div>
       <div
-        class="text-base-content/80 mt-0.5 flex items-center gap-2"
+        class="text-base-content/80 mt-1 flex items-center gap-2"
         @contextmenu.prevent.stop="handlerLatencyTest"
       >
         <div class="flex flex-1 items-center gap-1 text-sm">

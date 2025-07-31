@@ -124,6 +124,6 @@ const importSettingsFromFile = () => {
 }
 const importSettingsFromUrlHandler = async () => {
   importDialogShow.value = false
-  await importSettingsFromUrl()
+  await importSettingsFromUrl(true)
 }
 </script>

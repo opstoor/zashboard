@@ -94,34 +94,52 @@
       </template>
 
       <div
-        class="grid max-w-3xl grid-cols-2 gap-2 md:grid-cols-3 xl:max-w-6xl xl:grid-cols-6"
-        v-if="version"
+        class="grid max-w-6xl grid-cols-2 gap-2"
+        :class="hasSmartGroup ? 'md:grid-cols-4 xl:grid-cols-7' : 'md:grid-cols-3 xl:grid-cols-6'"
       >
         <template v-if="!isSingBox || displayAllFeatures">
           <button
             v-if="!activeBackend?.disableUpgradeCore"
-            :class="twMerge('btn btn-primary btn-sm', isCoreUpgrading ? 'animate-pulse' : '')"
-            @click="handlerClickUpgradeCore"
+            class="btn btn-primary btn-sm"
+            @click="showUpgradeCoreModal = true"
           >
             {{ $t('upgradeCore') }}
           </button>
           <button
-            :class="twMerge('btn btn-sm', isCoreRestarting ? 'animate-pulse' : '')"
+            class="btn btn-sm"
             @click="handlerClickRestartCore"
           >
+            <span
+              v-if="isCoreRestarting"
+              class="loading loading-spinner loading-md"
+            ></span>
             {{ $t('restartCore') }}
           </button>
           <button
-            :class="twMerge('btn btn-sm', isConfigReloading ? 'animate-pulse' : '')"
+            class="btn btn-sm"
             @click="handlerClickReloadConfigs"
           >
+            <span
+              v-if="isConfigReloading"
+              class="loading loading-spinner loading-md"
+            ></span>
             {{ $t('reloadConfigs') }}
           </button>
           <button
-            :class="twMerge('btn btn-sm', isGeoUpdating ? 'animate-pulse' : '')"
+            class="btn btn-sm"
             @click="handlerClickUpdateGeo"
           >
+            <span
+              v-if="isGeoUpdating"
+              class="loading loading-spinner loading-md"
+            ></span>
             {{ $t('updateGeoDatabase') }}
+          </button>
+          <button
+            class="btn btn-sm"
+            @click="flushDNSCacheAPI"
+          >
+            {{ $t('flushDNSCache') }}
           </button>
         </template>
         <button
@@ -141,11 +159,13 @@
       <div class="divider"></div>
       <DnsQuery />
     </div>
+    <UpgradeCoreModal v-model="showUpgradeCoreModal" />
   </div>
 </template>
 
 <script setup lang="ts">
 import {
+  flushDNSCacheAPI,
   flushFakeIPAPI,
   flushSmartGroupWeightsAPI,
   isCoreUpdateAvailable,
@@ -153,21 +173,18 @@ import {
   reloadConfigsAPI,
   restartCoreAPI,
   updateGeoDataAPI,
-  upgradeCoreAPI,
-  version,
 } from '@/api'
 import BackendVersion from '@/components/common/BackendVersion.vue'
 import BackendSwitch from '@/components/settings/BackendSwitch.vue'
 import DnsQuery from '@/components/settings/DnsQuery.vue'
-import { handlerUpgradeSuccess } from '@/helper'
 import { configs, fetchConfigs, updateConfigs } from '@/store/config'
 import { fetchProxies, hasSmartGroup } from '@/store/proxies'
 import { fetchRules } from '@/store/rules'
 import { autoUpgradeCore, checkUpgradeCore, displayAllFeatures } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
 import type { Config } from '@/types'
-import { twMerge } from 'tailwind-merge'
 import { ref } from 'vue'
+import UpgradeCoreModal from './UpgradeCoreModal.vue'
 
 const portList = [
   {
@@ -198,6 +215,8 @@ const reloadAll = () => {
   fetchProxies()
 }
 
+const showUpgradeCoreModal = ref(false)
+
 const isCoreRestarting = ref(false)
 const handlerClickRestartCore = async () => {
   if (isCoreRestarting.value) return
@@ -210,21 +229,6 @@ const handlerClickRestartCore = async () => {
     isCoreRestarting.value = false
   } catch {
     isCoreRestarting.value = false
-  }
-}
-
-const isCoreUpgrading = ref(false)
-const handlerClickUpgradeCore = async () => {
-  if (isCoreUpgrading.value) return
-  isCoreUpgrading.value = true
-  try {
-    await upgradeCoreAPI()
-    reloadAll()
-    handlerUpgradeSuccess()
-    isCoreUpgrading.value = false
-  } catch (e) {
-    console.error(e)
-    isCoreUpgrading.value = false
   }
 }
 

@@ -18,36 +18,12 @@ import {
 import { getMinCardWidth, isMiddleScreen, isPreferredDark } from '@/helper/utils'
 import type { SourceIPLabel } from '@/types'
 import { useStorage } from '@vueuse/core'
-import { isEmpty } from 'lodash'
-import { v4 as uuid } from 'uuid'
 import { computed } from 'vue'
 
 // global
-const themeOld = useStorage<string>('config/theme', 'default')
-const isDefault = themeOld.value === 'default'
-
-export const defaultTheme = useStorage<string>(
-  'config/default-theme',
-  isDefault ? 'light' : themeOld.value,
-)
+export const defaultTheme = useStorage<string>('config/default-theme', 'light')
 export const darkTheme = useStorage<string>('config/dark-theme', 'dark')
-export const autoTheme = useStorage<boolean>('config/auto-theme', isDefault)
-
-const replaceLegacyTheme = (theme: string) => {
-  if (theme === 'light-daisyui-v5') {
-    return 'light'
-  }
-
-  if (theme === 'dark-daisyui-v5') {
-    return 'dark'
-  }
-
-  return theme
-}
-
-defaultTheme.value = replaceLegacyTheme(defaultTheme.value)
-darkTheme.value = replaceLegacyTheme(darkTheme.value)
-
+export const autoTheme = useStorage<boolean>('config/auto-theme', true)
 export const theme = computed(() => {
   if (autoTheme.value && isPreferredDark.value) {
     return darkTheme.value
@@ -137,8 +113,7 @@ export const manageHiddenGroup = useStorage('config/manage-hidden-group-mode', f
 export const displayGlobalByMode = useStorage('config/display-global-by-mode', false)
 export const customGlobalNode = useStorage('config/custom-global-node-name', GLOBAL)
 
-const iconSize = useStorage('config/icon-size', 14)
-export const proxyGroupIconSize = useStorage('config/proxy-group-icon-size', iconSize.value + 4)
+export const proxyGroupIconSize = useStorage('config/proxy-group-icon-size', 24)
 export const proxyGroupIconMargin = useStorage('config/proxy-group-icon-margin', 6)
 export const proxyCountMode = useStorage('config/proxies-count-mode', PROXY_COUNT_MODE.ALIVE_TOTAL)
 export const iconReflectList = useStorage<
@@ -179,39 +154,7 @@ export const connectionCardLines = useStorage<CONNECTIONS_TABLE_ACCESSOR_KEY[][]
   DETAILED_CARD_STYLE,
 )
 
-const filterLegacyDetailsOpt = (key: string) => key !== 'details'
-const replaceLegacyKey = (key: string) => {
-  if (key === 'transferType') {
-    return CONNECTIONS_TABLE_ACCESSOR_KEY.DestinationType
-  }
-
-  if (key === 'proxyNodeAddress') {
-    return CONNECTIONS_TABLE_ACCESSOR_KEY.RemoteAddress
-  }
-
-  return key as CONNECTIONS_TABLE_ACCESSOR_KEY
-}
-
-connectionTableColumns.value = connectionTableColumns.value
-  .filter(filterLegacyDetailsOpt)
-  .map(replaceLegacyKey)
-connectionCardLines.value = connectionCardLines.value.map((lines) =>
-  lines.filter(filterLegacyDetailsOpt).map(replaceLegacyKey),
-)
-
-const sourceIPLabelMap = useStorage<Record<string, string>>('config/source-ip-label-map', {})
-
-export const sourceIPLabelList = useStorage<SourceIPLabel[]>('config/source-ip-label-list', () => {
-  const oldMap = sourceIPLabelMap.value
-
-  if (isEmpty(oldMap)) {
-    return []
-  }
-
-  return Object.entries(oldMap)
-    .sort((prev, next) => prev[0].localeCompare(next[0]))
-    .map(([key, label]) => ({ key, label, id: uuid() }))
-})
+export const sourceIPLabelList = useStorage<SourceIPLabel[]>('config/source-ip-label-list', [])
 
 // rules
 export const displayNowNodeInRule = useStorage('config/display-now-node-in-rule', true)

@@ -8,7 +8,7 @@
   >
     <div
       v-if="modalMode"
-      class="fixed inset-0 z-40 overflow-hidden backdrop-blur-sm transition-all duration-300"
+      class="bg-base-300/50 fixed inset-0 z-40 overflow-hidden"
     ></div>
     <div
       class="card absolute overflow-hidden transition-[max-height,width,transform] duration-250 ease-in-out will-change-[max-height,width,transform]"
