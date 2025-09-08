@@ -1,9 +1,6 @@
 <template>
   <div class="size-full overflow-x-hidden">
-    <ConnectionCardList
-      v-if="useConnectionCard"
-      class="overflow-x-hidden p-2"
-    />
+    <ConnectionCardList v-if="useConnectionCard" />
     <ConnectionTable v-else />
     <ConnectionDetails />
   </div>
