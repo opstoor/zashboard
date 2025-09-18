@@ -144,6 +144,13 @@ export const iconReflectList = useStorage<
 >('config/icon-reflect-list', [])
 export const groupProxiesByProvider = useStorage('config/group-proxies-by-provider', false)
 export const useSmartGroupSort = useStorage('config/use-smart-group-sort', false)
+export const groupTestUrls = useStorage<
+  {
+    name: string
+    url: string
+    uuid: string
+  }[]
+>('config/group-test-urls', [])
 
 // connections
 export const useConnectionCard = useStorage('config/use-connecticon-card', window.innerWidth < 640)

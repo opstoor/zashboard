@@ -148,9 +148,10 @@ const zh: LANG_MESSAGE = {
   mostUploadProxy: '最多上传节点',
   manual: '手动',
   tableWidthMode: '表格宽度模式',
-  testFinishedTip: '{number} 测试完成',
-  testFinishedResultTip: '测试完成: {success} 成功，{failed} 超时',
-  testFailedTip: '测速超时',
+  testFailed: '测速超时',
+  testFinishedTip: "{name}{'@'}{url} \n{number}/{total} 测试完成",
+  testFinishedResultTip: "{name}{'@'}{url} \n测试完成: {success} 成功，{failed} 超时",
+  testFailedTip: "{name}{'@'}{url} \n测速超时",
   updateFinishedTip: '{number} 更新完成',
   independentLatencyTest: '独立延迟测试',
   independentLatencyTestTip:
@@ -234,6 +235,10 @@ const zh: LANG_MESSAGE = {
   getting: '获取中...',
   mmdbSizeTip: 'mmdb等格式的geo文件无法统计数量，因此数量为0',
   displayFinalOutbound: '显示最终出口节点',
+  groupTestUrls: '组测试链接',
+  groupTestUrlsTip:
+    '对于从面板手动触发的测试，此处设置测试链接 > 配置中的链接 > 面板全局测试链接，但是对于UrlTest/Fallback等具有核心内部的定时测速逻辑的组，仍然需要修改配置中的链接，此处仅推荐Selector等场景',
+  groupName: '组名',
 }
 
 export default zh

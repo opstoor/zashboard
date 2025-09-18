@@ -100,7 +100,8 @@ const subscriptionInfo = computed(() => {
         ? `${t('expire')}: ${t('noExpire')}`
         : `${t('expire')}: ${dayjs(Expire * 1000).format('YYYY-MM-DD')}`
 
-    const usageStr = `${used} / ${total} ( ${percentage}% )`
+    const usedStr = `${used} / ${total}`
+    const usageStr = Total === 0 ? usedStr : `${usedStr} ( ${percentage}% )`
 
     return {
       expireStr,

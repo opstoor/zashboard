@@ -40,6 +40,14 @@
           />
           ms
         </div>
+        <div class="flex items-center gap-2">
+          {{ $t('ipv6Test') }}
+          <input
+            class="toggle"
+            type="checkbox"
+            v-model="IPv6test"
+          />
+        </div>
         <div class="flex w-full items-center gap-2">
           <span> {{ $t('independentLatencyTest') }} </span>
           <input
@@ -52,13 +60,11 @@
             @mouseenter="independentLatencyTestTip"
           />
         </div>
-        <div class="flex items-center gap-2">
-          {{ $t('ipv6Test') }}
-          <input
-            class="toggle"
-            type="checkbox"
-            v-model="IPv6test"
-          />
+        <div
+          v-if="independentLatencyTest"
+          class="col-span-full"
+        >
+          <GroupTestUrlsSettings />
         </div>
       </div>
       <div class="divider"></div>
@@ -201,6 +207,7 @@ import {
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline'
 import { useI18n } from 'vue-i18n'
 import TextInput from '../common/TextInput.vue'
+import GroupTestUrlsSettings from './GroupTestUrlsSettings.vue'
 import IconSettings from './IconSettings.vue'
 
 const { showTip } = useTooltip()

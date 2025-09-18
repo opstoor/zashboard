@@ -6,7 +6,7 @@ import { EMOJIS, FONTS } from './constant'
 import { autoImportSettings, importSettingsFromUrl } from './helper/autoImportSettings'
 import { backgroundImage } from './helper/indexeddb'
 import { initNotification } from './helper/notification'
-import { isPreferredDark } from './helper/utils'
+import { getBackendFromUrl, isPreferredDark } from './helper/utils'
 import {
   blurIntensity,
   dashboardTransparent,
@@ -15,6 +15,8 @@ import {
   font,
   theme,
 } from './store/settings'
+import { activeUuid, backendList } from './store/setup'
+import type { Backend } from './types'
 
 const app = ref<HTMLElement>()
 const toast = ref<HTMLElement>()
@@ -70,6 +72,31 @@ watch(
     immediate: true,
   },
 )
+
+const isSameBackend = (b1: Omit<Backend, 'uuid'>, b2: Omit<Backend, 'uuid'>) => {
+  return (
+    b1.host === b2.host &&
+    b1.port === b2.port &&
+    b1.password === b2.password &&
+    b1.protocol === b2.protocol &&
+    b1.secondaryPath === b2.secondaryPath
+  )
+}
+
+const autoSwitchToURLBackendIfExists = () => {
+  const backend = getBackendFromUrl()
+
+  if (backend) {
+    for (const b of backendList.value) {
+      if (isSameBackend(b, backend)) {
+        activeUuid.value = b.uuid
+        return
+      }
+    }
+  }
+}
+
+autoSwitchToURLBackendIfExists()
 
 onMounted(() => {
   if (autoImportSettings.value) {

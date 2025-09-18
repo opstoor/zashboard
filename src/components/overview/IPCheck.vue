@@ -72,8 +72,8 @@ const QUERYING_IP_INFO = {
 }
 
 const FAILED_IP_INFO = {
-  ip: [t('testFailedTip'), ''],
-  ipWithPrivacy: [t('testFailedTip'), ''],
+  ip: [t('testFailed'), ''],
+  ipWithPrivacy: [t('testFailed'), ''],
 }
 
 const getIPs = () => {

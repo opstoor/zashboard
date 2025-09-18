@@ -149,9 +149,10 @@ const ru: LANG_MESSAGE = {
   mostUploadProxy: 'Прокси с наибольшей отдачей',
   manual: 'Ручной',
   tableWidthMode: 'Режим ширины таблицы',
-  testFinishedTip: '{number} Тест завершен',
-  testFinishedResultTip: 'Тест завершен: {success} Успешно, {failed} Таймаут',
-  testFailedTip: 'Тест задержки таймаут',
+  testFailed: 'Тест задержки таймаут',
+  testFinishedTip: "{name}{'@'}{url} \n{number}/{total} Тест завершен",
+  testFinishedResultTip: "{name}{'@'}{url} \nТест завершен: {success} Успешно, {failed} Таймаут",
+  testFailedTip: "{name}{'@'}{url} \nТест задержки таймаут",
   updateFinishedTip: '{number} Обновление завершено',
   independentLatencyTest: 'Независимый тест задержки',
   independentLatencyTestTip:
@@ -237,6 +238,10 @@ const ru: LANG_MESSAGE = {
   getting: 'Получение...',
   mmdbSizeTip: 'Если вы используете mmdb-формат файлов geo, то количество будет равно 0',
   displayFinalOutbound: 'Показать конечный исходящий узел',
+  groupTestUrls: 'Группа тестовых URL',
+  groupTestUrlsTip:
+    'Для ручных тестов, запущенных из панели, установите тестовые URL > URL в конфигурации > Глобальные тестовые URL, но для групп с UrlTest/Fallback и т.д., URL в конфигурации все равно нужно изменить, поэтому это рекомендуется только для Selector и т.д. ',
+  groupName: 'Группа имени',
 }
 
 export default ru

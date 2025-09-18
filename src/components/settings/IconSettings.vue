@@ -32,7 +32,7 @@
             <TextInput
               class="w-32"
               v-model="iconReflect.name"
-              placeholder="Name"
+              :placeholder="$t('groupName')"
             />
             <ArrowRightCircleIcon class="h-4 w-4 shrink-0" />
             <TextInput
@@ -58,11 +58,13 @@
       :menus="
         proxyGroupList.filter((group) => !iconReflectList.some((item) => item.name === group))
       "
+      @keydown.enter="addIconReflect"
     />
     <ArrowRightCircleIcon class="h-4 w-4 shrink-0" />
     <TextInput
       v-model="newIconReflect.icon"
       placeholder="Icon URL"
+      @keydown.enter="addIconReflect"
     />
     <button
       class="btn btn-sm btn-circle"

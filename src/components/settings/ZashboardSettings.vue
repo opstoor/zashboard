@@ -17,6 +17,12 @@
           <span> zashboard </span>
           <span class="text-sm font-normal">
             {{ zashboardVersion }}
+            <span
+              v-if="commitId"
+              class="text-xs"
+            >
+              {{ commitId }}
+            </span>
           </span>
         </a>
       </div>
@@ -214,6 +220,7 @@ import ThemeSelector from './ThemeSelector.vue'
 
 const customThemeModal = ref(false)
 const displayBgProperty = ref(false)
+const commitId = __COMMIT_ID__
 
 watch(customBackgroundURL, (value) => {
   if (value) {
