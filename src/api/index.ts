@@ -155,6 +155,10 @@ export const updateRuleProviderAPI = (name: string) => {
   return axios.put(`/providers/rules/${encodeURIComponent(name)}`)
 }
 
+export const blockconnectByIdAPI = (id: string) => {
+  return axios.delete(`/connections/smart/${id}`)
+}
+
 export const disconnectByIdAPI = (id: string) => {
   return axios.delete(`/connections/${id}`)
 }

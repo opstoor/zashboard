@@ -1,6 +1,6 @@
 <template>
   <div
-    class="max-sm:scrollbar-hidden h-full p-2 sm:pr-1"
+    class="max-md:scrollbar-hidden h-full p-2 md:pr-1"
     :class="disableProxiesPageScroll ? 'overflow-y-hidden' : 'overflow-y-scroll'"
     ref="proxiesRef"
     @scroll.passive="handleScroll"
@@ -44,11 +44,10 @@ import { PROXY_TAB_TYPE } from '@/constant'
 import { isMiddleScreen } from '@/helper/utils'
 import { fetchProxies, proxiesTabShow } from '@/store/proxies'
 import { twoColumnProxyGroup } from '@/store/settings'
-import { useElementSize, useSessionStorage } from '@vueuse/core'
+import { useSessionStorage } from '@vueuse/core'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 const proxiesRef = ref()
-const { width } = useElementSize(proxiesRef)
 const scrollStatus = useSessionStorage('cache/proxies-scroll-status', {
   [PROXY_TAB_TYPE.PROVIDER]: 0,
   [PROXY_TAB_TYPE.PROXIES]: 0,
@@ -92,19 +91,12 @@ onMounted(() => {
   })
 })
 
-const isSmallScreen = computed(() => {
-  return width.value < 640 && isMiddleScreen.value
-})
-const isWidthEnough = computed(() => {
-  return width.value > 720
-})
-
 const renderComponent = computed(() => {
   if (proxiesTabShow.value === PROXY_TAB_TYPE.PROVIDER) {
     return ProxyProvider
   }
 
-  if (isSmallScreen.value && displayTwoColumns.value) {
+  if (isMiddleScreen.value && displayTwoColumns.value) {
     return ProxyGroupForMobile
   }
 
@@ -112,12 +104,7 @@ const renderComponent = computed(() => {
 })
 
 const displayTwoColumns = computed(() => {
-  if (renderGroups.value.length < 2 || !twoColumnProxyGroup.value) {
-    return false
-  }
-  return (
-    isWidthEnough.value || (isSmallScreen.value && proxiesTabShow.value === PROXY_TAB_TYPE.PROXIES)
-  )
+  return twoColumnProxyGroup.value && renderGroups.value.length > 1
 })
 
 const filterContent: <T>(all: T[], target: number) => T[] = (all, target) => {

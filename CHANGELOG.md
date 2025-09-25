@@ -2,6 +2,21 @@
 
 # Changelog
 
+## [1.105.0](https://github.com/Zephyruso/zashboard/compare/v1.104.0...v1.105.0) (2025-09-22)
+
+
+### Features
+
+* auto switch to url backend if exist ([1315204](https://github.com/Zephyruso/zashboard/commit/1315204385835c3367415f55db0d636b6a940415))
+* interrupt connection when switching clash_mode ([3921572](https://github.com/Zephyruso/zashboard/commit/3921572103aa1c6918cff94e59fbed8dbc4916a4))
+
+
+### Bug Fixes
+
+* grouped connection table style ([3f4e082](https://github.com/Zephyruso/zashboard/commit/3f4e0828ef68fe8b4369c43175224b712d7d8f87))
+* notification style ([9ceeca4](https://github.com/Zephyruso/zashboard/commit/9ceeca42c7fd1c7ea8dae68b9d2e908ff87362d7))
+* total is 0 in subscription ([b45e17a](https://github.com/Zephyruso/zashboard/commit/b45e17a30fad0a4afa8d72cdf028a0489fcb8115))
+
 ## [1.104.0](https://github.com/Zephyruso/zashboard/compare/v1.103.1...v1.104.0) (2025-09-16)
 
 

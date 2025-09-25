@@ -119,6 +119,7 @@ export type ConnectionRawMessage = {
     specialRules: string
     type: string
     uid: number
+    smartBlock: string
   }
 }
 

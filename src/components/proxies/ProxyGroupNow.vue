@@ -53,7 +53,7 @@ const tipForFixed = (e: Event) => {
     return
   }
 
-  showTip(e, t('tipForFixed'), {
+  showTip(e, t('tipForFixed', { type: proxyGroup.value.type }), {
     delay: [500, 0],
   })
 }

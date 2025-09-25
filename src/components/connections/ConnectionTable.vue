@@ -154,20 +154,23 @@
             >
               <template v-if="cell.column.getIsGrouped()">
                 <template v-if="rows[virtualRow.index].getCanExpand()">
-                  <div class="flex items-center">
-                    <MagnifyingGlassMinusIcon
-                      v-if="rows[virtualRow.index].getIsExpanded()"
-                      class="mr-1 inline-block h-4 w-4"
-                    />
-                    <MagnifyingGlassPlusIcon
-                      v-else
-                      class="mr-1 inline-block h-4 w-4"
+                  <div class="flex items-center overflow-hidden">
+                    <component
+                      :is="
+                        rows[virtualRow.index].getIsExpanded()
+                          ? MagnifyingGlassMinusIcon
+                          : MagnifyingGlassPlusIcon
+                      "
+                      class="mr-1 inline-block h-4 w-4 shrink-0"
                     />
                     <FlexRender
                       :render="cell.column.columnDef.cell"
                       :props="cell.getContext()"
+                      class="shrink-1 overflow-hidden"
                     />
-                    <span class="ml-1"> ({{ rows[virtualRow.index].subRows.length }}) </span>
+                    <span class="ml-1 shrink-0">
+                      ({{ rows[virtualRow.index].subRows.length }})
+                    </span>
                   </div>
                 </template>
               </template>
@@ -189,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { disconnectByIdAPI } from '@/api'
+import { blockconnectByIdAPI, disconnectByIdAPI } from '@/api'
 import { useConnections } from '@/composables/connections'
 import {
   CONNECTION_TAB_TYPE,
@@ -224,6 +227,7 @@ import {
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
   MapPinIcon,
+  NoSymbolIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import {
@@ -279,7 +283,7 @@ const columns: ColumnDef<Connection>[] = [
     enableSorting: false,
     id: CONNECTIONS_TABLE_ACCESSOR_KEY.Close,
     cell: ({ row }) => {
-      return h(
+      const closeButton = h(
         'button',
         {
           class: 'btn btn-xs btn-circle',
@@ -296,6 +300,30 @@ const columns: ColumnDef<Connection>[] = [
           }),
         ],
       )
+
+      if (row.original.metadata.smartBlock === 'normal') {
+        const degradeButton = h(
+          'button',
+          {
+            class: 'btn btn-xs btn-circle',
+            onClick: (e) => {
+              const connection = row.original
+
+              e.stopPropagation()
+              blockconnectByIdAPI(connection.id)
+            },
+          },
+          [
+            h(NoSymbolIcon, {
+              class: 'h-4 w-4',
+            }),
+          ],
+        )
+
+        return h('div', { class: 'flex gap-1' }, [closeButton, degradeButton])
+      }
+
+      return closeButton
     },
   },
   {

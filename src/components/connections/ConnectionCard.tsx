@@ -1,4 +1,4 @@
-import { disconnectByIdAPI } from '@/api'
+import { blockconnectByIdAPI, disconnectByIdAPI } from '@/api'
 import { useBounceOnVisible } from '@/composables/bouncein'
 import { useConnections } from '@/composables/connections'
 import {
@@ -25,6 +25,7 @@ import {
   ArrowRightCircleIcon,
   ArrowUpCircleIcon,
   ArrowUpIcon,
+  NoSymbolIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { first, last } from 'lodash'
@@ -131,17 +132,40 @@ export default defineComponent<{
         [CONNECTIONS_TABLE_ACCESSOR_KEY.InboundUser]: (
           <div class="gap-1 whitespace-nowrap">{getInboundUserFromConnection(conn)}</div>
         ),
-        [CONNECTIONS_TABLE_ACCESSOR_KEY.Close]: (
-          <button
-            class="btn btn-circle btn-xs"
-            onClick={(e) => {
-              e.stopPropagation()
-              disconnectByIdAPI(conn.id)
-            }}
-          >
-            <XMarkIcon class="h-4 w-4" />
-          </button>
-        ),
+        [CONNECTIONS_TABLE_ACCESSOR_KEY.Close]: (() => {
+          const closeButton = (
+            <button
+              class="btn btn-circle btn-xs"
+              onClick={(e) => {
+                e.stopPropagation()
+                disconnectByIdAPI(conn.id)
+              }}
+            >
+              <XMarkIcon class="h-4 w-4" />
+            </button>
+          )
+
+          if (metadata.smartBlock === 'normal') {
+            const degradeButton = (
+              <button
+                class="btn btn-circle btn-xs"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  blockconnectByIdAPI(conn.id)
+                }}
+              >
+                <NoSymbolIcon class="h-4 w-4" />
+              </button>
+            )
+            return (
+              <div class="flex gap-1">
+                {degradeButton}
+                {closeButton}
+              </div>
+            )
+          }
+          return closeButton
+        })(),
       }
       return (
         <div

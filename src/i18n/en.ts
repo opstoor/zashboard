@@ -181,7 +181,7 @@ const en = {
   displaySelectedNode: 'Show Selected Node',
   displayLatencyNumber: 'Show Latency Numbers',
   tipForFixed:
-    'The current policy group is locked to the current node. Run a speed test to restore urltest/fallback behavior.',
+    'The current policy group is locked to the current node. Run a speed test to restore {type} behavior.',
   remoteAddress: 'Remote Address',
   themeName: 'Theme Name',
   save: 'Save',

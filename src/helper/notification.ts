@@ -94,10 +94,10 @@ const setAlert = (
   type: string,
   alertKey: string,
 ): HTMLElement | null => {
-  alert.className = `alert flex p-2 pr-5 break-all whitespace-pre relative ${type}`
+  alert.className = `alert flex p-2 pr-5 relative ${type}`
 
   const contentDiv = document.createElement('div')
-  contentDiv.className = 'flex-1'
+  contentDiv.className = 'break-all whitespace-pre-wrap'
   contentDiv.innerHTML = t(content, params)
 
   const closeButton = document.createElement('button')
