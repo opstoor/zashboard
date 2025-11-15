@@ -2,8 +2,8 @@ name: Sync from Upstream
 
 on:
   schedule:
-    - cron: "0 * * * *"  # 每小时同步一次，可改
-  workflow_dispatch:     # 手动触发
+    - cron: "0 12 * * *"  # 定时同步
+  workflow_dispatch:      # 手动触发
 
 jobs:
   sync:
