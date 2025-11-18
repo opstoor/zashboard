@@ -12,7 +12,12 @@ jobs:
       - name: Checkout local repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # 需要完整历史才能 reset
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "actions[bot]"
+          git config user.email "actions[bot]@users.noreply.github.com"
 
       - name: Add upstream remote
         run: |
