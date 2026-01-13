@@ -1,0 +1,33 @@
+name: Sync from Upstream
+
+on:
+  schedule:
+    - cron: "0 12 * * *"  # 定时同步
+  workflow_dispatch:      # 手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout local repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SYNC_TOKEN }}
+
+      - name: 配置 Git 身份
+        run: |
+          git config user.name "actions[bot]"
+          git config user.email "actions[bot]@users.noreply.github.com"
+
+      - name: 添加上游仓库
+        run: |
+          git remote add upstream https://github.com/Zephyruso/zashboard.git
+          git fetch upstream main
+
+      - name: 硬重置本地分支
+        run: |
+          git checkout -B main upstream/main
+
+      - name: 强制推送
+        run: |
+          git push origin HEAD:main --force
