@@ -27,11 +27,9 @@
         </a>
       </div>
     </div>
-    <BackendSwitch v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.backend}.backendSwitch`]" />
+    <BackendSwitch v-if="isVisibleBackendSwitch" />
 
-    <template
-      v-if="!isSingBox && configs && !hiddenSettingsItems[`${SETTINGS_MENU_KEY.backend}.ports`]"
-    >
+    <template v-if="!isSingBox && configs && isVisiblePorts">
       <div class="divider"></div>
       <div
         class="grid max-w-3xl gap-2 gap-x-6"
@@ -60,7 +58,7 @@
         :style="`grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));`"
       >
         <div
-          v-if="configs?.tun && !hiddenSettingsItems[`${SETTINGS_MENU_KEY.backend}.tunMode`]"
+          v-if="configs?.tun && isVisibleTunMode"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -74,7 +72,7 @@
           />
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.backend}.allowLan`]"
+          v-if="isVisibleAllowLan"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -89,7 +87,7 @@
         </div>
         <template v-if="!activeBackend?.disableUpgradeCore">
           <div
-            v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.backend}.checkUpgrade`]"
+            v-if="isVisibleCheckUpgrade"
             class="setting-item"
           >
             <div class="setting-item-label">
@@ -103,9 +101,7 @@
             />
           </div>
           <div
-            v-if="
-              checkUpgradeCore && !hiddenSettingsItems[`${SETTINGS_MENU_KEY.backend}.autoUpgrade`]
-            "
+            v-if="checkUpgradeCore && isVisibleAutoUpgrade"
             class="setting-item"
           >
             <div class="setting-item-label">
@@ -122,12 +118,12 @@
     </template>
 
     <div
-      v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.backend}.actions`]"
+      v-if="isVisibleActions"
       class="divider"
     ></div>
 
     <div
-      v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.backend}.actions`]"
+      v-if="isVisibleActions"
       class="grid max-w-6xl gap-2 gap-y-3"
       :style="`grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));`"
     >
@@ -191,10 +187,10 @@
       </button>
     </div>
     <div
-      v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.backend}.dnsQuery`]"
+      v-if="isVisibleDnsQuery"
       class="divider"
     ></div>
-    <DnsQuery v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.backend}.dnsQuery`]" />
+    <DnsQuery v-if="isVisibleDnsQuery" />
     <UpgradeCoreModal v-model="showUpgradeCoreModal" />
   </div>
 </template>
@@ -213,47 +209,45 @@ import {
 import BackendVersion from '@/components/common/BackendVersion.vue'
 import BackendSwitch from '@/components/settings/BackendSwitch.vue'
 import DnsQuery from '@/components/settings/DnsQuery.vue'
-import { SETTINGS_MENU_KEY } from '@/constant'
+import { useIsSettingVisible } from '@/composables/settings'
+import { BACKEND_ITEM_KEYS } from '@/config/settingsItems'
 import { showNotification } from '@/helper/notification'
 import { configs, fetchConfigs, updateConfigs } from '@/store/config'
 import { fetchProxies, hasSmartGroup } from '@/store/proxies'
 import { fetchRules } from '@/store/rules'
-import {
-  autoUpgradeCore,
-  checkUpgradeCore,
-  displayAllFeatures,
-  hiddenSettingsItems,
-} from '@/store/settings'
+import { autoUpgradeCore, checkUpgradeCore, displayAllFeatures } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
 import type { Config } from '@/types'
 import { computed, ref } from 'vue'
 import UpgradeCoreModal from './UpgradeCoreModal.vue'
 
-// 检查是否有可见的子项
+const k = BACKEND_ITEM_KEYS
+const isVisibleBackendSwitch = useIsSettingVisible(k.backend)
+const isVisiblePorts = useIsSettingVisible(k.ports)
+const isVisibleTunMode = useIsSettingVisible(k.tunMode)
+const isVisibleAllowLan = useIsSettingVisible(k.allowLan)
+const isVisibleCheckUpgrade = useIsSettingVisible(k.checkUpgrade)
+const isVisibleAutoUpgrade = useIsSettingVisible(k.autoUpgrade)
+const isVisibleActions = useIsSettingVisible(k.actions)
+const isVisibleDnsQuery = useIsSettingVisible(k.DNSQuery)
+
 const hasVisibleItems = computed(() => {
   return (
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.backend}.backendSwitch`] ||
-    (!isSingBox.value &&
-      configs.value &&
-      !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.backend}.ports`]) ||
-    (!isSingBox.value &&
-      configs.value &&
-      configs.value?.tun &&
-      !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.backend}.tunMode`]) ||
-    (!isSingBox.value &&
-      configs.value &&
-      !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.backend}.allowLan`]) ||
+    isVisibleBackendSwitch.value ||
+    (!isSingBox.value && configs.value && isVisiblePorts.value) ||
+    (!isSingBox.value && configs.value?.tun && isVisibleTunMode.value) ||
+    (!isSingBox.value && configs.value && isVisibleAllowLan.value) ||
     (!isSingBox.value &&
       configs.value &&
       !activeBackend.value?.disableUpgradeCore &&
-      !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.backend}.checkUpgrade`]) ||
+      isVisibleCheckUpgrade.value) ||
     (!isSingBox.value &&
       configs.value &&
       !activeBackend.value?.disableUpgradeCore &&
       checkUpgradeCore.value &&
-      !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.backend}.autoUpgrade`]) ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.backend}.actions`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.backend}.dnsQuery`]
+      isVisibleAutoUpgrade.value) ||
+    isVisibleActions.value ||
+    isVisibleDnsQuery.value
   )
 })
 

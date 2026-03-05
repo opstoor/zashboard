@@ -1,8 +1,6 @@
 <template>
   <!-- overview -->
-  <template
-    v-if="!splitOverviewPage && !hiddenSettingsItems[`${SETTINGS_MENU_KEY.overview}.overviewCard`]"
-  >
+  <template v-if="!splitOverviewPage && isVisibleOverviewCard">
     <OverviewCard />
     <div class="divider my-4" />
   </template>
@@ -15,7 +13,7 @@
     </div>
     <div class="settings-grid">
       <div
-        v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.overview}.splitOverviewPage`]"
+        v-if="isVisibleSplitOverviewPage"
         class="setting-item"
       >
         <div class="setting-item-label">
@@ -28,7 +26,7 @@
         />
       </div>
       <div
-        v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.overview}.autoIPCheckWhenStart`]"
+        v-if="isVisibleAutoIPCheckWhenStart"
         class="setting-item"
       >
         <div class="setting-item-label">
@@ -41,7 +39,7 @@
         />
       </div>
       <div
-        v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.overview}.autoConnectionCheckWhenStart`]"
+        v-if="isVisibleAutoConnectionCheckWhenStart"
         class="setting-item"
       >
         <div class="setting-item-label">
@@ -54,9 +52,7 @@
         />
       </div>
       <div
-        v-if="
-          !hiddenSettingsItems[`${SETTINGS_MENU_KEY.overview}.showStatisticsWhenSidebarCollapsed`]
-        "
+        v-if="isVisibleShowStatisticsWhenSidebarCollapsed"
         class="setting-item max-md:hidden"
       >
         <div class="setting-item-label">
@@ -69,7 +65,7 @@
         />
       </div>
       <div
-        v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.overview}.numberOfChartsInSidebar`]"
+        v-if="isVisibleNumberOfChartsInSidebar"
         class="setting-item max-md:hidden"
       >
         <div class="setting-item-label">
@@ -93,28 +89,28 @@
 </template>
 
 <script setup lang="ts">
+import { useHasAnyVisibleSetting, useIsSettingVisible } from '@/composables/settings'
+import { getItemKeysByCategory, OVERVIEW_ITEM_KEYS } from '@/config/settingsItems'
 import { SETTINGS_MENU_KEY } from '@/constant'
 import {
   autoConnectionCheck,
   autoIPCheck,
-  hiddenSettingsItems,
   numberOfChartsInSidebar,
   showStatisticsWhenSidebarCollapsed,
   splitOverviewPage,
 } from '@/store/settings'
-import { computed } from 'vue'
 import OverviewCard from './OverviewCard.vue'
 
-// 检查是否有可见的子项
-const hasVisibleItems = computed(() => {
-  return (
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.overview}.splitOverviewPage`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.overview}.autoIPCheckWhenStart`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.overview}.autoConnectionCheckWhenStart`] ||
-    !hiddenSettingsItems.value[
-      `${SETTINGS_MENU_KEY.overview}.showStatisticsWhenSidebarCollapsed`
-    ] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.overview}.numberOfChartsInSidebar`]
-  )
-})
+const k = OVERVIEW_ITEM_KEYS
+const isVisibleOverviewCard = useIsSettingVisible(k.chartsCard)
+const isVisibleSplitOverviewPage = useIsSettingVisible(k.splitOverviewPage)
+const isVisibleAutoIPCheckWhenStart = useIsSettingVisible(k.autoIPCheckWhenStart)
+const isVisibleAutoConnectionCheckWhenStart = useIsSettingVisible(k.autoConnectionCheckWhenStart)
+const isVisibleShowStatisticsWhenSidebarCollapsed = useIsSettingVisible(
+  k.showStatisticsWhenSidebarCollapsed,
+)
+const isVisibleNumberOfChartsInSidebar = useIsSettingVisible(k.numberOfChartsInSidebar)
+
+const overviewGridKeys = getItemKeysByCategory(SETTINGS_MENU_KEY.overview).slice(2)
+const hasVisibleItems = useHasAnyVisibleSetting(overviewGridKeys)
 </script>

@@ -14,7 +14,7 @@
     </div>
     <div class="settings-grid">
       <div
-        v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.general}.autoDisconnectIdleUDP`]"
+        v-if="isVisibleAutoDisconnectIdleUDP"
         class="setting-item"
       >
         <div class="setting-item-label">
@@ -31,10 +31,7 @@
         />
       </div>
       <div
-        v-if="
-          autoDisconnectIdleUDP &&
-          !hiddenSettingsItems[`${SETTINGS_MENU_KEY.general}.autoDisconnectIdleUDPTime`]
-        "
+        v-if="autoDisconnectIdleUDP && isVisibleAutoDisconnectIdleUDPTime"
         class="setting-item"
       >
         <div class="setting-item-label">
@@ -48,7 +45,7 @@
         mins
       </div>
       <div
-        v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.general}.IPInfoAPI`]"
+        v-if="isVisibleIPInfoAPI"
         class="setting-item"
       >
         <div class="setting-item-label">
@@ -73,7 +70,7 @@
       </div>
 
       <div
-        v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.general}.scrollAnimationEffect`]"
+        v-if="isVisibleScrollAnimationEffect"
         class="setting-item md:hidden!"
       >
         <div class="setting-item-label">
@@ -86,7 +83,7 @@
         />
       </div>
       <div
-        v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.general}.swipeInPages`]"
+        v-if="isVisibleSwipeInPages"
         class="setting-item md:hidden!"
       >
         <div class="setting-item-label">
@@ -99,7 +96,7 @@
         />
       </div>
       <div
-        v-if="swipeInPages && !hiddenSettingsItems[`${SETTINGS_MENU_KEY.general}.swipeInTabs`]"
+        v-if="swipeInPages && isVisibleSwipeInTabs"
         class="setting-item md:hidden!"
       >
         <div class="setting-item-label">
@@ -112,7 +109,7 @@
         />
       </div>
       <div
-        v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.general}.disablePullToRefresh`]"
+        v-if="isVisibleDisablePullToRefresh"
         class="setting-item md:hidden!"
       >
         <div class="setting-item-label">
@@ -129,7 +126,7 @@
         />
       </div>
       <div
-        v-if="isSingBox && !hiddenSettingsItems[`${SETTINGS_MENU_KEY.general}.displayAllFeatures`]"
+        v-if="isSingBox && isVisibleDisplayAllFeatures"
         class="setting-item"
       >
         <div class="setting-item-label">
@@ -151,14 +148,15 @@
 
 <script setup lang="ts">
 import { isSingBox } from '@/api'
-import { IP_INFO_API, SETTINGS_MENU_KEY } from '@/constant'
+import { useIsSettingVisible } from '@/composables/settings'
+import { GENERAL_ITEM_KEYS } from '@/config/settingsItems'
+import { IP_INFO_API } from '@/constant'
 import { useTooltip } from '@/helper/tooltip'
 import {
   autoDisconnectIdleUDP,
   autoDisconnectIdleUDPTime,
   disablePullToRefresh,
   displayAllFeatures,
-  hiddenSettingsItems,
   IPInfoAPI,
   scrollAnimationEffect,
   swipeInPages,
@@ -170,20 +168,26 @@ import ZashboardSettings from './ZashboardSettings.vue'
 
 const { showTip } = useTooltip()
 
-// 检查"通用"区块是否有可见的子项
+const k = GENERAL_ITEM_KEYS
+const isVisibleAutoDisconnectIdleUDP = useIsSettingVisible(k.autoDisconnectIdleUDP)
+const isVisibleAutoDisconnectIdleUDPTime = useIsSettingVisible(k.autoDisconnectIdleUDPTime)
+const isVisibleIPInfoAPI = useIsSettingVisible(k.IPInfoAPI)
+const isVisibleScrollAnimationEffect = useIsSettingVisible(k.scrollAnimationEffect)
+const isVisibleSwipeInPages = useIsSettingVisible(k.swipeInPages)
+const isVisibleSwipeInTabs = useIsSettingVisible(k.swipeInTabs)
+const isVisibleDisablePullToRefresh = useIsSettingVisible(k.disablePullToRefresh)
+const isVisibleDisplayAllFeatures = useIsSettingVisible(k.displayAllFeatures)
+
 const hasVisibleGeneralItems = computed(() => {
   return (
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.general}.autoDisconnectIdleUDP`] ||
-    (autoDisconnectIdleUDP.value &&
-      !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.general}.autoDisconnectIdleUDPTime`]) ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.general}.IPInfoAPI`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.general}.scrollAnimationEffect`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.general}.swipeInPages`] ||
-    (swipeInPages.value &&
-      !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.general}.swipeInTabs`]) ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.general}.disablePullToRefresh`] ||
-    (isSingBox.value &&
-      !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.general}.displayAllFeatures`])
+    isVisibleAutoDisconnectIdleUDP.value ||
+    (autoDisconnectIdleUDP.value && isVisibleAutoDisconnectIdleUDPTime.value) ||
+    isVisibleIPInfoAPI.value ||
+    isVisibleScrollAnimationEffect.value ||
+    isVisibleSwipeInPages.value ||
+    (swipeInPages.value && isVisibleSwipeInTabs.value) ||
+    isVisibleDisablePullToRefresh.value ||
+    (isSingBox.value && isVisibleDisplayAllFeatures.value)
   )
 })
 </script>

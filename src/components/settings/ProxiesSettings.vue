@@ -6,7 +6,7 @@
       </div>
       <div class="settings-grid">
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.speedtestUrl`]"
+          v-if="isVisibleSpeedtestUrl"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -19,7 +19,7 @@
           />
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.speedtestTimeout`]"
+          v-if="isVisibleSpeedtestTimeout"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -33,7 +33,7 @@
           ms
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.lowLatency`]"
+          v-if="isVisibleLowLatency"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -47,7 +47,7 @@
           ms
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.mediumLatency`]"
+          v-if="isVisibleMediumLatency"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -61,7 +61,7 @@
           ms
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.ipv6Test`]"
+          v-if="isVisibleIpv6Test"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -74,7 +74,7 @@
           />
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.independentLatencyTest`]"
+          v-if="isVisibleIndependentLatencyTest"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -91,10 +91,7 @@
           />
         </div>
         <div
-          v-if="
-            independentLatencyTest &&
-            !hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.groupTestUrls`]
-          "
+          v-if="independentLatencyTest && isVisibleGroupTestUrls"
           class="col-span-full"
         >
           <GroupTestUrlsSettings />
@@ -111,7 +108,7 @@
       </div>
       <div class="settings-grid">
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.twoColumnProxyGroup`]"
+          v-if="isVisibleTwoColumnProxyGroup"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -124,7 +121,7 @@
           />
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.truncateProxyName`]"
+          v-if="isVisibleTruncateProxyName"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -137,7 +134,7 @@
           />
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.displayGlobalByMode`]"
+          v-if="isVisibleDisplayGlobalByMode"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -150,11 +147,7 @@
           />
         </div>
         <div
-          v-if="
-            displayGlobalByMode &&
-            isSingBox &&
-            !hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.customGlobalNode`]
-          "
+          v-if="displayGlobalByMode && isSingBox && isVisibleCustomGlobalNode"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -174,7 +167,7 @@
           </select>
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.proxyPreviewType`]"
+          v-if="isVisibleProxyPreviewType"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -194,7 +187,7 @@
           </select>
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.proxyCardSize`]"
+          v-if="isVisibleProxyCardSize"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -216,7 +209,7 @@
         </div>
 
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.proxyGroupIconSize`]"
+          v-if="isVisibleProxyGroupIconSize"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -229,7 +222,7 @@
           />
         </div>
         <div
-          v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.proxyGroupIconMargin`]"
+          v-if="isVisibleProxyGroupIconMargin"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -243,7 +236,7 @@
         </div>
       </div>
     </template>
-    <template v-if="!hiddenSettingsItems[`${SETTINGS_MENU_KEY.proxies}.iconSettings`]">
+    <template v-if="isVisibleIconSettings">
       <div
         v-if="hasVisibleLatencyItems || hasVisibleProxyStyleItems"
         class="divider my-4"
@@ -258,14 +251,15 @@
 
 <script setup lang="ts">
 import { isSingBox } from '@/api'
-import { PROXY_CARD_SIZE, PROXY_PREVIEW_TYPE, SETTINGS_MENU_KEY } from '@/constant'
+import { useIsSettingVisible } from '@/composables/settings'
+import { PROXIES_ITEM_KEYS } from '@/config/settingsItems'
+import { PROXY_CARD_SIZE, PROXY_PREVIEW_TYPE } from '@/constant'
 import { useTooltip } from '@/helper/tooltip'
 import { getMinCardWidth } from '@/helper/utils'
 import { proxyMap } from '@/store/proxies'
 import {
   customGlobalNode,
   displayGlobalByMode,
-  hiddenSettingsItems,
   independentLatencyTest,
   IPv6test,
   lowLatency,
@@ -287,6 +281,24 @@ import TextInput from '../common/TextInput.vue'
 import GroupTestUrlsSettings from './GroupTestUrlsSettings.vue'
 import IconSettings from './IconSettings.vue'
 
+const k = PROXIES_ITEM_KEYS
+const isVisibleSpeedtestUrl = useIsSettingVisible(k.speedtestUrl)
+const isVisibleSpeedtestTimeout = useIsSettingVisible(k.speedtestTimeout)
+const isVisibleLowLatency = useIsSettingVisible(k.lowLatencyDesc)
+const isVisibleMediumLatency = useIsSettingVisible(k.mediumLatencyDesc)
+const isVisibleIpv6Test = useIsSettingVisible(k.ipv6Test)
+const isVisibleIndependentLatencyTest = useIsSettingVisible(k.independentLatencyTest)
+const isVisibleGroupTestUrls = useIsSettingVisible(k.groupTestUrls)
+const isVisibleTwoColumnProxyGroup = useIsSettingVisible(k.twoColumnProxyGroup)
+const isVisibleTruncateProxyName = useIsSettingVisible(k.truncateProxyName)
+const isVisibleDisplayGlobalByMode = useIsSettingVisible(k.displayGlobalByMode)
+const isVisibleCustomGlobalNode = useIsSettingVisible(k.customGlobalNode)
+const isVisibleProxyPreviewType = useIsSettingVisible(k.proxyPreviewType)
+const isVisibleProxyCardSize = useIsSettingVisible(k.proxyCardSize)
+const isVisibleProxyGroupIconSize = useIsSettingVisible(k.proxyGroupIconSize)
+const isVisibleProxyGroupIconMargin = useIsSettingVisible(k.proxyGroupIconMargin)
+const isVisibleIconSettings = useIsSettingVisible(k.icon)
+
 const { showTip } = useTooltip()
 const { t } = useI18n()
 const independentLatencyTestTip = (e: Event) => {
@@ -297,33 +309,28 @@ const handlerProxyCardSizeChange = () => {
   minProxyCardWidth.value = getMinCardWidth(proxyCardSize.value)
 }
 
-// 检查"延迟"区块是否有可见的子项
 const hasVisibleLatencyItems = computed(() => {
   return (
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.speedtestUrl`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.speedtestTimeout`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.lowLatency`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.mediumLatency`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.ipv6Test`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.independentLatencyTest`] ||
-    (independentLatencyTest.value &&
-      !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.groupTestUrls`])
+    isVisibleSpeedtestUrl.value ||
+    isVisibleSpeedtestTimeout.value ||
+    isVisibleLowLatency.value ||
+    isVisibleMediumLatency.value ||
+    isVisibleIpv6Test.value ||
+    isVisibleIndependentLatencyTest.value ||
+    (independentLatencyTest.value && isVisibleGroupTestUrls.value)
   )
 })
 
-// 检查"代理样式"区块是否有可见的子项
 const hasVisibleProxyStyleItems = computed(() => {
   return (
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.twoColumnProxyGroup`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.truncateProxyName`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.displayGlobalByMode`] ||
-    (displayGlobalByMode.value &&
-      isSingBox.value &&
-      !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.customGlobalNode`]) ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.proxyPreviewType`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.proxyCardSize`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.proxyGroupIconSize`] ||
-    !hiddenSettingsItems.value[`${SETTINGS_MENU_KEY.proxies}.proxyGroupIconMargin`]
+    isVisibleTwoColumnProxyGroup.value ||
+    isVisibleTruncateProxyName.value ||
+    isVisibleDisplayGlobalByMode.value ||
+    (displayGlobalByMode.value && isSingBox.value && isVisibleCustomGlobalNode.value) ||
+    isVisibleProxyPreviewType.value ||
+    isVisibleProxyCardSize.value ||
+    isVisibleProxyGroupIconSize.value ||
+    isVisibleProxyGroupIconMargin.value
   )
 })
 </script>
