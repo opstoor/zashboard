@@ -1,7 +1,7 @@
 <template>
   <div
-    class="grid gap-2"
-    :style="`grid-template-columns: repeat(auto-fill, minmax(${minProxyCardWidth}px, 1fr));`"
+    class="grid min-w-0 gap-2"
+    :style="`grid-template-columns: repeat(auto-fill, minmax(min(${minProxyCardWidth}px, 100%), 1fr));`"
   >
     <slot />
   </div>
