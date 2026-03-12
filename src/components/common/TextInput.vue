@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="relative"
-    ref="inputRef"
-  >
+  <div class="relative">
     <XMarkIcon
       v-if="beforeClose && clearable"
       class="absolute top-2 right-2 z-10 h-4 w-3 cursor-pointer hover:scale-125"
@@ -10,6 +7,7 @@
     />
     <input
       v-model="inputValue"
+      ref="inputRef"
       type="text"
       :class="['input input-sm join-item w-full', { 'pr-6': clearable }]"
       :placeholder="placeholder || ''"
@@ -54,7 +52,7 @@ const clearInput = () => {
 }
 
 const { showTip, hideTip } = useTooltip()
-const inputRef = ref()
+const inputRef = ref<HTMLInputElement>()
 const handlerSearchInputClick = (e: Event) => {
   if (!props.menus?.length) {
     return
@@ -90,6 +88,7 @@ const handlerSearchInputClick = (e: Event) => {
                     onClick: () => {
                       inputValue.value = item
                       hideTip()
+                      inputRef.value?.focus()
                     },
                   },
                   item,

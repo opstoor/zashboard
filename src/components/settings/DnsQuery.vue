@@ -1,5 +1,8 @@
 <template>
-  <div class="join w-96 max-sm:w-full">
+  <form
+    class="join w-96 max-sm:w-full"
+    @submit.prevent="query"
+  >
     <TextInput
       v-model="form.name"
       placeholder="Domain Name"
@@ -12,12 +15,12 @@
       :menus="['A', 'AAAA', 'HTTPS']"
     />
     <button
+      type="submit"
       class="btn join-item btn-sm"
-      @click="query"
     >
       {{ $t('DNSQuery') }}
     </button>
-  </div>
+  </form>
   <div class="flex max-h-96 flex-col gap-1 overflow-y-auto">
     <div
       class="flex gap-1"
