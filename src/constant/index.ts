@@ -201,6 +201,7 @@ export const ALL_THEME = [
   'dark',
   'light-legacy',
   'dark-legacy',
+  ...(window.ksu ? ['light-monet', 'dark-monet'] : []),
   'cupcake',
   'bumblebee',
   'emerald',

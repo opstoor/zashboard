@@ -6,11 +6,12 @@ import App from './App.vue'
 import { loadFonts } from './assets/load-fonts'
 import './assets/main.css'
 import './assets/theme.css'
-import { applyCustomThemes } from './helper'
+import { applyCustomThemes, applyKsuTheme } from './helper'
 import { i18n } from './i18n'
 import router from './router'
 
 applyCustomThemes()
+applyKsuTheme()
 loadFonts()
 
 const app = createApp(App)
