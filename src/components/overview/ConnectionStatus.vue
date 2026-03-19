@@ -4,24 +4,46 @@
       <div>
         <span class="inline-block w-20">Baidu </span>
         :
-        <span :class="getColorForLatency(Number(baiduLatency))">{{ baiduLatency }}ms </span>
+        <span :class="getColorForLatency(Number(baiduLatency))">
+          <SignalStrength
+            v-if="baiduLatency"
+            :latency="Number(baiduLatency)"
+          />
+          {{ baiduLatency }}ms
+        </span>
       </div>
       <div>
         <span class="inline-block w-20">Cloudflare </span>
         :
-        <span :class="getColorForLatency(Number(cloudflareLatency))"
-          >{{ cloudflareLatency }}ms
+        <span :class="getColorForLatency(Number(cloudflareLatency))">
+          <SignalStrength
+            v-if="cloudflareLatency"
+            :latency="Number(cloudflareLatency)"
+          />
+          {{ cloudflareLatency }}ms
         </span>
       </div>
       <div>
         <span class="inline-block w-20">Github </span>
         :
-        <span :class="getColorForLatency(Number(githubLatency))">{{ githubLatency }}ms </span>
+        <span :class="getColorForLatency(Number(githubLatency))">
+          <SignalStrength
+            v-if="githubLatency"
+            :latency="Number(githubLatency)"
+          />
+          {{ githubLatency }}ms
+        </span>
       </div>
       <div>
         <span class="inline-block w-20">YouTube </span>
         :
-        <span :class="getColorForLatency(Number(youtubeLatency))">{{ youtubeLatency }}ms </span>
+        <span :class="getColorForLatency(Number(youtubeLatency))">
+          <SignalStrength
+            v-if="youtubeLatency"
+            :latency="Number(youtubeLatency)"
+          />
+          {{ youtubeLatency }}ms
+        </span>
       </div>
     </div>
     <button
@@ -50,6 +72,7 @@ import { getColorForLatency } from '@/helper'
 import { autoConnectionCheck } from '@/store/settings'
 import { BoltIcon } from '@heroicons/vue/24/outline'
 import { onMounted } from 'vue'
+import SignalStrength from './SignalStrength.vue'
 
 const getLatency = async () => {
   getBaiduLatencyAPI().then((res) => {

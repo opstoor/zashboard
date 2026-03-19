@@ -206,6 +206,7 @@ const en = {
   moreDetails: 'More details',
   moreSettings: 'More settings',
   customIcon: 'Custom icon',
+  dropOrClickUpload: 'Drop image or paste URL',
   disablePullToRefresh: 'Disable pull to refresh',
   disablePullToRefreshTip:
     'Pull-to-refresh and virtual scrolling components may conflict. If you experience lag or accidentally trigger pull-to-refresh while scrolling, try disabling this feature.',

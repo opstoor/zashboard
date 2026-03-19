@@ -1,7 +1,7 @@
 <template>
   <!-- overview -->
   <div class="flex flex-col gap-2 p-4 text-sm">
-    <div class="flex items-center gap-2 py-2 text-lg font-bold">
+    <div class="divider">
       {{ $t('overview') }}
     </div>
     <div class="settings-grid">

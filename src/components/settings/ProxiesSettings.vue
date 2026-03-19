@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-2 p-4 text-sm">
     <template v-if="hasVisibleLatencyItems">
-      <div class="settings-title">
+      <div class="divider mt-0">
         {{ $t('latency') }}
       </div>
       <div class="settings-grid">
@@ -99,11 +99,7 @@
       </div>
     </template>
     <template v-if="hasVisibleProxyStyleItems">
-      <div
-        v-if="hasVisibleLatencyItems"
-        class="divider my-4"
-      ></div>
-      <div class="settings-title">
+      <div class="divider">
         {{ $t('proxyStyle') }}
       </div>
       <div class="settings-grid">
@@ -237,11 +233,7 @@
       </div>
     </template>
     <template v-if="isVisibleIconSettings">
-      <div
-        v-if="hasVisibleLatencyItems || hasVisibleProxyStyleItems"
-        class="divider my-4"
-      ></div>
-      <div class="settings-title">
+      <div class="divider">
         {{ $t('icon') }}
       </div>
       <IconSettings />

@@ -2,15 +2,16 @@
   <!-- overview -->
   <template v-if="!splitOverviewPage && isVisibleOverviewCard">
     <OverviewCard />
-    <div class="divider my-4" />
   </template>
+
   <div
     v-if="hasVisibleItems"
     class="flex flex-col gap-2 p-4 text-sm"
   >
-    <div class="settings-title">
-      {{ $t('overviewSettings') }}
-    </div>
+    <div
+      class="divider my-4"
+      v-if="!splitOverviewPage && isVisibleOverviewCard"
+    ></div>
     <div class="settings-grid">
       <div
         v-if="isVisibleSplitOverviewPage"

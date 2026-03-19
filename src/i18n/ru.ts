@@ -209,6 +209,7 @@ const ru: LANG_MESSAGE = {
   moreDetails: 'Подробнее',
   moreSettings: 'Дополнительные настройки',
   customIcon: 'Пользовательская иконка',
+  dropOrClickUpload: 'Перетащите изображение или вставьте URL',
   disablePullToRefresh: 'Отключить свойство обновления',
   disablePullToRefreshTip:
     'Компоненты Pull-to-refresh и виртуальной прокрутки иногда могут конфликтовать. Если при прокрутке вверх-вниз у вас часто возникают задержки или случайные срабатывания Pull-to-refresh, попробуйте отключить Pull-to-refresh.',

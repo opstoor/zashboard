@@ -204,6 +204,7 @@ const zhTW: LANG_MESSAGE = {
   moreDetails: '更多詳情',
   moreSettings: '更多設定',
   customIcon: '自訂圖示',
+  dropOrClickUpload: '拖曳圖片或輸入 URL',
   disablePullToRefresh: '禁用下拉重新整理',
   disablePullToRefreshTip:
     '下拉重新整理和虛擬滾動的組件有時會有衝突，如果你在上下滾動的時候經常卡頓或者誤觸發下拉重新整理，可以嘗試禁用下拉重新整理',

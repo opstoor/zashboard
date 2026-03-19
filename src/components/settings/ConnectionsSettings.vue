@@ -4,9 +4,6 @@
     v-if="hasVisibleItems"
     class="flex flex-col gap-2 p-4 text-sm"
   >
-    <div class="settings-title">
-      {{ $t('connections') }}
-    </div>
     <div class="settings-grid">
       <div
         v-if="isVisibleConnectionStyle"
@@ -96,7 +93,9 @@
     <div
       v-if="isVisibleSourceIPLabels"
       class="divider"
-    ></div>
+    >
+      {{ $t('sourceIPLabels') }}
+    </div>
     <SourceIPLabels v-if="isVisibleSourceIPLabels" />
   </div>
 </template>

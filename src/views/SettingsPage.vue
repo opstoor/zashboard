@@ -24,6 +24,12 @@
           :data-key="item.key"
           class="card"
         >
+          <div
+            class="settings-title mt-4 px-4"
+            v-if="![SETTINGS_MENU_KEY.general, SETTINGS_MENU_KEY.backend].includes(item.key)"
+          >
+            {{ $t(item.label) }}
+          </div>
           <component :is="item.component" />
         </div>
       </div>

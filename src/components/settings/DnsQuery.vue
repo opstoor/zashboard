@@ -1,6 +1,6 @@
 <template>
   <form
-    class="join w-96 max-sm:w-full"
+    class="join mt-4 w-96 max-sm:w-full"
     @submit.prevent="query"
   >
     <TextInput

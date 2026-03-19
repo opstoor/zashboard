@@ -29,8 +29,87 @@
     </div>
     <BackendSwitch v-if="isVisibleBackendSwitch" />
 
+    <div
+      v-if="isVisibleActions"
+      class="divider"
+    >
+      {{ $t('actions') }}
+    </div>
+
+    <div
+      v-if="isVisibleActions"
+      class="grid max-w-3xl gap-3 gap-y-3"
+      :style="`grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));`"
+    >
+      <template v-if="!isSingBox || displayAllFeatures">
+        <button
+          v-if="!activeBackend?.disableUpgradeCore"
+          class="btn btn-primary btn-sm"
+          @click="showUpgradeCoreModal = true"
+        >
+          {{ $t('upgradeCore') }}
+        </button>
+        <button
+          class="btn btn-sm"
+          @click="handlerClickRestartCore"
+        >
+          <span
+            v-if="isCoreRestarting"
+            class="loading loading-spinner loading-md"
+          ></span>
+          {{ $t('restartCore') }}
+        </button>
+        <button
+          class="btn btn-sm"
+          @click="handlerClickReloadConfigs"
+        >
+          <span
+            v-if="isConfigReloading"
+            class="loading loading-spinner loading-md"
+          ></span>
+          {{ $t('reloadConfigs') }}
+        </button>
+        <button
+          v-if="!isSingBox"
+          class="btn btn-sm"
+          @click="showUpdateConfigModal = true"
+        >
+          {{ $t('updateConfigs') }}
+        </button>
+        <button
+          class="btn btn-sm"
+          @click="handlerClickUpdateGeo"
+        >
+          <span
+            v-if="isGeoUpdating"
+            class="loading loading-spinner loading-md"
+          ></span>
+          {{ $t('updateGeoDatabase') }}
+        </button>
+      </template>
+      <button
+        class="btn btn-sm"
+        @click="handleFlushDNSCache"
+      >
+        {{ $t('flushDNSCache') }}
+      </button>
+      <button
+        class="btn btn-sm"
+        @click="handleFlushFakeIP"
+      >
+        {{ $t('flushFakeIP') }}
+      </button>
+      <button
+        v-if="hasSmartGroup"
+        class="btn btn-sm"
+        @click="flushSmartGroupWeightsAPI"
+      >
+        {{ $t('flushSmartWeights') }}
+      </button>
+    </div>
+
     <template v-if="!isSingBox && configs && isVisiblePorts">
-      <div class="divider"></div>
+      <div class="divider">{{ $t('settings') }}</div>
       <div
         class="grid max-w-3xl gap-2 gap-x-6"
         :style="`grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));`"
@@ -116,88 +195,11 @@
         </template>
       </div>
     </template>
-
-    <div
-      v-if="isVisibleActions"
-      class="divider"
-    ></div>
-
-    <div
-      v-if="isVisibleActions"
-      class="grid max-w-6xl gap-2 gap-y-3"
-      :style="`grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));`"
-    >
-      <template v-if="!isSingBox || displayAllFeatures">
-        <button
-          v-if="!activeBackend?.disableUpgradeCore"
-          class="btn btn-primary btn-sm"
-          @click="showUpgradeCoreModal = true"
-        >
-          {{ $t('upgradeCore') }}
-        </button>
-        <button
-          class="btn btn-sm"
-          @click="handlerClickRestartCore"
-        >
-          <span
-            v-if="isCoreRestarting"
-            class="loading loading-spinner loading-md"
-          ></span>
-          {{ $t('restartCore') }}
-        </button>
-        <button
-          class="btn btn-sm"
-          @click="handlerClickReloadConfigs"
-        >
-          <span
-            v-if="isConfigReloading"
-            class="loading loading-spinner loading-md"
-          ></span>
-          {{ $t('reloadConfigs') }}
-        </button>
-        <button
-          v-if="!isSingBox"
-          class="btn btn-sm"
-          @click="showUpdateConfigModal = true"
-        >
-          {{ $t('updateConfigs') }}
-        </button>
-        <button
-          class="btn btn-sm"
-          @click="handlerClickUpdateGeo"
-        >
-          <span
-            v-if="isGeoUpdating"
-            class="loading loading-spinner loading-md"
-          ></span>
-          {{ $t('updateGeoDatabase') }}
-        </button>
-      </template>
-      <button
-        class="btn btn-sm"
-        @click="handleFlushDNSCache"
-      >
-        {{ $t('flushDNSCache') }}
-      </button>
-      <button
-        class="btn btn-sm"
-        @click="handleFlushFakeIP"
-      >
-        {{ $t('flushFakeIP') }}
-      </button>
-      <button
-        v-if="hasSmartGroup"
-        class="btn btn-sm"
-        @click="flushSmartGroupWeightsAPI"
-      >
-        {{ $t('flushSmartWeights') }}
-      </button>
-    </div>
-    <div
+    <DnsQuery
       v-if="isVisibleDnsQuery"
-      class="divider"
-    ></div>
-    <DnsQuery v-if="isVisibleDnsQuery" />
+      class="mt-4"
+    />
+
     <UpgradeCoreModal v-model="showUpgradeCoreModal" />
     <UpdateConfigModal v-model="showUpdateConfigModal" />
   </div>

@@ -366,7 +366,7 @@ div {
   @apply md:grid-cols-2;
 }
 .setting-item {
-  @apply border-base-300/80 flex h-10 items-center gap-2 border-b;
+  @apply border-base-300/40 flex h-10 items-center gap-2 border-b;
   .setting-item-label {
     @apply flex-1 text-sm font-medium;
     svg {

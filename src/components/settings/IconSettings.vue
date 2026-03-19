@@ -17,6 +17,8 @@
       />
     </button>
   </div>
+
+  <!-- Existing items (collapsible) -->
   <div
     class="transparent-collapse collapse rounded-none shadow-none"
     :class="dialogVisible ? 'collapse-open' : ''"
@@ -27,18 +29,39 @@
           <div
             v-for="iconReflect in iconReflectList"
             :key="iconReflect.uuid"
-            class="flex items-center gap-2"
+            class="border-base-300 flex items-center gap-2 rounded-lg border p-2 transition-colors"
+            :class="{ 'border-primary bg-primary/5': dragOverId === iconReflect.uuid }"
+            @dragover.prevent="dragOverId = iconReflect.uuid"
+            @dragleave="dragOverId = ''"
+            @drop.prevent="handleDropOnItem($event, iconReflect)"
           >
-            <TextInput
-              class="w-32"
-              v-model="iconReflect.name"
-              :placeholder="$t('groupName')"
-            />
-            <ArrowRightCircleIcon class="h-4 w-4 shrink-0" />
-            <TextInput
-              v-model="iconReflect.icon"
-              placeholder="Icon URL"
-            />
+            <div
+              class="bg-base-200 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-md"
+              @click="triggerUploadForItem(iconReflect)"
+            >
+              <ProxyIcon
+                v-if="iconReflect.icon"
+                :icon="iconReflect.icon"
+                :size="28"
+                :margin="0"
+              />
+              <PhotoIcon
+                v-else
+                class="h-5 w-5 opacity-30"
+              />
+            </div>
+            <div class="flex min-w-0 flex-1 flex-col gap-1">
+              <TextInput
+                v-model="iconReflect.name"
+                class="max-w-42"
+                :placeholder="$t('groupName')"
+              />
+              <TextInput
+                v-model="iconReflect.icon"
+                placeholder="Icon URL"
+                :clearable="true"
+              />
+            </div>
             <button
               class="btn btn-sm btn-circle"
               @click="removeIconReflect(iconReflect.uuid)"
@@ -50,51 +73,165 @@
       </div>
     </div>
   </div>
-  <div class="flex items-center gap-2">
-    <TextInput
-      class="w-32"
-      v-model="newIconReflect.name"
-      placeholder="Name"
-      :menus="
-        proxyGroupList.filter((group) => !iconReflectList.some((item) => item.name === group))
-      "
-      @keydown.enter="addIconReflect"
-    />
-    <ArrowRightCircleIcon class="h-4 w-4 shrink-0" />
-    <TextInput
-      v-model="newIconReflect.icon"
-      placeholder="Icon URL"
-      @keydown.enter="addIconReflect"
-    />
+
+  <!-- Add new: drop zone + inputs -->
+  <div
+    class="border-base-300 flex cursor-pointer items-center gap-3 rounded-lg border-2 border-dashed p-3 transition-colors"
+    :class="{ 'border-primary bg-primary/5': isDraggingNew }"
+    @dragover.prevent="isDraggingNew = true"
+    @dragleave="isDraggingNew = false"
+    @drop.prevent="handleDropNew"
+  >
+    <div
+      class="bg-base-200 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md"
+      @click="fileInputRef?.click()"
+    >
+      <ProxyIcon
+        v-if="newIconReflect.icon"
+        :icon="newIconReflect.icon"
+        :size="32"
+        :margin="0"
+      />
+      <ArrowUpTrayIcon
+        v-else
+        class="h-5 w-5 opacity-40"
+      />
+    </div>
+    <div class="flex min-w-0 flex-1 flex-col gap-1">
+      <TextInput
+        v-model="newIconReflect.name"
+        class="max-w-42"
+        :placeholder="$t('groupName')"
+        :menus="
+          proxyGroupList.filter((group) => !iconReflectList.some((item) => item.name === group))
+        "
+        @keydown.enter="addIconReflect"
+        @click.stop
+      />
+      <TextInput
+        v-model="newIconReflect.icon"
+        :placeholder="$t('dropOrClickUpload')"
+        :clearable="true"
+        @keydown.enter="addIconReflect"
+        @click.stop
+      />
+    </div>
     <button
       class="btn btn-sm btn-circle"
-      @click="addIconReflect"
+      @click.stop="addIconReflect"
     >
       <PlusIcon class="h-4 w-4 shrink-0" />
     </button>
   </div>
+
+  <input
+    ref="fileInputRef"
+    type="file"
+    accept="image/*"
+    class="hidden"
+    @change="handleFileSelect"
+  />
 </template>
 
 <script setup lang="ts">
+import ProxyIcon from '@/components/proxies/ProxyIcon.vue'
 import { proxyGroupList } from '@/store/proxies'
 import { iconReflectList } from '@/store/settings'
 import {
-  ArrowRightCircleIcon,
+  ArrowUpTrayIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  PhotoIcon,
   PlusIcon,
   TrashIcon,
 } from '@heroicons/vue/24/outline'
 import { useSessionStorage } from '@vueuse/core'
 import { v4 as uuid } from 'uuid'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import TextInput from '../common/TextInput.vue'
 
 const dialogVisible = useSessionStorage('cache/icon-dialog-visible', false)
+const isDraggingNew = ref(false)
+const dragOverId = ref('')
+const fileInputRef = ref<HTMLInputElement>()
+
 const newIconReflect = reactive({
   name: '',
   icon: '',
 })
+
+// Track which existing item we're uploading for
+let uploadTargetItem: { icon: string; name: string; uuid: string } | null = null
+
+const readFileAsIcon = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    if (!file.type.startsWith('image/')) {
+      reject(new Error('Not an image file'))
+      return
+    }
+
+    if (file.type === 'image/svg+xml') {
+      const reader = new FileReader()
+      reader.onload = () => {
+        resolve('data:image/svg+xml,' + (reader.result as string))
+      }
+      reader.onerror = () => reject(reader.error)
+      reader.readAsText(file)
+    } else {
+      const reader = new FileReader()
+      reader.onload = () => {
+        resolve(reader.result as string)
+      }
+      reader.onerror = () => reject(reader.error)
+      reader.readAsDataURL(file)
+    }
+  })
+}
+
+const getImageFileFromEvent = (e: DragEvent): File | undefined => {
+  return Array.from(e.dataTransfer?.files || []).find((f) => f.type.startsWith('image/'))
+}
+
+const handleDropNew = async (e: DragEvent) => {
+  isDraggingNew.value = false
+  const file = getImageFileFromEvent(e)
+  if (!file) return
+  newIconReflect.icon = await readFileAsIcon(file)
+}
+
+const handleDropOnItem = async (
+  e: DragEvent,
+  item: { icon: string; name: string; uuid: string },
+) => {
+  dragOverId.value = ''
+  const file = getImageFileFromEvent(e)
+  if (!file) return
+  item.icon = await readFileAsIcon(file)
+}
+
+const triggerUploadForItem = (item: { icon: string; name: string; uuid: string }) => {
+  uploadTargetItem = item
+  fileInputRef.value?.click()
+}
+
+const handleFileSelect = async (e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+
+  const iconData = await readFileAsIcon(file)
+
+  if (uploadTargetItem) {
+    uploadTargetItem.icon = iconData
+    uploadTargetItem = null
+  } else {
+    newIconReflect.icon = iconData
+  }
+
+  // Reset file input so the same file can be selected again
+  if (fileInputRef.value) {
+    fileInputRef.value.value = ''
+  }
+}
 
 const addIconReflect = () => {
   if (!newIconReflect.name || !newIconReflect.icon) return

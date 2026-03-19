@@ -1,15 +1,12 @@
 <template>
   <ZashboardSettings />
-  <div
-    v-if="hasVisibleGeneralItems"
-    class="divider my-4"
-  />
+
   <!-- dashboard -->
   <div
     v-if="hasVisibleGeneralItems"
     class="p-4 text-sm"
   >
-    <div class="settings-title">
+    <div class="divider my-4">
       {{ $t('general') }}
     </div>
     <div class="settings-grid">
