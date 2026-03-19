@@ -1,6 +1,7 @@
 <template>
   <CollapseCard
     :name="proxyGroup.name"
+    :data-group-name="proxyGroup.name"
     @contextmenu.prevent.stop="handlerLatencyTest"
   >
     <template v-slot:title>
@@ -38,7 +39,7 @@
         />
       </div>
       <div class="text-base-content/80 mt-1.5 flex items-center gap-2">
-        <div class="flex flex-1 items-center gap-1 truncate text-sm">
+        <div class="flex flex-1 items-center gap-2 truncate text-sm">
           <ProxyGroupNow :name="name" />
         </div>
         <div class="min-w-12 shrink-0 text-right text-xs">
