@@ -220,6 +220,16 @@ export const reloadConfigsAPI = () => {
   return axios.put('/configs?reload=true', { path: '', payload: '' })
 }
 
+export const updateConfigsAPI = (
+  config: { path?: string; payload?: string },
+  force: boolean = false,
+) => {
+  return axios.put(`/configs${force ? '?force=true' : ''}`, {
+    path: config.path || '',
+    payload: config.payload || '',
+  })
+}
+
 export const upgradeUIAPI = () => {
   return axios.post('/upgrade/ui')
 }

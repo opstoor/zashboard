@@ -156,6 +156,13 @@
           {{ $t('reloadConfigs') }}
         </button>
         <button
+          v-if="!isSingBox"
+          class="btn btn-sm"
+          @click="showUpdateConfigModal = true"
+        >
+          {{ $t('updateConfigs') }}
+        </button>
+        <button
           class="btn btn-sm"
           @click="handlerClickUpdateGeo"
         >
@@ -192,6 +199,7 @@
     ></div>
     <DnsQuery v-if="isVisibleDnsQuery" />
     <UpgradeCoreModal v-model="showUpgradeCoreModal" />
+    <UpdateConfigModal v-model="showUpdateConfigModal" />
   </div>
 </template>
 
@@ -221,6 +229,7 @@ import { autoUpgradeCore, checkUpgradeCore, displayAllFeatures } from '@/store/s
 import { activeBackend } from '@/store/setup'
 import type { Config } from '@/types'
 import { computed, ref } from 'vue'
+import UpdateConfigModal from './UpdateConfigModal.vue'
 import UpgradeCoreModal from './UpgradeCoreModal.vue'
 
 const k = BACKEND_ITEM_KEYS
@@ -283,6 +292,7 @@ const reloadAll = () => {
 }
 
 const showUpgradeCoreModal = ref(false)
+const showUpdateConfigModal = ref(false)
 
 const isCoreRestarting = ref(false)
 const handlerClickRestartCore = async () => {
