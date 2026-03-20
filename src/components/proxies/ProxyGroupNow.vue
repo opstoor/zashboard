@@ -1,25 +1,18 @@
 <template>
-  <div class="flex flex-1 items-center gap-2 truncate pb-1">
+  <div class="flex flex-1 items-center gap-1 truncate pb-1">
     <template v-if="proxyGroup.now">
       <Component
         class="h-4 w-4 shrink-0 outline-none"
         :is="isFixed ? LockClosedIcon : ArrowRightCircleIcon"
         @mouseenter="tipForFixed"
       />
-      <div
-        v-if="isNowAGroup"
-        class="hover:bg-base-300 -ml-1 flex cursor-pointer items-center gap-1 rounded-lg px-2 hover:shadow-sm"
-        @click.stop="scrollToGroup(proxyGroup.now)"
-      >
-        <ProxyName
-          :name="proxyGroup.now"
-          class="text-base-content/80 text-xs md:text-sm"
-        />
-      </div>
       <ProxyName
-        v-else
         :name="proxyGroup.now"
+        :class="
+          isNowAGroup && 'hover:bg-base-300 hover:-mx-1 hover:rounded-lg hover:px-1 hover:shadow'
+        "
         class="text-base-content/80 text-xs md:text-sm"
+        @click="handlerClickNow"
       />
       <template v-if="finalOutbound && displayFinalOutbound">
         <ArrowRightCircleIcon class="h-4 w-4 shrink-0" />
@@ -84,4 +77,11 @@ const finalOutbound = computed(() => {
 
   return now
 })
+
+const handlerClickNow = (e: Event) => {
+  if (isNowAGroup.value) {
+    e.stopPropagation()
+    scrollToGroup(proxyGroup.value.now)
+  }
+}
 </script>
