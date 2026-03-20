@@ -16,11 +16,15 @@
           aria-hidden="true"
           @click="close"
         />
+
         <!-- 弹层内容，阻止点击穿透 -->
         <div
+          ref="modalBoxRef"
           class="modal-box bg-base-100 relative overflow-hidden p-0"
           :class="[blurIntensity < 5 && 'backdrop-blur-sm!', boxClass]"
+          tabindex="-1"
           @click.stop
+          @keydown.enter.self="enter"
         >
           <div
             v-if="title && isOpen"
@@ -54,12 +58,28 @@
 <script setup lang="ts">
 import { blurIntensity } from '@/store/settings'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
+import { ref, watch } from 'vue'
 
 const isOpen = defineModel<boolean>()
 defineProps<{ noPadding?: boolean; boxClass?: string; title?: string }>()
+const emits = defineEmits<{
+  (e: 'enter'): void
+}>()
 
+const modalBoxRef = ref<HTMLDivElement | undefined>(undefined)
+
+watch(isOpen, (val) => {
+  if (val) {
+    requestAnimationFrame(() => {
+      modalBoxRef.value?.focus()
+    })
+  }
+})
 function close() {
   isOpen.value = false
+}
+function enter() {
+  emits('enter')
 }
 </script>
 
