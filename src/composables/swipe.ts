@@ -26,7 +26,7 @@ export const useSwipeRouter = () => {
               return [
                 () => route.name === ROUTE_NAME.proxies && proxiesTabShow.value === tab,
                 () => {
-                  router.push({ name: ROUTE_NAME.proxies })
+                  router.push({ name: ROUTE_NAME.proxies, replace: true })
                   proxiesTabShow.value = tab
                 },
               ]
@@ -36,7 +36,7 @@ export const useSwipeRouter = () => {
               return [
                 () => route.name === ROUTE_NAME.connections && connectionTabShow.value === tab,
                 () => {
-                  router.push({ name: ROUTE_NAME.connections })
+                  router.push({ name: ROUTE_NAME.connections, replace: true })
                   connectionTabShow.value = tab
                 },
               ]
@@ -46,7 +46,7 @@ export const useSwipeRouter = () => {
               return [
                 () => route.name === ROUTE_NAME.rules && rulesTabShow.value === tab,
                 () => {
-                  router.push({ name: ROUTE_NAME.rules })
+                  router.push({ name: ROUTE_NAME.rules, replace: true })
                   rulesTabShow.value = tab
                 },
               ]
@@ -54,7 +54,7 @@ export const useSwipeRouter = () => {
           }
         }
 
-        return [[() => route.name === r, () => router.push({ name: r })]]
+        return [[() => route.name === r, () => router.push({ name: r, replace: true })]]
       }),
     )
   })
@@ -67,7 +67,7 @@ export const useSwipeRouter = () => {
     const routeName = route.name as ROUTE_NAME
 
     if (routeName === ROUTE_NAME.setup) {
-      return router.push({ name: ROUTE_NAME.proxies })
+      return router.push({ name: ROUTE_NAME.proxies, replace: true })
     }
 
     return swipeList.value[(getNextIndexInSwipeList() + 1) % swipeList.value.length]?.[1]?.()
@@ -76,7 +76,7 @@ export const useSwipeRouter = () => {
     const routeName = route.name as ROUTE_NAME
 
     if (routeName === ROUTE_NAME.setup) {
-      return router.push({ name: ROUTE_NAME.proxies })
+      return router.push({ name: ROUTE_NAME.proxies, replace: true })
     }
 
     return swipeList.value[

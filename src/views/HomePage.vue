@@ -34,7 +34,7 @@
             <button
               v-for="r in renderRoutes"
               :key="r"
-              @click="router.push({ name: r })"
+              @click="router.push({ name: r, replace: true })"
               class="h-14 flex-col items-center justify-center pt-2"
               :class="r === route.name && 'dock-active'"
             >
