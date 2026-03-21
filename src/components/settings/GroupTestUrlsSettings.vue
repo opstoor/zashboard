@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-2 flex items-center gap-2">
+  <div class="my-2 flex items-center gap-2">
     {{ $t('groupTestUrls') }}
     <template v-if="groupTestUrls.length"> ({{ groupTestUrls.length }}) </template>
     <button

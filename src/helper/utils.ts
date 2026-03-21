@@ -88,6 +88,8 @@ export const findScrollableParent = (el: HTMLElement | null): HTMLElement | null
   return parent ? findScrollableParent(parent) : null
 }
 
+export const PROXIES_PAGE = 'proxies-page'
+
 export const scrollToGroup = (groupName: string) => {
   const el = document.querySelector(`[data-group-name="${groupName}"]`) as HTMLElement | null
 
@@ -96,7 +98,7 @@ export const scrollToGroup = (groupName: string) => {
   el.classList.add('highlight-flash')
   el.addEventListener('animationend', () => el.classList.remove('highlight-flash'), { once: true })
 
-  const scrollableParent = findScrollableParent(el)
+  const scrollableParent = document.getElementById(PROXIES_PAGE)
 
   if (!scrollableParent) return
 

@@ -1,11 +1,9 @@
 <template>
   <div
     class="max-md:scrollbar-hidden h-full"
-    :class="[
-      SCROLLABLE_PARENT_CLASS,
-      disableProxiesPageScroll ? 'overflow-y-hidden' : 'overflow-y-scroll',
-    ]"
+    :class="disableProxiesPageScroll ? 'overflow-y-hidden' : 'overflow-y-scroll'"
     :style="padding"
+    :id="PROXIES_PAGE"
     ref="proxiesRef"
     @scroll.passive="handleScroll"
   >
@@ -48,7 +46,7 @@ import ProxiesCtrl from '@/components/sidebar/ProxiesCtrl.tsx'
 import { usePaddingForViews } from '@/composables/paddingViews'
 import { disableProxiesPageScroll, isProxiesPageMounted, renderGroups } from '@/composables/proxies'
 import { PROXY_TAB_TYPE } from '@/constant'
-import { isMiddleScreen, SCROLLABLE_PARENT_CLASS } from '@/helper/utils'
+import { isMiddleScreen, PROXIES_PAGE } from '@/helper/utils'
 import { fetchProxies, proxiesTabShow } from '@/store/proxies'
 import { twoColumnProxyGroup } from '@/store/settings'
 import { useSessionStorage } from '@vueuse/core'
