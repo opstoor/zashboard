@@ -49,7 +49,7 @@ axios.interceptors.response.use(
 
       showNotification({
         key: errorMessage,
-        content: `${error.config?.url} \n${errorMessage}`,
+        content: `${decodeURIComponent(error.config?.url || '')} \n${errorMessage}`,
         type: 'alert-error',
       })
       return Promise.reject(error)
