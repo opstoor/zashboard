@@ -20,7 +20,7 @@
         <!-- 弹层内容，阻止点击穿透 -->
         <div
           ref="modalBoxRef"
-          class="modal-box bg-base-100 relative overflow-hidden p-0"
+          class="modal-box bg-base-100 relative overflow-hidden p-0 outline-none"
           :class="[blurIntensity < 5 && 'backdrop-blur-sm!', boxClass]"
           tabindex="-1"
           @click.stop
