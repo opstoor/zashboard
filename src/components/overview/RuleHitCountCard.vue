@@ -3,19 +3,19 @@
     class="card w-full"
     v-if="hasRulesWithExtra"
   >
-    <div class="card-title px-4 pt-4">
-      {{ $t('ruleHitCountCard') }}
-    </div>
     <div class="card-body gap-4">
-      <div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-        <div class="flex flex-col gap-2">
-          <div class="pb-2 text-sm font-bold">
+      <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+        {{ $t('ruleHitCountCard') }}
+      </div>
+      <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
+        <div class="bg-base-200/30 flex flex-col gap-2 rounded-xl p-3">
+          <div class="text-base-content/60 text-xs font-medium">
             {{ $t('ruleHitChart') }}
           </div>
           <RuleHitCountChart type="hit" />
         </div>
-        <div class="flex flex-col gap-2">
-          <div class="pb-2 text-sm font-bold">
+        <div class="bg-base-200/30 flex flex-col gap-2 rounded-xl p-3">
+          <div class="text-base-content/60 text-xs font-medium">
             {{ $t('ruleMissChart') }}
           </div>
           <RuleHitCountChart type="miss" />

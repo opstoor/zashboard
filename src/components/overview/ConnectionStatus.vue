@@ -1,57 +1,37 @@
 <template>
-  <div class="bg-base-200/50 relative h-28 rounded-lg p-2 text-sm">
-    <div class="flex h-full flex-col justify-between">
-      <div>
-        <span class="inline-block w-20">Baidu </span>
-        :
-        <span :class="getColorForLatency(Number(baiduLatency))">
-          <SignalStrength
-            v-if="baiduLatency"
-            :latency="Number(baiduLatency)"
-          />
-          {{ baiduLatency }}ms
-        </span>
+  <div class="bg-base-200/30 flex flex-col rounded-xl p-4">
+    <div class="flex items-center justify-between">
+      <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+        {{ $t('latency') }}
       </div>
-      <div>
-        <span class="inline-block w-20">Cloudflare </span>
-        :
-        <span :class="getColorForLatency(Number(cloudflareLatency))">
+      <button
+        class="btn btn-ghost btn-xs btn-circle"
+        @click="getLatency"
+      >
+        <BoltIcon class="h-3.5 w-3.5" />
+      </button>
+    </div>
+
+    <div class="mt-3 flex flex-col gap-2.5">
+      <div
+        v-for="item in latencyItems"
+        :key="item.name"
+        class="flex items-center justify-between"
+      >
+        <span class="text-base-content/70 text-sm">{{ item.name }}</span>
+        <span
+          class="flex items-center gap-1.5 text-sm font-medium"
+          :class="item.value ? getColorForLatency(Number(item.value)) : 'text-base-content/20'"
+        >
+          <template v-if="item.value">{{ item.value }}ms</template>
+          <template v-else>--</template>
           <SignalStrength
-            v-if="cloudflareLatency"
-            :latency="Number(cloudflareLatency)"
+            v-if="item.value"
+            :latency="Number(item.value)"
           />
-          {{ cloudflareLatency }}ms
-        </span>
-      </div>
-      <div>
-        <span class="inline-block w-20">Github </span>
-        :
-        <span :class="getColorForLatency(Number(githubLatency))">
-          <SignalStrength
-            v-if="githubLatency"
-            :latency="Number(githubLatency)"
-          />
-          {{ githubLatency }}ms
-        </span>
-      </div>
-      <div>
-        <span class="inline-block w-20">YouTube </span>
-        :
-        <span :class="getColorForLatency(Number(youtubeLatency))">
-          <SignalStrength
-            v-if="youtubeLatency"
-            :latency="Number(youtubeLatency)"
-          />
-          {{ youtubeLatency }}ms
         </span>
       </div>
     </div>
-    <button
-      class="btn btn-circle btn-sm absolute right-2 bottom-2"
-      @click="getLatency"
-    >
-      <BoltIcon class="h-4 w-4" />
-    </button>
   </div>
 </template>
 
@@ -71,8 +51,15 @@ import {
 import { getColorForLatency } from '@/helper'
 import { autoConnectionCheck } from '@/store/settings'
 import { BoltIcon } from '@heroicons/vue/24/outline'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import SignalStrength from './SignalStrength.vue'
+
+const latencyItems = computed(() => [
+  { name: 'Baidu', value: baiduLatency.value },
+  { name: 'Cloudflare', value: cloudflareLatency.value },
+  { name: 'GitHub', value: githubLatency.value },
+  { name: 'YouTube', value: youtubeLatency.value },
+])
 
 const getLatency = async () => {
   getBaiduLatencyAPI().then((res) => {

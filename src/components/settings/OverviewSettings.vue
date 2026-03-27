@@ -1,6 +1,6 @@
 <template>
   <!-- overview -->
-  <template v-if="!splitOverviewPage && isVisibleOverviewCard">
+  <template v-if="!splitOverviewPage">
     <OverviewCard />
   </template>
 

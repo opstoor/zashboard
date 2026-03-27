@@ -3,64 +3,70 @@
     class="card w-full"
     v-if="hasProvidersWithTraffic"
   >
-    <div class="card-title px-4 pt-4">
-      {{ $t('providerTrafficOverview') }}
-    </div>
-    <div
-      class="card-body grid max-h-128 gap-2 overflow-y-auto"
-      :style="
-        hasMultipleProvidersWithTraffic
-          ? `grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));`
-          : 'grid-template-columns: 1fr;'
-      "
-    >
-      <!-- 总流量 -->
+    <div class="card-body gap-4">
       <div
-        class="bg-base-200/50 flex flex-col gap-2 rounded-lg p-2"
-        v-if="hasMultipleProvidersWithTraffic"
+        class="grid max-h-128 gap-3 overflow-y-auto"
+        :style="
+          hasMultipleProvidersWithTraffic
+            ? `grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));`
+            : 'grid-template-columns: 1fr;'
+        "
       >
-        <div class="flex items-center justify-between">
-          <div class="text-lg font-medium">
-            {{ $t('totalTraffic') }}
+        <!-- Total Traffic -->
+        <div
+          class="bg-base-200/30 flex flex-col gap-3 rounded-xl p-4"
+          v-if="hasMultipleProvidersWithTraffic"
+        >
+          <div class="flex items-center justify-between">
+            <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+              {{ $t('totalTraffic') }}
+            </div>
+            <div class="text-base-content/60 text-xs">{{ totalPercentage }}%</div>
           </div>
-          <div class="text-base-content/70 text-sm">{{ totalPercentage }}%</div>
-        </div>
-        <div class="w-full">
-          <progress
-            class="progress h-2 w-full"
-            :class="getProgressColor(totalPercentage)"
-            :value="totalPercentage"
-            max="100"
-          ></progress>
-        </div>
-        <div class="text-base-content/60 flex items-center justify-between text-sm">
-          <div>{{ $t('remainingTraffic') }}: {{ totalRemainingStr }}</div>
-          <div>{{ $t('usedTraffic') }}: {{ totalUsedStr }} / {{ totalTotalStr }}</div>
-        </div>
-      </div>
-      <!-- 各提供商流量 -->
-      <div
-        v-for="provider in providersWithTraffic"
-        :key="provider.name"
-        class="bg-base-200/50 flex flex-col gap-2 rounded-lg p-2"
-      >
-        <div class="flex items-center justify-between">
-          <div class="text-lg font-medium">
-            {{ provider.name }}
+          <div class="flex items-baseline gap-1.5">
+            <span class="text-2xl font-extralight tabular-nums">{{ totalUsedStr }}</span>
+            <span class="text-base-content/60 text-sm">/ {{ totalTotalStr }}</span>
           </div>
-          <div class="text-base-content/70 text-sm">{{ provider.percentage }}%</div>
+          <div class="w-full">
+            <progress
+              class="progress h-1.5 w-full"
+              :class="getProgressColor(totalPercentage)"
+              :value="totalPercentage"
+              max="100"
+            ></progress>
+          </div>
+          <div class="text-base-content/30 text-xs">
+            {{ $t('remainingTraffic') }}: {{ totalRemainingStr }}
+          </div>
         </div>
-        <div class="w-full">
-          <progress
-            class="progress h-2 w-full"
-            :class="getProgressColor(provider.percentage)"
-            :value="provider.percentage"
-            max="100"
-          ></progress>
-        </div>
-        <div class="text-base-content/60 flex items-center justify-between text-sm">
-          <div>{{ $t('remainingTraffic') }}: {{ provider.remainingStr }}</div>
-          <div>{{ $t('usedTraffic') }}: {{ provider.usedStr }} / {{ provider.totalStr }}</div>
+
+        <!-- Per-provider Traffic -->
+        <div
+          v-for="provider in providersWithTraffic"
+          :key="provider.name"
+          class="bg-base-200/30 flex flex-col gap-3 rounded-xl p-4"
+        >
+          <div class="flex items-center justify-between">
+            <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+              {{ provider.name }}
+            </div>
+            <div class="text-base-content/60 text-xs">{{ provider.percentage }}%</div>
+          </div>
+          <div class="flex items-baseline gap-1.5">
+            <span class="text-2xl font-extralight tabular-nums">{{ provider.usedStr }}</span>
+            <span class="text-base-content/60 text-sm">/ {{ provider.totalStr }}</span>
+          </div>
+          <div class="w-full">
+            <progress
+              class="progress h-1.5 w-full"
+              :class="getProgressColor(provider.percentage)"
+              :value="provider.percentage"
+              max="100"
+            ></progress>
+          </div>
+          <div class="text-base-content/30 text-xs">
+            {{ $t('remainingTraffic') }}: {{ provider.remainingStr }}
+          </div>
         </div>
       </div>
     </div>
@@ -116,7 +122,7 @@ const hasMultipleProvidersWithTraffic = computed(() => {
   return providersWithTraffic.value.length > 1
 })
 
-// 计算总流量
+// Total traffic
 const totalTraffic = computed(() => {
   const total = providersWithTraffic.value.reduce(
     (acc, provider) => ({

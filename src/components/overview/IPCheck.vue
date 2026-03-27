@@ -1,51 +1,63 @@
 <template>
-  <div class="bg-base-200/50 relative flex h-28 flex-col gap-1 rounded-lg p-2">
-    <div class="grid grid-cols-[auto_auto_1fr] gap-x-2 gap-y-1">
-      <div class="text-left text-sm">ipip.net</div>
-      <div class="text-right text-sm">:</div>
-      <div class="text-sm">
-        {{ showPrivacy ? ipForChina.ipWithPrivacy[0] : ipForChina.ip[0] }}
-        <span
-          class="text-xs"
-          v-if="ipForChina.ip[1]"
-        >
-          ({{ showPrivacy ? ipForChina.ipWithPrivacy[1] : ipForChina.ip[1] }})
-        </span>
+  <div class="bg-base-200/30 flex flex-col rounded-xl p-4">
+    <div class="flex items-center justify-between">
+      <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+        {{ $t('networkInfo') }}
       </div>
-      <div class="text-left text-sm">{{ IPInfoAPI }}</div>
-      <div class="text-right text-sm">:</div>
-      <div class="text-sm">
-        {{ showPrivacy ? ipForGlobal.ipWithPrivacy[0] : ipForGlobal.ip[0] }}
-        <span
-          class="text-xs"
-          v-if="ipForGlobal.ip[1]"
+      <div class="flex gap-1">
+        <button
+          class="btn btn-ghost btn-xs btn-circle"
+          @click="showPrivacy = !showPrivacy"
+          @mouseenter="handlerShowPrivacyTip"
         >
-          ({{ showPrivacy ? ipForGlobal.ipWithPrivacy[1] : ipForGlobal.ip[1] }})
-        </span>
+          <EyeIcon
+            v-if="showPrivacy"
+            class="h-3.5 w-3.5"
+          />
+          <EyeSlashIcon
+            v-else
+            class="h-3.5 w-3.5"
+          />
+        </button>
+        <button
+          class="btn btn-ghost btn-xs btn-circle"
+          @click="getIPs"
+        >
+          <BoltIcon class="h-3.5 w-3.5" />
+        </button>
       </div>
     </div>
 
-    <div class="absolute right-2 bottom-2 flex items-center gap-2">
-      <button
-        class="btn btn-circle btn-sm flex items-center justify-center"
-        @click="showPrivacy = !showPrivacy"
-        @mouseenter="handlerShowPrivacyTip"
-      >
-        <EyeIcon
-          v-if="showPrivacy"
-          class="h-4 w-4"
-        />
-        <EyeSlashIcon
-          v-else
-          class="h-4 w-4"
-        />
-      </button>
-      <button
-        class="btn btn-circle btn-sm"
-        @click="getIPs"
-      >
-        <BoltIcon class="h-4 w-4" />
-      </button>
+    <div class="mt-3 flex flex-col gap-3">
+      <!-- China IP -->
+      <div>
+        <div class="text-base-content/60 text-xs">ipip.net</div>
+        <div class="mt-0.5 text-sm font-medium">
+          {{ showPrivacy ? ipForChina.ipWithPrivacy[0] : ipForChina.ip[0] }}
+          <span
+            v-if="ipForChina.ip[1]"
+            class="text-base-content/60 text-xs"
+          >
+            ({{ showPrivacy ? ipForChina.ipWithPrivacy[1] : ipForChina.ip[1] }})
+          </span>
+        </div>
+      </div>
+
+      <div class="border-base-content/5 border-t" />
+
+      <!-- Global IP -->
+      <div>
+        <div class="text-base-content/60 text-xs">{{ IPInfoAPI }}</div>
+        <div class="mt-0.5 text-sm font-medium">
+          {{ showPrivacy ? ipForGlobal.ipWithPrivacy[0] : ipForGlobal.ip[0] }}
+          <span
+            v-if="ipForGlobal.ip[1]"
+            class="text-base-content/60 text-xs"
+          >
+            ({{ showPrivacy ? ipForGlobal.ipWithPrivacy[1] : ipForGlobal.ip[1] }})
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </template>

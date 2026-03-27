@@ -1,25 +1,28 @@
 <template>
   <div class="card w-full backdrop-blur-none!">
-    <div class="card-title need-blur flex items-center justify-between px-4 pt-4">
-      <div class="flex w-full items-center gap-4 max-sm:flex-col max-sm:items-start">
-        <div class="flex flex-1 items-center gap-2">
+    <div class="card-body need-blur gap-4">
+      <!-- Header -->
+      <div
+        class="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2"
+      >
+        <div
+          class="text-base-content/60 flex items-center gap-2 text-xs font-semibold tracking-wider uppercase"
+        >
           {{ $t('totalConnections') }}
-
           <button
-            class="btn btn-circle btn-sm"
+            class="btn btn-ghost btn-xs btn-circle"
             @click="showClearDialog = true"
           >
-            <TrashIcon class="h-4 w-4" />
+            <TrashIcon class="h-3.5 w-3.5" />
           </button>
           <QuestionMarkCircleIcon
-            class="h-4 w-4 cursor-pointer"
+            class="h-3.5 w-3.5 cursor-pointer"
             @mouseenter="showTip($event, totalConnectionsTip)"
           />
         </div>
-
-        <div class="flex items-center gap-2 font-normal max-sm:flex-col max-sm:items-start">
+        <div class="flex items-center gap-2 max-sm:flex-col max-sm:items-start">
           <div class="flex items-center gap-2">
-            <span class="text-sm">{{ $t('aggregateBy') }}</span>
+            <span class="text-base-content/60 text-xs">{{ $t('aggregateBy') }}</span>
             <select
               v-model="aggregationType"
               class="select select-bordered select-sm w-32"
@@ -37,7 +40,7 @@
             </select>
           </div>
           <div class="flex items-center gap-2">
-            <span class="text-sm">{{ $t('autoCleanupInterval') }}</span>
+            <span class="text-base-content/60 text-xs">{{ $t('autoCleanupInterval') }}</span>
             <select
               v-model="autoCleanupInterval"
               class="select select-bordered select-sm w-28"
@@ -56,35 +59,34 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="card-body need-blur gap-0! p-0!">
-      <div class="px-4 py-4">
-        <div
-          class="stats stats-vertical sm:stats-horizontal bg-base-200 w-full gap-2 shadow max-md:grid max-md:grid-cols-2"
-        >
-          <div class="stat">
-            <div class="stat-title text-xs">{{ aggregateSourceLabel }}</div>
-            <div class="stat-value text-lg">{{ aggregateSourceCount }}</div>
+
+      <!-- Stats grid -->
+      <div class="bg-base-200/30 grid grid-cols-2 gap-4 rounded-xl p-4 sm:grid-cols-5">
+        <div>
+          <div class="text-base-content/60 text-xs">{{ aggregateSourceLabel }}</div>
+          <div class="text-xl font-extralight tabular-nums">{{ aggregateSourceCount }}</div>
+        </div>
+        <div>
+          <div class="text-base-content/60 text-xs">{{ t('download') }}</div>
+          <div class="text-xl font-extralight tabular-nums">
+            {{ prettyBytesHelper(totalStats.download) }}
           </div>
-          <div class="stat md:hidden"></div>
-          <div class="stat">
-            <div class="stat-title text-xs">{{ t('download') }}</div>
-            <div class="stat-value text-lg">{{ prettyBytesHelper(totalStats.download) }}</div>
+        </div>
+        <div>
+          <div class="text-base-content/60 text-xs">{{ t('upload') }}</div>
+          <div class="text-xl font-extralight tabular-nums">
+            {{ prettyBytesHelper(totalStats.upload) }}
           </div>
-          <div class="stat">
-            <div class="stat-title text-xs">{{ t('upload') }}</div>
-            <div class="stat-value text-lg">{{ prettyBytesHelper(totalStats.upload) }}</div>
+        </div>
+        <div>
+          <div class="text-base-content/60 text-xs">{{ t('totalTraffic') }}</div>
+          <div class="text-xl font-extralight tabular-nums">
+            {{ prettyBytesHelper(totalStats.download + totalStats.upload) }}
           </div>
-          <div class="stat">
-            <div class="stat-title text-xs">{{ t('totalTraffic') }}</div>
-            <div class="stat-value text-lg">
-              {{ prettyBytesHelper(totalStats.download + totalStats.upload) }}
-            </div>
-          </div>
-          <div class="stat">
-            <div class="stat-title text-xs">{{ t('connectionCount') }}</div>
-            <div class="stat-value text-lg">{{ totalStats.count.toString() }}</div>
-          </div>
+        </div>
+        <div>
+          <div class="text-base-content/60 text-xs">{{ t('connectionCount') }}</div>
+          <div class="text-xl font-extralight tabular-nums">{{ totalStats.count }}</div>
         </div>
       </div>
     </div>
