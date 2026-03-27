@@ -1,3 +1,4 @@
+import { SETTINGS_CATEGORIES } from '@/config/settingsItems'
 import {
   CONNECTIONS_TABLE_ACCESSOR_KEY,
   DETAILED_CARD_STYLE,
@@ -244,10 +245,7 @@ export const hiddenSettingsItems = useStorage<Record<string, boolean>>(
 
 // settings menu order
 // 存储设置菜单项的顺序
-export const settingsMenuOrder = useStorage<SETTINGS_MENU_KEY[]>('config/settings-menu-order', [
-  SETTINGS_MENU_KEY.general,
-  SETTINGS_MENU_KEY.overview,
-  SETTINGS_MENU_KEY.backend,
-  SETTINGS_MENU_KEY.proxies,
-  SETTINGS_MENU_KEY.connections,
-])
+export const settingsMenuOrder = useStorage<SETTINGS_MENU_KEY[]>(
+  'config/settings-menu-order',
+  SETTINGS_CATEGORIES.map((category) => category.key),
+)

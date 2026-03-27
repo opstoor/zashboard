@@ -1,30 +1,59 @@
 <template>
-  <div class="flex items-center gap-2">
-    {{ $t('customIcon') }}
-    <template v-if="iconReflectList.length"> ({{ iconReflectList.length }}) </template>
-    <button
-      v-if="iconReflectList.length"
-      class="btn btn-sm btn-circle"
-      @click="dialogVisible = !dialogVisible"
-    >
-      <ChevronUpIcon
-        v-if="dialogVisible"
-        class="h-4 w-4"
-      />
-      <ChevronDownIcon
-        v-else
-        class="h-4 w-4"
-      />
-    </button>
-  </div>
-
-  <!-- Existing items (collapsible) -->
-  <div
-    class="transparent-collapse collapse rounded-none shadow-none"
-    :class="dialogVisible ? 'collapse-open' : ''"
+  <DialogWrapper
+    v-model="dialogVisible"
+    :title="$t('customIcon')"
   >
-    <div class="collapse-content p-0">
-      <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
+    <div class="flex flex-col gap-2 overflow-hidden text-sm">
+      <!-- Add new: drop zone + inputs -->
+      <div
+        class="border-base-300 mt-2 flex cursor-pointer items-center gap-3 rounded-lg border-2 border-dashed p-3 transition-colors"
+        :class="{ 'border-primary bg-primary/5': isDraggingNew }"
+        @dragover.prevent="isDraggingNew = true"
+        @dragleave="isDraggingNew = false"
+        @drop.prevent="handleDropNew"
+      >
+        <div
+          class="bg-base-200 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md"
+          @click="fileInputRef?.click()"
+        >
+          <ProxyIcon
+            v-if="newIconReflect.icon"
+            :icon="newIconReflect.icon"
+            :size="32"
+            :margin="0"
+          />
+          <ArrowUpTrayIcon
+            v-else
+            class="h-5 w-5 opacity-40"
+          />
+        </div>
+        <div class="flex min-w-0 flex-1 flex-col gap-1">
+          <TextInput
+            v-model="newIconReflect.name"
+            class="max-w-42"
+            :placeholder="$t('groupName')"
+            :menus="
+              proxyGroupList.filter((group) => !iconReflectList.some((item) => item.name === group))
+            "
+            @keydown.enter="addIconReflect"
+            @click.stop
+          />
+          <TextInput
+            v-model="newIconReflect.icon"
+            :placeholder="$t('dropOrClickUpload')"
+            :clearable="true"
+            @keydown.enter="addIconReflect"
+            @click.stop
+          />
+        </div>
+        <button
+          class="btn btn-sm btn-circle"
+          @click.stop="addIconReflect"
+        >
+          <PlusIcon class="h-4 w-4 shrink-0" />
+        </button>
+      </div>
+      <div class="grid flex-1 grid-cols-1 gap-2">
         <template v-if="dialogVisible">
           <div
             v-for="iconReflect in iconReflectList"
@@ -72,57 +101,7 @@
         </template>
       </div>
     </div>
-  </div>
-
-  <!-- Add new: drop zone + inputs -->
-  <div
-    class="border-base-300 flex cursor-pointer items-center gap-3 rounded-lg border-2 border-dashed p-3 transition-colors"
-    :class="{ 'border-primary bg-primary/5': isDraggingNew }"
-    @dragover.prevent="isDraggingNew = true"
-    @dragleave="isDraggingNew = false"
-    @drop.prevent="handleDropNew"
-  >
-    <div
-      class="bg-base-200 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md"
-      @click="fileInputRef?.click()"
-    >
-      <ProxyIcon
-        v-if="newIconReflect.icon"
-        :icon="newIconReflect.icon"
-        :size="32"
-        :margin="0"
-      />
-      <ArrowUpTrayIcon
-        v-else
-        class="h-5 w-5 opacity-40"
-      />
-    </div>
-    <div class="flex min-w-0 flex-1 flex-col gap-1">
-      <TextInput
-        v-model="newIconReflect.name"
-        class="max-w-42"
-        :placeholder="$t('groupName')"
-        :menus="
-          proxyGroupList.filter((group) => !iconReflectList.some((item) => item.name === group))
-        "
-        @keydown.enter="addIconReflect"
-        @click.stop
-      />
-      <TextInput
-        v-model="newIconReflect.icon"
-        :placeholder="$t('dropOrClickUpload')"
-        :clearable="true"
-        @keydown.enter="addIconReflect"
-        @click.stop
-      />
-    </div>
-    <button
-      class="btn btn-sm btn-circle"
-      @click.stop="addIconReflect"
-    >
-      <PlusIcon class="h-4 w-4 shrink-0" />
-    </button>
-  </div>
+  </DialogWrapper>
 
   <input
     ref="fileInputRef"
@@ -131,6 +110,18 @@
     class="hidden"
     @change="handleFileSelect"
   />
+  <div class="setting-item">
+    <div class="setting-item-label">
+      {{ $t('customIcon') }}
+      <template v-if="iconReflectList.length"> ({{ iconReflectList.length }}) </template>
+    </div>
+    <button
+      class="btn btn-sm"
+      @click="dialogVisible = true"
+    >
+      <PencilSquareIcon class="h-4 w-4" />
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -139,8 +130,7 @@ import { proxyGroupList } from '@/store/proxies'
 import { iconReflectList } from '@/store/settings'
 import {
   ArrowUpTrayIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
+  PencilSquareIcon,
   PhotoIcon,
   PlusIcon,
   TrashIcon,
@@ -148,6 +138,7 @@ import {
 import { useSessionStorage } from '@vueuse/core'
 import { v4 as uuid } from 'uuid'
 import { reactive, ref } from 'vue'
+import DialogWrapper from '../common/DialogWrapper.vue'
 import TextInput from '../common/TextInput.vue'
 
 const dialogVisible = useSessionStorage('cache/icon-dialog-visible', false)

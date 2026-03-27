@@ -2,11 +2,8 @@
   <ZashboardSettings />
 
   <!-- dashboard -->
-  <div
-    v-if="hasVisibleGeneralItems"
-    class="p-4 text-sm"
-  >
-    <div class="divider my-4">
+  <template v-if="hasVisibleGeneralItems">
+    <div class="settings-section-label">
       {{ $t('general') }}
     </div>
     <div class="settings-grid">
@@ -65,7 +62,6 @@
           </option>
         </select>
       </div>
-
       <div
         v-if="isVisibleScrollAnimationEffect"
         class="setting-item md:hidden!"
@@ -140,7 +136,7 @@
         />
       </div>
     </div>
-  </div>
+  </template>
 </template>
 
 <script setup lang="ts">

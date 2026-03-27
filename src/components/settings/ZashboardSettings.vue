@@ -2,9 +2,9 @@
   <!-- dashboard -->
   <div
     v-if="hasVisibleItems"
-    class="relative flex flex-col gap-2 p-4 text-sm"
+    class="relative flex flex-col text-sm"
   >
-    <div class="settings-title">
+    <div class="flex items-center gap-2 px-1">
       <div class="indicator">
         <span
           v-if="isUIUpdateAvailable"
@@ -16,9 +16,10 @@
         <a
           href="https://github.com/Zephyruso/zashboard"
           target="_blank"
+          class="text-lg font-semibold"
         >
-          <span> zashboard </span>
-          <span class="text-sm font-normal">
+          zashboard
+          <span class="text-sm font-normal opacity-50">
             {{ zashboardVersion }}
             <span
               v-if="commitId"
@@ -29,14 +30,37 @@
           </span>
         </a>
       </div>
+      <div class="flex-1" />
       <button
-        class="btn btn-sm absolute top-2 right-2"
+        class="btn btn-ghost btn-sm"
         @click="refreshPages"
         v-if="isPWA"
       >
-        {{ $t('refresh') }}
         <ArrowPathIcon class="h-4 w-4" />
+        {{ $t('refresh') }}
       </button>
+    </div>
+
+    <div
+      v-if="isVisibleUpgradeUI || isVisibleExportSettings || isVisibleImportSettings"
+      class="settings-grid my-3 gap-2 p-3 md:grid-cols-2!"
+    >
+      <button
+        v-if="isVisibleUpgradeUI"
+        :class="twMerge('btn btn-neutral btn-sm', isUIUpgrading ? 'animate-pulse' : '')"
+        @click="handlerClickUpgradeUI"
+      >
+        {{ $t('upgradeUI') }}
+      </button>
+      <div class="hidden md:block"></div>
+      <button
+        v-if="isVisibleExportSettings"
+        class="btn btn-sm"
+        @click="exportSettings"
+      >
+        {{ $t('exportSettings') }}
+      </button>
+      <ImportSettings v-if="isVisibleImportSettings" />
     </div>
     <div class="settings-grid">
       <LanguageSelect v-if="isVisibleLanguage" />
@@ -79,9 +103,86 @@
         </select>
       </div>
       <div
-        v-if="isVisibleCustomBackgroundURL"
+        v-if="isVisibleAutoUpgrade"
         class="setting-item"
       >
+        <div class="setting-item-label">
+          {{ $t('autoUpgrade') }}
+        </div>
+        <input
+          class="toggle"
+          type="checkbox"
+          v-model="autoUpgrade"
+        />
+      </div>
+    </div>
+
+    <div
+      v-if="isVisibleDefaultTheme || (autoTheme && isVisibleDarkTheme)"
+      class="settings-section-label"
+    >
+      {{ $t('defaultTheme') }}
+    </div>
+    <div
+      v-if="isVisibleDefaultTheme || (autoTheme && isVisibleDarkTheme)"
+      class="settings-grid"
+    >
+      <div
+        v-if="isVisibleAutoSwitchTheme"
+        class="setting-item"
+      >
+        <div class="setting-item-label">
+          {{ $t('autoSwitchTheme') }}
+        </div>
+        <input
+          type="checkbox"
+          v-model="autoTheme"
+          class="toggle"
+        />
+      </div>
+      <div
+        v-if="isVisibleDefaultTheme"
+        class="setting-item"
+      >
+        <div class="setting-item-label">
+          {{ $t('defaultTheme') }}
+        </div>
+        <div class="join">
+          <ThemeSelector
+            class="w-38!"
+            v-model:value="defaultTheme"
+          />
+          <button
+            class="btn btn-sm join-item"
+            @click="customThemeModal = !customThemeModal"
+          >
+            <PlusIcon class="h-4 w-4" />
+          </button>
+        </div>
+        <CustomTheme v-model:value="customThemeModal" />
+      </div>
+      <div
+        v-if="autoTheme && isVisibleDarkTheme"
+        class="setting-item"
+      >
+        <div class="setting-item-label">
+          {{ $t('darkTheme') }}
+        </div>
+        <ThemeSelector v-model:value="darkTheme" />
+      </div>
+    </div>
+
+    <div
+      v-if="isVisibleCustomBackgroundURL"
+      class="settings-section-label"
+    >
+      {{ $t('customBackgroundURL') }}
+    </div>
+    <div
+      v-if="isVisibleCustomBackgroundURL"
+      class="settings-grid"
+    >
+      <div class="setting-item">
         <div class="setting-item-label">
           {{ $t('customBackgroundURL') }}
         </div>
@@ -114,121 +215,42 @@
           @change="handlerFileChange"
         />
       </div>
-      <template v-if="customBackgroundURL && displayBgProperty && isVisibleTransparent">
-        <div class="setting-item">
-          <div class="setting-item-label">
-            {{ $t('transparent') }}
-          </div>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            v-model="dashboardTransparent"
-            class="range max-w-64"
-            @touchstart.passive.stop
-            @touchmove.passive.stop
-            @touchend.passive.stop
-          />
-        </div>
-      </template>
-      <template v-if="customBackgroundURL && displayBgProperty && isVisibleBlurIntensity">
-        <div class="setting-item">
-          <div class="setting-item-label">
-            {{ $t('blurIntensity') }}
-          </div>
-          <input
-            type="range"
-            min="0"
-            max="40"
-            v-model="blurIntensity"
-            class="range max-w-64"
-            @touchstart.stop
-            @touchmove.stop
-            @touchend.stop
-          />
-        </div>
-      </template>
       <div
-        v-if="isVisibleDefaultTheme"
+        v-if="customBackgroundURL && displayBgProperty && isVisibleTransparent"
         class="setting-item"
       >
         <div class="setting-item-label">
-          {{ $t('defaultTheme') }}
-        </div>
-        <div class="join">
-          <ThemeSelector
-            class="w-38!"
-            v-model:value="defaultTheme"
-          />
-          <button
-            class="btn btn-sm join-item"
-            @click="customThemeModal = !customThemeModal"
-          >
-            <PlusIcon class="h-4 w-4" />
-          </button>
-        </div>
-        <CustomTheme v-model:value="customThemeModal" />
-      </div>
-      <div
-        v-if="autoTheme && isVisibleDarkTheme"
-        class="setting-item"
-      >
-        <div class="setting-item-label">
-          {{ $t('darkTheme') }}
-        </div>
-        <ThemeSelector v-model:value="darkTheme" />
-      </div>
-      <div
-        v-if="isVisibleAutoSwitchTheme"
-        class="setting-item"
-      >
-        <div class="setting-item-label">
-          {{ $t('autoSwitchTheme') }}
+          {{ $t('transparent') }}
         </div>
         <input
-          type="checkbox"
-          v-model="autoTheme"
-          class="toggle"
+          type="range"
+          min="0"
+          max="100"
+          v-model="dashboardTransparent"
+          class="range max-w-64"
+          @touchstart.passive.stop
+          @touchmove.passive.stop
+          @touchend.passive.stop
         />
       </div>
       <div
-        v-if="isVisibleAutoUpgrade"
+        v-if="customBackgroundURL && displayBgProperty && isVisibleBlurIntensity"
         class="setting-item"
       >
         <div class="setting-item-label">
-          {{ $t('autoUpgrade') }}
+          {{ $t('blurIntensity') }}
         </div>
         <input
-          class="toggle"
-          type="checkbox"
-          v-model="autoUpgrade"
+          type="range"
+          min="0"
+          max="40"
+          v-model="blurIntensity"
+          class="range max-w-64"
+          @touchstart.stop
+          @touchmove.stop
+          @touchend.stop
         />
       </div>
-    </div>
-    <div
-      v-if="isVisibleUpgradeUI || isVisibleExportSettings || isVisibleImportSettings"
-      class="mt-4 grid max-w-3xl grid-cols-2 gap-2 gap-y-3 md:grid-cols-4"
-    >
-      <button
-        v-if="isVisibleUpgradeUI"
-        :class="twMerge('btn btn-primary btn-sm', isUIUpgrading ? 'animate-pulse' : '')"
-        @click="handlerClickUpgradeUI"
-      >
-        {{ $t('upgradeUI') }}
-      </button>
-      <div
-        v-if="isVisibleUpgradeUI"
-        class="sm:hidden"
-      ></div>
-
-      <button
-        v-if="isVisibleExportSettings"
-        class="btn btn-sm"
-        @click="exportSettings"
-      >
-        {{ $t('exportSettings') }}
-      </button>
-      <ImportSettings v-if="isVisibleImportSettings" />
     </div>
   </div>
 </template>

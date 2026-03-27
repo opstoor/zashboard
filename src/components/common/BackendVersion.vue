@@ -5,7 +5,7 @@
       class="h-4 w-4 rounded-xs"
     />
     <span
-      class="truncate"
+      class="text-base-content/60 truncate"
       @mouseenter="checkTruncation"
     >
       {{ version }}

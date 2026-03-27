@@ -1,31 +1,30 @@
 <template>
-  <div
-    class="relative flex h-full flex-col overflow-y-auto"
-    ref="scrollContainerRef"
-    @scroll.passive="handleScroll"
-  >
-    <!-- 左侧菜单 -->
+  <div class="relative flex h-full flex-col">
     <SettingsMenu
-      ref="menuComponentRef"
       :menu-items="menuItems"
       :active-menu-key="activeMenuKey"
       @menu-click="handleMenuClick"
     />
-    <!-- 右侧内容区域 -->
+
+    <!-- Content Area -->
     <div
-      class="grid grid-cols-1 gap-3 p-3"
-      :style="padding"
+      class="flex-1 overflow-y-auto"
+      ref="scrollContainerRef"
+      @scroll.passive="handleScroll"
     >
-      <div class="flex flex-col gap-4">
+      <div
+        class="settings-content"
+        :style="padding"
+      >
         <div
           v-for="item in menuItems"
           :key="item.key"
           :id="`item-${item.key}`"
           :data-key="item.key"
-          class="card"
+          class="settings-page-section"
         >
           <div
-            class="settings-title mt-4 px-4"
+            class="settings-page-section-title"
             v-if="![SETTINGS_MENU_KEY.general, SETTINGS_MENU_KEY.backend].includes(item.key)"
           >
             {{ $t(item.label) }}
@@ -70,7 +69,6 @@ type MenuItem = {
 const { padding } = usePaddingForViews()
 const route = useRoute()
 
-const menuComponentRef = ref<InstanceType<typeof SettingsMenu> | null>(null)
 const scrollContainerRef = ref<HTMLDivElement>()
 const menuItems = computed<MenuItem[]>(() => {
   const itemsMap = new Map<SETTINGS_MENU_KEY, MenuItem>([
@@ -136,9 +134,6 @@ watch(
       if (!newItems.find((item) => item.key === activeMenuKey.value)) {
         activeMenuKey.value = newItems[0].key
       }
-    } else {
-      // 如果所有设置项都被隐藏，保持当前值（虽然不会显示）
-      // 这种情况应该很少见，因为至少应该有一个设置项可见
     }
   },
   { immediate: true },
@@ -165,7 +160,7 @@ const handleMenuClick = (key: SETTINGS_MENU_KEY) => {
       const containerRect = scrollContainerRef.value.getBoundingClientRect()
       const elementRect = element.getBoundingClientRect()
       const scrollTop = scrollContainerRef.value.scrollTop
-      const targetScrollTop = scrollTop + elementRect.top - containerRect.top - 86
+      const targetScrollTop = scrollTop + elementRect.top - containerRect.top - 24
 
       scrollContainerRef.value.scrollTo({
         top: targetScrollTop,

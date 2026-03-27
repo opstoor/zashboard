@@ -7,19 +7,8 @@
       <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
         {{ $t('ruleHitCountCard') }}
       </div>
-      <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
-        <div class="bg-base-200/30 flex flex-col gap-2 rounded-xl p-3">
-          <div class="text-base-content/60 text-xs font-medium">
-            {{ $t('ruleHitChart') }}
-          </div>
-          <RuleHitCountChart type="hit" />
-        </div>
-        <div class="bg-base-200/30 flex flex-col gap-2 rounded-xl p-3">
-          <div class="text-base-content/60 text-xs font-medium">
-            {{ $t('ruleMissChart') }}
-          </div>
-          <RuleHitCountChart type="miss" />
-        </div>
+      <div class="bg-base-200/30 flex flex-col gap-2 rounded-xl p-3">
+        <RuleHitCountChart type="hit" />
       </div>
     </div>
   </div>

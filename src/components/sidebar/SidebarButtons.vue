@@ -23,7 +23,7 @@
     box-class="max-w-173"
     no-padding
   >
-    <BackendSettings class="w-full" />
+    <BackendSettings class="w-full p-2" />
   </DialogWrapper>
 </template>
 

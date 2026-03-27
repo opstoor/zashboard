@@ -27,11 +27,11 @@
       >
         <template #item="{ element: category }">
           <div
-            class="collapse-arrow bg-base-200/50 collapse mb-4"
+            class="bg-base-200 collapse mb-4"
             :class="expandedCategories[category.key] ? 'collapse-open' : 'collapse-close'"
           >
             <div
-              class="collapse-title cursor-pointer font-medium"
+              class="collapse-title cursor-pointer p-2 font-medium"
               @click="expandedCategories[category.key] = !expandedCategories[category.key]"
             >
               <div class="setting-item">
@@ -52,7 +52,7 @@
             </div>
             <div class="collapse-content p-0">
               <div class="max-h-96 overflow-y-auto">
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col px-4">
                   <div
                     v-for="item in category.items"
                     :key="item.key"
@@ -114,6 +114,7 @@ const orderedCategories = computed({
 // 应用"全部显示"预设
 const applyShowAllPreset = () => {
   hiddenSettingsItems.value = {}
+  settingsMenuOrder.value = [...SETTINGS_CATEGORIES].map((category) => category.key)
 }
 
 // 应用"精简显示"预设
@@ -160,6 +161,7 @@ const applyMinimalPreset = () => {
     newHiddenItems[key] = true
   }
   hiddenSettingsItems.value = newHiddenItems
+  settingsMenuOrder.value = [...SETTINGS_CATEGORIES].map((category) => category.key)
 }
 </script>
 

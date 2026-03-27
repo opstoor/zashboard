@@ -2,7 +2,7 @@
   <!-- connections -->
   <div
     v-if="hasVisibleItems"
-    class="flex flex-col gap-2 p-4 text-sm"
+    class="flex flex-col gap-3 text-sm"
   >
     <div class="settings-grid">
       <div
@@ -44,59 +44,50 @@
           </option>
         </select>
       </div>
-    </div>
-    <div
-      v-if="!useConnectionCard"
-      class="settings-grid"
-    >
-      <div
-        v-if="isVisibleTableWidthMode"
-        class="setting-item"
-      >
-        <div class="setting-item-label">
-          {{ $t('tableWidthMode') }}
-        </div>
-        <select
-          class="select select-sm min-w-24"
-          v-model="tableWidthMode"
+      <template v-if="!useConnectionCard">
+        <div
+          v-if="isVisibleTableWidthMode"
+          class="setting-item"
         >
-          <option
-            v-for="opt in Object.values(TABLE_WIDTH_MODE)"
-            :key="opt"
-            :value="opt"
+          <div class="setting-item-label">
+            {{ $t('tableWidthMode') }}
+          </div>
+          <select
+            class="select select-sm min-w-24"
+            v-model="tableWidthMode"
           >
-            {{ $t(opt) }}
-          </option>
-        </select>
-      </div>
-      <div
-        v-if="isVisibleTableSize"
-        class="setting-item"
-      >
-        <div class="setting-item-label">
-          {{ $t('tableSize') }}
+            <option
+              v-for="opt in Object.values(TABLE_WIDTH_MODE)"
+              :key="opt"
+              :value="opt"
+            >
+              {{ $t(opt) }}
+            </option>
+          </select>
         </div>
-        <select
-          class="select select-sm min-w-24"
-          v-model="tableSize"
+        <div
+          v-if="isVisibleTableSize"
+          class="setting-item"
         >
-          <option
-            v-for="opt in Object.values(TABLE_SIZE)"
-            :key="opt"
-            :value="opt"
+          <div class="setting-item-label">
+            {{ $t('tableSize') }}
+          </div>
+          <select
+            class="select select-sm min-w-24"
+            v-model="tableSize"
           >
-            {{ $t(opt) }}
-          </option>
-        </select>
-      </div>
+            <option
+              v-for="opt in Object.values(TABLE_SIZE)"
+              :key="opt"
+              :value="opt"
+            >
+              {{ $t(opt) }}
+            </option>
+          </select>
+        </div>
+      </template>
+      <SourceIPLabels v-if="isVisibleSourceIPLabels" />
     </div>
-    <div
-      v-if="isVisibleSourceIPLabels"
-      class="divider"
-    >
-      {{ $t('sourceIPLabels') }}
-    </div>
-    <SourceIPLabels v-if="isVisibleSourceIPLabels" />
   </div>
 </template>
 

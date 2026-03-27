@@ -90,7 +90,7 @@ const updateFontFamily = () => {
 }
 
 const barData = computed(() => {
-  const maxItems = isMiddleScreen.value ? 8 : 20
+  const maxItems = isMiddleScreen.value ? 16 : 40
   const getValue = (rule: Rule) => {
     return props.type === 'hit' ? rule.extra?.hitCount || 0 : rule.extra?.missCount || 0
   }
@@ -143,8 +143,8 @@ const options = computed(() => {
     grid: {
       left: '2%',
       right: '2%',
-      top: '5%',
-      bottom: '20%',
+      top: '10%',
+      bottom: '5%',
       containLabel: false,
     },
     xAxis: {

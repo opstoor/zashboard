@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col gap-2 p-4 text-sm">
+  <div class="flex flex-col text-sm">
     <template v-if="hasVisibleLatencyItems">
-      <div class="divider mt-0">
+      <div class="settings-section-label">
         {{ $t('latency') }}
       </div>
       <div class="settings-grid">
@@ -90,16 +90,11 @@
             v-model="independentLatencyTest"
           />
         </div>
-        <div
-          v-if="independentLatencyTest && isVisibleGroupTestUrls"
-          class="col-span-full"
-        >
-          <GroupTestUrlsSettings />
-        </div>
+        <GroupTestUrlsSettings v-if="independentLatencyTest && isVisibleGroupTestUrls" />
       </div>
     </template>
     <template v-if="hasVisibleProxyStyleItems">
-      <div class="divider">
+      <div class="settings-section-label">
         {{ $t('proxyStyle') }}
       </div>
       <div class="settings-grid">
@@ -203,7 +198,6 @@
             </option>
           </select>
         </div>
-
         <div
           v-if="isVisibleProxyGroupIconSize"
           class="setting-item"
@@ -230,13 +224,8 @@
             v-model="proxyGroupIconMargin"
           />
         </div>
+        <IconSettings v-if="isVisibleIconSettings" />
       </div>
-    </template>
-    <template v-if="isVisibleIconSettings">
-      <div class="divider">
-        {{ $t('icon') }}
-      </div>
-      <IconSettings />
     </template>
   </div>
 </template>

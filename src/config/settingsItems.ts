@@ -13,6 +13,20 @@ export type SettingsCategory = {
 
 export const SETTINGS_CATEGORIES: SettingsCategory[] = [
   {
+    key: SETTINGS_MENU_KEY.backend,
+    label: 'backendSettings',
+    items: [
+      { key: `${SETTINGS_MENU_KEY.backend}.backendSwitch`, label: 'backend' },
+      { key: `${SETTINGS_MENU_KEY.backend}.ports`, label: 'ports' },
+      { key: `${SETTINGS_MENU_KEY.backend}.tunMode`, label: 'tunMode' },
+      { key: `${SETTINGS_MENU_KEY.backend}.allowLan`, label: 'allowLan' },
+      { key: `${SETTINGS_MENU_KEY.backend}.checkUpgrade`, label: 'checkUpgrade' },
+      { key: `${SETTINGS_MENU_KEY.backend}.autoUpgrade`, label: 'autoUpgrade' },
+      { key: `${SETTINGS_MENU_KEY.backend}.actions`, label: 'actions' },
+      { key: `${SETTINGS_MENU_KEY.backend}.dnsQuery`, label: 'DNSQuery' },
+    ],
+  },
+  {
     key: SETTINGS_MENU_KEY.general,
     label: 'zashboardSettings',
     items: [
@@ -107,20 +121,6 @@ export const SETTINGS_CATEGORIES: SettingsCategory[] = [
         key: `${SETTINGS_MENU_KEY.overview}.numberOfChartsInSidebar`,
         label: 'numberOfChartsInSidebar',
       },
-    ],
-  },
-  {
-    key: SETTINGS_MENU_KEY.backend,
-    label: 'backendSettings',
-    items: [
-      { key: `${SETTINGS_MENU_KEY.backend}.backendSwitch`, label: 'backend' },
-      { key: `${SETTINGS_MENU_KEY.backend}.ports`, label: 'ports' },
-      { key: `${SETTINGS_MENU_KEY.backend}.tunMode`, label: 'tunMode' },
-      { key: `${SETTINGS_MENU_KEY.backend}.allowLan`, label: 'allowLan' },
-      { key: `${SETTINGS_MENU_KEY.backend}.checkUpgrade`, label: 'checkUpgrade' },
-      { key: `${SETTINGS_MENU_KEY.backend}.autoUpgrade`, label: 'autoUpgrade' },
-      { key: `${SETTINGS_MENU_KEY.backend}.actions`, label: 'actions' },
-      { key: `${SETTINGS_MENU_KEY.backend}.dnsQuery`, label: 'DNSQuery' },
     ],
   },
   {

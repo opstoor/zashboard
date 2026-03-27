@@ -6,12 +6,8 @@
 
   <div
     v-if="hasVisibleItems"
-    class="flex flex-col gap-2 p-4 text-sm"
+    class="flex flex-col gap-3 text-sm"
   >
-    <div
-      class="divider my-4"
-      v-if="!splitOverviewPage && isVisibleOverviewCard"
-    ></div>
     <div class="settings-grid">
       <div
         v-if="isVisibleSplitOverviewPage"
@@ -103,7 +99,6 @@ import {
 import OverviewCard from './OverviewCard.vue'
 
 const k = OVERVIEW_ITEM_KEYS
-const isVisibleOverviewCard = useIsSettingVisible(k.chartsCard)
 const isVisibleSplitOverviewPage = useIsSettingVisible(k.splitOverviewPage)
 const isVisibleAutoIPCheckWhenStart = useIsSettingVisible(k.autoIPCheckWhenStart)
 const isVisibleAutoConnectionCheckWhenStart = useIsSettingVisible(k.autoConnectionCheckWhenStart)

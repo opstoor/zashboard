@@ -2,9 +2,9 @@
   <!-- backend -->
   <div
     v-if="hasVisibleItems"
-    class="flex flex-col gap-2 p-4 text-sm"
+    class="flex flex-col gap-3 text-sm"
   >
-    <div class="settings-title">
+    <div class="flex items-center gap-2 px-1">
       <div class="indicator">
         <span
           v-if="isCoreUpdateAvailable"
@@ -14,7 +14,7 @@
           <span class="bg-secondary h-2 w-2 rounded-full"></span>
         </span>
         <a
-          class="flex cursor-pointer items-center gap-2"
+          class="flex cursor-pointer items-center gap-2 text-lg font-semibold"
           :href="
             isSingBox
               ? 'https://github.com/sagernet/sing-box'
@@ -27,175 +27,168 @@
         </a>
       </div>
     </div>
-    <BackendSwitch v-if="isVisibleBackendSwitch" />
 
-    <div
-      v-if="isVisibleActions"
-      class="divider"
-    >
-      {{ $t('actions') }}
-    </div>
+    <div class="settings-grid p-3">
+      <BackendSwitch v-if="isVisibleBackendSwitch" />
 
-    <div
-      v-if="isVisibleActions"
-      class="grid max-w-3xl gap-3 gap-y-3"
-      :style="`grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));`"
-    >
-      <template v-if="!isSingBox || displayAllFeatures">
-        <button
-          v-if="!activeBackend?.disableUpgradeCore"
-          class="btn btn-primary btn-sm"
-          @click="showUpgradeCoreModal = true"
-        >
-          {{ $t('upgradeCore') }}
-        </button>
-        <button
-          class="btn btn-sm"
-          @click="handlerClickRestartCore"
-        >
-          <span
-            v-if="isCoreRestarting"
-            class="loading loading-spinner loading-md"
-          ></span>
-          {{ $t('restartCore') }}
-        </button>
-        <button
-          class="btn btn-sm"
-          @click="handlerClickReloadConfigs"
-        >
-          <span
-            v-if="isConfigReloading"
-            class="loading loading-spinner loading-md"
-          ></span>
-          {{ $t('reloadConfigs') }}
-        </button>
-        <button
-          v-if="!isSingBox"
-          class="btn btn-sm"
-          @click="showUpdateConfigModal = true"
-        >
-          {{ $t('updateConfigs') }}
-        </button>
-        <button
-          class="btn btn-sm"
-          @click="handlerClickUpdateGeo"
-        >
-          <span
-            v-if="isGeoUpdating"
-            class="loading loading-spinner loading-md"
-          ></span>
-          {{ $t('updateGeoDatabase') }}
-        </button>
-      </template>
-      <button
-        class="btn btn-sm"
-        @click="handleFlushDNSCache"
-      >
-        {{ $t('flushDNSCache') }}
-      </button>
-      <button
-        class="btn btn-sm"
-        @click="handleFlushFakeIP"
-      >
-        {{ $t('flushFakeIP') }}
-      </button>
-      <button
-        v-if="hasSmartGroup"
-        class="btn btn-sm"
-        @click="flushSmartGroupWeightsAPI"
-      >
-        {{ $t('flushSmartWeights') }}
-      </button>
-    </div>
-
-    <template v-if="!isSingBox && configs && isVisiblePorts">
-      <div class="divider">{{ $t('settings') }}</div>
       <div
-        class="grid max-w-3xl gap-2 gap-x-6"
-        :style="`grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));`"
+        v-if="isVisibleActions"
+        class="settings-section-label"
       >
-        <div
-          class="setting-item"
-          v-for="portConfig in portList"
-          :key="portConfig.key"
-        >
-          <div class="setting-item-label">
-            {{ $t(portConfig.label) }}
-          </div>
-          <input
-            class="input input-sm w-20 sm:w-24"
-            type="number"
-            v-model="configs[portConfig.key as keyof Config]"
-            @change="
-              updateConfigs({ [portConfig.key]: Number(configs[portConfig.key as keyof Config]) })
-            "
-          />
-        </div>
+        {{ $t('actions') }}
       </div>
       <div
-        class="grid max-w-3xl gap-2 gap-x-6"
-        :style="`grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));`"
+        v-if="isVisibleActions"
+        class="settings-grid gap-2 md:grid-cols-2!"
       >
-        <div
-          v-if="configs?.tun && isVisibleTunMode"
-          class="setting-item"
-        >
-          <div class="setting-item-label">
-            {{ $t('tunMode') }}
-          </div>
-          <input
-            class="toggle"
-            type="checkbox"
-            v-model="configs.tun.enable"
-            @change="hanlderTunModeChange"
-          />
-        </div>
-        <div
-          v-if="isVisibleAllowLan"
-          class="setting-item"
-        >
-          <div class="setting-item-label">
-            {{ $t('allowLan') }}
-          </div>
-          <input
-            class="toggle"
-            type="checkbox"
-            v-model="configs['allow-lan']"
-            @change="handlerAllowLanChange"
-          />
-        </div>
-        <template v-if="!activeBackend?.disableUpgradeCore">
-          <div
-            v-if="isVisibleCheckUpgrade"
-            class="setting-item"
+        <template v-if="!isSingBox || displayAllFeatures">
+          <button
+            v-if="!activeBackend?.disableUpgradeCore"
+            class="btn btn-neutral btn-sm"
+            @click="showUpgradeCoreModal = true"
           >
-            <div class="setting-item-label">
-              {{ $t('checkUpgrade') }}
-            </div>
-            <input
-              class="toggle"
-              type="checkbox"
-              v-model="checkUpgradeCore"
-              @change="handlerCheckUpgradeCoreChange"
-            />
-          </div>
-          <div
-            v-if="checkUpgradeCore && isVisibleAutoUpgrade"
-            class="setting-item"
+            {{ $t('upgradeCore') }}
+          </button>
+          <button
+            class="btn btn-sm"
+            @click="handlerClickRestartCore"
           >
-            <div class="setting-item-label">
-              {{ $t('autoUpgrade') }}
-            </div>
-            <input
-              class="toggle"
-              type="checkbox"
-              v-model="autoUpgradeCore"
-            />
-          </div>
+            <span
+              v-if="isCoreRestarting"
+              class="loading loading-spinner loading-md"
+            ></span>
+            {{ $t('restartCore') }}
+          </button>
+          <button
+            class="btn btn-sm"
+            @click="handlerClickReloadConfigs"
+          >
+            <span
+              v-if="isConfigReloading"
+              class="loading loading-spinner loading-md"
+            ></span>
+            {{ $t('reloadConfigs') }}
+          </button>
+          <button
+            v-if="!isSingBox"
+            class="btn btn-sm"
+            @click="showUpdateConfigModal = true"
+          >
+            {{ $t('updateConfigs') }}
+          </button>
+          <button
+            class="btn btn-sm"
+            @click="handlerClickUpdateGeo"
+          >
+            <span
+              v-if="isGeoUpdating"
+              class="loading loading-spinner loading-md"
+            ></span>
+            {{ $t('updateGeoDatabase') }}
+          </button>
         </template>
+        <button
+          class="btn btn-sm"
+          @click="handleFlushDNSCache"
+        >
+          {{ $t('flushDNSCache') }}
+        </button>
+        <button
+          class="btn btn-sm"
+          @click="handleFlushFakeIP"
+        >
+          {{ $t('flushFakeIP') }}
+        </button>
+        <button
+          v-if="hasSmartGroup"
+          class="btn btn-sm"
+          @click="flushSmartGroupWeightsAPI"
+        >
+          {{ $t('flushSmartWeights') }}
+        </button>
       </div>
-    </template>
-    <DnsQuery v-if="isVisibleDnsQuery" />
+
+      <template v-if="!isSingBox && configs && isVisiblePorts">
+        <div class="settings-section-label">{{ $t('settings') }}</div>
+        <div class="settings-grid">
+          <div
+            class="setting-item"
+            v-for="portConfig in portList"
+            :key="portConfig.key"
+          >
+            <div class="setting-item-label">
+              {{ $t(portConfig.label) }}
+            </div>
+            <input
+              class="input input-sm w-20 sm:w-24"
+              type="number"
+              v-model="configs[portConfig.key as keyof Config]"
+              @change="
+                updateConfigs({ [portConfig.key]: Number(configs[portConfig.key as keyof Config]) })
+              "
+            />
+          </div>
+          <div
+            v-if="configs?.tun && isVisibleTunMode"
+            class="setting-item"
+          >
+            <div class="setting-item-label">
+              {{ $t('tunMode') }}
+            </div>
+            <input
+              class="toggle"
+              type="checkbox"
+              v-model="configs.tun.enable"
+              @change="hanlderTunModeChange"
+            />
+          </div>
+          <div
+            v-if="isVisibleAllowLan"
+            class="setting-item"
+          >
+            <div class="setting-item-label">
+              {{ $t('allowLan') }}
+            </div>
+            <input
+              class="toggle"
+              type="checkbox"
+              v-model="configs['allow-lan']"
+              @change="handlerAllowLanChange"
+            />
+          </div>
+          <template v-if="!activeBackend?.disableUpgradeCore">
+            <div
+              v-if="isVisibleCheckUpgrade"
+              class="setting-item"
+            >
+              <div class="setting-item-label">
+                {{ $t('checkUpgrade') }}
+              </div>
+              <input
+                class="toggle"
+                type="checkbox"
+                v-model="checkUpgradeCore"
+                @change="handlerCheckUpgradeCoreChange"
+              />
+            </div>
+            <div
+              v-if="checkUpgradeCore && isVisibleAutoUpgrade"
+              class="setting-item"
+            >
+              <div class="setting-item-label">
+                {{ $t('autoUpgrade') }}
+              </div>
+              <input
+                class="toggle"
+                type="checkbox"
+                v-model="autoUpgradeCore"
+              />
+            </div>
+          </template>
+        </div>
+      </template>
+      <DnsQuery v-if="isVisibleDnsQuery" />
+    </div>
 
     <UpgradeCoreModal v-model="showUpgradeCoreModal" />
     <UpdateConfigModal v-model="showUpdateConfigModal" />

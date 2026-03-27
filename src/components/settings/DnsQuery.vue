@@ -1,6 +1,9 @@
 <template>
+  <div class="settings-section-label">
+    {{ $t('DNSQuery') }}
+  </div>
   <form
-    class="join mt-4 w-96 max-sm:w-full"
+    class="join w-96 max-sm:w-full"
     @submit.prevent="query"
   >
     <TextInput
@@ -21,7 +24,10 @@
       {{ $t('DNSQuery') }}
     </button>
   </form>
-  <div class="flex max-h-96 flex-col gap-1 overflow-y-auto">
+  <div
+    class="flex max-h-96 flex-col gap-1 overflow-y-auto p-3"
+    v-if="resultList?.length"
+  >
     <div
       class="flex gap-1"
       v-for="item in resultList"

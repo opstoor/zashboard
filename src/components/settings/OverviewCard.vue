@@ -1,6 +1,6 @@
 <template>
   <!-- overview -->
-  <div class="flex flex-col gap-0">
+  <div class="mb-3 flex flex-col gap-3">
     <ChartsCard
       v-if="isVisibleOverviewCard"
       class="shadow-none"
