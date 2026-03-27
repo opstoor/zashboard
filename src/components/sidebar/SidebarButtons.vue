@@ -1,14 +1,14 @@
 <template>
   <div :class="wrapperClass">
     <button
-      class="btn btn-circle btn-sm bg-base-300"
+      class="btn btn-circle btn-sm"
       @click="showBackendSelectorDialog = true"
       @mouseenter="handlerMouseenterBackendSelector"
     >
       <ServerIcon class="h-5 w-5" />
     </button>
     <button
-      class="btn btn-circle btn-sm bg-base-300"
+      class="btn btn-circle btn-sm"
       @click="isSidebarCollapsed = !isSidebarCollapsed"
     >
       <component

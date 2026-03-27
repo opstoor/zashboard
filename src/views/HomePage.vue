@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-base-200/50 home-page flex size-full"
+    class="bg-base-200 home-page flex size-full"
     :class="isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'"
   >
     <SideBar v-if="!isMiddleScreen" />

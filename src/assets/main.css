@@ -34,14 +34,14 @@
   }
 }
 @utility card {
-  @apply bg-base-100 rounded-lg shadow-md;
+  @apply bg-base-100 rounded-xl shadow-xs;
   .card-body {
     @apply p-4;
   }
 }
 
 @utility collapse {
-  @apply bg-base-100 rounded-lg shadow-md;
+  @apply bg-base-100 rounded-xl shadow-xs;
 }
 
 .collapse.transparent-collapse {
@@ -147,7 +147,7 @@
       }
     }
 
-    .home-page.bg-base-200\/50 {
+    .home-page.bg-base-200 {
       background-color: transparent;
     }
   }
@@ -216,7 +216,7 @@
 }
 
 .tippy-box[data-theme^='transparent'] {
-  @apply rounded-lg;
+  @apply rounded-xl;
   .tippy-content {
     @apply p-0;
   }
@@ -365,7 +365,7 @@ div {
       color-mix(in srgb, var(--color-base-100) 10%, transparent)
     );
   }
-  @apply md:bg-base-100/20 fixed top-0 right-0 left-0 z-30 shadow-sm backdrop-blur-lg md:sticky;
+  @apply md:bg-base-100/20 fixed top-0 right-0 left-0 z-30 shadow-xs backdrop-blur-xl md:sticky;
 }
 
 .dock {

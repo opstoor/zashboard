@@ -3,7 +3,7 @@
     <template v-if="!isVirtualScroller">
       <RulesCtrl />
       <div
-        class="flex flex-col gap-1 p-2"
+        class="flex flex-col gap-3 p-3"
         :style="padding"
       >
         <template v-if="rulesTabShow === RULE_TAB_TYPE.PROVIDER">

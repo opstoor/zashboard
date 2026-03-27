@@ -15,14 +15,14 @@
   >
     <div :style="{ height: `${totalSize}px` }">
       <table
-        :class="['table rounded-none shadow-md', sizeOfTable, isManualTable && 'table-fixed']"
+        :class="['table rounded-xl shadow-xs', sizeOfTable, isManualTable && 'table-fixed']"
         :style="
           isManualTable && {
             width: `${tanstackTable.getCenterTotalSize()}px`,
           }
         "
       >
-        <thead class="bg-base-100 sticky -top-2 z-10">
+        <thead class="bg-base-100 border-base-300/60 sticky -top-2 z-10 border-b">
           <tr
             v-for="headerGroup in tanstackTable.getHeaderGroups()"
             :key="headerGroup.id"
@@ -113,9 +113,9 @@
               height: `${virtualRow.size}px`,
               transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
             }"
-            class="hover:bg-primary! hover:text-primary-content"
+            class="hover:bg-base-300/50"
             :class="[
-              index % 2 === 0 ? 'bg-base-100' : 'bg-base-200',
+              index % 2 === 0 ? 'bg-base-100' : 'bg-base-200/50',
               !isDragging ? 'cursor-pointer' : 'cursor-grabbing',
             ]"
             @click="handlerClickRow(rows[virtualRow.index])"
@@ -143,7 +143,7 @@
                         'max-w-xl truncate',
                     ),
                 cell.column.getIsPinned && cell.column.getIsPinned() === 'left'
-                  ? 'pinned-td sticky -left-2 z-20 bg-inherit shadow-md'
+                  ? 'pinned-td sticky -left-2 z-20 bg-inherit shadow-sm'
                   : '',
               ]"
               @contextmenu="handleCellRightClick($event, cell)"

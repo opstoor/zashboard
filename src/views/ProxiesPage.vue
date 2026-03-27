@@ -9,11 +9,11 @@
   >
     <ProxiesCtrl />
     <template v-if="displayTwoColumns">
-      <div class="grid grid-cols-2 gap-1 p-2 md:pr-1">
+      <div class="grid grid-cols-2 gap-3 p-3 md:pr-1">
         <div
           v-for="idx in [0, 1]"
           :key="idx"
-          class="flex flex-1 flex-col gap-1"
+          class="flex flex-1 flex-col gap-3"
         >
           <component
             v-for="name in filterContent(renderGroups, idx)"
@@ -25,7 +25,7 @@
       </div>
     </template>
     <div
-      class="grid grid-cols-1 gap-1 p-2 md:pr-1"
+      class="grid grid-cols-1 gap-3 p-3 md:pr-1"
       v-else
     >
       <component

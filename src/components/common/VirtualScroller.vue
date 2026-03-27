@@ -78,7 +78,7 @@ const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
 const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
 
 const marginBottom = (index: number) => {
-  return index === props.data.length - 1 ? `${paddingBottom.value}px` : '4px'
+  return index === props.data.length - 1 ? `${paddingBottom.value}px` : '12px'
 }
 const measureElement = (el: Element | null) => {
   if (!el) {

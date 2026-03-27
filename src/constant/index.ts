@@ -199,8 +199,7 @@ export const DETAILED_CARD_STYLE = [
 export const ALL_THEME = [
   'light',
   'dark',
-  'light-legacy',
-  'dark-legacy',
+  'dark-apple',
   ...(window.ksu ? ['light-monet', 'dark-monet'] : []),
   'cupcake',
   'bumblebee',
@@ -235,6 +234,8 @@ export const ALL_THEME = [
   'caramellatte',
   'abyss',
   'silk',
+  'light-legacy',
+  'dark-legacy',
 ]
 
 export const DEFAULT_THEME = {

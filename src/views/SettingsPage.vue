@@ -13,7 +13,7 @@
     />
     <!-- 右侧内容区域 -->
     <div
-      class="grid grid-cols-1 gap-2 p-2"
+      class="grid grid-cols-1 gap-3 p-3"
       :style="padding"
     >
       <div class="flex flex-col gap-4">
