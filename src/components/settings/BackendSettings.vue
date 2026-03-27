@@ -39,7 +39,7 @@
       </div>
       <div
         v-if="isVisibleActions"
-        class="settings-grid gap-2 md:grid-cols-2!"
+        class="grid grid-cols-1 gap-2 md:grid-cols-2"
       >
         <template v-if="!isSingBox || displayAllFeatures">
           <button

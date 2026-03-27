@@ -58,7 +58,7 @@
           :menus="
             proxyGroupList.filter((group) => !groupTestUrls.some((item) => item.name === group))
           "
-          @keydown.enter="addGroupTestUrl"
+          @keydown.enter="() => addGroupTestUrl()"
         />
         <ArrowRightCircleIcon class="h-4 w-4 shrink-0" />
         <TextInput
@@ -66,11 +66,11 @@
           v-model="newGroupTestUrl.url"
           :clearable="true"
           :placeholder="$t('speedtestUrl')"
-          @keydown.enter="addGroupTestUrl"
+          @keydown.enter="() => addGroupTestUrl()"
         />
         <button
           class="btn btn-sm btn-circle"
-          @click="addGroupTestUrl"
+          @click="() => addGroupTestUrl()"
         >
           <PlusIcon class="h-4 w-4 shrink-0" />
         </button>
@@ -92,7 +92,7 @@ import {
 } from '@heroicons/vue/24/outline'
 import { useSessionStorage } from '@vueuse/core'
 import { v4 as uuid } from 'uuid'
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DialogWrapper from '../common/DialogWrapper.vue'
 import TextInput from '../common/TextInput.vue'
@@ -110,15 +110,25 @@ const groupTestUrlsTip = (e: Event) => {
   return showTip(e, t('groupTestUrlsTip'))
 }
 
-const addGroupTestUrl = () => {
-  if (!newGroupTestUrl.name || !newGroupTestUrl.url) return
-  dialogVisible.value = true
-  groupTestUrls.value.push({ ...newGroupTestUrl, uuid: uuid() })
+const resetNewGroupTestUrl = () => {
   newGroupTestUrl.name = ''
   newGroupTestUrl.url = ''
+}
+
+const addGroupTestUrl = (keepDialogOpen = true) => {
+  if (!newGroupTestUrl.name || !newGroupTestUrl.url) return
+  dialogVisible.value = keepDialogOpen
+  groupTestUrls.value.push({ ...newGroupTestUrl, uuid: uuid() })
+  resetNewGroupTestUrl()
 }
 
 const removeGroupTestUrl = (uuid: string) => {
   groupTestUrls.value = groupTestUrls.value.filter((item) => item.uuid !== uuid)
 }
+
+watch(dialogVisible, (visible, wasVisible) => {
+  if (!visible && wasVisible) {
+    addGroupTestUrl(false)
+  }
+})
 </script>

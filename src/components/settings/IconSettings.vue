@@ -35,20 +35,20 @@
             :menus="
               proxyGroupList.filter((group) => !iconReflectList.some((item) => item.name === group))
             "
-            @keydown.enter="addIconReflect"
+            @keydown.enter="() => addIconReflect()"
             @click.stop
           />
           <TextInput
             v-model="newIconReflect.icon"
             :placeholder="$t('dropOrClickUpload')"
             :clearable="true"
-            @keydown.enter="addIconReflect"
+            @keydown.enter="() => addIconReflect()"
             @click.stop
           />
         </div>
         <button
           class="btn btn-sm btn-circle"
-          @click.stop="addIconReflect"
+          @click.stop="() => addIconReflect()"
         >
           <PlusIcon class="h-4 w-4 shrink-0" />
         </button>
@@ -137,7 +137,7 @@ import {
 } from '@heroicons/vue/24/outline'
 import { useSessionStorage } from '@vueuse/core'
 import { v4 as uuid } from 'uuid'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import DialogWrapper from '../common/DialogWrapper.vue'
 import TextInput from '../common/TextInput.vue'
 
@@ -224,16 +224,26 @@ const handleFileSelect = async (e: Event) => {
   }
 }
 
-const addIconReflect = () => {
-  if (!newIconReflect.name || !newIconReflect.icon) return
-  dialogVisible.value = true
-  iconReflectList.value.push({ ...newIconReflect, uuid: uuid() })
+const resetNewIconReflect = () => {
   newIconReflect.name = ''
   newIconReflect.icon = ''
+}
+
+const addIconReflect = (keepDialogOpen = true) => {
+  if (!newIconReflect.name || !newIconReflect.icon) return
+  dialogVisible.value = keepDialogOpen
+  iconReflectList.value.push({ ...newIconReflect, uuid: uuid() })
+  resetNewIconReflect()
 }
 
 const removeIconReflect = (uuid: string) => {
   const index = iconReflectList.value.findIndex((item) => item.uuid === uuid)
   iconReflectList.value.splice(index, 1)
 }
+
+watch(dialogVisible, (visible, wasVisible) => {
+  if (!visible && wasVisible) {
+    addIconReflect(false)
+  }
+})
 </script>

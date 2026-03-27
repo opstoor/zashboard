@@ -49,7 +49,7 @@
       </Draggable>
       <SourceIPInput
         v-model="newLabelForIP"
-        @keydown.enter="handlerLabelAdd"
+        @keydown.enter="() => handlerLabelAdd()"
       >
         <template #prefix>
           <TagIcon class="h-4 w-4 shrink-0" />
@@ -57,7 +57,7 @@
         <template #default>
           <button
             class="btn btn-circle btn-sm"
-            @click="handlerLabelAdd"
+            @click="() => handlerLabelAdd()"
           >
             <PlusIcon class="h-4 w-4" />
           </button>
@@ -80,7 +80,7 @@ import {
 } from '@heroicons/vue/24/outline'
 import { useSessionStorage } from '@vueuse/core'
 import { v4 as uuid } from 'uuid'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import DialogWrapper from '../common/DialogWrapper.vue'
 import SourceIPInput from './SourceIPInput.vue'
@@ -91,21 +91,25 @@ const newLabelForIP = ref<Omit<SourceIPLabel, 'id'>>({
   label: '',
 })
 
-const handlerLabelAdd = () => {
+const resetNewLabelForIP = () => {
+  newLabelForIP.value = {
+    key: '',
+    label: '',
+  }
+}
+
+const handlerLabelAdd = (keepDialogOpen = true) => {
   if (!newLabelForIP.value.key || !newLabelForIP.value.label) {
     return
   }
 
-  dialogVisible.value = true
+  dialogVisible.value = keepDialogOpen
   sourceIPLabelList.value.push({
     ...newLabelForIP.value,
     id: uuid(),
   })
 
-  newLabelForIP.value = {
-    key: '',
-    label: '',
-  }
+  resetNewLabelForIP()
 }
 
 const handlerLabelRemove = (id: string) => {
@@ -123,4 +127,10 @@ const handlerLabelUpdate = (sourceIP: Partial<SourceIPLabel>) => {
     ...sourceIP,
   }
 }
+
+watch(dialogVisible, (visible, wasVisible) => {
+  if (!visible && wasVisible) {
+    handlerLabelAdd(false)
+  }
+})
 </script>

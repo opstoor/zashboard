@@ -104,6 +104,7 @@
     .toggle,
     .settings-menu,
     .ctrls-bar,
+    .settings-grid,
     .tabs {
       @apply bg-base-100/$(i);
     }
@@ -161,6 +162,7 @@
     .nav-bar,
     .modal-box,
     .need-blur,
+    .settings-grid,
     .table thead {
       /* prettier-ignore */
       backdrop-filter: blur($(i)px);

@@ -129,6 +129,7 @@ const options = computed(() => {
         formatter: props.labelFormatter,
         color: colorSet.baseContent,
         fontFamily,
+        fontSize: 10,
       },
     },
     series: props.data.map((item, index) => {

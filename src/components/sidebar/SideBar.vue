@@ -38,7 +38,7 @@
         />
       </template>
       <template v-else>
-        <OverviewCarousel v-if="route.name !== ROUTE_NAME.overview" />
+        <OverviewCarousel />
         <div class="card">
           <CommonSidebar />
         </div>
@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import CommonSidebar from '@/components/sidebar/CommonCtrl.vue'
-import { ROUTE_ICON_MAP, ROUTE_NAME } from '@/constant'
+import { ROUTE_ICON_MAP } from '@/constant'
 import { renderRoutes } from '@/helper'
 import { useTooltip } from '@/helper/tooltip'
 import router from '@/router'
