@@ -58,6 +58,7 @@ const ru: LANG_MESSAGE = {
   customTableColumns: 'Пользовательские столбцы таблицы',
   customCardLines: 'Пользовательские строчки карточки',
   close: 'Закрыть',
+  panelStyle: 'Стиль панели',
   defaultTheme: 'Тема по умолчанию',
   darkTheme: 'Темная тема',
   proxyProvider: 'Провайдер прокси',

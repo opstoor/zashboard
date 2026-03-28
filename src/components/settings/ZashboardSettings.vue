@@ -56,44 +56,6 @@
     <div class="settings-grid">
       <LanguageSelect v-if="isVisibleLanguage" />
       <div
-        v-if="isVisibleFonts"
-        class="setting-item"
-      >
-        <div class="setting-item-label">
-          {{ $t('fonts') }}
-        </div>
-        <select
-          class="select select-sm w-48"
-          v-model="font"
-        >
-          <option
-            v-for="opt in fontOptions"
-            :key="opt"
-            :value="opt"
-          >
-            {{ opt }}
-          </option>
-        </select>
-      </div>
-      <div
-        v-if="isVisibleEmoji"
-        class="setting-item"
-      >
-        <div class="setting-item-label">Emoji</div>
-        <select
-          class="select select-sm w-48"
-          v-model="emoji"
-        >
-          <option
-            v-for="opt in Object.values(EMOJIS)"
-            :key="opt"
-            :value="opt"
-          >
-            {{ opt }}
-          </option>
-        </select>
-      </div>
-      <div
         v-if="isVisibleAutoUpgrade"
         class="setting-item"
       >
@@ -109,13 +71,13 @@
     </div>
 
     <div
-      v-if="isVisibleDefaultTheme || (autoTheme && isVisibleDarkTheme)"
+      v-if="isPanelStyleVisible"
       class="settings-section-label"
     >
-      {{ $t('defaultTheme') }}
+      {{ $t('panelStyle') }}
     </div>
     <div
-      v-if="isVisibleDefaultTheme || (autoTheme && isVisibleDarkTheme)"
+      v-if="isPanelStyleVisible"
       class="settings-grid"
     >
       <div
@@ -161,19 +123,10 @@
         </div>
         <ThemeSelector v-model:value="darkTheme" />
       </div>
-    </div>
-
-    <div
-      v-if="isVisibleCustomBackgroundURL"
-      class="settings-section-label"
-    >
-      {{ $t('customBackgroundURL') }}
-    </div>
-    <div
-      v-if="isVisibleCustomBackgroundURL"
-      class="settings-grid"
-    >
-      <div class="setting-item">
+      <div
+        v-if="isVisibleCustomBackgroundURL"
+        class="setting-item"
+      >
         <div class="setting-item-label">
           {{ $t('customBackgroundURL') }}
         </div>
@@ -242,6 +195,44 @@
           @touchend.stop
         />
       </div>
+      <div
+        v-if="isVisibleFonts"
+        class="setting-item"
+      >
+        <div class="setting-item-label">
+          {{ $t('fonts') }}
+        </div>
+        <select
+          class="select select-sm w-48"
+          v-model="font"
+        >
+          <option
+            v-for="opt in fontOptions"
+            :key="opt"
+            :value="opt"
+          >
+            {{ opt }}
+          </option>
+        </select>
+      </div>
+      <div
+        v-if="isVisibleEmoji"
+        class="setting-item"
+      >
+        <div class="setting-item-label">Emoji</div>
+        <select
+          class="select select-sm w-48"
+          v-model="emoji"
+        >
+          <option
+            v-for="opt in Object.values(EMOJIS)"
+            :key="opt"
+            :value="opt"
+          >
+            {{ opt }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -291,6 +282,17 @@ const isVisibleExportSettings = useIsSettingVisible(k.exportSettings)
 const isVisibleImportSettings = useIsSettingVisible(k.importSettings)
 
 const displayBgProperty = ref(false)
+
+const isPanelStyleVisible = computed(() => {
+  return (
+    isVisibleDefaultTheme.value ||
+    isVisibleAutoSwitchTheme.value ||
+    (autoTheme.value && isVisibleDarkTheme.value) ||
+    isVisibleCustomBackgroundURL.value ||
+    isVisibleFonts.value ||
+    isVisibleEmoji.value
+  )
+})
 
 const hasVisibleItems = computed(() => {
   return (

@@ -58,6 +58,7 @@ const zh: LANG_MESSAGE = {
   customTableColumns: '自定义表格列',
   customCardLines: '自定义卡片行',
   close: '关闭',
+  panelStyle: '面板样式',
   defaultTheme: '默认主题',
   darkTheme: '深色主题',
   proxyProvider: '代理提供商',

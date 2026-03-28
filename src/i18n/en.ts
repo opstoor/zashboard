@@ -56,6 +56,7 @@ const en = {
   customTableColumns: 'Custom table columns',
   customCardLines: 'Custom card lines',
   close: 'Close',
+  panelStyle: 'Panel Style',
   defaultTheme: 'Default theme',
   darkTheme: 'Dark theme',
   proxyProvider: 'Proxy provider',
