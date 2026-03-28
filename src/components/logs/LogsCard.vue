@@ -8,7 +8,7 @@
         {{ seqWithPadding }}
       </span>
       <span
-        class="badge badge-sm font-mono"
+        class="badge badge-sm"
         :class="colorMapForType[log.type as keyof typeof colorMapForType]"
       >
         {{ log.type }}

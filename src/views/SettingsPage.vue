@@ -7,6 +7,7 @@
     <SettingsMenu
       :menu-items="menuItems"
       :active-menu-key="activeMenuKey"
+      :show-active-indicator="!isTwoColumns"
       @menu-click="handleMenuClick"
     />
 
@@ -20,8 +21,37 @@
     </button>
 
     <!-- Content Area -->
+    <template v-if="isTwoColumns">
+      <div
+        class="mx-auto grid w-full max-w-7xl grid-cols-2 gap-12 p-3"
+        :style="padding"
+      >
+        <div
+          v-for="col in [0, 1]"
+          :key="col"
+          class="flex flex-col gap-3"
+        >
+          <div
+            v-for="item in menuItems.filter((_, i) => columnAssignment[i] === col)"
+            :key="item.key"
+            :id="`item-${item.key}`"
+            :data-key="item.key"
+            class="mb-4 rounded-lg p-2 md:mb-6"
+          >
+            <div
+              class="mt-1 mb-3 px-1 text-lg font-semibold"
+              v-if="![SETTINGS_MENU_KEY.general, SETTINGS_MENU_KEY.backend].includes(item.key)"
+            >
+              {{ $t(item.label) }}
+            </div>
+            <component :is="item.component" />
+          </div>
+        </div>
+      </div>
+    </template>
     <div
-      class="settings-content"
+      v-else
+      class="mx-auto w-full max-w-3xl space-y-1 p-3 md:space-y-2 md:px-8 md:py-6"
       :style="padding"
     >
       <div
@@ -29,10 +59,10 @@
         :key="item.key"
         :id="`item-${item.key}`"
         :data-key="item.key"
-        class="settings-page-section"
+        class="mb-4 md:mb-6"
       >
         <div
-          class="settings-page-section-title"
+          class="mt-1 mb-3 px-1 text-lg font-semibold"
           v-if="![SETTINGS_MENU_KEY.general, SETTINGS_MENU_KEY.backend].includes(item.key)"
         >
           {{ $t(item.label) }}
@@ -63,6 +93,7 @@ import {
   HomeIcon,
   ServerIcon,
 } from '@heroicons/vue/24/outline'
+import { useElementSize } from '@vueuse/core'
 import { throttle } from 'lodash'
 import type { Component } from 'vue'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -76,9 +107,12 @@ type MenuItem = {
 }
 
 const { padding } = usePaddingForViews()
+
 const route = useRoute()
 
 const scrollContainerRef = ref<HTMLDivElement>()
+const { width } = useElementSize(scrollContainerRef)
+const isTwoColumns = computed(() => width.value >= 1000)
 const menuItems = computed<MenuItem[]>(() => {
   const itemsMap = new Map<SETTINGS_MENU_KEY, MenuItem>([
     [
@@ -135,6 +169,27 @@ const menuItems = computed<MenuItem[]>(() => {
 })
 const activeMenuKey = ref<SETTINGS_MENU_KEY>(menuItems.value[0]?.key || SETTINGS_MENU_KEY.general)
 
+const columnAssignment = ref<number[]>(menuItems.value.map((_, i) => i % 2))
+
+const rebalanceColumns = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 0)) // 等待 DOM 更新
+  const colHeights = [0, 0]
+  columnAssignment.value = menuItems.value.map((item) => {
+    const el = document.getElementById(`item-${item.key}`)
+    const h = el?.offsetHeight ?? 0
+    const col = colHeights[0] <= colHeights[1] ? 0 : 1
+    colHeights[col] += h
+    return col
+  })
+}
+
+watch(menuItems, () => {
+  columnAssignment.value = menuItems.value.map((_, i) => i % 2)
+  rebalanceColumns()
+})
+
+watch(isTwoColumns, rebalanceColumns)
+
 // 当 menuItems 变化时，如果当前激活的项被隐藏，则切换到第一个可见项
 watch(
   menuItems,
@@ -153,6 +208,12 @@ const getItemRef = (key: SETTINGS_MENU_KEY) => {
 
 const isTriggerByClick = ref(false)
 const timeoutId = ref<number>()
+
+const flashElement = (el: HTMLElement) => {
+  el.classList.remove('highlight-flash')
+  el.classList.add('highlight-flash')
+  el.addEventListener('animationend', () => el.classList.remove('highlight-flash'), { once: true })
+}
 
 const handleMenuClick = (key: SETTINGS_MENU_KEY) => {
   activeMenuKey.value = key
@@ -175,13 +236,17 @@ const handleMenuClick = (key: SETTINGS_MENU_KEY) => {
         top: targetScrollTop,
         behavior: 'smooth',
       })
+
+      if (isTwoColumns.value) {
+        setTimeout(() => flashElement(element), 300)
+      }
     }
   }
 }
 
 const scrollTop = ref(0)
 const updateActiveMenuByScroll = () => {
-  if (!scrollContainerRef.value || isTriggerByClick.value) return
+  if (!scrollContainerRef.value || isTriggerByClick.value || isTwoColumns.value) return
 
   const containerRect = scrollContainerRef.value.getBoundingClientRect()
   const newScrollTop = scrollContainerRef.value.scrollTop
@@ -243,6 +308,7 @@ const refreshPages = async () => {
 }
 
 onMounted(() => {
+  rebalanceColumns()
   requestAnimationFrame(async () => {
     const scrollTo = route.query.scrollTo as SETTINGS_MENU_KEY
     if (scrollTo) {

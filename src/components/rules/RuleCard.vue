@@ -8,10 +8,10 @@
       @click="clickHandler"
     >
       <div class="min-h-6 leading-6">
-        <span class="text-base-content/60 inline-flex items-center gap-2 text-xs">
-          <span>{{ index }}.</span>
-          <span>{{ rule.type }}</span>
+        <span class="text-base-content/40 text-xs">
+          {{ index }}
         </span>
+        <span class="text-main ml-4">{{ rule.type }}</span>
         <span
           class="ml-2"
           v-if="rule.payload"

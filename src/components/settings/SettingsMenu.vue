@@ -6,30 +6,40 @@
     @touchmove.passive.stop
     @touchend.passive.stop
   >
-    <div class="relative flex w-full max-w-7xl flex-row">
-      <div
-        class="bg-neutral absolute top-1 left-0 -z-1 h-8 rounded-lg"
-        :class="[!isSwiping ? 'transition-transform duration-300 will-change-transform' : '']"
-        :style="activeStyle"
-      ></div>
-      <div
-        v-for="item in menuItems"
-        :key="item.key"
-        ref="menuItemRefs"
-        :data-key="item.key"
-        :id="`menu-item-${item.key}`"
-        class="mr-2 flex h-10 w-full flex-1 flex-shrink-0 cursor-pointer items-center justify-center gap-2 truncate transition-all duration-300"
-        :class="[activeMenuKey === item.key ? 'text-neutral-content' : '']"
-        @click="handleMenuClick(item.key)"
-      >
-        <component
-          :is="item.icon"
-          class="h-5 w-5"
-        />
-        <span class="hidden text-sm lg:block">
-          {{ $t(item.label) }}
-        </span>
+    <div class="flex w-full">
+      <div class="relative flex max-w-7xl grow-1 gap-2">
+        <div
+          v-if="showActiveIndicator"
+          class="bg-neutral absolute top-1 left-0 -z-1 h-8 rounded-lg"
+          :class="[!isSwiping ? 'transition-transform duration-300 will-change-transform' : '']"
+          :style="activeStyle"
+        ></div>
+        <div
+          v-for="item in menuItems"
+          :key="item.key"
+          ref="menuItemRefs"
+          :data-key="item.key"
+          :id="`menu-item-${item.key}`"
+          class="btn btn-ghost btn-sm my-1 flex-1"
+          :class="[
+            !showActiveIndicator
+              ? 'hover:btn hover:btn-neutral'
+              : activeMenuKey === item.key
+                ? 'text-neutral-content bg-transparent'
+                : '',
+          ]"
+          @click="handleMenuClick(item.key)"
+        >
+          <component
+            :is="item.icon"
+            class="h-5 w-5"
+          />
+          <span class="hidden text-sm lg:block">
+            {{ $t(item.label) }}
+          </span>
+        </div>
       </div>
+      <div class="flex-1"></div>
       <button
         class="btn btn-circle btn-sm my-auto"
         @click="showVisibilityDialog = true"
@@ -60,6 +70,7 @@ type MenuItem = {
 const props = defineProps<{
   menuItems: MenuItem[]
   activeMenuKey: SETTINGS_MENU_KEY
+  showActiveIndicator?: boolean
 }>()
 
 const emit = defineEmits<{

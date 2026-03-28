@@ -26,7 +26,7 @@ import { computed } from 'vue'
 
 // global
 export const defaultTheme = useStorage<string>('config/default-theme', 'light')
-export const darkTheme = useStorage<string>('config/dark-theme', 'dark')
+export const darkTheme = useStorage<string>('config/dark-theme', 'dark-apple')
 export const autoTheme = useStorage<boolean>('config/auto-theme', true)
 export const theme = computed(() => {
   if (autoTheme.value && isPreferredDark.value) {

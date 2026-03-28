@@ -365,21 +365,6 @@ div {
   }
 }
 
-.dock-shadow {
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.3),
-    rgba(0, 0, 0, 0.16),
-    rgba(0, 0, 0, 0.08),
-    rgba(0, 0, 0, 0.02),
-    rgba(0, 0, 0, 0)
-  );
-  width: 100%;
-  height: env(safe-area-inset-bottom);
-  position: fixed;
-  bottom: 0;
-  z-index: 10;
-}
 .ctrls-bar {
   @apply bg-base-100 md:bg-base-100/20 fixed top-0 right-0 left-0 z-30 shadow-xs backdrop-blur-xl md:sticky;
 }
@@ -388,18 +373,6 @@ div {
   @apply absolute right-2 left-2 z-30 rounded-3xl;
 }
 
-.settings-content {
-  @apply mx-auto w-full max-w-3xl space-y-1 p-3 md:space-y-2 md:px-8 md:py-6;
-}
-.settings-page-section {
-  @apply mb-4 md:mb-6;
-}
-.settings-page-section-title {
-  @apply mt-1 mb-3 px-1 text-lg font-semibold;
-}
-.settings-title {
-  @apply flex items-center gap-2 py-2 text-lg font-bold;
-}
 .settings-section-label {
   @apply px-1 pt-5 pb-1.5 text-xs font-semibold tracking-wider uppercase first:pt-2;
   color: color-mix(in srgb, var(--color-base-content) 45%, transparent);
