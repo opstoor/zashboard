@@ -210,7 +210,7 @@ const updateActiveMenuByScroll = () => {
     const containerRatio = visibleHeight / containerHeight
     // 综合得分：优先考虑自身可见比例高的元素，其次考虑占容器比例
     // 当小元素完全可见时 selfRatio=1，得分会很高
-    let score = selfRatio * 0.6 + containerRatio * 0.4
+    let score = selfRatio + containerRatio * 0.4
 
     // 滚动方向偏好：偏向即将进入视口的元素
     const elementCenter = (visibleTop + visibleBottom) / 2

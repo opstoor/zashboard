@@ -16,7 +16,7 @@
     >
       <div
         v-if="showContent"
-        class="max-h-108 overflow-y-auto p-4 pt-0 max-md:p-2"
+        class="max-h-108 overflow-y-auto p-4 pt-0"
         :class="[SCROLLABLE_PARENT_CLASS, !showCollapse && 'opacity-0']"
       >
         <slot name="content" />

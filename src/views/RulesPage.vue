@@ -57,7 +57,7 @@ import { computed } from 'vue'
 fetchRules()
 
 const { padding } = usePaddingForViews({
-  offsetTop: 8,
+  offsetTop: 12,
   offsetBottom: 8,
 })
 const isVirtualScroller = computed(() => {
