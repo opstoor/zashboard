@@ -113,7 +113,7 @@
               height: `${virtualRow.size}px`,
               transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
             }"
-            class="hover:bg-base-300/50"
+            class="hover:bg-primary hover:text-primary-content"
             :class="[
               index % 2 === 0 ? 'bg-base-100' : 'bg-base-200/50',
               !isDragging ? 'cursor-pointer' : 'cursor-grabbing',

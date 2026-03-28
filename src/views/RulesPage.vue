@@ -3,31 +3,35 @@
     <template v-if="!isVirtualScroller">
       <RulesCtrl />
       <div
-        class="flex flex-col gap-3 p-3"
+        class="p-3"
         :style="padding"
       >
         <template v-if="rulesTabShow === RULE_TAB_TYPE.PROVIDER">
-          <RuleProvider
-            v-for="(ruleProvider, index) in renderRulesProvider"
-            :key="ruleProvider.name"
-            :ruleProvider="ruleProvider"
-            :index="index + 1"
-          />
+          <div class="scroller-group">
+            <RuleProvider
+              v-for="(ruleProvider, index) in renderRulesProvider"
+              :key="ruleProvider.name"
+              :ruleProvider="ruleProvider"
+              :index="index + 1"
+            />
+          </div>
         </template>
         <template v-else>
-          <RuleCard
-            v-for="rule in renderRules"
-            :key="rule.payload"
-            :rule="rule"
-            :index="rules.indexOf(rule) + 1"
-          />
+          <div class="scroller-group">
+            <RuleCard
+              v-for="rule in renderRules"
+              :key="rule.payload"
+              :rule="rule"
+              :index="rules.indexOf(rule) + 1"
+            />
+          </div>
         </template>
       </div>
     </template>
     <VirtualScroller
       v-else
       :data="renderRules"
-      :size="64"
+      :size="44"
     >
       <template v-slot:before>
         <RulesCtrl />
@@ -52,9 +56,12 @@ import { usePaddingForViews } from '@/composables/paddingViews'
 import { RULE_TAB_TYPE } from '@/constant'
 import { fetchRules, renderRules, renderRulesProvider, rules, rulesTabShow } from '@/store/rules'
 import type { Rule } from '@/types'
-import { computed } from 'vue'
+import { computed, provide, ref } from 'vue'
 
 fetchRules()
+
+const expandedRule = ref<string | null>(null)
+provide('expandedRule', expandedRule)
 
 const { padding } = usePaddingForViews({
   offsetTop: 12,

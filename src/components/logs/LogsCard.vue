@@ -1,24 +1,24 @@
 <template>
-  <div class="card block p-3 text-sm break-all">
-    <div class="inline-flex items-center gap-2">
-      <div
-        class="text-base-content/60"
+  <div class="scroller-item flex flex-col gap-2 px-3 py-2 text-sm">
+    <div class="flex items-center gap-2">
+      <span
+        class="text-base-content/40 text-xs tabular-nums"
         :style="{ minWidth: `${(seqWithPadding.length + 1) * 0.62}em` }"
       >
-        {{ seqWithPadding }}.
-      </div>
-      <span class="badge badge-sm text-main min-w-14">
-        {{ log.time }}
+        {{ seqWithPadding }}
       </span>
       <span
-        class="badge badge-sm min-w-17"
-        :class="textColorMapForType[log.type as keyof typeof textColorMapForType]"
+        class="badge badge-sm font-mono"
+        :class="colorMapForType[log.type as keyof typeof colorMapForType]"
       >
         {{ log.type }}
       </span>
+      <div class="flex-1"></div>
+      <span class="text-base-content/40 text-xs tabular-nums">
+        {{ log.time }}
+      </span>
     </div>
-
-    <span class="leading-6 max-md:mt-2 max-md:block md:ml-2">{{ log.payload }}</span>
+    <div class="w-full leading-relaxed break-words">{{ log.payload }}</div>
   </div>
 </template>
 
@@ -36,7 +36,7 @@ const seqWithPadding = computed(() => {
   return props.log.seq.toString().padStart(2, '0')
 })
 
-const textColorMapForType = {
+const colorMapForType = {
   [LOG_LEVEL.Trace]: 'text-success',
   [LOG_LEVEL.Debug]: 'text-accent',
   [LOG_LEVEL.Info]: 'text-info',

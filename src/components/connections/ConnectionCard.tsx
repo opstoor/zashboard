@@ -169,10 +169,7 @@ export default defineComponent<{
       }
       return (
         <div
-          class={[
-            'card cursor-pointer gap-1',
-            connectionCardLines.value.length > 2 ? 'p-2' : 'p-1',
-          ]}
+          class={['scroller-item flex cursor-pointer flex-col gap-1 px-3 py-2']}
           onClick={() => handlerInfo(conn)}
         >
           {connectionCardLines.value.map((line) => (

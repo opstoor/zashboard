@@ -1,18 +1,17 @@
 <template>
-  <div
-    class="card"
-    :class="{ 'opacity-50': isDisabled }"
-  >
+  <div :class="{ 'opacity-50': isDisabled, 'scroller-item': 1 }">
     <div
-      class="flex flex-col gap-2 overflow-hidden p-3 text-sm"
+      class="flex flex-col gap-2 overflow-hidden p-3 pt-2 text-sm"
       :class="{
         'cursor-pointer': isSelectable,
       }"
       @click="clickHandler"
     >
       <div class="min-h-6 leading-6">
-        <span class="text-base-content/60">{{ index }}.</span>
-        <span class="text-base-content/60 ml-2">{{ rule.type }}</span>
+        <span class="text-base-content/60 inline-flex items-center gap-2 text-xs">
+          <span>{{ index }}.</span>
+          <span>{{ rule.type }}</span>
+        </span>
         <span
           class="ml-2"
           v-if="rule.payload"
@@ -58,37 +57,55 @@
           @change="toggleRuleDisabledHandler"
           @click.stop
         />
-        <ProxyName
+        <div
+          class="proxy-chain-path"
           v-if="isCollapsed"
-          :name="rule.proxy"
-          class="badge gap-0 text-xs"
-        />
-        <template v-if="!isCollapsed">
-          <template
-            v-for="(chain, index) in proxyChains"
-            :key="chain"
-          >
-            <ArrowRightCircleIcon
-              class="h-4 w-4"
-              v-if="index > 0"
-            />
-            <ProxyName
-              :name="chain"
-              class="badge gap-0 text-xs"
-              :class="{
-                'bg-neutral text-neutral-content': selected === chain,
-              }"
-              @click.stop="selected = chain"
-            />
+        >
+          <span class="proxy-chain-node">
+            <ProxyName :name="rule.proxy" />
+          </span>
+          <template v-if="proxyNode?.now && displayNowNodeInRule">
+            <ChevronRightIcon class="proxy-chain-separator" />
+            <span class="proxy-chain-node pointer-events-none">
+              <ProxyName :name="getNowProxyNodeName(rule.proxy)" />
+            </span>
           </template>
-        </template>
-        <template v-if="proxyNode?.now && displayNowNodeInRule">
-          <ArrowRightCircleIcon class="h-4 w-4" />
-          <ProxyName
-            :name="getNowProxyNodeName(rule.proxy)"
-            class="badge cursor-not-allowed gap-0 text-xs"
-            @click.stop
-          />
+        </div>
+        <template v-else>
+          <div class="proxy-chain-path">
+            <template
+              v-for="(chain, index) in proxyChains"
+              :key="chain"
+            >
+              <ChevronRightIcon
+                class="proxy-chain-separator"
+                v-if="index > 0"
+              />
+              <span
+                class="proxy-chain-node"
+                :class="{
+                  'proxy-chain-node-active': selected === chain,
+                }"
+                @click.stop="selected = chain"
+              >
+                <ProxyName :name="chain" />
+              </span>
+            </template>
+            <template
+              v-if="
+                getNowProxyNodeName(rule.proxy) &&
+                getNowProxyNodeName(rule.proxy) !== proxyChains[proxyChains.length - 1]
+              "
+            >
+              <ChevronRightIcon class="proxy-chain-separator" />
+              <span
+                class="proxy-chain-node proxy-chain-node-terminal"
+                @click.stop
+              >
+                <ProxyName :name="getNowProxyNodeName(rule.proxy)" />
+              </span>
+            </template>
+          </div>
         </template>
         <span
           v-if="latency !== NOT_CONNECTED && displayLatencyInRule"
@@ -101,10 +118,10 @@
     </div>
 
     <template v-if="isSelectable && !isCollapsed">
-      <div class="border-base-content/15 border-b"></div>
+      <div class="border-base-content/3 border-b"></div>
       <ProxyGroup
         :name="selected"
-        class="transparent-collapse"
+        class="transparent-collapse bg-base-200/40! rounded-none!"
       />
     </template>
   </div>
@@ -138,13 +155,14 @@ import {
 import type { Rule } from '@/types'
 import {
   ArrowPathIcon,
-  ArrowRightCircleIcon,
+  ChevronRightIcon,
   InformationCircleIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
 import { twMerge } from 'tailwind-merge'
-import { computed, createApp, defineComponent, h, ref } from 'vue'
+import type { Ref } from 'vue'
+import { computed, createApp, defineComponent, h, inject, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ProxyGroup from '../proxies/ProxyGroup.vue'
 import ProxyName from '../proxies/ProxyName.vue'
@@ -154,7 +172,9 @@ const props = defineProps<{
   index: number
 }>()
 
-const isCollapsed = ref(true)
+const expandedRule = inject<Ref<string | null>>('expandedRule', ref(null))
+const ruleKey = computed(() => `${props.index}-${props.rule.payload}`)
+const isCollapsed = computed(() => expandedRule.value !== ruleKey.value)
 const isSelectable = computed(() => proxyGroupList.value.includes(props.rule.proxy))
 const selected = ref('')
 const proxyChains = computed(() => getProxyGroupChains(props.rule.proxy))
@@ -283,10 +303,60 @@ const showRuleHitInfoTip = (e: Event) => {
 
 const clickHandler = () => {
   if (isSelectable.value && !props.rule.disabled) {
-    isCollapsed.value = !isCollapsed.value
+    expandedRule.value = isCollapsed.value ? ruleKey.value : null
     selected.value = props.rule.proxy
   }
 }
 
 useBounceOnVisible()
 </script>
+
+<style scoped>
+.proxy-chain-path {
+  flex-shrink: 1;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background-color: color-mix(in srgb, var(--color-base-content) 4%, transparent);
+  padding: 2px;
+  gap: 0;
+  overflow-x: auto;
+}
+
+.proxy-chain-node {
+  flex-shrink: 0;
+  padding: 1px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+  white-space: nowrap;
+}
+
+.proxy-chain-node:hover {
+  background-color: color-mix(in srgb, var(--color-base-content) 8%, transparent);
+}
+
+.proxy-chain-node-active {
+  background-color: var(--color-neutral);
+  color: var(--color-neutral-content);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.proxy-chain-node-active:hover {
+  background-color: var(--color-neutral);
+}
+
+.proxy-chain-node-terminal {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.proxy-chain-separator {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  opacity: 0.35;
+}
+</style>

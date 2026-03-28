@@ -48,6 +48,13 @@
   @apply bg-transparent! shadow-none! backdrop-blur-none!;
 }
 
+.scroller-group {
+  @apply bg-base-100 overflow-hidden rounded-xl shadow-xs;
+}
+.scroller-group:not(.virtual-scroller) .scroller-item + .scroller-item {
+  @apply border-base-200/80 border-t;
+}
+
 @utility badge {
   @apply bg-base-200/80;
 }
@@ -105,6 +112,7 @@
     .settings-menu,
     .ctrls-bar,
     .settings-grid,
+    .rules-group,
     .tabs {
       @apply bg-base-100/$(i);
     }
@@ -163,6 +171,7 @@
     .modal-box,
     .need-blur,
     .settings-grid,
+    .rules-group,
     .table thead {
       /* prettier-ignore */
       backdrop-filter: blur($(i)px);

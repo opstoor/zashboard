@@ -1,14 +1,14 @@
 <template>
-  <div class="size-full overflow-hidden">
+  <div class="relative size-full overflow-x-hidden">
     <VirtualScroller
       :data="renderLogs"
-      :size="isMiddleScreen ? 96 : 64"
+      :size="44"
     >
       <template v-slot:before>
         <LogsCtrl />
       </template>
       <template v-slot="{ item }: { item: LogWithSeq }">
-        <LogsCard :log="item"></LogsCard>
+        <LogsCard :log="item" />
       </template>
     </VirtualScroller>
   </div>
@@ -18,7 +18,6 @@
 import VirtualScroller from '@/components/common/VirtualScroller.vue'
 import LogsCard from '@/components/logs/LogsCard.vue'
 import LogsCtrl from '@/components/sidebar/LogsCtrl.tsx'
-import { isMiddleScreen } from '@/helper/utils'
 import { logFilter, logFilterEnabled, logFilterRegex, logTypeFilter, logs } from '@/store/logs'
 import type { LogWithSeq } from '@/types'
 import { computed } from 'vue'

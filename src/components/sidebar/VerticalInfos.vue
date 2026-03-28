@@ -15,12 +15,12 @@
             class="h-3.5 w-3.5"
             :class="item.iconColor ?? 'text-base-content/60'"
           />
-          <span class="text-base-content/90 text-[10px] leading-tight font-medium tabular-nums">
+          <span class="text-base-content/90 text-[11px] leading-tight font-medium tabular-nums">
             {{ statisticsMap[item.type] }}
           </span>
           <span
             v-if="item.secondary"
-            class="text-base-content/40 text-[9px] leading-tight tabular-nums"
+            class="text-base-content/40 text-[10px] leading-tight tabular-nums"
           >
             {{ statisticsMap[item.secondary] }}
           </span>

@@ -70,6 +70,14 @@
         </div>
         <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
           <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+            {{ t('totalTraffic') }}
+          </div>
+          <div class="text-2xl font-extralight tabular-nums">
+            {{ prettyBytesHelper(totalStats.download + totalStats.upload) }}
+          </div>
+        </div>
+        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
             {{ t('download') }}
           </div>
           <div class="text-2xl font-extralight tabular-nums">
@@ -84,14 +92,7 @@
             {{ prettyBytesHelper(totalStats.upload) }}
           </div>
         </div>
-        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
-          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
-            {{ t('totalTraffic') }}
-          </div>
-          <div class="text-2xl font-extralight tabular-nums">
-            {{ prettyBytesHelper(totalStats.download + totalStats.upload) }}
-          </div>
-        </div>
+
         <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
           <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
             {{ t('connectionCount') }}

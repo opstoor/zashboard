@@ -117,27 +117,27 @@ export default defineComponent({
             v-model={settingsModel.value}
             title={t('ruleSettings')}
           >
-            <div class="flex flex-col gap-4 p-2 text-sm">
-              <div class="flex items-center gap-2">
-                {t('displaySelectedNode')}
+            <div class="flex flex-col gap-1 p-1">
+              <div class="setting-item">
+                <span class="setting-item-label">{t('displaySelectedNode')}</span>
                 <input
-                  class="toggle"
+                  class="toggle toggle-sm"
                   type="checkbox"
                   v-model={displayNowNodeInRule.value}
                 />
               </div>
-              <div class="flex items-center gap-2">
-                {t('displayLatencyNumber')}
+              <div class="setting-item">
+                <span class="setting-item-label">{t('displayLatencyNumber')}</span>
                 <input
-                  class="toggle"
+                  class="toggle toggle-sm"
                   type="checkbox"
                   v-model={displayLatencyInRule.value}
                 />
               </div>
-              <div class="flex items-center gap-2">
-                {t('disconnectOnRuleDisable')}
+              <div class="setting-item">
+                <span class="setting-item-label">{t('disconnectOnRuleDisable')}</span>
                 <input
-                  class="toggle"
+                  class="toggle toggle-sm"
                   type="checkbox"
                   v-model={disconnectOnRuleDisable.value}
                 />
@@ -150,18 +150,18 @@ export default defineComponent({
       const content = !isLargeCtrlsBar.value ? (
         <div class="flex flex-col gap-2 p-2">
           {hasProviders.value && (
-            <div class="flex gap-2">
+            <div class="flex items-center gap-2">
               {tabs}
               {upgradeAllIcon}
             </div>
           )}
-          <div class="flex w-full gap-2">
+          <div class="flex w-full items-center gap-2">
             {searchInput}
             {settingsModal}
           </div>
         </div>
       ) : (
-        <div class="flex flex-wrap gap-2 p-2">
+        <div class="flex flex-wrap items-center gap-2 p-2">
           {hasProviders.value && tabs}
           {searchInput}
           <div class="flex-1"></div>
