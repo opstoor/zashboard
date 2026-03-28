@@ -1,36 +1,43 @@
 <template>
-  <div class="relative flex h-full flex-col">
+  <div
+    class="relative h-full overflow-y-auto"
+    @scroll.passive="handleScroll"
+    ref="scrollContainerRef"
+  >
     <SettingsMenu
       :menu-items="menuItems"
       :active-menu-key="activeMenuKey"
       @menu-click="handleMenuClick"
     />
 
+    <button
+      v-if="isPWA"
+      class="btn btn-ghost btn-sm absolute top-14 right-2 z-10"
+      @click="refreshPages"
+    >
+      <ArrowPathIcon class="h-4 w-4" />
+      {{ $t('refresh') }}
+    </button>
+
     <!-- Content Area -->
     <div
-      class="flex-1 overflow-y-auto"
-      ref="scrollContainerRef"
-      @scroll.passive="handleScroll"
+      class="settings-content"
+      :style="padding"
     >
       <div
-        class="settings-content"
-        :style="padding"
+        v-for="item in menuItems"
+        :key="item.key"
+        :id="`item-${item.key}`"
+        :data-key="item.key"
+        class="settings-page-section"
       >
         <div
-          v-for="item in menuItems"
-          :key="item.key"
-          :id="`item-${item.key}`"
-          :data-key="item.key"
-          class="settings-page-section"
+          class="settings-page-section-title"
+          v-if="![SETTINGS_MENU_KEY.general, SETTINGS_MENU_KEY.backend].includes(item.key)"
         >
-          <div
-            class="settings-page-section-title"
-            v-if="![SETTINGS_MENU_KEY.general, SETTINGS_MENU_KEY.backend].includes(item.key)"
-          >
-            {{ $t(item.label) }}
-          </div>
-          <component :is="item.component" />
+          {{ $t(item.label) }}
         </div>
+        <component :is="item.component" />
       </div>
     </div>
   </div>
@@ -46,8 +53,10 @@ import SettingsMenu from '@/components/settings/SettingsMenu.vue'
 import { usePaddingForViews } from '@/composables/paddingViews'
 import { isSettingVisible } from '@/composables/settings'
 import { SETTINGS_MENU_KEY } from '@/constant'
+import { isPWA } from '@/helper/utils'
 import { settingsMenuOrder } from '@/store/settings'
 import {
+  ArrowPathIcon,
   ArrowsRightLeftIcon,
   CubeTransparentIcon,
   GlobeAltIcon,
@@ -160,7 +169,7 @@ const handleMenuClick = (key: SETTINGS_MENU_KEY) => {
       const containerRect = scrollContainerRef.value.getBoundingClientRect()
       const elementRect = element.getBoundingClientRect()
       const scrollTop = scrollContainerRef.value.scrollTop
-      const targetScrollTop = scrollTop + elementRect.top - containerRect.top - 24
+      const targetScrollTop = scrollTop + elementRect.top - containerRect.top - 54
 
       scrollContainerRef.value.scrollTo({
         top: targetScrollTop,
@@ -176,35 +185,62 @@ const updateActiveMenuByScroll = () => {
 
   const containerRect = scrollContainerRef.value.getBoundingClientRect()
   const newScrollTop = scrollContainerRef.value.scrollTop
-  const containerCenter =
-    containerRect.top + containerRect.height * (newScrollTop > scrollTop.value ? 0.8 : 0.3)
+  const scrollingDown = newScrollTop > scrollTop.value
+  const containerTop = containerRect.top
+  const containerBottom = containerRect.bottom
+  const containerHeight = containerRect.height
 
-  let minDistance = Infinity
-  let closestKey: SETTINGS_MENU_KEY | null = null
+  let bestKey: SETTINGS_MENU_KEY | null = null
+  let bestScore = -Infinity
 
   menuItems.value.forEach((item) => {
     const element = getItemRef(item.key)
     if (!element) return
 
     const elementRect = element.getBoundingClientRect()
-    const elementCenter = elementRect.top + elementRect.height / 2
-    const distance = Math.abs(elementCenter - containerCenter)
+    const visibleTop = Math.max(elementRect.top, containerTop)
+    const visibleBottom = Math.min(elementRect.bottom, containerBottom)
+    const visibleHeight = Math.max(0, visibleBottom - visibleTop)
 
-    if (distance < minDistance) {
-      minDistance = distance
-      closestKey = item.key
+    if (visibleHeight <= 0) return
+
+    // 元素自身的可见比例（对小元素更友好）
+    const selfRatio = visibleHeight / elementRect.height
+    // 元素占容器可见区域的比例
+    const containerRatio = visibleHeight / containerHeight
+    // 综合得分：优先考虑自身可见比例高的元素，其次考虑占容器比例
+    // 当小元素完全可见时 selfRatio=1，得分会很高
+    let score = selfRatio * 0.6 + containerRatio * 0.4
+
+    // 滚动方向偏好：偏向即将进入视口的元素
+    const elementCenter = (visibleTop + visibleBottom) / 2
+    const referencePoint = containerTop + containerHeight * (scrollingDown ? 0.6 : 0.4)
+    const normalizedDistance = Math.abs(elementCenter - referencePoint) / containerHeight
+    score -= normalizedDistance * 0.2
+
+    if (score > bestScore) {
+      bestScore = score
+      bestKey = item.key
     }
   })
 
-  // 如果找到了最近的元素，更新激活菜单
-  if (closestKey && closestKey !== activeMenuKey.value) {
-    activeMenuKey.value = closestKey
+  if (bestKey && bestKey !== activeMenuKey.value) {
+    activeMenuKey.value = bestKey
   }
 
   scrollTop.value = newScrollTop
 }
 
 const handleScroll = throttle(updateActiveMenuByScroll, 100)
+
+const refreshPages = async () => {
+  const registrations = await navigator.serviceWorker.getRegistrations()
+
+  for (const registration of registrations) {
+    registration.unregister()
+  }
+  window.location.reload()
+}
 
 onMounted(() => {
   requestAnimationFrame(async () => {

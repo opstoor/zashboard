@@ -30,15 +30,6 @@
           </span>
         </a>
       </div>
-      <div class="flex-1" />
-      <button
-        class="btn btn-ghost btn-sm"
-        @click="refreshPages"
-        v-if="isPWA"
-      >
-        <ArrowPathIcon class="h-4 w-4" />
-        {{ $t('refresh') }}
-      </button>
     </div>
 
     <div
@@ -263,7 +254,7 @@ import { GENERAL_ITEM_KEYS } from '@/config/settingsItems'
 import { EMOJIS, FONTS } from '@/constant'
 import { handlerUpgradeSuccess } from '@/helper'
 import { deleteBase64FromIndexedDB, LOCAL_IMAGE, saveBase64ToIndexedDB } from '@/helper/indexeddb'
-import { exportSettings, isPWA } from '@/helper/utils'
+import { exportSettings } from '@/helper/utils'
 import {
   autoTheme,
   autoUpgrade,
@@ -275,12 +266,7 @@ import {
   emoji,
   font,
 } from '@/store/settings'
-import {
-  AdjustmentsHorizontalIcon,
-  ArrowPathIcon,
-  ArrowUpTrayIcon,
-  PlusIcon,
-} from '@heroicons/vue/24/outline'
+import { AdjustmentsHorizontalIcon, ArrowUpTrayIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { twMerge } from 'tailwind-merge'
 import { computed, ref, watch } from 'vue'
 import ImportSettings from '../common/ImportSettings.vue'
@@ -378,14 +364,5 @@ const handlerClickUpgradeUI = async () => {
   } catch {
     isUIUpgrading.value = false
   }
-}
-
-const refreshPages = async () => {
-  const registrations = await navigator.serviceWorker.getRegistrations()
-
-  for (const registration of registrations) {
-    registration.unregister()
-  }
-  window.location.reload()
 }
 </script>
