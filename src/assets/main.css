@@ -360,14 +360,7 @@ div {
   z-index: 10;
 }
 .ctrls-bar {
-  @media screen and (max-width: 768px) {
-    background: linear-gradient(
-      to bottom,
-      var(--color-base-100),
-      color-mix(in srgb, var(--color-base-100) 10%, transparent)
-    );
-  }
-  @apply md:bg-base-100/20 fixed top-0 right-0 left-0 z-30 shadow-xs backdrop-blur-xl md:sticky;
+  @apply bg-base-100 md:bg-base-100/20 fixed top-0 right-0 left-0 z-30 shadow-xs backdrop-blur-xl md:sticky;
 }
 
 .dock {

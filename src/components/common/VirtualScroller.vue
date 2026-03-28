@@ -12,7 +12,7 @@
       v-if="data.length > 0"
     >
       <div
-        class="absolute top-0 left-0 w-full p-2"
+        class="absolute top-0 left-0 w-full p-3"
         :style="{
           transform: `translateY(${virtualRows[0]?.start ?? 0}px)`,
         }"
@@ -33,7 +33,7 @@
     </div>
     <div
       v-else
-      class="card m-2 flex-row p-2 text-sm"
+      class="card m-3 flex-row p-2 text-sm"
     >
       {{ $t('noContent') }}
     </div>

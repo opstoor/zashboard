@@ -1,7 +1,10 @@
 <template>
-  <div class="card block p-2 text-sm break-all">
+  <div class="card block p-3 text-sm break-all">
     <div class="inline-flex items-center gap-2">
-      <div :style="{ minWidth: `${(seqWithPadding.length + 1) * 0.62}em` }">
+      <div
+        class="text-base-content/60"
+        :style="{ minWidth: `${(seqWithPadding.length + 1) * 0.62}em` }"
+      >
         {{ seqWithPadding }}.
       </div>
       <span class="badge badge-sm text-main min-w-14">

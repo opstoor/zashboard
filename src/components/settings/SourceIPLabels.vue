@@ -17,6 +17,24 @@
     :title="$t('sourceIPLabels')"
   >
     <div class="flex flex-col gap-2 text-sm">
+      <div class="border-base-content/10 rounded-box border border-dashed p-2.5">
+        <SourceIPInput
+          v-model="newLabelForIP"
+          @keydown.enter="() => handlerLabelAdd()"
+        >
+          <template #prefix>
+            <TagIcon class="h-4 w-4 shrink-0" />
+          </template>
+          <template #default>
+            <button
+              class="btn btn-circle btn-sm"
+              @click="() => handlerLabelAdd()"
+            >
+              <PlusIcon class="h-4 w-4" />
+            </button>
+          </template>
+        </SourceIPInput>
+      </div>
       <Draggable
         v-if="dialogVisible"
         class="flex flex-1 flex-col gap-2"
@@ -29,40 +47,26 @@
         @end="disableSwipe = false"
       >
         <template #item="{ element: sourceIP }">
-          <SourceIPInput
-            :model-value="sourceIP"
-            @update:model-value="handlerLabelUpdate"
-          >
-            <template #prefix>
-              <ChevronUpDownIcon class="drag-handle h-4 w-4 shrink-0 cursor-grab" />
-            </template>
-            <template #default>
-              <button
-                class="btn btn-circle btn-ghost btn-sm"
-                @click="() => handlerLabelRemove(sourceIP.id)"
-              >
-                <TrashIcon class="h-4 w-4" />
-              </button>
-            </template>
-          </SourceIPInput>
+          <div class="border-base-content/10 rounded-box border p-2.5">
+            <SourceIPInput
+              :model-value="sourceIP"
+              @update:model-value="handlerLabelUpdate"
+            >
+              <template #prefix>
+                <ChevronUpDownIcon class="drag-handle h-4 w-4 shrink-0 cursor-grab" />
+              </template>
+              <template #default>
+                <button
+                  class="btn btn-circle btn-ghost btn-sm"
+                  @click="() => handlerLabelRemove(sourceIP.id)"
+                >
+                  <TrashIcon class="h-4 w-4" />
+                </button>
+              </template>
+            </SourceIPInput>
+          </div>
         </template>
       </Draggable>
-      <SourceIPInput
-        v-model="newLabelForIP"
-        @keydown.enter="() => handlerLabelAdd()"
-      >
-        <template #prefix>
-          <TagIcon class="h-4 w-4 shrink-0" />
-        </template>
-        <template #default>
-          <button
-            class="btn btn-circle btn-sm"
-            @click="() => handlerLabelAdd()"
-          >
-            <PlusIcon class="h-4 w-4" />
-          </button>
-        </template>
-      </SourceIPInput>
     </div>
   </DialogWrapper>
 </template>

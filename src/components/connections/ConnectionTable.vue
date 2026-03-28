@@ -1,7 +1,7 @@
 <template>
   <div
     ref="parentRef"
-    class="h-full overflow-auto p-2"
+    class="m-3 mr-0 h-full overflow-auto rounded-xl pr-3 shadow-xs"
     :class="{
       'select-none': isDragging,
     }"
@@ -15,14 +15,14 @@
   >
     <div :style="{ height: `${totalSize}px` }">
       <table
-        :class="['table rounded-xl shadow-xs', sizeOfTable, isManualTable && 'table-fixed']"
+        :class="['table', sizeOfTable, isManualTable && 'table-fixed']"
         :style="
           isManualTable && {
             width: `${tanstackTable.getCenterTotalSize()}px`,
           }
         "
       >
-        <thead class="bg-base-100 border-base-300/60 sticky -top-2 z-10 border-b">
+        <thead class="bg-base-100 border-base-300/60 sticky -top-0 z-10 border-b">
           <tr
             v-for="headerGroup in tanstackTable.getHeaderGroups()"
             :key="headerGroup.id"

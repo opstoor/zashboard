@@ -81,10 +81,11 @@ const options = computed(() => {
       textStyle: {
         color: colorSet.baseContent,
         fontFamily,
+        fontSize: 10,
       },
     },
     grid: {
-      left: 60,
+      left: 50,
       top: 15,
       right: 8,
       bottom: 25,
@@ -125,7 +126,7 @@ const options = computed(() => {
       },
       axisLabel: {
         align: 'left',
-        padding: [0, 0, 0, -45],
+        padding: [0, 0, 0, -35],
         formatter: props.labelFormatter,
         color: colorSet.baseContent,
         fontFamily,

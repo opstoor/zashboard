@@ -1,47 +1,50 @@
 <template>
-  <div
-    class="relative flex w-full items-center gap-2"
-    :class="sourceIPLabel.scope?.length ? 'pt-4' : ''"
-  >
-    <slot name="prefix"></slot>
-    <span
-      class="absolute top-0 left-6 truncate text-xs"
-      @mouseenter="checkTruncation"
-    >
-      {{
-        backendList
-          .filter((b) => sourceIPLabel.scope?.includes(b.uuid))
-          .map(getLabelFromBackend)
-          .join(', ')
-      }}
-    </span>
-    <TextInput
-      class="w-12 max-w-64 flex-1 sm:w-36"
-      :menus="sourceList"
-      v-model="sourceIPLabel.key"
-      placeholder="IP/CIDR | eui64 | /Regex"
-    />
-    <div
-      v-if="backendList.length > 1"
-      class="rounded-field bg-base-200 flex h-8 w-8 cursor-pointer items-center justify-center"
-      @click="bindBackendMenu"
-    >
-      <LockClosedIcon
-        v-if="isLocked"
-        class="h-4 w-4"
+  <div class="flex w-full flex-col gap-1.5">
+    <div class="flex w-full items-center gap-2">
+      <slot name="prefix"></slot>
+      <TextInput
+        class="min-w-0 flex-1"
+        :menus="sourceList"
+        v-model="sourceIPLabel.key"
+        placeholder="IP/CIDR | eui64 | /Regex"
       />
-      <LockOpenIcon
-        v-else
-        class="h-4 w-4"
-      />
+
+      <slot></slot>
     </div>
-    <ArrowRightCircleIcon class="h-4 w-4 shrink-0" />
-    <TextInput
-      class="w-24 sm:w-40"
-      v-model="sourceIPLabel.label"
-      :placeholder="$t('label')"
-    />
-    <slot></slot>
+    <div class="flex w-full items-center gap-2">
+      <ArrowRightCircleIcon class="text-base-content/40 h-4 w-4 shrink-0" />
+      <TextInput
+        class="flex-1"
+        v-model="sourceIPLabel.label"
+        :placeholder="$t('label')"
+      />
+      <span
+        v-if="sourceIPLabel.scope?.length"
+        class="text-base-content/50 max-w-48 shrink-0 truncate text-xs"
+        @mouseenter="checkTruncation"
+      >
+        {{
+          backendList
+            .filter((b) => sourceIPLabel.scope?.includes(b.uuid))
+            .map(getLabelFromBackend)
+            .join(', ')
+        }}
+      </span>
+      <div
+        v-if="backendList.length > 1"
+        class="rounded-field bg-base-200 flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center"
+        @click="bindBackendMenu"
+      >
+        <LockClosedIcon
+          v-if="isLocked"
+          class="h-4 w-4"
+        />
+        <LockOpenIcon
+          v-else
+          class="h-4 w-4"
+        />
+      </div>
+    </div>
   </div>
 </template>
 

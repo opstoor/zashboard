@@ -61,32 +61,42 @@
       </div>
 
       <!-- Stats grid -->
-      <div class="bg-base-200/30 grid grid-cols-2 gap-4 rounded-xl p-4 sm:grid-cols-5">
-        <div>
-          <div class="text-base-content/60 text-xs">{{ aggregateSourceLabel }}</div>
-          <div class="text-xl font-extralight tabular-nums">{{ aggregateSourceCount }}</div>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-5">
+        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+            {{ aggregateSourceLabel }}
+          </div>
+          <div class="text-2xl font-extralight tabular-nums">{{ aggregateSourceCount }}</div>
         </div>
-        <div>
-          <div class="text-base-content/60 text-xs">{{ t('download') }}</div>
-          <div class="text-xl font-extralight tabular-nums">
+        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+            {{ t('download') }}
+          </div>
+          <div class="text-2xl font-extralight tabular-nums">
             {{ prettyBytesHelper(totalStats.download) }}
           </div>
         </div>
-        <div>
-          <div class="text-base-content/60 text-xs">{{ t('upload') }}</div>
-          <div class="text-xl font-extralight tabular-nums">
+        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+            {{ t('upload') }}
+          </div>
+          <div class="text-2xl font-extralight tabular-nums">
             {{ prettyBytesHelper(totalStats.upload) }}
           </div>
         </div>
-        <div>
-          <div class="text-base-content/60 text-xs">{{ t('totalTraffic') }}</div>
-          <div class="text-xl font-extralight tabular-nums">
+        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+            {{ t('totalTraffic') }}
+          </div>
+          <div class="text-2xl font-extralight tabular-nums">
             {{ prettyBytesHelper(totalStats.download + totalStats.upload) }}
           </div>
         </div>
-        <div>
-          <div class="text-base-content/60 text-xs">{{ t('connectionCount') }}</div>
-          <div class="text-xl font-extralight tabular-nums">{{ totalStats.count }}</div>
+        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+            {{ t('connectionCount') }}
+          </div>
+          <div class="text-2xl font-extralight tabular-nums">{{ totalStats.count }}</div>
         </div>
       </div>
     </div>

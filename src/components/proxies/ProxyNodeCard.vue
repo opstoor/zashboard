@@ -40,7 +40,7 @@
         {{ typeDescription }}
       </span>
       <LatencyTag
-        :class="[isSmallCard && 'h-4! w-8! rounded-md!', 'shrink-0', active && 'hover:bg-base-300']"
+        :class="[isSmallCard && 'h-4! w-8! rounded-md!', 'shrink-0']"
         :name="node.name"
         :loading="isLatencyTesting"
         :group-name="groupName"
