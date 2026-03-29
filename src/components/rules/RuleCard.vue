@@ -1,7 +1,7 @@
 <template>
   <div :class="{ 'opacity-50': isDisabled, 'scroller-item': 1 }">
     <div
-      class="flex flex-col gap-2 overflow-hidden p-3 pt-2 text-sm"
+      class="hover:bg-base-200/40 flex flex-col gap-2 overflow-hidden p-3 pt-2 text-sm transition-colors"
       :class="{
         'cursor-pointer': isSelectable,
       }"
@@ -11,7 +11,9 @@
         <span class="text-base-content/40 text-xs">
           {{ index }}
         </span>
-        <span class="text-main ml-4">{{ rule.type }}</span>
+        <span class="text-base-content/80 ml-4 text-xs"
+          >{{ rule.type }} <template v-if="rule.payload"> : </template></span
+        >
         <span
           class="ml-2"
           v-if="rule.payload"
@@ -121,6 +123,7 @@
       <div class="border-base-content/3 border-b"></div>
       <ProxyGroup
         :name="selected"
+        :force-open="true"
         class="transparent-collapse bg-base-200/40! rounded-none!"
       />
     </template>

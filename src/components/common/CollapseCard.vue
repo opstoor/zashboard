@@ -32,14 +32,17 @@ import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{
   name: string
+  forceOpen?: boolean
 }>()
 
 const showCollapse = computed({
   get() {
-    return collapseGroupMap.value[props.name]
+    return props.forceOpen || collapseGroupMap.value[props.name]
   },
   set(value) {
-    collapseGroupMap.value[props.name] = value
+    if (!props.forceOpen) {
+      collapseGroupMap.value[props.name] = value
+    }
   },
 })
 

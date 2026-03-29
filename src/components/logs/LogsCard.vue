@@ -1,5 +1,7 @@
 <template>
-  <div class="scroller-item flex flex-col gap-2 px-3 py-2 text-sm">
+  <div
+    class="scroller-item hover:bg-base-200/40 flex flex-col gap-2 px-3 py-2 text-sm transition-colors"
+  >
     <div class="flex items-center gap-2">
       <span
         class="text-base-content/40 text-xs tabular-nums"

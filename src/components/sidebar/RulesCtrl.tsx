@@ -117,25 +117,25 @@ export default defineComponent({
             v-model={settingsModel.value}
             title={t('ruleSettings')}
           >
-            <div class="flex flex-col gap-1 p-1">
-              <div class="setting-item">
-                <span class="setting-item-label">{t('displaySelectedNode')}</span>
+            <div class="flex flex-col gap-4 p-2 text-sm">
+              <div class="flex items-center gap-2">
+                <span>{t('displaySelectedNode')}</span>
                 <input
                   class="toggle toggle-sm"
                   type="checkbox"
                   v-model={displayNowNodeInRule.value}
                 />
               </div>
-              <div class="setting-item">
-                <span class="setting-item-label">{t('displayLatencyNumber')}</span>
+              <div class="flex items-center gap-2">
+                <span>{t('displayLatencyNumber')}</span>
                 <input
                   class="toggle toggle-sm"
                   type="checkbox"
                   v-model={displayLatencyInRule.value}
                 />
               </div>
-              <div class="setting-item">
-                <span class="setting-item-label">{t('disconnectOnRuleDisable')}</span>
+              <div class="flex items-center gap-2">
+                <span>{t('disconnectOnRuleDisable')}</span>
                 <input
                   class="toggle toggle-sm"
                   type="checkbox"

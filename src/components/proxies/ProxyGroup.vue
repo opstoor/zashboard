@@ -1,6 +1,7 @@
 <template>
   <CollapseCard
     :name="proxyGroup.name"
+    :force-open="forceOpen"
     :data-group-name="proxyGroup.name"
     @contextmenu.prevent.stop="handlerLatencyTest"
   >
@@ -97,6 +98,7 @@ import ProxyPreview from './ProxyPreview.vue'
 
 const props = defineProps<{
   name: string
+  forceOpen?: boolean
 }>()
 const proxyGroup = computed(() => proxyMap.value[props.name])
 const allProxies = computed(() => proxyGroup.value.all ?? [])
