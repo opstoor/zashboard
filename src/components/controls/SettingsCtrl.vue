@@ -8,7 +8,7 @@
       @touchend.passive.stop
     >
       <div class="flex w-full">
-        <div class="relative flex max-w-7xl grow-1 gap-2">
+        <div class="relative mx-auto flex max-w-6xl flex-1 gap-2">
           <div
             v-if="showActiveIndicator"
             class="bg-neutral absolute top-1 left-0 -z-1 h-8 rounded-lg"
@@ -40,7 +40,6 @@
             </span>
           </div>
         </div>
-        <div class="flex-1"></div>
         <button
           class="btn btn-circle btn-sm my-auto"
           @click="showVisibilityDialog = true"

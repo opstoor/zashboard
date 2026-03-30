@@ -1,5 +1,6 @@
 import { SETTINGS_CATEGORIES } from '@/config/settingsItems'
 import {
+  ALL_THEME,
   CONNECTIONS_TABLE_ACCESSOR_KEY,
   DETAILED_CARD_STYLE,
   EMOJIS,
@@ -26,7 +27,7 @@ import { computed } from 'vue'
 
 // global
 export const defaultTheme = useStorage<string>('config/default-theme', 'light')
-export const darkTheme = useStorage<string>('config/dark-theme', 'dark-apple')
+export const darkTheme = useStorage<string>('config/dark-theme', 'dark')
 export const autoTheme = useStorage<boolean>('config/auto-theme', true)
 export const theme = computed(() => {
   if (autoTheme.value && isPreferredDark.value) {
@@ -34,8 +35,17 @@ export const theme = computed(() => {
   }
   return defaultTheme.value
 })
-
 export const customThemes = useStorage<THEME[]>('config/custom-themes', [])
+
+const replaceLegacyTheme = (theme: string, defaultTheme: string) => {
+  if ([...ALL_THEME, ...customThemes.value.map((theme) => theme.name)].includes(theme)) {
+    return theme
+  }
+  return defaultTheme
+}
+
+defaultTheme.value = replaceLegacyTheme(defaultTheme.value, 'light')
+darkTheme.value = replaceLegacyTheme(darkTheme.value, 'dark')
 
 export const language = useStorage<LANG>(
   'config/language',
@@ -202,7 +212,7 @@ export const proxyChainDirection = useStorage(
   PROXY_CHAIN_DIRECTION.NORMAL,
 )
 export const showFullProxyChain = useStorage('config/show-full-proxy-chain', true)
-export const tableSize = useStorage<TABLE_SIZE>('config/connecticon-table-size', TABLE_SIZE.SMALL)
+export const tableSize = useStorage<TABLE_SIZE>('config/connecticon-table-size', TABLE_SIZE.LARGE)
 export const tableWidthMode = useStorage('config/table-width-mode', TABLE_WIDTH_MODE.AUTO)
 export const connectionTableColumns = useStorage<CONNECTIONS_TABLE_ACCESSOR_KEY[]>(
   'config/connection-table-columns',
