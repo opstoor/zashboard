@@ -1,6 +1,6 @@
 <template>
   <div
-    class="card scrollbar-hidden flex-2 overflow-y-auto text-sm"
+    class="base-container scrollbar-hidden flex-2 overflow-y-auto text-sm"
     :class="classNameMap[numberOfChartsInSidebar]"
   >
     <SpeedCharts class="h-28 shrink-0" />

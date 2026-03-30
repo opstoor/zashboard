@@ -12,7 +12,7 @@
       v-if="data.length > 0"
     >
       <div
-        :class="['scroller-group virtual-scroller absolute top-3 right-3 left-3', contentClass]"
+        :class="['base-container virtual-scroller absolute top-3 right-3 left-3', contentClass]"
         :style="{
           transform: `translateY(${virtualRows[0]?.start ?? 0}px)`,
         }"
@@ -33,7 +33,7 @@
     </div>
     <div
       v-else
-      class="card m-3 flex-row p-3 text-sm"
+      class="base-container m-3 flex-row p-3 text-sm"
       :style="{ marginTop: `${paddingTop + 12}px`, marginBottom: `${paddingBottom}px` }"
     >
       {{ $t('noContent') }}

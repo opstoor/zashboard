@@ -32,7 +32,7 @@ const { showTip, hideTip } = useTooltip()
 const handlerDropdown = (e: Event) => {
   const themeCotainer = document.createElement('div')
 
-  themeCotainer.className = 'card h-96 w-48 overflow-y-auto overscroll-contain shadow-2xl'
+  themeCotainer.className = 'base-container h-96 w-48 overflow-y-auto overscroll-contain shadow-2xl'
 
   for (const themeName of themes.value) {
     const item = document.createElement('div')

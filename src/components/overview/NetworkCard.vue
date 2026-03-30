@@ -1,11 +1,7 @@
 <template>
-  <div class="card w-full">
-    <div class="card-body gap-4">
-      <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
-        <ConnectionStatus />
-        <IPCheck />
-      </div>
-    </div>
+  <div class="base-container grid grid-cols-1 gap-3 p-4 lg:grid-cols-2">
+    <ConnectionStatus />
+    <IPCheck />
   </div>
 </template>
 

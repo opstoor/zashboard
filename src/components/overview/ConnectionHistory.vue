@@ -1,104 +1,102 @@
 <template>
-  <div class="card w-full backdrop-blur-none!">
-    <div class="card-body need-blur gap-4">
-      <!-- Header -->
+  <div class="base-container w-full backdrop-blur-none!">
+    <!-- Header -->
+    <div
+      class="need-blur flex items-center justify-between p-4 max-sm:flex-col max-sm:items-start max-sm:gap-2"
+    >
       <div
-        class="flex items-center justify-between max-sm:flex-col max-sm:items-start max-sm:gap-2"
+        class="text-base-content/60 flex items-center gap-2 text-xs font-semibold tracking-wider uppercase"
       >
-        <div
-          class="text-base-content/60 flex items-center gap-2 text-xs font-semibold tracking-wider uppercase"
+        {{ $t('totalConnections') }}
+        <button
+          class="btn btn-ghost btn-xs btn-circle"
+          @click="showClearDialog = true"
         >
-          {{ $t('totalConnections') }}
-          <button
-            class="btn btn-ghost btn-xs btn-circle"
-            @click="showClearDialog = true"
+          <TrashIcon class="h-3.5 w-3.5" />
+        </button>
+        <QuestionMarkCircleIcon
+          class="h-3.5 w-3.5 cursor-pointer"
+          @mouseenter="showTip($event, totalConnectionsTip)"
+        />
+      </div>
+      <div class="flex items-center gap-2 max-sm:flex-col max-sm:items-start">
+        <div class="flex items-center gap-2">
+          <span class="text-base-content/60 text-xs">{{ $t('aggregateBy') }}</span>
+          <select
+            v-model="aggregationType"
+            class="select select-bordered select-sm w-32"
           >
-            <TrashIcon class="h-3.5 w-3.5" />
-          </button>
-          <QuestionMarkCircleIcon
-            class="h-3.5 w-3.5 cursor-pointer"
-            @mouseenter="showTip($event, totalConnectionsTip)"
-          />
+            <option :value="ConnectionHistoryType.SourceIP">
+              {{ $t('aggregateBySourceIP') }}
+            </option>
+            <option :value="ConnectionHistoryType.Destination">
+              {{ $t('aggregateByDestination') }}
+            </option>
+            <option :value="ConnectionHistoryType.Process">{{ $t('aggregateByProcess') }}</option>
+            <option :value="ConnectionHistoryType.Outbound">
+              {{ $t('aggregateByOutbound') }}
+            </option>
+          </select>
         </div>
-        <div class="flex items-center gap-2 max-sm:flex-col max-sm:items-start">
-          <div class="flex items-center gap-2">
-            <span class="text-base-content/60 text-xs">{{ $t('aggregateBy') }}</span>
-            <select
-              v-model="aggregationType"
-              class="select select-bordered select-sm w-32"
-            >
-              <option :value="ConnectionHistoryType.SourceIP">
-                {{ $t('aggregateBySourceIP') }}
-              </option>
-              <option :value="ConnectionHistoryType.Destination">
-                {{ $t('aggregateByDestination') }}
-              </option>
-              <option :value="ConnectionHistoryType.Process">{{ $t('aggregateByProcess') }}</option>
-              <option :value="ConnectionHistoryType.Outbound">
-                {{ $t('aggregateByOutbound') }}
-              </option>
-            </select>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="text-base-content/60 text-xs">{{ $t('autoCleanupInterval') }}</span>
-            <select
-              v-model="autoCleanupInterval"
-              class="select select-bordered select-sm w-28"
-            >
-              <option :value="AutoCleanupInterval.Never">
-                {{ $t('autoCleanupIntervalNever') }}
-              </option>
-              <option :value="AutoCleanupInterval.Week">{{ $t('autoCleanupIntervalWeek') }}</option>
-              <option :value="AutoCleanupInterval.Month">
-                {{ $t('autoCleanupIntervalMonth') }}
-              </option>
-              <option :value="AutoCleanupInterval.Quarter">
-                {{ $t('autoCleanupIntervalQuarter') }}
-              </option>
-            </select>
-          </div>
+        <div class="flex items-center gap-2">
+          <span class="text-base-content/60 text-xs">{{ $t('autoCleanupInterval') }}</span>
+          <select
+            v-model="autoCleanupInterval"
+            class="select select-bordered select-sm w-28"
+          >
+            <option :value="AutoCleanupInterval.Never">
+              {{ $t('autoCleanupIntervalNever') }}
+            </option>
+            <option :value="AutoCleanupInterval.Week">{{ $t('autoCleanupIntervalWeek') }}</option>
+            <option :value="AutoCleanupInterval.Month">
+              {{ $t('autoCleanupIntervalMonth') }}
+            </option>
+            <option :value="AutoCleanupInterval.Quarter">
+              {{ $t('autoCleanupIntervalQuarter') }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats grid -->
+    <div class="need-blur grid grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-5">
+      <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+        <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+          {{ aggregateSourceLabel }}
+        </div>
+        <div class="text-2xl font-extralight tabular-nums">{{ aggregateSourceCount }}</div>
+      </div>
+      <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+        <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+          {{ t('totalTraffic') }}
+        </div>
+        <div class="text-2xl font-extralight tabular-nums">
+          {{ prettyBytesHelper(totalStats.download + totalStats.upload) }}
+        </div>
+      </div>
+      <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+        <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+          {{ t('download') }}
+        </div>
+        <div class="text-2xl font-extralight tabular-nums">
+          {{ prettyBytesHelper(totalStats.download) }}
+        </div>
+      </div>
+      <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+        <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+          {{ t('upload') }}
+        </div>
+        <div class="text-2xl font-extralight tabular-nums">
+          {{ prettyBytesHelper(totalStats.upload) }}
         </div>
       </div>
 
-      <!-- Stats grid -->
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-5">
-        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
-          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
-            {{ aggregateSourceLabel }}
-          </div>
-          <div class="text-2xl font-extralight tabular-nums">{{ aggregateSourceCount }}</div>
+      <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
+        <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+          {{ t('connectionCount') }}
         </div>
-        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
-          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
-            {{ t('totalTraffic') }}
-          </div>
-          <div class="text-2xl font-extralight tabular-nums">
-            {{ prettyBytesHelper(totalStats.download + totalStats.upload) }}
-          </div>
-        </div>
-        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
-          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
-            {{ t('download') }}
-          </div>
-          <div class="text-2xl font-extralight tabular-nums">
-            {{ prettyBytesHelper(totalStats.download) }}
-          </div>
-        </div>
-        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
-          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
-            {{ t('upload') }}
-          </div>
-          <div class="text-2xl font-extralight tabular-nums">
-            {{ prettyBytesHelper(totalStats.upload) }}
-          </div>
-        </div>
-
-        <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
-          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
-            {{ t('connectionCount') }}
-          </div>
-          <div class="text-2xl font-extralight tabular-nums">{{ totalStats.count }}</div>
-        </div>
+        <div class="text-2xl font-extralight tabular-nums">{{ totalStats.count }}</div>
       </div>
     </div>
     <div

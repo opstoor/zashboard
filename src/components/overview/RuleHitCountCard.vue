@@ -1,15 +1,13 @@
 <template>
   <div
-    class="card w-full"
+    class="base-container w-full p-4"
     v-if="hasRulesWithExtra"
   >
-    <div class="card-body gap-4">
-      <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
-        {{ $t('ruleHitCountCard') }}
-      </div>
-      <div class="bg-base-200/30 flex flex-col gap-2 rounded-xl p-3">
-        <RuleHitCountChart type="hit" />
-      </div>
+    <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+      {{ $t('ruleHitCountCard') }}
+    </div>
+    <div class="bg-base-200/30 mt-4 flex flex-col gap-2 rounded-xl p-3">
+      <RuleHitCountChart type="hit" />
     </div>
   </div>
 </template>

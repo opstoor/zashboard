@@ -33,6 +33,11 @@
     src: url('./TwemojiMozilla-flags.woff2') format('woff2');
   }
 }
+
+@utility base-container {
+  @apply bg-base-100 overflow-hidden rounded-xl shadow-xs;
+}
+
 @utility card {
   @apply bg-base-100 rounded-xl shadow-xs;
   .card-body {
@@ -48,10 +53,7 @@
   @apply bg-transparent! shadow-none! backdrop-blur-none!;
 }
 
-.scroller-group {
-  @apply bg-base-100 overflow-hidden rounded-xl shadow-xs;
-}
-.scroller-group:not(.virtual-scroller) .scroller-item + .scroller-item {
+.base-container:not(.virtual-scroller) .scroller-item + .scroller-item {
   @apply border-base-200/80 border-t;
 }
 
@@ -112,7 +114,7 @@
     .settings-menu,
     .ctrls-bar,
     .settings-grid,
-    .scroller-group,
+    .base-container,
     .tabs {
       @apply bg-base-100/$(i);
     }
@@ -171,7 +173,7 @@
     .modal-box,
     .need-blur,
     .settings-grid,
-    .scroller-group,
+    .base-container,
     .table thead {
       /* prettier-ignore */
       backdrop-filter: blur($(i)px);

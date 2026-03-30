@@ -39,9 +39,7 @@
       </template>
       <template v-else>
         <OverviewCarousel />
-        <div class="card">
-          <CommonSidebar />
-        </div>
+        <CommonSidebar class="base-container" />
       </template>
     </div>
   </div>

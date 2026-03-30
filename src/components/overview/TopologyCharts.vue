@@ -1,55 +1,53 @@
 <template>
-  <div class="card">
-    <div class="card-body gap-4">
-      <div class="flex items-center justify-between">
-        <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
-          {{ $t('connectionTopology') }}
+  <div class="base-container p-4">
+    <div class="flex items-center justify-between">
+      <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+        {{ $t('connectionTopology') }}
+      </div>
+    </div>
+    <div
+      :class="twMerge('bg-base-200/30 relative mt-4 h-96 w-full overflow-hidden rounded-xl')"
+      @mousemove.stop
+      @touchmove.stop
+    >
+      <div
+        ref="chart"
+        class="h-full w-full"
+      />
+      <span
+        class="border-base-content/30 text-base-content/10 bg-base-100/70 hidden"
+        ref="colorRef"
+      />
+      <div
+        v-if="sankeyData.nodes.length === 0"
+        class="text-base-content/50 absolute inset-0 flex items-center justify-center"
+      >
+        <div class="text-center">
+          <div>{{ t('noData') }}</div>
         </div>
       </div>
       <div
-        :class="twMerge('bg-base-200/30 relative h-96 w-full overflow-hidden rounded-xl')"
-        @mousemove.stop
-        @touchmove.stop
+        class="absolute right-1 bottom-1 flex flex-col gap-1"
+        :class="isFullScreen ? 'fixed right-4 bottom-4 mb-[env(safe-area-inset-bottom)]' : ''"
       >
-        <div
-          ref="chart"
-          class="h-full w-full"
-        />
-        <span
-          class="border-base-content/30 text-base-content/10 bg-base-100/70 hidden"
-          ref="colorRef"
-        />
-        <div
-          v-if="sankeyData.nodes.length === 0"
-          class="text-base-content/50 absolute inset-0 flex items-center justify-center"
+        <button
+          class="btn btn-ghost btn-circle btn-sm"
+          @click="isPaused = !isPaused"
         >
-          <div class="text-center">
-            <div>{{ t('noData') }}</div>
-          </div>
-        </div>
-        <div
-          class="absolute right-1 bottom-1 flex flex-col gap-1"
-          :class="isFullScreen ? 'fixed right-4 bottom-4 mb-[env(safe-area-inset-bottom)]' : ''"
+          <component
+            :is="!isPaused ? PauseCircleIcon : PlayCircleIcon"
+            class="h-4 w-4"
+          />
+        </button>
+        <button
+          class="btn btn-ghost btn-circle btn-sm"
+          @click="isFullScreen = !isFullScreen"
         >
-          <button
-            class="btn btn-ghost btn-circle btn-sm"
-            @click="isPaused = !isPaused"
-          >
-            <component
-              :is="!isPaused ? PauseCircleIcon : PlayCircleIcon"
-              class="h-4 w-4"
-            />
-          </button>
-          <button
-            class="btn btn-ghost btn-circle btn-sm"
-            @click="isFullScreen = !isFullScreen"
-          >
-            <component
-              :is="isFullScreen ? ArrowsPointingInIcon : ArrowsPointingOutIcon"
-              class="h-4 w-4"
-            />
-          </button>
-        </div>
+          <component
+            :is="isFullScreen ? ArrowsPointingInIcon : ArrowsPointingOutIcon"
+            class="h-4 w-4"
+          />
+        </button>
       </div>
     </div>
   </div>

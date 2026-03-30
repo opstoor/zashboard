@@ -7,7 +7,7 @@
         :style="padding"
       >
         <template v-if="rulesTabShow === RULE_TAB_TYPE.PROVIDER">
-          <div class="scroller-group">
+          <div class="base-container">
             <RuleProvider
               v-for="(ruleProvider, index) in renderRulesProvider"
               :key="ruleProvider.name"
@@ -17,7 +17,7 @@
           </div>
         </template>
         <template v-else>
-          <div class="scroller-group">
+          <div class="base-container">
             <RuleCard
               v-for="rule in renderRules"
               :key="rule.payload"

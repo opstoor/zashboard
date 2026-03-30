@@ -1,72 +1,70 @@
 <template>
   <div
-    class="card w-full"
+    class="base-container w-full p-4"
     v-if="hasProvidersWithTraffic"
   >
-    <div class="card-body gap-4">
+    <div
+      class="grid max-h-128 gap-3 overflow-y-auto"
+      :style="
+        hasMultipleProvidersWithTraffic
+          ? `grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));`
+          : 'grid-template-columns: 1fr;'
+      "
+    >
+      <!-- Total Traffic -->
       <div
-        class="grid max-h-128 gap-3 overflow-y-auto"
-        :style="
-          hasMultipleProvidersWithTraffic
-            ? `grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));`
-            : 'grid-template-columns: 1fr;'
-        "
+        class="bg-base-200/30 flex flex-col gap-3 rounded-xl p-4"
+        v-if="hasMultipleProvidersWithTraffic"
       >
-        <!-- Total Traffic -->
-        <div
-          class="bg-base-200/30 flex flex-col gap-3 rounded-xl p-4"
-          v-if="hasMultipleProvidersWithTraffic"
-        >
-          <div class="flex items-center justify-between">
-            <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
-              {{ $t('totalTraffic') }}
-            </div>
-            <div class="text-base-content/60 text-xs">{{ totalPercentage }}%</div>
+        <div class="flex items-center justify-between">
+          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+            {{ $t('totalTraffic') }}
           </div>
-          <div class="flex items-baseline gap-1.5">
-            <span class="text-2xl font-extralight tabular-nums">{{ totalUsedStr }}</span>
-            <span class="text-base-content/60 text-sm">/ {{ totalTotalStr }}</span>
-          </div>
-          <div class="w-full">
-            <progress
-              class="progress h-1.5 w-full"
-              :class="getProgressColor(totalPercentage)"
-              :value="totalPercentage"
-              max="100"
-            ></progress>
-          </div>
-          <div class="text-base-content/30 text-xs">
-            {{ $t('remainingTraffic') }}: {{ totalRemainingStr }}
-          </div>
+          <div class="text-base-content/60 text-xs">{{ totalPercentage }}%</div>
         </div>
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-2xl font-extralight tabular-nums">{{ totalUsedStr }}</span>
+          <span class="text-base-content/60 text-sm">/ {{ totalTotalStr }}</span>
+        </div>
+        <div class="w-full">
+          <progress
+            class="progress h-1.5 w-full"
+            :class="getProgressColor(totalPercentage)"
+            :value="totalPercentage"
+            max="100"
+          ></progress>
+        </div>
+        <div class="text-base-content/30 text-xs">
+          {{ $t('remainingTraffic') }}: {{ totalRemainingStr }}
+        </div>
+      </div>
 
-        <!-- Per-provider Traffic -->
-        <div
-          v-for="provider in providersWithTraffic"
-          :key="provider.name"
-          class="bg-base-200/30 flex flex-col gap-3 rounded-xl p-4"
-        >
-          <div class="flex items-center justify-between">
-            <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
-              {{ provider.name }}
-            </div>
-            <div class="text-base-content/60 text-xs">{{ provider.percentage }}%</div>
+      <!-- Per-provider Traffic -->
+      <div
+        v-for="provider in providersWithTraffic"
+        :key="provider.name"
+        class="bg-base-200/30 flex flex-col gap-3 rounded-xl p-4"
+      >
+        <div class="flex items-center justify-between">
+          <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
+            {{ provider.name }}
           </div>
-          <div class="flex items-baseline gap-1.5">
-            <span class="text-2xl font-extralight tabular-nums">{{ provider.usedStr }}</span>
-            <span class="text-base-content/60 text-sm">/ {{ provider.totalStr }}</span>
-          </div>
-          <div class="w-full">
-            <progress
-              class="progress h-1.5 w-full"
-              :class="getProgressColor(provider.percentage)"
-              :value="provider.percentage"
-              max="100"
-            ></progress>
-          </div>
-          <div class="text-base-content/30 text-xs">
-            {{ $t('remainingTraffic') }}: {{ provider.remainingStr }}
-          </div>
+          <div class="text-base-content/60 text-xs">{{ provider.percentage }}%</div>
+        </div>
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-2xl font-extralight tabular-nums">{{ provider.usedStr }}</span>
+          <span class="text-base-content/60 text-sm">/ {{ provider.totalStr }}</span>
+        </div>
+        <div class="w-full">
+          <progress
+            class="progress h-1.5 w-full"
+            :class="getProgressColor(provider.percentage)"
+            :value="provider.percentage"
+            max="100"
+          ></progress>
+        </div>
+        <div class="text-base-content/30 text-xs">
+          {{ $t('remainingTraffic') }}: {{ provider.remainingStr }}
         </div>
       </div>
     </div>
