@@ -115,7 +115,9 @@
             }"
             class="hover:bg-primary hover:text-primary-content"
             :class="[
-              index % 2 === 0 ? 'bg-base-100' : 'bg-base-200/50',
+              index % 2 === 0
+                ? 'bg-base-100'
+                : 'bg-[color-mix(in_oklab,var(--color-base-200)_50%,var(--color-base-100))]',
               !isDragging ? 'cursor-pointer' : 'cursor-grabbing',
             ]"
             @click="handlerClickRow(rows[virtualRow.index])"
