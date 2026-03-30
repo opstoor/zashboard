@@ -11,6 +11,7 @@ import {
 import { ArrowPathIcon, WrenchScrewdriverIcon } from '@heroicons/vue/24/outline'
 import { computed, defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import CtrlsBar from '../common/CtrlsBar.vue'
 import DialogWrapper from '../common/DialogWrapper.vue'
 import TextInput from '../common/TextInput.vue'
 
@@ -170,7 +171,7 @@ export default defineComponent({
         </div>
       )
 
-      return <div class="ctrls-bar">{content}</div>
+      return <CtrlsBar>{content}</CtrlsBar>
     }
   },
 })

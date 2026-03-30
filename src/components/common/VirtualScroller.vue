@@ -34,6 +34,7 @@
     <div
       v-else
       class="card m-3 flex-row p-3 text-sm"
+      :style="{ marginTop: `${paddingTop + 12}px`, marginBottom: `${paddingBottom}px` }"
     >
       {{ $t('noContent') }}
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="ctrls-bar">
+  <CtrlsBar>
     <div class="flex h-12 flex-row items-center gap-2 p-2 text-sm">
       <span class="truncate overflow-hidden">
         {{ getLabelFromBackend(activeBackend!) }}
@@ -14,7 +14,7 @@
       </button>
     </div>
     <OverviewCardSettingsDialog v-model="showCardSettingsDialog" />
-  </div>
+  </CtrlsBar>
 </template>
 
 <script setup lang="ts">
@@ -25,6 +25,7 @@ import { getLabelFromBackend } from '@/helper/utils'
 import { activeBackend } from '@/store/setup'
 import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
+import CtrlsBar from '../common/CtrlsBar.vue'
 
 const showCardSettingsDialog = ref(false)
 

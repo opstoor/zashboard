@@ -1,54 +1,56 @@
 <template>
-  <div
-    ref="menuRef"
-    class="scrollbar-hidden ctrls-bar p-1 px-2"
-    @touchstart.passive.stop
-    @touchmove.passive.stop
-    @touchend.passive.stop
-  >
-    <div class="flex w-full">
-      <div class="relative flex max-w-7xl grow-1 gap-2">
-        <div
-          v-if="showActiveIndicator"
-          class="bg-neutral absolute top-1 left-0 -z-1 h-8 rounded-lg"
-          :class="[!isSwiping ? 'transition-transform duration-300 will-change-transform' : '']"
-          :style="activeStyle"
-        ></div>
-        <div
-          v-for="item in menuItems"
-          :key="item.key"
-          ref="menuItemRefs"
-          :data-key="item.key"
-          :id="`menu-item-${item.key}`"
-          class="btn btn-ghost btn-sm my-1 flex-1"
-          :class="[
-            !showActiveIndicator
-              ? 'hover:btn hover:btn-neutral'
-              : activeMenuKey === item.key
-                ? 'text-neutral-content bg-transparent'
-                : '',
-          ]"
-          @click="handleMenuClick(item.key)"
-        >
-          <component
-            :is="item.icon"
-            class="h-5 w-5"
-          />
-          <span class="hidden text-sm lg:block">
-            {{ $t(item.label) }}
-          </span>
+  <CtrlsBar>
+    <div
+      ref="menuRef"
+      class="scrollbar-hidden p-1 px-2"
+      @touchstart.passive.stop
+      @touchmove.passive.stop
+      @touchend.passive.stop
+    >
+      <div class="flex w-full">
+        <div class="relative flex max-w-7xl grow-1 gap-2">
+          <div
+            v-if="showActiveIndicator"
+            class="bg-neutral absolute top-1 left-0 -z-1 h-8 rounded-lg"
+            :class="[!isSwiping ? 'transition-transform duration-300 will-change-transform' : '']"
+            :style="activeStyle"
+          ></div>
+          <div
+            v-for="item in menuItems"
+            :key="item.key"
+            ref="menuItemRefs"
+            :data-key="item.key"
+            :id="`menu-item-${item.key}`"
+            class="btn btn-ghost btn-sm my-1 flex-1"
+            :class="[
+              !showActiveIndicator
+                ? 'hover:btn hover:btn-neutral'
+                : activeMenuKey === item.key
+                  ? 'text-neutral-content bg-transparent'
+                  : '',
+            ]"
+            @click="handleMenuClick(item.key)"
+          >
+            <component
+              :is="item.icon"
+              class="h-5 w-5"
+            />
+            <span class="hidden text-sm lg:block">
+              {{ $t(item.label) }}
+            </span>
+          </div>
         </div>
+        <div class="flex-1"></div>
+        <button
+          class="btn btn-circle btn-sm my-auto"
+          @click="showVisibilityDialog = true"
+        >
+          <Cog6ToothIcon class="h-4 w-4" />
+        </button>
       </div>
-      <div class="flex-1"></div>
-      <button
-        class="btn btn-circle btn-sm my-auto"
-        @click="showVisibilityDialog = true"
-      >
-        <Cog6ToothIcon class="h-4 w-4" />
-      </button>
+      <SettingsVisibilityDialog v-model="showVisibilityDialog" />
     </div>
-    <SettingsVisibilityDialog v-model="showVisibilityDialog" />
-  </div>
+  </CtrlsBar>
 </template>
 
 <script setup lang="ts">
@@ -58,6 +60,7 @@ import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
 import { useElementSize, useSwipe } from '@vueuse/core'
 import type { Component } from 'vue'
 import { computed, nextTick, ref, watch } from 'vue'
+import CtrlsBar from '../common/CtrlsBar.vue'
 import SettingsVisibilityDialog from './SettingsVisibilityDialog.vue'
 
 type MenuItem = {

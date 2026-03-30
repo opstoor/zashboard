@@ -365,10 +365,6 @@ div {
   }
 }
 
-.ctrls-bar {
-  @apply bg-base-100 md:bg-base-100/20 fixed top-0 right-0 left-0 z-30 shadow-xs backdrop-blur-xl md:sticky;
-}
-
 .dock {
   @apply absolute right-2 left-2 z-30 rounded-3xl;
 }

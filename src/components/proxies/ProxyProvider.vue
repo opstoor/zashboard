@@ -2,7 +2,7 @@
   <CollapseCard :name="proxyProvider.name">
     <template v-slot:title>
       <div class="flex items-center justify-between gap-2">
-        <div class="text-xl font-medium">
+        <div class="text-lg font-medium">
           {{ proxyProvider.name }}
           <span class="text-base-content/60 text-sm font-normal"> ({{ proxiesCount }}) </span>
         </div>
