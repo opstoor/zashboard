@@ -95,7 +95,7 @@
     </template>
     <template v-if="hasVisibleProxyStyleItems">
       <div class="settings-section-label">
-        {{ $t('proxyStyle') }}
+        {{ $t('appearance') }}
       </div>
       <div class="settings-grid">
         <div

@@ -77,9 +77,9 @@
 import SettingsMenu from '@/components/controls/SettingsCtrl.vue'
 import BackendSettings from '@/components/settings/BackendSettings.vue'
 import ConnectionsSettings from '@/components/settings/ConnectionsSettings.vue'
-import GeneralSettings from '@/components/settings/GeneralSettings.vue'
 import OverviewSettings from '@/components/settings/OverviewSettings.vue'
 import ProxiesSettings from '@/components/settings/ProxiesSettings.vue'
+import ZashboardSettings from '@/components/settings/ZashboardSettings.vue'
 import { usePaddingForViews } from '@/composables/paddingViews'
 import { isSettingVisible } from '@/composables/settings'
 import { SETTINGS_MENU_KEY } from '@/constant'
@@ -121,7 +121,7 @@ const menuItems = computed<MenuItem[]>(() => {
         key: SETTINGS_MENU_KEY.general,
         label: 'zashboardSettings',
         icon: HomeIcon,
-        component: GeneralSettings,
+        component: ZashboardSettings,
       },
     ],
     [

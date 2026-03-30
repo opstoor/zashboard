@@ -50,7 +50,7 @@
           @click.stop
         />
       </div>
-      <div class="flex min-h-6 items-center gap-2">
+      <div class="flex items-center gap-2">
         <input
           v-if="rule.uuid || rule.extra"
           type="checkbox"

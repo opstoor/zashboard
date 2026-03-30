@@ -1,12 +1,23 @@
 <template>
-  <ZashboardSettings />
-
-  <!-- dashboard -->
   <template v-if="hasVisibleGeneralItems">
     <div class="settings-section-label">
       {{ $t('general') }}
     </div>
     <div class="settings-grid">
+      <LanguageSelect v-if="isVisibleLanguage" />
+      <div
+        v-if="isVisibleAutoUpgrade"
+        class="setting-item"
+      >
+        <div class="setting-item-label">
+          {{ $t('autoUpgrade') }}
+        </div>
+        <input
+          class="toggle"
+          type="checkbox"
+          v-model="autoUpgrade"
+        />
+      </div>
       <div
         v-if="isVisibleAutoDisconnectIdleUDP"
         class="setting-item"
@@ -141,6 +152,7 @@
 
 <script setup lang="ts">
 import { isSingBox } from '@/api'
+import LanguageSelect from '@/components/settings/LanguageSelect.vue'
 import { useIsSettingVisible } from '@/composables/settings'
 import { GENERAL_ITEM_KEYS } from '@/config/settingsItems'
 import { IP_INFO_API } from '@/constant'
@@ -148,6 +160,7 @@ import { useTooltip } from '@/helper/tooltip'
 import {
   autoDisconnectIdleUDP,
   autoDisconnectIdleUDPTime,
+  autoUpgrade,
   disablePullToRefresh,
   displayAllFeatures,
   IPInfoAPI,
@@ -157,11 +170,12 @@ import {
 } from '@/store/settings'
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline'
 import { computed } from 'vue'
-import ZashboardSettings from './ZashboardSettings.vue'
 
 const { showTip } = useTooltip()
 
 const k = GENERAL_ITEM_KEYS
+const isVisibleLanguage = useIsSettingVisible(k.language)
+const isVisibleAutoUpgrade = useIsSettingVisible(k.autoUpgrade)
 const isVisibleAutoDisconnectIdleUDP = useIsSettingVisible(k.autoDisconnectIdleUDP)
 const isVisibleAutoDisconnectIdleUDPTime = useIsSettingVisible(k.autoDisconnectIdleUDPTime)
 const isVisibleIPInfoAPI = useIsSettingVisible(k.IPInfoAPI)
@@ -173,6 +187,8 @@ const isVisibleDisplayAllFeatures = useIsSettingVisible(k.displayAllFeatures)
 
 const hasVisibleGeneralItems = computed(() => {
   return (
+    isVisibleLanguage.value ||
+    isVisibleAutoUpgrade.value ||
     isVisibleAutoDisconnectIdleUDP.value ||
     (autoDisconnectIdleUDP.value && isVisibleAutoDisconnectIdleUDPTime.value) ||
     isVisibleIPInfoAPI.value ||
