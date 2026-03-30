@@ -20,8 +20,8 @@ export const SETTINGS_CATEGORIES: SettingsCategory[] = [
       { key: `${SETTINGS_MENU_KEY.backend}.ports`, label: 'ports' },
       { key: `${SETTINGS_MENU_KEY.backend}.tunMode`, label: 'tunMode' },
       { key: `${SETTINGS_MENU_KEY.backend}.allowLan`, label: 'allowLan' },
-      { key: `${SETTINGS_MENU_KEY.backend}.checkUpgrade`, label: 'checkUpgrade' },
-      { key: `${SETTINGS_MENU_KEY.backend}.autoUpgrade`, label: 'autoUpgrade' },
+      { key: `${SETTINGS_MENU_KEY.backend}.checkCoreUpgrade`, label: 'checkCoreUpgrade' },
+      { key: `${SETTINGS_MENU_KEY.backend}.autoUpgradeCore`, label: 'autoUpgradeCore' },
       { key: `${SETTINGS_MENU_KEY.backend}.actions`, label: 'actions' },
       { key: `${SETTINGS_MENU_KEY.backend}.dnsQuery`, label: 'DNSQuery' },
     ],
@@ -58,12 +58,12 @@ export const SETTINGS_CATEGORIES: SettingsCategory[] = [
         label: 'autoSwitchTheme',
       },
       {
-        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.autoUpgrade`,
-        label: 'autoUpgrade',
+        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.autoUpgradeDashboard`,
+        label: 'autoUpgradeDashboard',
       },
       {
-        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.upgradeUI`,
-        label: 'upgradeUI',
+        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.upgradeDashboard`,
+        label: 'upgradeDashboard',
       },
       {
         key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.exportSettings`,

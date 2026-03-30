@@ -162,7 +162,7 @@
               class="setting-item"
             >
               <div class="setting-item-label">
-                {{ $t('checkUpgrade') }}
+                {{ $t('checkCoreUpgrade') }}
               </div>
               <input
                 class="toggle"
@@ -176,7 +176,7 @@
               class="setting-item"
             >
               <div class="setting-item-label">
-                {{ $t('autoUpgrade') }}
+                {{ $t('autoUpgradeCore') }}
               </div>
               <input
                 class="toggle"
@@ -229,8 +229,8 @@ const isVisibleBackendSwitch = useIsSettingVisible(k.backend)
 const isVisiblePorts = useIsSettingVisible(k.ports)
 const isVisibleTunMode = useIsSettingVisible(k.tunMode)
 const isVisibleAllowLan = useIsSettingVisible(k.allowLan)
-const isVisibleCheckUpgrade = useIsSettingVisible(k.checkUpgrade)
-const isVisibleAutoUpgrade = useIsSettingVisible(k.autoUpgrade)
+const isVisibleCheckUpgrade = useIsSettingVisible(k.checkCoreUpgrade)
+const isVisibleAutoUpgrade = useIsSettingVisible(k.autoUpgradeCore)
 const isVisibleActions = useIsSettingVisible(k.actions)
 const isVisibleDnsQuery = useIsSettingVisible(k.DNSQuery)
 

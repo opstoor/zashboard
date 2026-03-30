@@ -1,5 +1,5 @@
 import { fetchIsUIUpdateAvailable, upgradeUIAPI } from '@/api'
-import { autoUpgrade, hiddenSettingsItems } from '@/store/settings'
+import { autoUpgradeDashboard, hiddenSettingsItems } from '@/store/settings'
 import type { MaybeRef } from 'vue'
 import { computed, ref, unref } from 'vue'
 
@@ -32,7 +32,7 @@ export function useHasAnyVisibleSetting(keys: MaybeRef<string[]>) {
 export const useSettings = () => {
   const checkUIUpdate = async () => {
     isUIUpdateAvailable.value = await fetchIsUIUpdateAvailable()
-    if (isUIUpdateAvailable.value && autoUpgrade.value) {
+    if (isUIUpdateAvailable.value && autoUpgradeDashboard.value) {
       upgradeUIAPI()
     }
   }

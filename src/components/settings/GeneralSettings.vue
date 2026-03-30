@@ -10,12 +10,12 @@
         class="setting-item"
       >
         <div class="setting-item-label">
-          {{ $t('autoUpgrade') }}
+          {{ $t('autoUpgradeDashboard') }}
         </div>
         <input
           class="toggle"
           type="checkbox"
-          v-model="autoUpgrade"
+          v-model="autoUpgradeDashboard"
         />
       </div>
       <div
@@ -160,7 +160,7 @@ import { useTooltip } from '@/helper/tooltip'
 import {
   autoDisconnectIdleUDP,
   autoDisconnectIdleUDPTime,
-  autoUpgrade,
+  autoUpgradeDashboard,
   disablePullToRefresh,
   displayAllFeatures,
   IPInfoAPI,
@@ -175,7 +175,7 @@ const { showTip } = useTooltip()
 
 const k = GENERAL_ITEM_KEYS
 const isVisibleLanguage = useIsSettingVisible(k.language)
-const isVisibleAutoUpgrade = useIsSettingVisible(k.autoUpgrade)
+const isVisibleAutoUpgrade = useIsSettingVisible(k.autoUpgradeDashboard)
 const isVisibleAutoDisconnectIdleUDP = useIsSettingVisible(k.autoDisconnectIdleUDP)
 const isVisibleAutoDisconnectIdleUDPTime = useIsSettingVisible(k.autoDisconnectIdleUDPTime)
 const isVisibleIPInfoAPI = useIsSettingVisible(k.IPInfoAPI)

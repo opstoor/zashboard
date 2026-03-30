@@ -29,15 +29,15 @@
     </div>
 
     <div
-      v-if="isVisibleUpgradeUI || isVisibleExportSettings || isVisibleImportSettings"
+      v-if="isVisibleUpgradeDashboard || isVisibleExportSettings || isVisibleImportSettings"
       class="settings-grid my-3 gap-2 p-3 md:grid-cols-2!"
     >
       <button
-        v-if="isVisibleUpgradeUI"
+        v-if="isVisibleUpgradeDashboard"
         :class="twMerge('btn btn-neutral btn-sm', isUIUpgrading ? 'animate-pulse' : '')"
         @click="handlerClickUpgradeUI"
       >
-        {{ $t('upgradeUI') }}
+        {{ $t('upgradeDashboard') }}
       </button>
       <div class="hidden md:block"></div>
       <button
@@ -68,7 +68,7 @@ import GeneralSettings from './GeneralSettings.vue'
 import StyleSettings from './StyleSettings.vue'
 
 const k = GENERAL_ITEM_KEYS
-const isVisibleUpgradeUI = useIsSettingVisible(k.upgradeUI)
+const isVisibleUpgradeDashboard = useIsSettingVisible(k.upgradeDashboard)
 const isVisibleExportSettings = useIsSettingVisible(k.exportSettings)
 const isVisibleImportSettings = useIsSettingVisible(k.importSettings)
 
