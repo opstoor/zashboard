@@ -1,7 +1,7 @@
 <template>
   <div
     ref="parentRef"
-    class="m-3 mr-0 h-full overflow-auto rounded-xl pr-3 shadow-xs"
+    class="base-container m-3 h-full overflow-auto"
     :class="{
       'select-none': isDragging,
     }"
@@ -22,7 +22,7 @@
           }
         "
       >
-        <thead class="bg-base-100 border-base-300/60 sticky -top-0 z-10 border-b">
+        <thead class="bg-base-100 border-base-300/60 sticky top-0 z-10 border-b">
           <tr
             v-for="headerGroup in tanstackTable.getHeaderGroups()"
             :key="headerGroup.id"
@@ -701,7 +701,7 @@ const handleCellRightClick = (
 }
 </script>
 
-<style>
+<style scoped>
 th .resizer {
   @apply opacity-0;
 }

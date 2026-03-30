@@ -18,7 +18,7 @@ import { connectionCardLines } from '@/store/settings'
 import type { Connection } from '@/types'
 import { computed } from 'vue'
 import VirtualScroller from '../common/VirtualScroller.vue'
-import ConnectionCtrl from '../sidebar/ConnectionCtrl.tsx'
+import ConnectionCtrl from '../controls/ConnectionCtrl.tsx'
 import ConnectionCard from './ConnectionCard'
 const size = computed(() => {
   return connectionCardLines.value.length * 28 + 4

@@ -1,13 +1,13 @@
 <template>
   <div :class="{ 'opacity-50': isDisabled, 'scroller-item': 1 }">
     <div
-      class="hover:bg-base-200/40 flex flex-col gap-2 overflow-hidden p-3 pt-2 text-sm transition-colors"
+      class="hover:bg-base-200/40 flex flex-col gap-3 overflow-hidden px-3 py-2 text-sm transition-colors"
       :class="{
         'cursor-pointer': isSelectable,
       }"
       @click="clickHandler"
     >
-      <div class="min-h-6 leading-6">
+      <div class="min-h-5 leading-5">
         <span class="text-base-content/40 text-xs tabular-nums">
           {{ index }}
         </span>
@@ -72,6 +72,14 @@
               <ProxyName :name="getNowProxyNodeName(rule.proxy)" />
             </span>
           </template>
+          <template v-if="latency !== NOT_CONNECTED && displayLatencyInRule">
+            <span
+              :class="latencyColor"
+              class="proxy-chain-latency"
+            >
+              {{ latency }}
+            </span>
+          </template>
         </div>
         <template v-else>
           <div class="proxy-chain-path">
@@ -107,15 +115,16 @@
                 <ProxyName :name="getNowProxyNodeName(rule.proxy)" />
               </span>
             </template>
+            <template v-if="latency !== NOT_CONNECTED && displayLatencyInRule">
+              <span
+                :class="latencyColor"
+                class="proxy-chain-latency"
+              >
+                {{ latency }}
+              </span>
+            </template>
           </div>
         </template>
-        <span
-          v-if="latency !== NOT_CONNECTED && displayLatencyInRule"
-          :class="latencyColor"
-          class="ml-1 text-xs"
-        >
-          {{ latency }}
-        </span>
       </div>
     </div>
 
@@ -361,5 +370,16 @@ useBounceOnVisible()
   height: 12px;
   flex-shrink: 0;
   opacity: 0.35;
+}
+
+.proxy-chain-latency {
+  flex-shrink: 0;
+  margin-right: 8px;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  cursor: default;
+  pointer-events: none;
 }
 </style>
