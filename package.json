@@ -27,7 +27,7 @@
     "@tanstack/vue-virtual": "^3.13.23",
     "@types/reconnectingwebsocket": "^1.0.10",
     "@vueuse/core": "^14.2.1",
-    "axios": "^1.13.6",
+    "axios": "^1.14.0",
     "countup.js": "^2.10.0",
     "dayjs": "^1.11.20",
     "dompurify": "^3.3.3",
