@@ -138,8 +138,8 @@ import {
 import { useSessionStorage } from '@vueuse/core'
 import { v4 as uuid } from 'uuid'
 import { reactive, ref, watch } from 'vue'
-import DialogWrapper from '../common/DialogWrapper.vue'
-import TextInput from '../common/TextInput.vue'
+import DialogWrapper from '../../common/DialogWrapper.vue'
+import TextInput from '../../common/TextInput.vue'
 
 const dialogVisible = useSessionStorage('cache/icon-dialog-visible', false)
 const isDraggingNew = ref(false)

@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
-import BackendSettings from '@/components/settings/BackendSettings.vue'
+import BackendSettings from '@/components/settings/backend/BackendSettings.vue'
 import { useTooltip } from '@/helper/tooltip'
 import { getLabelFromBackend } from '@/helper/utils'
 import { isSidebarCollapsed } from '@/store/settings'

@@ -133,8 +133,8 @@ import { applyCustomThemes } from '@/helper'
 import { customThemes, darkTheme, defaultTheme } from '@/store/settings'
 import { v4 as uuid } from 'uuid'
 import { computed, nextTick, reactive, ref } from 'vue'
-import DialogWrapper from '../common/DialogWrapper.vue'
-import TextInput from '../common/TextInput.vue'
+import DialogWrapper from '../../common/DialogWrapper.vue'
+import TextInput from '../../common/TextInput.vue'
 
 const model = defineModel<boolean>('value', {
   default: false,

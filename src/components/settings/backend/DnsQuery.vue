@@ -68,7 +68,7 @@ import { getIPInfo, type IPInfo } from '@/api/geoip'
 import type { DNSQuery } from '@/types'
 import { MapPinIcon, ServerIcon } from '@heroicons/vue/24/outline'
 import { reactive, ref } from 'vue'
-import TextInput from '../common/TextInput.vue'
+import TextInput from '../../common/TextInput.vue'
 
 const form = reactive({
   name: 'www.google.com',

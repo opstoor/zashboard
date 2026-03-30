@@ -63,7 +63,7 @@ import { handlerUpgradeSuccess } from '@/helper'
 import { exportSettings } from '@/helper/utils'
 import { twMerge } from 'tailwind-merge'
 import { ref } from 'vue'
-import ImportSettings from '../common/ImportSettings.vue'
+import ImportSettings from '../../common/ImportSettings.vue'
 import GeneralSettings from './GeneralSettings.vue'
 import StyleSettings from './StyleSettings.vue'
 

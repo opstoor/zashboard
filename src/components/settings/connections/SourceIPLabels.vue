@@ -86,7 +86,7 @@ import { useSessionStorage } from '@vueuse/core'
 import { v4 as uuid } from 'uuid'
 import { ref, watch } from 'vue'
 import Draggable from 'vuedraggable'
-import DialogWrapper from '../common/DialogWrapper.vue'
+import DialogWrapper from '../../common/DialogWrapper.vue'
 import SourceIPInput from './SourceIPInput.vue'
 
 const dialogVisible = useSessionStorage('cache/sourceip-label-dialog-visible', false)

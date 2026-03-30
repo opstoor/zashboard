@@ -12,6 +12,6 @@
 <script setup lang="ts">
 import BackendVersion from '../common/BackendVersion.vue'
 import StatisticsStats from '../overview/StatisticsStats.vue'
-import BackendSwitch from '../settings/BackendSwitch.vue'
+import BackendSwitch from '../settings/backend/BackendSwitch.vue'
 import SidebarButtons from './SidebarButtons.vue'
 </script>

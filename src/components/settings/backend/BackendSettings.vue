@@ -208,8 +208,8 @@ import {
   updateGeoDataAPI,
 } from '@/api'
 import BackendVersion from '@/components/common/BackendVersion.vue'
-import BackendSwitch from '@/components/settings/BackendSwitch.vue'
-import DnsQuery from '@/components/settings/DnsQuery.vue'
+import BackendSwitch from '@/components/settings/backend/BackendSwitch.vue'
+import DnsQuery from '@/components/settings/backend/DnsQuery.vue'
 import { useIsSettingVisible } from '@/composables/settings'
 import { BACKEND_ITEM_KEYS } from '@/config/settingsItems'
 import { MIHOMO, MIHOMO_CHANNEL } from '@/constant'

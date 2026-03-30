@@ -178,7 +178,7 @@ import {
 } from '@/store/settings'
 import { AdjustmentsHorizontalIcon, ArrowUpTrayIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { computed, ref, watch } from 'vue'
-import TextInput from '../common/TextInput.vue'
+import TextInput from '../../common/TextInput.vue'
 import CustomTheme from './CustomTheme.vue'
 import ThemeSelector from './ThemeSelector.vue'
 

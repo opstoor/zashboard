@@ -59,7 +59,7 @@ import { fetchConfigs } from '@/store/config'
 import { fetchProxies } from '@/store/proxies'
 import { fetchRules } from '@/store/rules'
 import { ref } from 'vue'
-import DialogWrapper from '../common/DialogWrapper.vue'
+import DialogWrapper from '../../common/DialogWrapper.vue'
 
 const modalValue = defineModel<boolean>()
 const configPath = ref('')

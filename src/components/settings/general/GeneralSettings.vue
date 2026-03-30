@@ -152,7 +152,7 @@
 
 <script setup lang="ts">
 import { isSingBox } from '@/api'
-import LanguageSelect from '@/components/settings/LanguageSelect.vue'
+import LanguageSelect from '@/components/settings/general/LanguageSelect.vue'
 import { useIsSettingVisible } from '@/composables/settings'
 import { GENERAL_ITEM_KEYS } from '@/config/settingsItems'
 import { IP_INFO_API } from '@/constant'

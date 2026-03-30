@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import SourceIPLabels from '@/components/settings/SourceIPLabels.vue'
+import SourceIPLabels from '@/components/settings/connections/SourceIPLabels.vue'
 import { useHasAnyVisibleSetting, useIsSettingVisible } from '@/composables/settings'
 import { CONNECTIONS_ITEM_KEYS, getItemKeysByCategory } from '@/config/settingsItems'
 import { PROXY_CHAIN_DIRECTION, SETTINGS_MENU_KEY, TABLE_SIZE, TABLE_WIDTH_MODE } from '@/constant'

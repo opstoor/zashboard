@@ -138,8 +138,8 @@
 <script setup lang="ts">
 import ImportSettings from '@/components/common/ImportSettings.vue'
 import TextInput from '@/components/common/TextInput.vue'
-import EditBackendModal from '@/components/settings/EditBackendModal.vue'
-import LanguageSelect from '@/components/settings/LanguageSelect.vue'
+import EditBackendModal from '@/components/settings/backend/EditBackendModal.vue'
+import LanguageSelect from '@/components/settings/general/LanguageSelect.vue'
 import { ROUTE_NAME } from '@/constant'
 import { showNotification } from '@/helper/notification'
 import { getBackendFromUrl, getLabelFromBackend, getUrlFromBackend } from '@/helper/utils'

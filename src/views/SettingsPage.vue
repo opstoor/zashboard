@@ -75,11 +75,11 @@
 
 <script setup lang="ts">
 import SettingsMenu from '@/components/controls/SettingsCtrl.vue'
-import BackendSettings from '@/components/settings/BackendSettings.vue'
-import ConnectionsSettings from '@/components/settings/ConnectionsSettings.vue'
-import OverviewSettings from '@/components/settings/OverviewSettings.vue'
-import ProxiesSettings from '@/components/settings/ProxiesSettings.vue'
-import ZashboardSettings from '@/components/settings/ZashboardSettings.vue'
+import BackendSettings from '@/components/settings/backend/BackendSettings.vue'
+import ConnectionsSettings from '@/components/settings/connections/ConnectionsSettings.vue'
+import ZashboardSettings from '@/components/settings/general/ZashboardSettings.vue'
+import OverviewSettings from '@/components/settings/overview/OverviewSettings.vue'
+import ProxiesSettings from '@/components/settings/proxies/ProxiesSettings.vue'
 import { usePaddingForViews } from '@/composables/paddingViews'
 import { isSettingVisible } from '@/composables/settings'
 import { SETTINGS_MENU_KEY } from '@/constant'

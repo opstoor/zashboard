@@ -58,7 +58,7 @@ import type { SourceIPLabel } from '@/types'
 import { ArrowRightCircleIcon, LockClosedIcon, LockOpenIcon } from '@heroicons/vue/24/outline'
 import { uniq } from 'lodash'
 import { computed } from 'vue'
-import TextInput from '../common/TextInput.vue'
+import TextInput from '../../common/TextInput.vue'
 
 const sourceIPLabel = defineModel<Partial<SourceIPLabel>>({
   default: {
