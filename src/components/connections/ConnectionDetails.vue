@@ -62,8 +62,21 @@
       </div>
       <template v-if="proxyChainStart">
         <div class="divider md:divider-horizontal m-0"></div>
-        <div class="md:w-128">
-          <ProxyChains :name="proxyChainStart" />
+        <div class="overflow-hidden md:w-128">
+          <div class="p-3">
+            <ProxyChainPath
+              :proxy="proxyChainStart"
+              :selected="selectedProxy"
+              :show-now-node="true"
+              :show-latency="true"
+              @update:selected="selectedProxy = $event"
+            />
+          </div>
+          <ProxyGroup
+            :name="selectedProxy || proxyChainStart"
+            :force-open="true"
+            class="transparent-collapse rounded-none!"
+          />
         </div>
       </template>
     </div>
@@ -73,6 +86,8 @@
 <script setup lang="ts">
 import { getIPInfo, type IPInfo } from '@/api/geoip'
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
+import ProxyChainPath from '@/components/common/ProxyChainPath.vue'
+import ProxyGroup from '@/components/proxies/ProxyGroup.vue'
 import { useConnections } from '@/composables/connections'
 import { proxyMap } from '@/store/proxies'
 import { ArrowRightCircleIcon, MapPinIcon, ServerIcon } from '@heroicons/vue/24/outline'
@@ -81,11 +96,11 @@ import { last } from 'lodash'
 import { computed, ref, watch } from 'vue'
 import VueJsonPretty from 'vue-json-pretty'
 import 'vue-json-pretty/lib/styles.css'
-import ProxyChains from '../common/ProxyChains.vue'
 import ProxyIcon from '../proxies/ProxyIcon.vue'
 
 const { infoConn, connectionDetailModalShow } = useConnections()
 const details = ref<IPInfo | null>(null)
+const selectedProxy = ref('')
 
 const destinationIP = computed(() => infoConn.value?.metadata.destinationIP)
 const isPrivateIP = computed(() => {
@@ -106,6 +121,14 @@ const proxyChainStart = computed(() => {
 
   return last(infoConn.value.chains)
 })
+
+watch(
+  () => proxyChainStart.value,
+  (name) => {
+    selectedProxy.value = name || ''
+  },
+  { immediate: true },
+)
 
 watch(
   () => destinationIP.value,
