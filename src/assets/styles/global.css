@@ -1,0 +1,19 @@
+div {
+  @apply scrollbar-thin;
+}
+
+.text-main {
+  @apply text-primary;
+}
+
+[data-theme='dark'] .text-main {
+  color: oklch(72% 0.233 277.117);
+}
+
+[data-theme='lofi'] .text-main,
+[data-theme='pastel'] .text-main,
+[data-theme='wireframe'] .text-main,
+[data-theme='business'] .text-main,
+[data-theme='black'] .text-main {
+  @apply text-info;
+}

@@ -38,6 +38,9 @@ export const theme = computed(() => {
 export const customThemes = useStorage<THEME[]>('config/custom-themes', [])
 
 const replaceLegacyTheme = (theme: string, defaultTheme: string) => {
+  if (theme === 'dark-apple') {
+    return 'dark'
+  }
   if ([...ALL_THEME, ...customThemes.value.map((theme) => theme.name)].includes(theme)) {
     return theme
   }

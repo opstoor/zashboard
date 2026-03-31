@@ -1,0 +1,13 @@
+@layer utilities {
+  @font-face {
+    font-family: 'NotoEmoji';
+    src: url('/fonts/NotoColorEmoji-flagsonly.ttf') format('truetype');
+  }
+}
+
+@layer utilities {
+  @font-face {
+    font-family: 'Twemoji';
+    src: url('/fonts/TwemojiMozilla-flags.woff2') format('woff2');
+  }
+}

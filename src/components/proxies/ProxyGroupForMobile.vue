@@ -10,7 +10,7 @@
       class="bg-base-300/50 fixed inset-0 z-40 overflow-hidden"
     />
     <div
-      class="base-container absolute overflow-hidden transition-[width,transform,max-height] duration-200 ease-out will-change-transform"
+      class="base-container absolute flex flex-col overflow-hidden transition-[width,transform,max-height] duration-200 ease-out will-change-transform"
       :class="modalMode && blurIntensity < 5 && 'backdrop-blur-sm!'"
       :style="cardStyle"
       @contextmenu.prevent.stop="handlerLatencyTest"
