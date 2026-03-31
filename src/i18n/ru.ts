@@ -1,12 +1,15 @@
 import type { LANG_MESSAGE } from './en'
 
 const ru: LANG_MESSAGE = {
+  // Navigation
   setup: 'Настройка',
   overview: 'Обзор',
   proxies: 'Прокси',
   rules: 'Правила',
   connections: 'Подключения',
   logs: 'Журнал',
+
+  // Shared labels and actions
   protocol: 'Протокол',
   host: 'Хост',
   port: 'Порт',
@@ -17,10 +20,10 @@ const ru: LANG_MESSAGE = {
   upload: 'Отправлено',
   downloadSpeed: 'Скорость загрузки',
   uploadSpeed: 'Скорость отдачи',
-  speed: 'Скорость',
   memoryUsage: 'Память',
-  version: 'Версия',
-  noContent: 'Нет содержимого',
+  noData: 'Нет данных',
+
+  // Backend actions and feedback
   flushFakeIP: 'Очистить Fake IP',
   flushDNSCache: 'Очистить DNS кэш',
   flushDNSCacheSuccess: 'DNS кэш успешно очищен',
@@ -37,6 +40,8 @@ const ru: LANG_MESSAGE = {
   closedConnections: 'Закрытые',
   logLevel: 'Уровень журнала',
   logType: 'Тип журнала',
+
+  // Connections, proxies, and rules pages
   twoColumnProxyGroup: 'Группа прокси в два столбца',
   type: 'Тип',
   process: 'Процесс',
@@ -76,13 +81,13 @@ const ru: LANG_MESSAGE = {
   configPayloadPlaceholder: 'Вставьте YAML содержимое конфигурации здесь...',
   forceUpdate: 'Принудительное обновление',
   or: 'ИЛИ',
-  mode: 'Режим',
-  proxySortType: 'Тип сортировки прокси',
   defaultsort: 'По конфигурациям',
   nameasc: 'Имя по возрастанию',
   namedesc: 'Имя по убыванию',
   latencydesc: 'Задержка по убыванию',
   latencyasc: 'Задержка по возрастанию',
+
+  // Settings sections and dialogs
   language: 'Язык',
   automaticDisconnection: 'Автоматическое отключение',
   backend: 'Бэкенд',
@@ -97,6 +102,8 @@ const ru: LANG_MESSAGE = {
   auto: 'Авто',
   dots: 'Точки',
   bar: 'Полоса',
+
+  // Settings page
   exportSettings: 'Экспорт настроек',
   importSettings: 'Импорт настроек',
   connectionSettings: 'Настройки подключения',
@@ -127,6 +134,8 @@ const ru: LANG_MESSAGE = {
     'Текущий бэкенд недоступен. Попробуйте переключиться на другой бэкенд?',
   confirm: 'Подтвердить',
   backendSwitchTo: 'Автоматическое переключение на {backend}',
+
+  // Backend settings
   ipv6Test: 'IPv6-тест',
   socksPort: 'Порт Socks',
   httpPort: 'Порт HTTP',
@@ -138,10 +147,10 @@ const ru: LANG_MESSAGE = {
   small: 'Маленький',
   normal: 'Нормальный',
   large: 'Большой',
+
+  // Overview page
   autoIPCheckWhenStart: 'Автоматическая проверка IP при запуске',
   autoConnectionCheckWhenStart: 'Автоматическая проверка соединений при запуске',
-  chinaIP: 'IP для Китая',
-  globalIP: 'Мировой IP',
   networkInfo: 'Информация о сети',
   autoSwitchTheme: 'Автоматический темы',
   customBackgroundURL: 'URL фона',
@@ -160,12 +169,6 @@ const ru: LANG_MESSAGE = {
   totalConnections: 'Статистика соединений',
   totalConnectionsTip:
     'Учитываются только соединения, открытые во время работы панели. \nВремя начала записи: {statsStartTime}',
-  mostDownloadHost: 'Ресурс с наибольшим скачиванием',
-  mostUploadHost: 'Ресурс с наибольшей отправкой данных',
-  mostDownloadSourceIP: 'IP-источник с наибольшим скачиванием',
-  mostUploadSourceIP: 'IP-источник с наибольшей отдачей',
-  mostDownloadProxy: 'Прокси с наибольшим скачиванием',
-  mostUploadProxy: 'Прокси с наибольшей отдачей',
   manual: 'Ручной',
   tableWidthMode: 'Режим ширины таблицы',
   testFailed: 'Тест задержки таймаут',
@@ -173,6 +176,8 @@ const ru: LANG_MESSAGE = {
   testFinishedResultTip: '{name}\nТест завершен: {success} Успешно, {failed} Таймаут',
   testFailedTip: '{name}\nТест задержки таймаут',
   updateFinishedTip: '{number} Обновление завершено',
+
+  // Page controls and interaction
   independentLatencyTest: 'Независимый тест задержки',
   independentLatencyTestTip:
     'Включение независимого тестирования задержки попытается использовать URL-адреса, указанные в конфигурационном файле, вместо настроек URL-адресов в панели управления во время теста задержки. Задержка будет отображаться отдельно на основе URL-адресов, установленных в группах политик.',
@@ -209,7 +214,6 @@ const ru: LANG_MESSAGE = {
   tipForFixed:
     'Текущая стратегическая группа закреплена за текущим узлом. Нажмите «Тест скорости», чтобы восстановить поведение {type}.',
   remoteAddress: 'удалённый адрес',
-  themeName: 'Название темы',
   save: 'Сохранить',
   moreDetails: 'Подробнее',
   moreSettings: 'Дополнительные настройки',
@@ -223,9 +227,10 @@ const ru: LANG_MESSAGE = {
     'Показать все функции, включая те, которые не поддерживаются официальной версией sing-box. Если вы используете форк sing-box, поддерживающий некоторые из этих функций, вы можете попробовать их включить.',
   blurIntensity: 'Интенсивность размытия',
   scrollAnimationEffect: 'Эффект анимации прокрутки',
+
+  // Import, export, and upgrade
   importFromFile: 'Импортировать из файла',
   importFromUrl: 'Импортировать из URL',
-  sync: 'Синхронизировать',
   upgradeSuccess: 'Обновление до новой версии выполнено успешно',
   numberOfChartsInSidebar: 'Количество графиков в боковой панели',
   flushSmartWeights: 'Очистить Smart веса',
@@ -235,9 +240,6 @@ const ru: LANG_MESSAGE = {
   general: 'Универсальный',
   groupProxiesByProvider: 'Группировать прокси по провайдеру',
   useSmartGroupSort: 'Сортировать Smart группы по частоте использования',
-  RarelyUsed: 'Редко используется',
-  OccasionalUsed: 'Временно используется',
-  MostUsed: 'Часто используется',
   all: 'Все',
   autoDisconnectIdleUDP: 'Автоматически отключить UDP-идле',
   autoDisconnectIdleUDPTime: 'Время UDP-идле',
@@ -253,7 +255,6 @@ const ru: LANG_MESSAGE = {
   saveFailed: 'Не удалось сохранить',
   checking: 'Проверка...',
   copySuccess: 'Копирование успешно',
-  importFromBackend: 'Импортировать из бэкенда',
   importFromBackendTip:
     'По умолчанию ./zashboard-settings.json находится в папке ui. Пожалуйста, убедитесь, что папка ui существует и содержит файл конфигурации.',
   importFailed: 'Импорт не выполнен, проверьте url {url}',
@@ -267,7 +268,6 @@ const ru: LANG_MESSAGE = {
   groupTestUrlsTip:
     'Для ручных тестов, запущенных из панели, установите тестовые URL > URL в конфигурации > Глобальные тестовые URL, но для групп с UrlTest/Fallback и т.д., URL в конфигурации все равно нужно изменить, поэтому это рекомендуется только для Selector и т.д. ',
   groupName: 'Группа имени',
-  noData: 'Нет данных',
   unknown: 'Неизвестно',
   sourceIPAddress: 'Исходный IP-адрес',
   ruleMatch: 'Совпадение правила',
@@ -278,7 +278,6 @@ const ru: LANG_MESSAGE = {
   zashboardSettings: 'Настройки панели',
   backendSettings: 'Настройки бэкенда',
   generalSettings: 'Общие настройки',
-  overviewCard: 'Карточка обзора',
   overviewSettings: 'Настройки обзора',
   overviewCardSettings: 'Настройки карточек',
   chartsCard: 'Карточка графиков',
@@ -287,8 +286,6 @@ const ru: LANG_MESSAGE = {
   topologyCharts: 'Топологические графики',
   connectionHistory: 'История подключений',
   ruleHitCountCard: 'Статистика попаданий/промахов правил',
-  ruleHitChart: 'Статистика попаданий',
-  ruleMissChart: 'Статистика промахов',
   latency: 'Задержка',
   icon: 'Иконка',
   settingsVisibility: 'Видимость настроек',
@@ -301,7 +298,6 @@ const ru: LANG_MESSAGE = {
   aggregateByDestination: 'По назначению',
   aggregateByProcess: 'По процессу',
   aggregateByOutbound: 'По исходящему',
-  aggregateByNode: 'По узлу',
   totalTraffic: 'Общий трафик',
   total: 'Итого',
   clearConnectionHistory: 'Очистить историю соединений',
@@ -314,7 +310,6 @@ const ru: LANG_MESSAGE = {
   autoCleanupIntervalQuarter: 'Ежеквартально',
   autoCleanupIntervalNever: 'Никогда',
   remainingTraffic: 'Осталось',
-  usedTraffic: 'Использовано',
   ruleHitCount: 'Попадание: {count} раз',
   ruleLastHit: 'Последнее попадание: {time}',
   ruleMissCount: 'Промах: {count} раз',

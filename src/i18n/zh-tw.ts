@@ -1,12 +1,15 @@
 import type { LANG_MESSAGE } from './en'
 
 const zhTW: LANG_MESSAGE = {
+  // Navigation
   setup: '配置',
   overview: '概覽',
   proxies: '代理',
   rules: '規則',
   connections: '連接',
   logs: '日誌',
+
+  // Shared labels and actions
   protocol: '協議',
   host: '主機',
   port: '端口',
@@ -17,10 +20,10 @@ const zhTW: LANG_MESSAGE = {
   upload: '上傳',
   downloadSpeed: '下載速度',
   uploadSpeed: '上傳速度',
-  speed: '速度',
   memoryUsage: '記憶體使用',
-  version: '版本',
-  noContent: '無內容',
+  noData: '暫無資料',
+
+  // Backend actions and feedback
   flushFakeIP: '清空Fake IP',
   flushDNSCache: '清空DNS快取',
   flushDNSCacheSuccess: 'DNS快取清空成功',
@@ -37,6 +40,8 @@ const zhTW: LANG_MESSAGE = {
   closedConnections: '已關閉',
   logLevel: '日誌等級',
   logType: '日誌類型',
+
+  // Connections, proxies, and rules pages
   twoColumnProxyGroup: '雙列顯示代理組',
   type: '類型',
   process: '進程',
@@ -76,13 +81,13 @@ const zhTW: LANG_MESSAGE = {
   configPayloadPlaceholder: '在此貼上 YAML 配置內容...',
   forceUpdate: '強制更新',
   or: '或',
-  mode: '模式',
-  proxySortType: '代理排序方式',
   defaultsort: '按配置排序',
   nameasc: '按名稱升序',
   namedesc: '按名稱降序',
   latencydesc: '按延遲降序',
   latencyasc: '按延遲升序',
+
+  // Settings sections and dialogs
   language: '面板語言',
   automaticDisconnection: '切換節點時自動斷開連接',
   backend: '後端',
@@ -97,6 +102,8 @@ const zhTW: LANG_MESSAGE = {
   auto: '自動',
   dots: '點',
   bar: '條',
+
+  // Settings page
   exportSettings: '匯出設定',
   importSettings: '匯入設定',
   connectionSettings: '連接設定',
@@ -126,6 +133,8 @@ const zhTW: LANG_MESSAGE = {
   currentBackendUnavailable: '當前後端不可用，嘗試切換到其他後端?',
   confirm: '確定',
   backendSwitchTo: '自動切換到{backend}',
+
+  // Backend settings
   ipv6Test: 'IPv6 測試',
   socksPort: 'Socks 端口',
   httpPort: 'HTTP 端口',
@@ -137,10 +146,10 @@ const zhTW: LANG_MESSAGE = {
   small: '小',
   normal: '正常',
   large: '大',
+
+  // Overview page
   autoIPCheckWhenStart: '自動檢查 IP',
   autoConnectionCheckWhenStart: '自動檢查連接',
-  chinaIP: '中國大陸 IP',
-  globalIP: '全球節點 IP',
   networkInfo: '網路資訊',
   autoSwitchTheme: '自動切換主題',
   customBackgroundURL: '面板背景',
@@ -158,12 +167,6 @@ const zhTW: LANG_MESSAGE = {
   showStatisticsWhenSidebarCollapsed: '側邊欄摺疊時顯示統計',
   totalConnections: '連接統計',
   totalConnectionsTip: '只能統計面板開啟期間的連接。\n記錄開始時間：{statsStartTime}',
-  mostDownloadHost: '最多下載主機',
-  mostUploadHost: '最多上傳主機',
-  mostDownloadSourceIP: '最多下載源IP',
-  mostUploadSourceIP: '最多上傳源IP',
-  mostDownloadProxy: '最多下載節點',
-  mostUploadProxy: '最多上傳節點',
   manual: '手動',
   tableWidthMode: '表格寬度模式',
   testFailed: '測速超時',
@@ -171,6 +174,8 @@ const zhTW: LANG_MESSAGE = {
   testFinishedResultTip: '{name}\n測試完成: {success} 成功，{failed} 超時',
   testFailedTip: '{name}\n測速超時',
   updateFinishedTip: '{number} 更新完成',
+
+  // Page controls and interaction
   independentLatencyTest: '獨立延遲測試',
   independentLatencyTestTip:
     '開啟獨立延遲測試會在測速中盡可能的使用配置檔案中的url覆蓋面板設定的url，並展示根據策略組設定的url獲取的延遲。',
@@ -203,7 +208,6 @@ const zhTW: LANG_MESSAGE = {
   disconnectOnRuleDisable: '禁用規則時打斷連接',
   tipForFixed: '當前策略組被固定在了當前節點，點擊測速來恢復{type}行為',
   remoteAddress: '遠端地址',
-  themeName: '主題名稱',
   save: '儲存',
   moreDetails: '更多詳情',
   moreSettings: '更多設定',
@@ -217,9 +221,10 @@ const zhTW: LANG_MESSAGE = {
     '顯示所有功能，包括sing-box官方版本不支援的功能，如果您使用了fork版本的sing-box支援其中的某些功能，可以嘗試啟用',
   blurIntensity: '毛玻璃強度',
   scrollAnimationEffect: '滾動動畫效果',
+
+  // Import, export, and upgrade
   importFromFile: '從檔案匯入',
   importFromUrl: '從 URL 匯入',
-  sync: '同步',
   upgradeSuccess: '升級成功',
   numberOfChartsInSidebar: '側邊欄圖表數量',
   flushSmartWeights: '清空Smart權重',
@@ -229,9 +234,6 @@ const zhTW: LANG_MESSAGE = {
   general: '通用',
   groupProxiesByProvider: '節點根據提供商分組',
   useSmartGroupSort: 'Smart組根據使用頻率排序',
-  RarelyUsed: '很少使用',
-  OccasionalUsed: '偶爾使用',
-  MostUsed: '經常使用',
   all: '全部',
   autoDisconnectIdleUDP: '自動斷開空閒UDP',
   autoDisconnectIdleUDPTime: 'UDP空閒時間',
@@ -247,7 +249,6 @@ const zhTW: LANG_MESSAGE = {
   saveFailed: '儲存失敗',
   checking: '檢查中...',
   copySuccess: '複製成功',
-  importFromBackend: '從後端匯入',
   importFromBackendTip:
     '預設的./zashboard-settings.json位於ui資料夾下，匯入前請確保ui資料夾下存在配置檔案。',
   importFailed: '匯入失敗，請檢查url {url}',
@@ -261,7 +262,6 @@ const zhTW: LANG_MESSAGE = {
   groupTestUrlsTip:
     '對於從面板手動觸發的測試，此處設定測試連結 > 配置中的連結 > 面板全域測試連結，但是對於UrlTest/Fallback等具有核心內部的定時測速邏輯的組，仍然需要修改配置中的連結，此處僅推薦Selector等場景',
   groupName: '組名',
-  noData: '暫無資料',
   unknown: '未知',
   sourceIPAddress: '源IP地址',
   ruleMatch: '規則匹配',
@@ -272,7 +272,6 @@ const zhTW: LANG_MESSAGE = {
   zashboardSettings: '面板設置',
   backendSettings: '後端設置',
   generalSettings: '常規設置',
-  overviewCard: '概覽卡片',
   overviewSettings: '概覽設置',
   overviewCardSettings: '卡片設置',
   chartsCard: '圖表卡片',
@@ -281,8 +280,6 @@ const zhTW: LANG_MESSAGE = {
   topologyCharts: '拓撲圖表',
   connectionHistory: '連接歷史',
   ruleHitCountCard: '規則命中統計',
-  ruleHitChart: '命中統計',
-  ruleMissChart: '未命中統計',
   latency: '延遲',
   icon: '圖示',
   settingsVisibility: '設置項顯示控制',
@@ -295,7 +292,6 @@ const zhTW: LANG_MESSAGE = {
   aggregateByDestination: '按目標地址',
   aggregateByProcess: '按進程',
   aggregateByOutbound: '按出站節點',
-  aggregateByNode: '按節點',
   totalTraffic: '總流量',
   total: '總計',
   clearConnectionHistory: '清空連接歷史',
@@ -307,7 +303,6 @@ const zhTW: LANG_MESSAGE = {
   autoCleanupIntervalQuarter: '每季度',
   autoCleanupIntervalNever: '永不',
   remainingTraffic: '剩餘流量',
-  usedTraffic: '已使用',
   ruleHitCount: '命中: {count} 次',
   ruleLastHit: '最後命中: {time}',
   ruleMissCount: '未命中: {count} 次',
