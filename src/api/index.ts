@@ -77,7 +77,7 @@ export const mihomo = computed<[MIHOMO, string] | undefined>(() => {
       case 'meta':
         return [MIHOMO.Meta, match[2] ?? version.value]
       default:
-        return undefined
+        return [MIHOMO.Meta, version.value]
     }
   }
 })

@@ -115,7 +115,7 @@
             }"
             class="hover:bg-primary! hover:text-primary-content!"
             :class="[
-              index % 2 === 0
+              index % 2 === 1
                 ? 'bg-base-100'
                 : 'bg-[color-mix(in_oklab,var(--color-base-200)_50%,var(--color-base-100))]',
               !isDragging ? 'cursor-pointer' : 'cursor-grabbing',

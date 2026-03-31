@@ -23,7 +23,9 @@
     box-class="max-w-173"
     no-padding
   >
-    <BackendSettings class="w-full p-2" />
+    <div class="bg-base-200 size-full p-4">
+      <BackendSettings />
+    </div>
   </DialogWrapper>
 </template>
 
