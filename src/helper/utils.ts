@@ -39,6 +39,15 @@ export const exportSettings = () => {
   URL.revokeObjectURL(url)
 }
 
+export const resetSettings = () => {
+  const keysToReset = Object.keys(localStorage).filter((key) => {
+    return key.startsWith('config/')
+  })
+
+  keysToReset.forEach((key) => localStorage.removeItem(key))
+  window.location.reload()
+}
+
 export const getUrlFromBackend = (end: Omit<Backend, 'uuid'>) => {
   return `${end.protocol}://${end.host}:${end.port}${end.secondaryPath || ''}`
 }

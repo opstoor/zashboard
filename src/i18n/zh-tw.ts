@@ -194,6 +194,8 @@ const zhTW: LANG_MESSAGE = {
   detailedCardPreset: '詳細預設',
   refresh: '重新整理',
   reset: '重設',
+  resetSettings: '恢復預設設定',
+  resetSettingsConfirm: '確定要將面板設定恢復為預設值嗎？此操作無法復原。',
   minProxyCardWidth: '節點卡片最小寬度',
   displayGlobalByMode: '根據模式顯示 GLOBAL',
   displaySelectedNode: '顯示選中節點',

@@ -198,6 +198,9 @@ const ru: LANG_MESSAGE = {
   detailedCardPreset: 'Подробный',
   refresh: 'Обновить',
   reset: 'Сбросить',
+  resetSettings: 'Сбросить настройки',
+  resetSettingsConfirm:
+    'Вы уверены, что хотите сбросить все настройки панели к значениям по умолчанию? Это действие нельзя отменить.',
   minProxyCardWidth: 'Минимальная ширина карточки прокси',
   displayGlobalByMode: 'Отображать GLOBAL по режиму',
   displaySelectedNode: 'Отображать выбранный узел',

@@ -195,6 +195,9 @@ const en = {
   detailedCardPreset: 'Detailed preset',
   refresh: 'Refresh',
   reset: 'Reset',
+  resetSettings: 'Reset settings',
+  resetSettingsConfirm:
+    'Are you sure you want to reset all dashboard settings to default values? This action cannot be undone.',
   minProxyCardWidth: 'Minimum proxy card width',
   displayGlobalByMode: 'Show GLOBAL based on mode',
   displaySelectedNode: 'Show selected node',

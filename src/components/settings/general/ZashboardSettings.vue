@@ -29,25 +29,28 @@
     </div>
 
     <div
-      v-if="isVisibleUpgradeDashboard || isVisibleExportSettings || isVisibleImportSettings"
+      v-if="isVisibleActions"
       class="settings-grid my-3 gap-2 p-3 md:grid-cols-2!"
     >
       <button
-        v-if="isVisibleUpgradeDashboard"
         :class="twMerge('btn btn-neutral btn-sm', isUIUpgrading ? 'animate-pulse' : '')"
         @click="handlerClickUpgradeUI"
       >
         {{ $t('upgradeDashboard') }}
       </button>
-      <div class="hidden md:block"></div>
       <button
-        v-if="isVisibleExportSettings"
+        class="btn btn-sm"
+        @click="handlerClickResetSettings"
+      >
+        {{ $t('resetSettings') }}
+      </button>
+      <button
         class="btn btn-sm"
         @click="exportSettings"
       >
         {{ $t('exportSettings') }}
       </button>
-      <ImportSettings v-if="isVisibleImportSettings" />
+      <ImportSettings />
     </div>
 
     <StyleSettings />
@@ -60,23 +63,29 @@ import { upgradeUIAPI, zashboardVersion } from '@/api'
 import { useIsSettingVisible, useSettings } from '@/composables/settings'
 import { GENERAL_ITEM_KEYS } from '@/config/settingsItems'
 import { handlerUpgradeSuccess } from '@/helper'
-import { exportSettings } from '@/helper/utils'
+import { exportSettings, resetSettings } from '@/helper/utils'
 import { twMerge } from 'tailwind-merge'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import ImportSettings from '../../common/ImportSettings.vue'
 import GeneralSettings from './GeneralSettings.vue'
 import StyleSettings from './StyleSettings.vue'
 
 const k = GENERAL_ITEM_KEYS
-const isVisibleUpgradeDashboard = useIsSettingVisible(k.upgradeDashboard)
-const isVisibleExportSettings = useIsSettingVisible(k.exportSettings)
-const isVisibleImportSettings = useIsSettingVisible(k.importSettings)
+const isVisibleActions = useIsSettingVisible(k.actions)
 
 const commitId = __COMMIT_ID__
 
 const { isUIUpdateAvailable } = useSettings()
+const { t } = useI18n()
 
 const isUIUpgrading = ref(false)
+
+const handlerClickResetSettings = () => {
+  if (!window.confirm(t('resetSettingsConfirm'))) return
+  resetSettings()
+}
+
 const handlerClickUpgradeUI = async () => {
   if (isUIUpgrading.value) return
   isUIUpgrading.value = true

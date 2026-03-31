@@ -17,12 +17,12 @@ export const SETTINGS_CATEGORIES: SettingsCategory[] = [
     label: 'backendSettings',
     items: [
       { key: `${SETTINGS_MENU_KEY.backend}.backendSwitch`, label: 'backend' },
+      { key: `${SETTINGS_MENU_KEY.backend}.actions`, label: 'actions' },
       { key: `${SETTINGS_MENU_KEY.backend}.ports`, label: 'ports' },
       { key: `${SETTINGS_MENU_KEY.backend}.tunMode`, label: 'tunMode' },
       { key: `${SETTINGS_MENU_KEY.backend}.allowLan`, label: 'allowLan' },
       { key: `${SETTINGS_MENU_KEY.backend}.checkCoreUpgrade`, label: 'checkCoreUpgrade' },
       { key: `${SETTINGS_MENU_KEY.backend}.autoUpgradeCore`, label: 'autoUpgradeCore' },
-      { key: `${SETTINGS_MENU_KEY.backend}.actions`, label: 'actions' },
       { key: `${SETTINGS_MENU_KEY.backend}.dnsQuery`, label: 'DNSQuery' },
     ],
   },
@@ -30,9 +30,19 @@ export const SETTINGS_CATEGORIES: SettingsCategory[] = [
     key: SETTINGS_MENU_KEY.general,
     label: 'zashboardSettings',
     items: [
-      { key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.language`, label: 'language' },
-      { key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.fonts`, label: 'fonts' },
-      { key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.emoji`, label: 'emoji' },
+      { key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.actions`, label: 'actions' },
+      {
+        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.autoSwitchTheme`,
+        label: 'autoSwitchTheme',
+      },
+      {
+        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.defaultTheme`,
+        label: 'defaultTheme',
+      },
+      {
+        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.darkTheme`,
+        label: 'darkTheme',
+      },
       {
         key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.customBackgroundURL`,
         label: 'customBackgroundURL',
@@ -45,33 +55,12 @@ export const SETTINGS_CATEGORIES: SettingsCategory[] = [
         key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.blurIntensity`,
         label: 'blurIntensity',
       },
-      {
-        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.defaultTheme`,
-        label: 'defaultTheme',
-      },
-      {
-        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.darkTheme`,
-        label: 'darkTheme',
-      },
-      {
-        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.autoSwitchTheme`,
-        label: 'autoSwitchTheme',
-      },
+      { key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.fonts`, label: 'fonts' },
+      { key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.emoji`, label: 'emoji' },
+      { key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.language`, label: 'language' },
       {
         key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.autoUpgradeDashboard`,
         label: 'autoUpgradeDashboard',
-      },
-      {
-        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.upgradeDashboard`,
-        label: 'upgradeDashboard',
-      },
-      {
-        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.exportSettings`,
-        label: 'exportSettings',
-      },
-      {
-        key: `${SETTINGS_MENU_KEY.general}.zashboardSettings.importSettings`,
-        label: 'importSettings',
       },
       {
         key: `${SETTINGS_MENU_KEY.general}.autoDisconnectIdleUDP`,
