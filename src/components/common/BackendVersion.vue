@@ -15,8 +15,7 @@
 
 <script setup lang="ts">
 import { isSingBox, version } from '@/api'
+import MetacubexLogo from '@/assets/images/metacubex.jpg'
+import SingBoxLogo from '@/assets/images/sing-box.svg'
 import { checkTruncation } from '@/helper/tooltip'
-
-const MetacubexLogo = `${import.meta.env.BASE_URL}images/metacubex.jpg`
-const SingBoxLogo = `${import.meta.env.BASE_URL}images/sing-box.svg`
 </script>
