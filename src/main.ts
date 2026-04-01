@@ -9,6 +9,16 @@ import { applyCustomThemes, applyKsuTheme } from './helper'
 import { i18n } from './i18n'
 import router from './router'
 
+const isEdge = /Edg\//.test(navigator.userAgent)
+
+if (isEdge) {
+  const originalReplaceState = history.replaceState
+  history.replaceState = function (...args) {
+    if (document.visibilityState === 'hidden') return
+    return originalReplaceState.apply(this, args)
+  }
+}
+
 applyCustomThemes()
 applyKsuTheme()
 loadFonts()
