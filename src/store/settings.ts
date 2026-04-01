@@ -25,6 +25,24 @@ import type { SourceIPLabel } from '@/types'
 import { useStorage } from '@vueuse/core'
 import { computed } from 'vue'
 
+const migrateLegacyStorageKey = (legacyKey: string, nextKey: string) => {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  const legacyValue = localStorage.getItem(legacyKey)
+  const nextValue = localStorage.getItem(nextKey)
+
+  if (legacyValue !== null && nextValue === null) {
+    localStorage.setItem(nextKey, legacyValue)
+  }
+  localStorage.removeItem(legacyKey)
+}
+
+migrateLegacyStorageKey('config/show-seleted-for-now-node', 'config/show-selected-for-now-node')
+migrateLegacyStorageKey('config/use-connecticon-card', 'config/use-connection-card')
+migrateLegacyStorageKey('config/connecticon-table-size', 'config/connection-table-size')
+
 // global
 export const defaultTheme = useStorage<string>('config/default-theme', 'light')
 export const darkTheme = useStorage<string>('config/dark-theme', 'dark')
@@ -160,7 +178,7 @@ if (missingCards.length > 0) {
 
 // proxies
 export const collapseGroupMap = useStorage<Record<string, boolean>>('config/collapse-group-map', {})
-export const displayFinalOutbound = useStorage('config/show-seleted-for-now-node', false)
+export const displayFinalOutbound = useStorage('config/show-selected-for-now-node', false)
 export const twoColumnProxyGroup = useStorage('config/two-columns', true)
 export const speedtestUrl = useStorage<string>('config/speedtest-url', TEST_URL)
 export const independentLatencyTest = useStorage('config/independent-latency-test', false)
@@ -209,13 +227,13 @@ export const groupTestUrls = useStorage<
 >('config/group-test-urls', [])
 
 // connections
-export const useConnectionCard = useStorage('config/use-connecticon-card', window.innerWidth < 640)
+export const useConnectionCard = useStorage('config/use-connection-card', window.innerWidth < 640)
 export const proxyChainDirection = useStorage(
   'config/proxy-chain-direction',
   PROXY_CHAIN_DIRECTION.NORMAL,
 )
 export const showFullProxyChain = useStorage('config/show-full-proxy-chain', true)
-export const tableSize = useStorage<TABLE_SIZE>('config/connecticon-table-size', TABLE_SIZE.LARGE)
+export const tableSize = useStorage<TABLE_SIZE>('config/connection-table-size', TABLE_SIZE.LARGE)
 export const tableWidthMode = useStorage('config/table-width-mode', TABLE_WIDTH_MODE.AUTO)
 export const connectionTableColumns = useStorage<CONNECTIONS_TABLE_ACCESSOR_KEY[]>(
   'config/connection-table-columns',
