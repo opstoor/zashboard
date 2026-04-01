@@ -13,8 +13,8 @@
             :icon-size="proxyGroupIconSize"
             :icon-margin="proxyGroupIconMargin"
           />
-          <span class="text-base-content/60 text-xs">
-            : {{ proxyGroup.type }} ({{ proxiesCount }})
+          <span class="text-base-content/60 text-xs tabular-nums">
+            · {{ proxyGroup.type }} · {{ proxiesCount }}
           </span>
           <button
             v-if="manageHiddenGroup"

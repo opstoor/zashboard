@@ -28,7 +28,7 @@
           class="text-base-content/60 truncate text-xs"
           :class="proxyGroup.icon && 'pr-10'"
         >
-          {{ proxyGroup.type }} ({{ proxiesCount }})
+          {{ proxyGroup.type }} · {{ proxiesCount }}
         </div>
         <div class="flex items-center">
           <div class="flex flex-1 items-center gap-1 truncate">

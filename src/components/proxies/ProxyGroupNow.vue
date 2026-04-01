@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-1 items-center gap-1 truncate pb-1">
+  <div class="flex flex-1 items-center gap-1 truncate">
     <template v-if="proxyGroup.now">
       <Component
         class="h-4 w-4 shrink-0 outline-none"
