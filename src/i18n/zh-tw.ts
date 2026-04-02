@@ -310,6 +310,11 @@ const zhTW: LANG_MESSAGE = {
   ruleLastHit: '最後命中: {time}',
   ruleMissCount: '未命中: {count} 次',
   ruleLastMiss: '最後未命中: {time}',
+
+  // Smart Core
+  RarelyUsed: '很少使用',
+  OccasionalUsed: '偶爾使用',
+  MostUsed: '經常使用',
 }
 
 export default zhTW

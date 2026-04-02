@@ -310,6 +310,11 @@ const zh: LANG_MESSAGE = {
   ruleLastHit: '最后命中: {time}',
   ruleMissCount: '未命中: {count} 次',
   ruleLastMiss: '最后未命中: {time}',
+
+  // Smart Core
+  RarelyUsed: '很少使用',
+  OccasionalUsed: '偶尔使用',
+  MostUsed: '经常使用',
 }
 
 export default zh

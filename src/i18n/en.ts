@@ -315,6 +315,11 @@ const en = {
   ruleLastHit: 'Last hit: {time}',
   ruleMissCount: 'Miss: {count} times',
   ruleLastMiss: 'Last miss: {time}',
+
+  // Smart Core
+  RarelyUsed: 'Rarely used',
+  OccasionalUsed: 'Occasionally used',
+  MostUsed: 'Most used',
 }
 
 export type LANG_MESSAGE = typeof en

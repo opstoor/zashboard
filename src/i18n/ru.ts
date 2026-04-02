@@ -317,6 +317,11 @@ const ru: LANG_MESSAGE = {
   ruleLastHit: 'Последнее попадание: {time}',
   ruleMissCount: 'Промах: {count} раз',
   ruleLastMiss: 'Последний промах: {time}',
+
+  // Smart Core
+  RarelyUsed: 'Редко используется',
+  OccasionalUsed: 'Иногда используется',
+  MostUsed: 'Часто используется',
 }
 
 export default ru
