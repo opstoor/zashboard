@@ -83,7 +83,7 @@ const virtualRows = computed(() => rowVirtualizer.value.getVirtualItems())
 const totalSize = computed(() => rowVirtualizer.value.getTotalSize())
 const getBorderClass = (index: number) => {
   if (index !== 0) {
-    return 'border-base-200/80 border-t'
+    return 'border-base-border border-t'
   }
   return ''
 }

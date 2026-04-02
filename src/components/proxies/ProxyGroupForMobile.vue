@@ -71,7 +71,7 @@
       <div
         v-if="displayContent"
         class="will-change-opacity max-h-108 overflow-y-auto overscroll-contain p-2 transition-opacity duration-200 ease-out"
-        :class="[SCROLLABLE_PARENT_CLASS]"
+        :class="[PROXIES_PARENT_CLASS]"
         :style="{
           width: WIDTH_STYLE,
           opacity: contentOpacity,
@@ -94,7 +94,7 @@ import { useBounceOnVisible } from '@/composables/bouncein'
 import { disableProxiesPageScroll } from '@/composables/proxies'
 import { useRenderProxies } from '@/composables/renderProxies'
 import { isHiddenGroup } from '@/helper'
-import { SCROLLABLE_PARENT_CLASS } from '@/helper/utils'
+import { PROXIES_PARENT_CLASS } from '@/helper/utils'
 import { hiddenGroupMap, proxyGroupLatencyTest, proxyMap } from '@/store/proxies'
 import { blurIntensity, groupProxiesByProvider, manageHiddenGroup } from '@/store/settings'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'

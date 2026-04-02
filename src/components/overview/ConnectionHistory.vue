@@ -107,7 +107,7 @@
       @touchend.passive.stop
     >
       <div :style="{ height: `${totalSize}px` }">
-        <table class="table-sm table-zebra table w-full rounded-none">
+        <table class="table-sm table w-full rounded-none">
           <thead class="bg-base-200 sticky top-0 z-10">
             <tr>
               <th
@@ -143,6 +143,7 @@
                 transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
               }"
               class="hover:bg-primary! hover:text-primary-content whitespace-nowrap"
+              :class="virtualRow.index % 2 === 1 && 'bg-base-150'"
             >
               <td
                 v-for="cell in rows[virtualRow.index].getVisibleCells()"
