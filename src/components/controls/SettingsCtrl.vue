@@ -7,7 +7,7 @@
       @touchmove.passive.stop
       @touchend.passive.stop
     >
-      <div class="flex w-full">
+      <div class="flex w-full gap-2">
         <div class="relative mx-auto flex max-w-6xl flex-1 gap-2">
           <div
             v-if="showActiveIndicator"

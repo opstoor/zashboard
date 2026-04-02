@@ -28,8 +28,7 @@ div {
   @apply bg-base-100 grid grid-cols-1 overflow-hidden rounded-xl;
 }
 .setting-item {
-  @apply flex min-h-11 items-center gap-3 px-4;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-base-content) 8%, transparent);
+  @apply border-base-border flex min-h-11 items-center gap-3 border-b px-4;
   &:last-child {
     border-bottom: none;
   }

@@ -206,6 +206,9 @@ const ru: LANG_MESSAGE = {
   resetSettings: 'Сбросить настройки',
   resetSettingsConfirm:
     'Вы уверены, что хотите сбросить все настройки панели к значениям по умолчанию? Это действие нельзя отменить.',
+  backgroundToneSwitchConfirm: 'Для этого фона лучше подходит {theme}. Переключить тему?',
+  backgroundToneLightThemeLabel: 'светлая тема',
+  backgroundToneDarkThemeLabel: 'темная тема',
   minProxyCardWidth: 'Минимальная ширина карточки прокси',
   displayGlobalByMode: 'Отображать GLOBAL по режиму',
   displaySelectedNode: 'Отображать выбранный узел',

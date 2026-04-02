@@ -47,78 +47,7 @@
         </div>
         <ThemeSelector v-model:value="darkTheme" />
       </div>
-      <div
-        v-if="isVisibleCustomBackgroundURL"
-        class="setting-item"
-      >
-        <div class="setting-item-label">
-          {{ $t('customBackgroundURL') }}
-        </div>
-        <div class="join">
-          <TextInput
-            class="join-item w-38"
-            v-model="customBackgroundURL"
-            :clearable="true"
-            @update:modelValue="handlerBackgroundURLChange"
-          />
-          <button
-            class="btn join-item btn-sm"
-            @click="handlerClickUpload"
-          >
-            <ArrowUpTrayIcon class="h-4 w-4" />
-          </button>
-        </div>
-        <button
-          class="btn btn-circle join-item btn-sm"
-          v-if="customBackgroundURL"
-          @click="displayBgProperty = !displayBgProperty"
-        >
-          <AdjustmentsHorizontalIcon class="h-4 w-4" />
-        </button>
-        <input
-          ref="inputFileRef"
-          type="file"
-          accept="image/*"
-          class="hidden"
-          @change="handlerFileChange"
-        />
-      </div>
-      <div
-        v-if="customBackgroundURL && displayBgProperty && isVisibleTransparent"
-        class="setting-item"
-      >
-        <div class="setting-item-label">
-          {{ $t('transparent') }}
-        </div>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          v-model="dashboardTransparent"
-          class="range max-w-64"
-          @touchstart.passive.stop
-          @touchmove.passive.stop
-          @touchend.passive.stop
-        />
-      </div>
-      <div
-        v-if="customBackgroundURL && displayBgProperty && isVisibleBlurIntensity"
-        class="setting-item"
-      >
-        <div class="setting-item-label">
-          {{ $t('blurIntensity') }}
-        </div>
-        <input
-          type="range"
-          min="0"
-          max="40"
-          v-model="blurIntensity"
-          class="range max-w-64"
-          @touchstart.stop
-          @touchmove.stop
-          @touchend.stop
-        />
-      </div>
+      <BackgroundSettings />
       <div
         v-if="isVisibleFonts"
         class="setting-item"
@@ -165,20 +94,10 @@
 import { useIsSettingVisible } from '@/composables/settings'
 import { GENERAL_ITEM_KEYS } from '@/config/settingsItems'
 import { EMOJIS, FONTS } from '@/constant'
-import { deleteBase64FromIndexedDB, LOCAL_IMAGE, saveBase64ToIndexedDB } from '@/helper/indexeddb'
-import {
-  autoTheme,
-  blurIntensity,
-  customBackgroundURL,
-  darkTheme,
-  dashboardTransparent,
-  defaultTheme,
-  emoji,
-  font,
-} from '@/store/settings'
-import { AdjustmentsHorizontalIcon, ArrowUpTrayIcon, PlusIcon } from '@heroicons/vue/24/outline'
-import { computed, ref, watch } from 'vue'
-import TextInput from '../../common/TextInput.vue'
+import { autoTheme, darkTheme, defaultTheme, emoji, font } from '@/store/settings'
+import { PlusIcon } from '@heroicons/vue/24/outline'
+import { computed, ref } from 'vue'
+import BackgroundSettings from './BackgroundSettings.vue'
 import CustomTheme from './CustomTheme.vue'
 import ThemeSelector from './ThemeSelector.vue'
 
@@ -188,13 +107,9 @@ const k = GENERAL_ITEM_KEYS
 const isVisibleFonts = useIsSettingVisible(k.fonts)
 const isVisibleEmoji = useIsSettingVisible(k.emoji)
 const isVisibleCustomBackgroundURL = useIsSettingVisible(k.customBackgroundURL)
-const isVisibleTransparent = useIsSettingVisible(k.transparent)
-const isVisibleBlurIntensity = useIsSettingVisible(k.blurIntensity)
 const isVisibleDefaultTheme = useIsSettingVisible(k.defaultTheme)
 const isVisibleDarkTheme = useIsSettingVisible(k.darkTheme)
 const isVisibleAutoSwitchTheme = useIsSettingVisible(k.autoSwitchTheme)
-
-const displayBgProperty = ref(false)
 
 const hasVisibleStyleItems = computed(() => {
   return (
@@ -206,34 +121,6 @@ const hasVisibleStyleItems = computed(() => {
     isVisibleEmoji.value
   )
 })
-
-watch(customBackgroundURL, (value) => {
-  if (value) {
-    displayBgProperty.value = true
-  }
-})
-
-const inputFileRef = ref()
-const handlerClickUpload = () => {
-  inputFileRef.value?.click()
-}
-
-const handlerBackgroundURLChange = () => {
-  if (!customBackgroundURL.value.includes(LOCAL_IMAGE)) {
-    deleteBase64FromIndexedDB()
-  }
-}
-
-const handlerFileChange = (e: Event) => {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
-  const reader = new FileReader()
-  reader.onload = () => {
-    customBackgroundURL.value = LOCAL_IMAGE + '-' + Date.now()
-    saveBase64ToIndexedDB(reader.result as string)
-  }
-  reader.readAsDataURL(file)
-}
 
 const fontOptions = computed(() => {
   const mode = import.meta.env.MODE

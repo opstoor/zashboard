@@ -203,6 +203,10 @@ const en = {
   resetSettings: 'Reset settings',
   resetSettingsConfirm:
     'Are you sure you want to reset all dashboard settings to default values? This action cannot be undone.',
+  backgroundToneSwitchConfirm:
+    'This background looks better with the {theme}. Do you want to switch?',
+  backgroundToneLightThemeLabel: 'light theme',
+  backgroundToneDarkThemeLabel: 'dark theme',
   minProxyCardWidth: 'Minimum proxy card width',
   displayGlobalByMode: 'Show GLOBAL based on mode',
   displaySelectedNode: 'Show selected node',
