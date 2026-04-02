@@ -8,7 +8,7 @@
       @click="clickHandler"
     >
       <div class="min-h-5 leading-5">
-        <span class="text-base-content/40 text-xs tabular-nums">
+        <span class="text-base-content/50 text-xs tabular-nums">
           {{ index }}
         </span>
         <span class="text-base-content/80 ml-4 text-xs"
@@ -41,11 +41,11 @@
           "
           @click.stop="updateRuleProviderClickHandler"
         >
-          <ArrowPathIcon class="h-4 w-4" />
+          <ArrowPathIcon class="h-3.5 w-3.5 opacity-60" />
         </button>
         <InformationCircleIcon
           v-if="rule.extra"
-          class="-mt-[2px] ml-1 inline-block h-4 w-4"
+          class="-mt-[2px] ml-1 inline-block h-4 w-4 opacity-60"
           @mouseenter="showRuleHitInfoTip"
           @click.stop
         />
