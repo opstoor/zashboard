@@ -14,8 +14,8 @@ import {
 } from '@/store/connections'
 import { isConnectionCard } from '@/store/settings'
 import {
-  ArrowDownCircleIcon,
-  ArrowUpCircleIcon,
+  BarsArrowDownIcon,
+  BarsArrowUpIcon,
   LinkIcon,
   LinkSlashIcon,
   PauseIcon,
@@ -61,40 +61,35 @@ export default defineComponent({
 
     return () => {
       const sortForCards = (
-        <div
-          class={`flex items-center gap-1 text-sm ${isLargeCtrlsBar.value ? 'w-auto' : 'w-full'}`}
-        >
-          <span class="shrink-0">{t('sortBy')}</span>
-          <div class={`join flex-1 ${isLargeCtrlsBar.value ? 'min-w-46' : ''}`}>
-            <select
-              class="join-item select select-sm flex-1"
-              v-model={connectionSortType.value}
-            >
-              {(Object.values(SORT_TYPE) as string[]).map((opt) => (
-                <option
-                  key={opt}
-                  value={opt}
-                >
-                  {t(opt) || opt}
-                </option>
-              ))}
-            </select>
-            <button
-              class="btn join-item btn-sm"
-              onClick={() => {
-                connectionSortDirection.value =
-                  connectionSortDirection.value === SORT_DIRECTION.ASC
-                    ? SORT_DIRECTION.DESC
-                    : SORT_DIRECTION.ASC
-              }}
-            >
-              {connectionSortDirection.value === SORT_DIRECTION.ASC ? (
-                <ArrowUpCircleIcon class="h-4 w-4" />
-              ) : (
-                <ArrowDownCircleIcon class="h-4 w-4" />
-              )}
-            </button>
-          </div>
+        <div class={`join flex-1 ${isLargeCtrlsBar.value ? 'min-w-46' : ''}`}>
+          <select
+            class="join-item select select-sm flex-1"
+            v-model={connectionSortType.value}
+          >
+            {(Object.values(SORT_TYPE) as string[]).map((opt) => (
+              <option
+                key={opt}
+                value={opt}
+              >
+                {t(opt) || opt}
+              </option>
+            ))}
+          </select>
+          <button
+            class="btn join-item btn-sm"
+            onClick={() => {
+              connectionSortDirection.value =
+                connectionSortDirection.value === SORT_DIRECTION.ASC
+                  ? SORT_DIRECTION.DESC
+                  : SORT_DIRECTION.ASC
+            }}
+          >
+            {connectionSortDirection.value === SORT_DIRECTION.ASC ? (
+              <BarsArrowUpIcon class="h-4 w-4" />
+            ) : (
+              <BarsArrowDownIcon class="h-4 w-4" />
+            )}
+          </button>
         </div>
       )
 

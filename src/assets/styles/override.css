@@ -100,7 +100,7 @@
     }
 
     .badge {
-      @apply bg-base-200/$(i) border-base-200/$(i);
+      @apply bg-base-200/$(i) border-transparent;
     }
 
     option,
