@@ -74,6 +74,12 @@ export enum PROXY_PREVIEW_TYPE {
   BAR = 'bar',
 }
 
+export enum CONNECTION_DISPLAY_STYLE {
+  AUTO = 'auto',
+  CARD = 'card',
+  TABLE = 'table',
+}
+
 export enum RULE_TAB_TYPE {
   RULES = 'rules',
   PROVIDER = 'ruleProvider',

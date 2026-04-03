@@ -14,13 +14,16 @@
         </div>
         <select
           class="select select-sm min-w-24"
-          v-model="useConnectionCard"
+          v-model="connectionDisplayStyle"
         >
-          <option :value="false">
-            {{ $t('table') }}
+          <option :value="CONNECTION_DISPLAY_STYLE.AUTO">
+            {{ $t('auto') }}
           </option>
-          <option :value="true">
+          <option :value="CONNECTION_DISPLAY_STYLE.CARD">
             {{ $t('card') }}
+          </option>
+          <option :value="CONNECTION_DISPLAY_STYLE.TABLE">
+            {{ $t('table') }}
           </option>
         </select>
       </div>
@@ -44,7 +47,7 @@
           </option>
         </select>
       </div>
-      <template v-if="!useConnectionCard">
+      <template v-if="!isConnectionCard">
         <div
           v-if="isVisibleTableWidthMode"
           class="setting-item"
@@ -95,8 +98,20 @@
 import SourceIPLabels from '@/components/settings/connections/SourceIPLabels.vue'
 import { useHasAnyVisibleSetting, useIsSettingVisible } from '@/composables/settings'
 import { CONNECTIONS_ITEM_KEYS, getItemKeysByCategory } from '@/config/settingsItems'
-import { PROXY_CHAIN_DIRECTION, SETTINGS_MENU_KEY, TABLE_SIZE, TABLE_WIDTH_MODE } from '@/constant'
-import { proxyChainDirection, tableSize, tableWidthMode, useConnectionCard } from '@/store/settings'
+import {
+  CONNECTION_DISPLAY_STYLE,
+  PROXY_CHAIN_DIRECTION,
+  SETTINGS_MENU_KEY,
+  TABLE_SIZE,
+  TABLE_WIDTH_MODE,
+} from '@/constant'
+import {
+  connectionDisplayStyle,
+  isConnectionCard,
+  proxyChainDirection,
+  tableSize,
+  tableWidthMode,
+} from '@/store/settings'
 
 const k = CONNECTIONS_ITEM_KEYS
 const isVisibleConnectionStyle = useIsSettingVisible(k.connectionStyle)

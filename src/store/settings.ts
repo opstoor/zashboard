@@ -2,6 +2,7 @@ import { SETTINGS_CATEGORIES } from '@/config/settingsItems'
 import {
   ALL_THEME,
   CONNECTIONS_TABLE_ACCESSOR_KEY,
+  CONNECTION_DISPLAY_STYLE,
   DETAILED_CARD_STYLE,
   EMOJIS,
   FONTS,
@@ -42,6 +43,33 @@ const migrateLegacyStorageKey = (legacyKey: string, nextKey: string) => {
 migrateLegacyStorageKey('config/show-seleted-for-now-node', 'config/show-selected-for-now-node')
 migrateLegacyStorageKey('config/use-connecticon-card', 'config/use-connection-card')
 migrateLegacyStorageKey('config/connecticon-table-size', 'config/connection-table-size')
+
+const migrateLegacyConnectionDisplayStyle = () => {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  const nextKey = 'config/connection-display-style'
+  const nextValue = localStorage.getItem(nextKey)
+  const legacyKey = 'config/use-connection-card'
+
+  if (nextValue !== null) {
+    return
+  }
+
+  const legacyValue = localStorage.getItem(legacyKey)
+
+  if (legacyValue === 'true' || legacyValue === 'false') {
+    localStorage.setItem(
+      nextKey,
+      legacyValue === 'true' ? CONNECTION_DISPLAY_STYLE.CARD : CONNECTION_DISPLAY_STYLE.TABLE,
+    )
+  }
+
+  localStorage.removeItem(legacyKey)
+}
+
+migrateLegacyConnectionDisplayStyle()
 
 // global
 export const defaultTheme = useStorage<string>('config/default-theme', 'light')
@@ -227,7 +255,19 @@ export const groupTestUrls = useStorage<
 >('config/group-test-urls', [])
 
 // connections
-export const useConnectionCard = useStorage('config/use-connection-card', window.innerWidth < 640)
+export const connectionDisplayStyle = useStorage<CONNECTION_DISPLAY_STYLE>(
+  'config/connection-display-style',
+  CONNECTION_DISPLAY_STYLE.AUTO,
+)
+export const isConnectionCard = computed(() => {
+  if (connectionDisplayStyle.value === CONNECTION_DISPLAY_STYLE.CARD) {
+    return true
+  }
+  if (connectionDisplayStyle.value === CONNECTION_DISPLAY_STYLE.TABLE) {
+    return false
+  }
+  return isMiddleScreen.value
+})
 export const proxyChainDirection = useStorage(
   'config/proxy-chain-direction',
   PROXY_CHAIN_DIRECTION.NORMAL,

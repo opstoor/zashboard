@@ -12,7 +12,7 @@ import {
   quickFilterRegex,
   renderConnections,
 } from '@/store/connections'
-import { useConnectionCard } from '@/store/settings'
+import { isConnectionCard } from '@/store/settings'
 import {
   ArrowDownCircleIcon,
   ArrowUpCircleIcon,
@@ -57,7 +57,7 @@ export default defineComponent({
     const router = useRouter()
     const settingsModel = ref(false)
     const { showTip, updateTip } = useTooltip()
-    const { isLargeCtrlsBar } = useCtrlsBar(useConnectionCard.value ? 860 : 720)
+    const { isLargeCtrlsBar } = useCtrlsBar(() => (isConnectionCard.value ? 860 : 720))
 
     return () => {
       const sortForCards = (
@@ -135,7 +135,7 @@ export default defineComponent({
                   <QuestionMarkCircleIcon class="h-4 w-4" />
                 </div>
               </div>
-              {useConnectionCard.value ? <ConnectionCardSettings /> : <TableSettings />}
+              {isConnectionCard.value ? <ConnectionCardSettings /> : <TableSettings />}
               <div class="divider m-0"></div>
               <button
                 class="btn btn-block"
@@ -205,14 +205,14 @@ export default defineComponent({
         <div class="flex flex-wrap items-center gap-2 p-2">
           <div class="flex w-full items-center justify-between gap-2">
             <ConnectionTabs />
-            {!useConnectionCard.value && (
+            {!isConnectionCard.value && (
               <div class="flex items-center gap-1">
                 {settingsModal}
                 {buttons}
               </div>
             )}
           </div>
-          {useConnectionCard.value && (
+          {isConnectionCard.value && (
             <div class="flex w-full items-center gap-2">
               {sortForCards}
               {settingsModal}
@@ -227,7 +227,7 @@ export default defineComponent({
       ) : (
         <div class="flex items-center gap-2 p-2">
           <ConnectionTabs />
-          {useConnectionCard.value && sortForCards}
+          {isConnectionCard.value && sortForCards}
           <SourceIPFilter class="w-40" />
           <div class="flex flex-1">{searchInput}</div>
           {settingsModal}
