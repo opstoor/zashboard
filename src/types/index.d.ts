@@ -7,6 +7,7 @@ export type Backend = {
   uuid: string
   label?: string
   disableUpgradeCore?: boolean
+  disableTunMode?: boolean
 }
 
 export type Config = {

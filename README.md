@@ -92,6 +92,9 @@ http://host:port/#/setup?hostname=ipordomain&port=9090&secret=123456
    - Password for authentication.
 
 6. **`disableUpgradeCore`**
-   - Set '1' or 'true' to hide upgrade core button
+   - Set '1' to hide upgrade core button
+
+7. **`disableTunMode`**
+   - Set '1' to hide tun switch
 
 ### I code just for fun, not for money. If you really want to donate, please consider donating to [UNICEF](https://www.unicef.org/) to help hungry children.

@@ -141,6 +141,7 @@ export const getBackendFromUrl = () => {
       label: query.get('label') || '',
       disableUpgradeCore:
         query.get('disableUpgradeCore') === '1' || query.get('disableUpgradeCore') === 'core',
+      disableTunMode: query.get('disableTunMode') === '1' || query.get('disableTunMode') === 'tun',
     }
   }
   return null

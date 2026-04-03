@@ -133,7 +133,7 @@
       <div class="settings-grid">
         <BackendPortsGrid v-if="isVisiblePorts" />
         <div
-          v-if="configs?.tun && isVisibleTunMode"
+          v-if="configs?.tun && canShowTunMode"
           class="setting-item"
         >
           <div class="setting-item-label">
@@ -235,6 +235,9 @@ const isVisibleCheckUpgrade = useIsSettingVisible(k.checkCoreUpgrade)
 const isVisibleAutoUpgrade = useIsSettingVisible(k.autoUpgradeCore)
 const isVisibleActions = useIsSettingVisible(k.actions)
 const isVisibleDnsQuery = useIsSettingVisible(k.DNSQuery)
+const canShowTunMode = computed(
+  () => isVisibleTunMode.value && !activeBackend.value?.disableTunMode,
+)
 
 const hasVisibleItems = computed(() => {
   return (
@@ -250,7 +253,7 @@ const hasVisibleSettings = computed(() => {
     !isSingBox.value &&
     !!configs.value &&
     (isVisiblePorts.value ||
-      (configs.value.tun && isVisibleTunMode.value) ||
+      (configs.value.tun && canShowTunMode.value) ||
       isVisibleAllowLan.value ||
       (!activeBackend.value?.disableUpgradeCore &&
         (isVisibleCheckUpgrade.value || (checkUpgradeCore.value && isVisibleAutoUpgrade.value))))

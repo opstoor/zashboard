@@ -80,7 +80,9 @@ const isSameBackend = (b1: Omit<Backend, 'uuid'>, b2: Omit<Backend, 'uuid'>) => 
     b1.port === b2.port &&
     b1.password === b2.password &&
     b1.protocol === b2.protocol &&
-    b1.secondaryPath === b2.secondaryPath
+    b1.secondaryPath === b2.secondaryPath &&
+    b1.disableUpgradeCore === b2.disableUpgradeCore &&
+    b1.disableTunMode === b2.disableTunMode
   )
 }
 

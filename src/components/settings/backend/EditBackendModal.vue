@@ -172,6 +172,7 @@ watch(
         password: backend.password,
         label: backend.label || '',
         disableUpgradeCore: backend.disableUpgradeCore || false,
+        disableTunMode: backend.disableTunMode || false,
       }
     }
   },
