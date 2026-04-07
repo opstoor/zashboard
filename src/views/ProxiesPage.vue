@@ -63,15 +63,20 @@ const scrollStatus = useSessionStorage('cache/proxies-scroll-status', {
 })
 
 const handleScroll = () => {
+  if (!proxiesRef.value) return
   scrollStatus.value[proxiesTabShow.value] = proxiesRef.value.scrollTop
 }
 
 const waitTickUntilReady = (startTime = performance.now()) => {
+  const proxiesEl = proxiesRef.value
+  const isTimedOut = performance.now() - startTime > 300
+
   if (
-    performance.now() - startTime > 300 ||
-    proxiesRef.value.scrollHeight > scrollStatus.value[proxiesTabShow.value]
+    isTimedOut ||
+    (proxiesEl && proxiesEl.scrollHeight > scrollStatus.value[proxiesTabShow.value])
   ) {
-    proxiesRef.value.scrollTo({
+    if (!proxiesEl) return
+    proxiesEl.scrollTo({
       top: scrollStatus.value[proxiesTabShow.value],
       behavior: 'smooth',
     })
