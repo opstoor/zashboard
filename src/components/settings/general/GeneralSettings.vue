@@ -129,6 +129,7 @@
           class="toggle"
         />
       </div>
+      <KeyboardShortcutsSettings v-if="isVisibleShortcuts" />
       <div
         v-if="isSingBox && isVisibleDisplayAllFeatures"
         class="setting-item"
@@ -152,11 +153,13 @@
 
 <script setup lang="ts">
 import { isSingBox } from '@/api'
+import KeyboardShortcutsSettings from '@/components/settings/general/KeyboardShortcutsSettings.vue'
 import LanguageSelect from '@/components/settings/general/LanguageSelect.vue'
 import { useIsSettingVisible } from '@/composables/settings'
 import { GENERAL_ITEM_KEYS } from '@/config/settingsItems'
 import { IP_INFO_API } from '@/constant'
 import { useTooltip } from '@/helper/tooltip'
+import { isMiddleScreen } from '@/helper/utils'
 import {
   autoDisconnectIdleUDP,
   autoDisconnectIdleUDPTime,
@@ -175,6 +178,8 @@ const { showTip } = useTooltip()
 
 const k = GENERAL_ITEM_KEYS
 const isVisibleLanguage = useIsSettingVisible(k.language)
+const isVisibleShortcutsSetting = useIsSettingVisible(k.keyboardShortcuts)
+const isVisibleShortcuts = computed(() => isVisibleShortcutsSetting.value && !isMiddleScreen.value)
 const isVisibleAutoUpgrade = useIsSettingVisible(k.autoUpgradeDashboard)
 const isVisibleAutoDisconnectIdleUDP = useIsSettingVisible(k.autoDisconnectIdleUDP)
 const isVisibleAutoDisconnectIdleUDPTime = useIsSettingVisible(k.autoDisconnectIdleUDPTime)
@@ -188,6 +193,7 @@ const isVisibleDisplayAllFeatures = useIsSettingVisible(k.displayAllFeatures)
 const hasVisibleGeneralItems = computed(() => {
   return (
     isVisibleLanguage.value ||
+    isVisibleShortcuts.value ||
     isVisibleAutoUpgrade.value ||
     isVisibleAutoDisconnectIdleUDP.value ||
     (autoDisconnectIdleUDP.value && isVisibleAutoDisconnectIdleUDPTime.value) ||

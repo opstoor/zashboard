@@ -82,6 +82,10 @@ export const SETTINGS_CATEGORIES: SettingsCategory[] = [
         label: 'disablePullToRefresh',
       },
       {
+        key: `${SETTINGS_MENU_KEY.general}.shortcuts`,
+        label: 'keyboardShortcuts',
+      },
+      {
         key: `${SETTINGS_MENU_KEY.general}.displayAllFeatures`,
         label: 'displayAllFeatures',
       },

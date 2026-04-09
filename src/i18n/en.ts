@@ -223,6 +223,15 @@ const en = {
   disablePullToRefresh: 'Disable pull to refresh',
   disablePullToRefreshTip:
     'Pull-to-refresh and virtual scrolling components may conflict. If you experience lag or accidentally trigger pull-to-refresh while scrolling, try disabling this feature.',
+  keyboardShortcuts: 'Keyboard shortcuts',
+  keyboardShortcutsTip:
+    'Click the input and press a key or key combination to set a shortcut. Press Backspace or Delete to clear it.',
+  keyboardShortcutPageName: '{name} page',
+  toggleSidebar: 'Toggle sidebar',
+  keyboardShortcutsConflict:
+    'Duplicate shortcuts detected: {keys}. Only the first one will take effect.',
+  resetKeyboardShortcuts: 'Reset shortcuts',
+  pressAnyKey: 'Press a key',
   displayAllFeatures: 'Show all features',
   displayAllFeaturesTip:
     "Show all features, including those not supported by the official sing-box version. If you're using a forked version of sing-box that supports some of these features, you can try enabling them.",

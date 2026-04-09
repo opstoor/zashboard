@@ -219,6 +219,14 @@ const zhTW: LANG_MESSAGE = {
   disablePullToRefresh: '禁用下拉重新整理',
   disablePullToRefreshTip:
     '下拉重新整理和虛擬滾動的組件有時會有衝突，如果你在上下滾動的時候經常卡頓或者誤觸發下拉重新整理，可以嘗試禁用下拉重新整理',
+  keyboardShortcuts: '快捷鍵設定',
+  keyboardShortcutsTip:
+    '點擊輸入框後可直接按單鍵或組合鍵設定快捷鍵，按 Backspace 或 Delete 可清空。',
+  keyboardShortcutPageName: '{name}頁',
+  toggleSidebar: '展開/收起側邊欄',
+  keyboardShortcutsConflict: '偵測到重複快捷鍵：{keys}。只有第一項會生效。',
+  resetKeyboardShortcuts: '重設快捷鍵',
+  pressAnyKey: '按下任意鍵',
   displayAllFeatures: '顯示所有功能',
   displayAllFeaturesTip:
     '顯示所有功能，包括sing-box官方版本不支援的功能，如果您使用了fork版本的sing-box支援其中的某些功能，可以嘗試啟用',

@@ -219,6 +219,14 @@ const zh: LANG_MESSAGE = {
   disablePullToRefresh: '禁用下拉刷新',
   disablePullToRefreshTip:
     '下拉刷新和虚拟滚动的组件有时会有冲突，如果你在上下滚动的时候经常卡顿或者误触发下拉刷新，可以尝试禁用下拉刷新',
+  keyboardShortcuts: '快捷键设置',
+  keyboardShortcutsTip:
+    '点击输入框后可直接按单键或组合键设置快捷键，按 Backspace 或 Delete 可清空。',
+  keyboardShortcutPageName: '{name}页',
+  toggleSidebar: '展开/收起侧边栏',
+  keyboardShortcutsConflict: '检测到重复快捷键：{keys}。只有第一项会生效。',
+  resetKeyboardShortcuts: '重置快捷键',
+  pressAnyKey: '按下任意键',
   displayAllFeatures: '显示所有功能',
   displayAllFeaturesTip:
     '显示所有功能，包括sing-box官方版本不支持的功能，如果您使用了fork版本的sing-box支持其中的某些功能，可以尝试启用',

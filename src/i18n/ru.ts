@@ -225,6 +225,15 @@ const ru: LANG_MESSAGE = {
   disablePullToRefresh: 'Отключить свойство обновления',
   disablePullToRefreshTip:
     'Компоненты Pull-to-refresh и виртуальной прокрутки иногда могут конфликтовать. Если при прокрутке вверх-вниз у вас часто возникают задержки или случайные срабатывания Pull-to-refresh, попробуйте отключить Pull-to-refresh.',
+  keyboardShortcuts: 'Горячие клавиши',
+  keyboardShortcutsTip:
+    'Нажмите на поле и затем нужную клавишу или сочетание клавиш. Для очистки используйте Backspace или Delete.',
+  keyboardShortcutPageName: 'Страница {name}',
+  toggleSidebar: 'Переключить боковую панель',
+  keyboardShortcutsConflict:
+    'Обнаружены повторяющиеся горячие клавиши: {keys}. Сработает только первое совпадение.',
+  resetKeyboardShortcuts: 'Сбросить горячие клавиши',
+  pressAnyKey: 'Нажмите клавишу',
   displayAllFeatures: 'Показать все функции',
   displayAllFeaturesTip:
     'Показать все функции, включая те, которые не поддерживаются официальной версией sing-box. Если вы используете форк sing-box, поддерживающий некоторые из этих функций, вы можете попробовать их включить.',
