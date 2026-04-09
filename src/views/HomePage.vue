@@ -1,9 +1,18 @@
 <template>
   <div
     class="bg-base-200 home-page flex size-full"
-    :class="isSidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'"
+    :class="sidebarLayoutCollapsed ? 'sidebar-collapsed' : 'sidebar-expanded'"
   >
-    <SideBar v-if="!isMiddleScreen" />
+    <div
+      v-if="!isMiddleScreen"
+      class="relative z-40 flex-none overflow-visible transition-none"
+      :class="sidebarLayoutCollapsed ? 'w-18' : 'w-64'"
+    >
+      <SideBar
+        class="absolute inset-y-0 left-0"
+        @transitionend="syncSidebarLayoutState"
+      />
+    </div>
     <RouterView v-slot="{ Component, route }">
       <div
         class="relative flex-1 overflow-hidden"
@@ -113,9 +122,30 @@ import { RouterView, useRouter } from 'vue-router'
 
 const router = useRouter()
 const { swiperRef } = useSwipeRouter()
+const sidebarLayoutCollapsed = ref(isSidebarCollapsed.value)
 
 const dockRef = ref<HTMLDivElement>()
 const { top: dockRefTop } = useElementBounding(dockRef)
+
+const syncSidebarLayoutState = () => {
+  sidebarLayoutCollapsed.value = isSidebarCollapsed.value
+}
+
+watch(isSidebarCollapsed, (value) => {
+  if (value) {
+    sidebarLayoutCollapsed.value = true
+  }
+})
+
+watch(
+  isMiddleScreen,
+  (value) => {
+    if (!value) {
+      sidebarLayoutCollapsed.value = isSidebarCollapsed.value
+    }
+  },
+  { immediate: true },
+)
 
 watch(
   dockRefTop,
