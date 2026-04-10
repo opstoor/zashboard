@@ -132,7 +132,7 @@ const zh: LANG_MESSAGE = {
   DNSQuery: 'DNS 查询',
   currentBackendUnavailable: '当前后端不可用，尝试切换到其他后端?',
   confirm: '确定',
-  backendSwitchTo: '自动切换到{backend}',
+  backendSwitchTo: '已切换后端为{backend}',
 
   // Backend settings
   ipv6Test: 'IPv6 测试',
@@ -224,6 +224,8 @@ const zh: LANG_MESSAGE = {
     '点击输入框后可直接按单键或组合键设置快捷键，按 Backspace 或 Delete 可清空。',
   keyboardShortcutPageName: '{name}页',
   toggleSidebar: '展开/收起侧边栏',
+  switchToPreviousBackend: '切换到上一个后端',
+  switchToNextBackend: '切换到下一个后端',
   keyboardShortcutsConflict: '检测到重复快捷键：{keys}。只有第一项会生效。',
   resetKeyboardShortcuts: '重置快捷键',
   pressAnyKey: '按下任意键',

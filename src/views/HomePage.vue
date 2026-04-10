@@ -201,6 +201,7 @@ const autoSwitchBackend = async () => {
       params: {
         backend: getLabelFromBackend(avaliable),
       },
+      type: 'alert-success',
     })
   }
 }

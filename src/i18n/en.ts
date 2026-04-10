@@ -131,7 +131,7 @@ const en = {
   currentBackendUnavailable:
     'The current backend is unavailable. Would you like to switch to another backend?',
   confirm: 'Confirm',
-  backendSwitchTo: 'Auto switch to {backend}',
+  backendSwitchTo: 'Switched backend to {backend}',
 
   // Backend settings
   ipv6Test: 'IPv6 test',
@@ -228,6 +228,8 @@ const en = {
     'Click the input and press a key or key combination to set a shortcut. Press Backspace or Delete to clear it.',
   keyboardShortcutPageName: '{name} page',
   toggleSidebar: 'Toggle sidebar',
+  switchToPreviousBackend: 'Switch to previous backend',
+  switchToNextBackend: 'Switch to next backend',
   keyboardShortcutsConflict:
     'Duplicate shortcuts detected: {keys}. Only the first one will take effect.',
   resetKeyboardShortcuts: 'Reset shortcuts',

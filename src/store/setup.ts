@@ -11,6 +11,25 @@ export const activeBackend = computed(() =>
   backendList.value.find((backend) => backend.uuid === activeUuid.value),
 )
 
+export const switchActiveBackend = (direction: 1 | -1) => {
+  if (backendList.value.length < 2) {
+    return null
+  }
+
+  const currentIndex = backendList.value.findIndex((backend) => backend.uuid === activeUuid.value)
+  const startIndex = currentIndex >= 0 ? currentIndex : 0
+  const nextIndex = (startIndex + direction + backendList.value.length) % backendList.value.length
+
+  const nextBackend = backendList.value[nextIndex]
+
+  if (!nextBackend) {
+    return null
+  }
+
+  activeUuid.value = nextBackend.uuid
+  return nextBackend
+}
+
 export const addBackend = (backend: Omit<Backend, 'uuid'>) => {
   const currentEnd = backendList.value.find((end) => {
     return isEqual(omit(end, 'uuid'), backend)

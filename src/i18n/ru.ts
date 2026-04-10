@@ -133,7 +133,7 @@ const ru: LANG_MESSAGE = {
   currentBackendUnavailable:
     'Текущий бэкенд недоступен. Попробуйте переключиться на другой бэкенд?',
   confirm: 'Подтвердить',
-  backendSwitchTo: 'Автоматическое переключение на {backend}',
+  backendSwitchTo: 'Бэкенд переключен на {backend}',
 
   // Backend settings
   ipv6Test: 'IPv6-тест',
@@ -230,6 +230,8 @@ const ru: LANG_MESSAGE = {
     'Нажмите на поле и затем нужную клавишу или сочетание клавиш. Для очистки используйте Backspace или Delete.',
   keyboardShortcutPageName: 'Страница {name}',
   toggleSidebar: 'Переключить боковую панель',
+  switchToPreviousBackend: 'Переключиться на предыдущий бэкенд',
+  switchToNextBackend: 'Переключиться на следующий бэкенд',
   keyboardShortcutsConflict:
     'Обнаружены повторяющиеся горячие клавиши: {keys}. Сработает только первое совпадение.',
   resetKeyboardShortcuts: 'Сбросить горячие клавиши',
