@@ -90,7 +90,7 @@
     .ctrls-bar,
     .settings-grid,
     .base-container,
-    .btn:not(.btn-ghost, .btn-neutral),
+    .btn:not(.btn-ghost, .btn-neutral, .btn-primary),
     .tabs {
       @apply bg-base-100/$(i);
     }
