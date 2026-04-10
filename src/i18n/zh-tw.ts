@@ -28,6 +28,7 @@ const zhTW: LANG_MESSAGE = {
   flushDNSCache: '清空DNS快取',
   flushDNSCacheSuccess: 'DNS快取清空成功',
   flushFakeIPSuccess: 'Fake IP清空成功',
+  flushSmartWeightsSuccess: 'Smart權重清空成功',
   restartCoreSuccess: '核心重啟成功',
   reloadConfigsSuccess: '配置重載成功',
   updateGeoSuccess: 'GEO資料庫更新成功',

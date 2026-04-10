@@ -28,6 +28,7 @@ const ru: LANG_MESSAGE = {
   flushDNSCache: 'Очистить DNS кэш',
   flushDNSCacheSuccess: 'DNS кэш успешно очищен',
   flushFakeIPSuccess: 'Fake IP успешно очищен',
+  flushSmartWeightsSuccess: 'Smart веса успешно очищены',
   restartCoreSuccess: 'Ядро успешно перезапущено',
   reloadConfigsSuccess: 'Конфигурации успешно перезагружены',
   updateGeoSuccess: 'Geo база данных успешно обновлена',

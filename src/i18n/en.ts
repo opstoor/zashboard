@@ -26,6 +26,7 @@ const en = {
   flushDNSCache: 'Flush DNS cache',
   flushDNSCacheSuccess: 'DNS cache flushed successfully',
   flushFakeIPSuccess: 'Fake IP flushed successfully',
+  flushSmartWeightsSuccess: 'Smart weights flushed successfully',
   restartCoreSuccess: 'Core restarted successfully',
   reloadConfigsSuccess: 'Configs reloaded successfully',
   updateGeoSuccess: 'Geo database updated successfully',

@@ -104,7 +104,7 @@
         <button
           v-if="hasSmartGroup"
           class="btn btn-sm"
-          @click="flushSmartGroupWeightsAPI"
+          @click="handleFlushSmartWeights"
         >
           {{ $t('flushSmartWeights') }}
         </button>
@@ -348,6 +348,14 @@ const handleFlushFakeIP = async () => {
   await flushFakeIPAPI()
   showNotification({
     content: 'flushFakeIPSuccess',
+    type: 'alert-success',
+  })
+}
+
+const handleFlushSmartWeights = async () => {
+  await flushSmartGroupWeightsAPI()
+  showNotification({
+    content: 'flushSmartWeightsSuccess',
     type: 'alert-success',
   })
 }

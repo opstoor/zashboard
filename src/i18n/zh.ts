@@ -28,6 +28,7 @@ const zh: LANG_MESSAGE = {
   flushDNSCache: '清空DNS缓存',
   flushDNSCacheSuccess: 'DNS缓存清空成功',
   flushFakeIPSuccess: 'Fake IP清空成功',
+  flushSmartWeightsSuccess: 'Smart权重清空成功',
   restartCoreSuccess: '核心重启成功',
   reloadConfigsSuccess: '配置重载成功',
   updateGeoSuccess: 'GEO数据库更新成功',
