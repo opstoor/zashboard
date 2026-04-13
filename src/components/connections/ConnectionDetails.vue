@@ -5,6 +5,19 @@
     :no-padding="true"
     :box-class="proxyChainStart ? `max-w-256` : `max-w-128`"
   >
+    <template #title-right>
+      <button
+        v-if="sourceIP"
+        type="button"
+        class="btn btn-ghost btn-xs absolute top-2 right-10"
+        :title="$t('sourceIPLabels')"
+        @click="sourceIPDialogVisible = true"
+      >
+        <PencilSquareIcon class="h-4 w-4" />
+        <span>{{ $t('sourceIPLabels') }}</span>
+      </button>
+    </template>
+
     <div class="flex flex-col md:h-[70dvh] md:max-h-[70dvh] md:flex-row md:overflow-hidden">
       <div class="flex flex-1 flex-col overflow-hidden p-4">
         <VueJsonPretty
@@ -82,6 +95,12 @@
       </template>
     </div>
   </DialogWrapper>
+
+  <SourceIPLabels
+    v-model="sourceIPDialogVisible"
+    :show-trigger="false"
+    :default-key="sourceIP"
+  />
 </template>
 
 <script setup lang="ts">
@@ -89,9 +108,15 @@ import { getIPInfo, type IPInfo } from '@/api/geoip'
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
 import ProxyChainPath from '@/components/common/ProxyChainPath.vue'
 import ProxyGroup from '@/components/proxies/ProxyGroup.vue'
+import SourceIPLabels from '@/components/settings/connections/SourceIPLabels.vue'
 import { useConnections } from '@/composables/connections'
 import { proxyMap } from '@/store/proxies'
-import { ArrowRightCircleIcon, MapPinIcon, ServerIcon } from '@heroicons/vue/24/outline'
+import {
+  ArrowRightCircleIcon,
+  MapPinIcon,
+  PencilSquareIcon,
+  ServerIcon,
+} from '@heroicons/vue/24/outline'
 import * as ipaddr from 'ipaddr.js'
 import { last } from 'lodash'
 import { computed, ref, watch } from 'vue'
@@ -102,8 +127,10 @@ import ProxyIcon from '../proxies/ProxyIcon.vue'
 const { infoConn, connectionDetailModalShow } = useConnections()
 const details = ref<IPInfo | null>(null)
 const selectedProxy = ref('')
+const sourceIPDialogVisible = ref(false)
 
 const destinationIP = computed(() => infoConn.value?.metadata.destinationIP)
+const sourceIP = computed(() => infoConn.value?.metadata.sourceIP || '')
 const isPrivateIP = computed(() => {
   if (!destinationIP.value || !ipaddr.isValid(destinationIP.value)) {
     return false

@@ -1,5 +1,8 @@
 <template>
-  <div class="setting-item">
+  <div
+    v-if="showTrigger"
+    class="setting-item"
+  >
     <div class="setting-item-label">
       {{ $t('sourceIPLabels') }}
       <template v-if="sourceIPLabelList.length"> ({{ sourceIPLabelList.length }}) </template>
@@ -84,12 +87,36 @@ import {
 } from '@heroicons/vue/24/outline'
 import { useSessionStorage } from '@vueuse/core'
 import { v4 as uuid } from 'uuid'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Draggable from 'vuedraggable'
 import DialogWrapper from '../../common/DialogWrapper.vue'
 import SourceIPInput from './SourceIPInput.vue'
 
-const dialogVisible = useSessionStorage('cache/sourceip-label-dialog-visible', false)
+const props = withDefaults(
+  defineProps<{
+    defaultKey?: string
+    modelValue?: boolean
+    showTrigger?: boolean
+  }>(),
+  {
+    defaultKey: '',
+    modelValue: undefined,
+    showTrigger: true,
+  },
+)
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void
+}>()
+
+const cachedDialogVisible = useSessionStorage('cache/sourceip-label-dialog-visible', false)
+const dialogVisible = computed({
+  get: () => props.modelValue ?? cachedDialogVisible.value,
+  set: (value: boolean) => {
+    cachedDialogVisible.value = value
+    emit('update:modelValue', value)
+  },
+})
 const newLabelForIP = ref<Omit<SourceIPLabel, 'id'>>({
   key: '',
   label: '',
@@ -97,7 +124,7 @@ const newLabelForIP = ref<Omit<SourceIPLabel, 'id'>>({
 
 const resetNewLabelForIP = () => {
   newLabelForIP.value = {
-    key: '',
+    key: props.defaultKey,
     label: '',
   }
 }
@@ -133,8 +160,21 @@ const handlerLabelUpdate = (sourceIP: Partial<SourceIPLabel>) => {
 }
 
 watch(dialogVisible, (visible, wasVisible) => {
+  if (visible && props.defaultKey && !newLabelForIP.value.key) {
+    newLabelForIP.value.key = props.defaultKey
+  }
+
   if (!visible && wasVisible) {
     handlerLabelAdd(false)
   }
 })
+
+watch(
+  () => props.defaultKey,
+  (defaultKey) => {
+    if (dialogVisible.value && defaultKey && !newLabelForIP.value.key) {
+      newLabelForIP.value.key = defaultKey
+    }
+  },
+)
 </script>
