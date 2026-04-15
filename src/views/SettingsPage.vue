@@ -8,6 +8,7 @@
       :menu-items="menuItems"
       :active-menu-key="activeMenuKey"
       :show-active-indicator="!isTwoColumns"
+      :two-columns-available="twoColumnsAvailable"
       @menu-click="handleMenuClick"
     />
 
@@ -84,7 +85,7 @@ import { usePaddingForViews } from '@/composables/paddingViews'
 import { isSettingVisible } from '@/composables/settings'
 import { SETTINGS_MENU_KEY } from '@/constant'
 import { isPWA } from '@/helper/utils'
-import { settingsMenuOrder } from '@/store/settings'
+import { settingsMenuOrder, settingsPageTwoColumns } from '@/store/settings'
 import {
   ArrowPathIcon,
   ArrowsRightLeftIcon,
@@ -112,7 +113,8 @@ const route = useRoute()
 
 const scrollContainerRef = ref<HTMLDivElement>()
 const { width } = useElementSize(scrollContainerRef)
-const isTwoColumns = computed(() => width.value >= 1000)
+const twoColumnsAvailable = computed(() => width.value >= 1000)
+const isTwoColumns = computed(() => settingsPageTwoColumns.value && twoColumnsAvailable.value)
 const menuItems = computed<MenuItem[]>(() => {
   const itemsMap = new Map<SETTINGS_MENU_KEY, MenuItem>([
     [

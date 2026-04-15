@@ -47,7 +47,10 @@
           <Cog6ToothIcon class="h-4 w-4" />
         </button>
       </div>
-      <SettingsVisibilityDialog v-model="showVisibilityDialog" />
+      <SettingsVisibilityDialog
+        v-model="showVisibilityDialog"
+        :two-columns-available="twoColumnsAvailable"
+      />
     </div>
   </CtrlsBar>
 </template>
@@ -73,6 +76,7 @@ const props = defineProps<{
   menuItems: MenuItem[]
   activeMenuKey: SETTINGS_MENU_KEY
   showActiveIndicator?: boolean
+  twoColumnsAvailable: boolean
 }>()
 
 const emit = defineEmits<{

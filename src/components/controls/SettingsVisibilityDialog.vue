@@ -4,6 +4,19 @@
     :title="$t('settingsVisibility')"
   >
     <div class="flex flex-col text-sm">
+      <div
+        v-if="twoColumnsAvailable"
+        class="setting-item mb-4 px-2"
+      >
+        <div class="setting-item-label">
+          {{ $t('settingsPageTwoColumns') }}
+        </div>
+        <input
+          v-model="settingsPageTwoColumns"
+          type="checkbox"
+          class="toggle"
+        />
+      </div>
       <div class="mb-4 flex gap-2">
         <button
           class="btn btn-sm"
@@ -88,10 +101,14 @@ import {
   type SettingsCategory,
 } from '@/config/settingsItems'
 import { SETTINGS_MENU_KEY } from '@/constant'
-import { hiddenSettingsItems, settingsMenuOrder } from '@/store/settings'
+import { hiddenSettingsItems, settingsMenuOrder, settingsPageTwoColumns } from '@/store/settings'
 import { Bars3Icon } from '@heroicons/vue/24/outline'
 import { computed, ref } from 'vue'
 import Draggable from 'vuedraggable'
+
+defineProps<{
+  twoColumnsAvailable: boolean
+}>()
 
 const isOpen = defineModel<boolean>({ required: true })
 

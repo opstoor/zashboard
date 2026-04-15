@@ -307,6 +307,7 @@ const en = {
   actions: 'Actions',
   showAllPreset: 'Show all',
   minimalPreset: 'Minimal view',
+  settingsPageTwoColumns: 'Two column layout',
   aggregateBy: 'Aggregate by',
   aggregateBySourceIP: 'By source IP',
   aggregateByDestination: 'By destination',

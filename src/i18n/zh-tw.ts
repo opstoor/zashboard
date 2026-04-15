@@ -302,6 +302,7 @@ const zhTW: LANG_MESSAGE = {
   actions: '操作',
   showAllPreset: '全部顯示',
   minimalPreset: '精簡顯示',
+  settingsPageTwoColumns: '雙列佈局',
   aggregateBy: '聚合方式',
   aggregateBySourceIP: '按源IP',
   aggregateByDestination: '按目標地址',

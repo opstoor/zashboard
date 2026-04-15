@@ -309,6 +309,7 @@ const ru: LANG_MESSAGE = {
   actions: 'Действия',
   showAllPreset: 'Показать все',
   minimalPreset: 'Минимальный вид',
+  settingsPageTwoColumns: 'Двухколоночный режим',
   aggregateBy: 'Агрегация по',
   aggregateBySourceIP: 'По исходному IP',
   aggregateByDestination: 'По назначению',
