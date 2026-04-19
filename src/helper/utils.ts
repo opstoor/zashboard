@@ -21,15 +21,28 @@ export const fromNow = (timestamp: string) => {
   return dayjs(timestamp).fromNow()
 }
 
-export const exportSettings = () => {
-  const settings: Record<string, string | null> = {}
+export const getDashboardSettingsFromStorage = () => {
+  const settings: Record<string, string> = {}
 
   for (const key in localStorage) {
-    if (key.startsWith('config/') || key.startsWith('setup/')) {
-      settings[key] = localStorage.getItem(key)
+    if (key.startsWith('config/')) {
+      settings[key] = localStorage.getItem(key) as string
     }
   }
 
+  return settings
+}
+
+export const applyDashboardSettingsToStorage = (settings: Record<string, unknown>) => {
+  for (const key in settings) {
+    if (key.startsWith('config/')) {
+      localStorage.setItem(key, settings[key] as string)
+    }
+  }
+}
+
+export const exportSettings = () => {
+  const settings = getDashboardSettingsFromStorage()
   const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')

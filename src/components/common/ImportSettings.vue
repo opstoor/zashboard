@@ -3,12 +3,22 @@
     class="btn btn-sm"
     @click="importDialogShow = true"
   >
-    {{ $t('importSettings') }}
+    {{ $t('importExportSettings') }}
   </button>
   <DialogWrapper
     v-model="importDialogShow"
-    :title="$t('importSettings')"
+    :title="$t('importExportSettings')"
   >
+    <div class="my-4 flex items-center gap-2">
+      {{ $t('exportSettings') }}
+      <button
+        class="btn btn-sm"
+        @click="exportSettings"
+      >
+        {{ $t('exportSettings') }}
+        <ArrowDownCircleIcon class="h-4 w-4" />
+      </button>
+    </div>
     <div class="my-4 flex items-center gap-2">
       {{ $t('importFromFile') }}
       <button
@@ -52,7 +62,7 @@
         </button>
       </div>
     </div>
-    <div class="my-4 flex items-center gap-2">
+    <div class="mt-4 flex items-center gap-2">
       <label class="flex cursor-pointer items-center gap-2">
         <span>{{ $t('autoImportFromUrl') }}</span>
         <input
@@ -89,7 +99,9 @@ import {
 } from '@/helper/autoImportSettings'
 import { showNotification } from '@/helper/notification'
 import { useTooltip } from '@/helper/tooltip'
+import { applyDashboardSettingsToStorage, exportSettings } from '@/helper/utils'
 import {
+  ArrowDownCircleIcon,
   ArrowDownTrayIcon,
   ArrowUpCircleIcon,
   QuestionMarkCircleIcon,
@@ -112,10 +124,7 @@ const handlerJsonUpload = () => {
   const reader = new FileReader()
   reader.onload = async () => {
     const settings = JSON.parse(reader.result as string)
-
-    for (const key in settings) {
-      localStorage.setItem(key, settings[key])
-    }
+    applyDashboardSettingsToStorage(settings)
     location.reload()
   }
   reader.readAsText(file)

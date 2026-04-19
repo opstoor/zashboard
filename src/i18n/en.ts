@@ -106,6 +106,12 @@ const en = {
   // Settings page
   exportSettings: 'Export settings',
   importSettings: 'Import settings',
+  importExportSettings: 'Import/Export settings',
+  syncSettingsTitle: 'Sync settings',
+  autoSyncSettings: 'Auto-sync settings',
+  uploadSettings: 'Upload settings to core',
+  syncSettings: 'Sync settings from core',
+  deleteUploadedSettings: 'Delete uploaded settings from core',
   connectionSettings: 'Connection settings',
   proxySettings: 'Proxy settings',
   logSettings: 'Log settings',
@@ -246,6 +252,11 @@ const en = {
   // Import, export, and upgrade
   importFromFile: 'Import from file',
   importFromUrl: 'Import from URL',
+  uploadSettingsSuccess: 'Settings uploaded successfully',
+  syncSettingsSuccess: 'Settings synced successfully',
+  deleteUploadedSettingsSuccess: 'Uploaded settings deleted successfully',
+  deleteUploadedSettingsConfirm:
+    'Are you sure you want to delete the uploaded settings on the backend? This action cannot be undone.',
   upgradeSuccess: 'Upgrade successful',
   numberOfChartsInSidebar: 'Number of charts in the sidebar',
   flushSmartWeights: 'Clear smart weights',

@@ -108,6 +108,12 @@ const zh: LANG_MESSAGE = {
   // Settings page
   exportSettings: '导出设置',
   importSettings: '导入设置',
+  importExportSettings: '导入/导出配置',
+  syncSettingsTitle: '同步配置',
+  autoSyncSettings: '自动同步设置',
+  uploadSettings: '上传设置到核心',
+  syncSettings: '从核心同步设置',
+  deleteUploadedSettings: '从核心删除已上传设置',
   connectionSettings: '连接设置',
   proxySettings: '代理设置',
   logSettings: '日志设置',
@@ -241,6 +247,10 @@ const zh: LANG_MESSAGE = {
   // Import, export, and upgrade
   importFromFile: '从文件导入',
   importFromUrl: '从 URL 导入',
+  uploadSettingsSuccess: '设置上传成功',
+  syncSettingsSuccess: '设置同步成功',
+  deleteUploadedSettingsSuccess: '已上传设置删除成功',
+  deleteUploadedSettingsConfirm: '确定要删除后端上已上传的设置吗？此操作不可撤销。',
   upgradeSuccess: '升级成功',
   numberOfChartsInSidebar: '侧边栏图表数量',
   flushSmartWeights: '清空Smart权重',

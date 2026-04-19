@@ -108,6 +108,12 @@ const zhTW: LANG_MESSAGE = {
   // Settings page
   exportSettings: '匯出設定',
   importSettings: '匯入設定',
+  importExportSettings: '匯入/匯出設定',
+  syncSettingsTitle: '同步設定',
+  autoSyncSettings: '自動同步設定',
+  uploadSettings: '上傳設定到核心',
+  syncSettings: '從核心同步設定',
+  deleteUploadedSettings: '從核心刪除已上傳設定',
   connectionSettings: '連接設定',
   proxySettings: '代理設定',
   logSettings: '日誌設定',
@@ -241,6 +247,10 @@ const zhTW: LANG_MESSAGE = {
   // Import, export, and upgrade
   importFromFile: '從檔案匯入',
   importFromUrl: '從 URL 匯入',
+  uploadSettingsSuccess: '設定上傳成功',
+  syncSettingsSuccess: '設定同步成功',
+  deleteUploadedSettingsSuccess: '已上傳設定刪除成功',
+  deleteUploadedSettingsConfirm: '確定要刪除後端上已上傳的設定嗎？此操作無法復原。',
   upgradeSuccess: '升級成功',
   numberOfChartsInSidebar: '側邊欄圖表數量',
   flushSmartWeights: '清空Smart權重',

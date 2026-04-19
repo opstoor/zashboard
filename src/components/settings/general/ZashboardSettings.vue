@@ -45,13 +45,55 @@
         {{ $t('resetSettings') }}
       </button>
       <button
+        v-if="!isSingBox || displayAllFeatures"
         class="btn btn-sm"
-        @click="exportSettings"
+        @click="isStorageSettingsModalOpen = true"
       >
-        {{ $t('exportSettings') }}
+        {{ $t('syncSettingsTitle') }}
       </button>
       <ImportSettings />
     </div>
+
+    <DialogWrapper
+      v-model="isStorageSettingsModalOpen"
+      :title="$t('syncSettingsTitle')"
+    >
+      <div class="flex min-w-64 flex-col gap-2">
+        <button
+          :class="twMerge('btn btn-sm', isStorageSubmitting ? 'btn-disabled' : '')"
+          :disabled="isStorageSubmitting"
+          @click="handlerClickUploadSettings"
+        >
+          {{ $t('uploadSettings') }}
+        </button>
+        <button
+          :class="twMerge('btn btn-sm', isStorageSubmitting ? 'btn-disabled' : '')"
+          :disabled="isStorageSubmitting"
+          @click="handlerClickSyncSettings"
+        >
+          {{ $t('syncSettings') }}
+        </button>
+        <button
+          :class="
+            twMerge('btn btn-sm btn-error btn-soft', isStorageSubmitting ? 'btn-disabled' : '')
+          "
+          :disabled="isStorageSubmitting"
+          @click="handlerClickDeleteUploadedSettings"
+        >
+          {{ $t('deleteUploadedSettings') }}
+        </button>
+        <div class="mt-2 flex items-center gap-2">
+          <label class="flex cursor-pointer items-center gap-2">
+            <span>{{ $t('autoSyncSettings') }}</span>
+            <input
+              v-model="autoSyncSettings"
+              type="checkbox"
+              class="toggle toggle-sm"
+            />
+          </label>
+        </div>
+      </div>
+    </DialogWrapper>
 
     <StyleSettings />
     <GeneralSettings />
@@ -59,14 +101,18 @@
 </template>
 
 <script setup lang="ts">
-import { upgradeUIAPI, zashboardVersion } from '@/api'
+import { deleteStorageAPI, isSingBox, setStorageAPI, upgradeUIAPI, zashboardVersion } from '@/api'
 import { useIsSettingVisible, useSettings } from '@/composables/settings'
 import { GENERAL_ITEM_KEYS } from '@/config/settingsItems'
 import { handlerUpgradeSuccess } from '@/helper'
-import { exportSettings, resetSettings } from '@/helper/utils'
+import { autoSyncSettings, syncSettingsFromCore } from '@/helper/autoImportSettings'
+import { showNotification } from '@/helper/notification'
+import { getDashboardSettingsFromStorage, resetSettings } from '@/helper/utils'
+import { displayAllFeatures } from '@/store/settings'
 import { twMerge } from 'tailwind-merge'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import DialogWrapper from '../../common/DialogWrapper.vue'
 import ImportSettings from '../../common/ImportSettings.vue'
 import GeneralSettings from './GeneralSettings.vue'
 import StyleSettings from './StyleSettings.vue'
@@ -80,6 +126,8 @@ const { isUIUpdateAvailable } = useSettings()
 const { t } = useI18n()
 
 const isUIUpgrading = ref(false)
+const isStorageSubmitting = ref(false)
+const isStorageSettingsModalOpen = ref(false)
 
 const handlerClickResetSettings = () => {
   if (!window.confirm(t('resetSettingsConfirm'))) return
@@ -100,4 +148,64 @@ const handlerClickUpgradeUI = async () => {
     isUIUpgrading.value = false
   }
 }
+
+const handlerClickUploadSettings = async () => {
+  if (isStorageSubmitting.value) return
+
+  isStorageSubmitting.value = true
+  try {
+    await setStorageAPI(getDashboardSettingsFromStorage())
+    isStorageSettingsModalOpen.value = false
+    showNotification({
+      content: 'uploadSettingsSuccess',
+      type: 'alert-success',
+    })
+  } finally {
+    isStorageSubmitting.value = false
+  }
+}
+
+const handlerClickSyncSettings = async () => {
+  if (isStorageSubmitting.value) return
+
+  isStorageSubmitting.value = true
+  try {
+    isStorageSettingsModalOpen.value = false
+    await syncSettingsFromCore({
+      force: true,
+      notify: true,
+    })
+  } finally {
+    isStorageSubmitting.value = false
+  }
+}
+
+const handlerClickDeleteUploadedSettings = async () => {
+  if (isStorageSubmitting.value) return
+  if (!window.confirm(t('deleteUploadedSettingsConfirm'))) return
+
+  isStorageSubmitting.value = true
+  try {
+    await deleteStorageAPI()
+    isStorageSettingsModalOpen.value = false
+    showNotification({
+      content: 'deleteUploadedSettingsSuccess',
+      type: 'alert-success',
+    })
+  } finally {
+    isStorageSubmitting.value = false
+  }
+}
+
+watch(autoSyncSettings, async (value, oldValue) => {
+  if (!value || oldValue || isStorageSubmitting.value) return
+
+  isStorageSubmitting.value = true
+  try {
+    isStorageSettingsModalOpen.value = false
+    await syncSettingsFromCore()
+  } finally {
+    isStorageSubmitting.value = false
+  }
+})
 </script>

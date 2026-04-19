@@ -254,6 +254,18 @@ export const queryDNSAPI = (params: { name: string; type: string }) => {
   })
 }
 
+export const getStorageAPI = () => {
+  return axios.get<Record<string, unknown>>(`/storage/zashboard`)
+}
+
+export const setStorageAPI = (value: Record<string, string>) => {
+  return axios.put(`/storage/zashboard`, value)
+}
+
+export const deleteStorageAPI = () => {
+  return axios.delete(`/storage/zashboard`)
+}
+
 const createWebSocket = <T>(url: string, searchParams?: Record<string, string>) => {
   const backend = activeBackend.value!
   const resurl = new URL(`${getUrlFromBackend(backend).replace('http', 'ws')}/${url}`)

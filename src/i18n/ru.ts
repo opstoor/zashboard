@@ -108,6 +108,12 @@ const ru: LANG_MESSAGE = {
   // Settings page
   exportSettings: 'Экспорт настроек',
   importSettings: 'Импорт настроек',
+  importExportSettings: 'Импорт/Экспорт настроек',
+  syncSettingsTitle: 'Синхронизация настроек',
+  autoSyncSettings: 'Автосинхронизация настроек',
+  uploadSettings: 'Загрузить настройки в ядро',
+  syncSettings: 'Синхронизировать настройки из ядра',
+  deleteUploadedSettings: 'Удалить загруженные настройки из ядра',
   connectionSettings: 'Настройки подключения',
   proxySettings: 'Настройки прокси',
   logSettings: 'Настройки журнала',
@@ -248,6 +254,11 @@ const ru: LANG_MESSAGE = {
   // Import, export, and upgrade
   importFromFile: 'Импортировать из файла',
   importFromUrl: 'Импортировать из URL',
+  uploadSettingsSuccess: 'Настройки успешно загружены',
+  syncSettingsSuccess: 'Настройки успешно синхронизированы',
+  deleteUploadedSettingsSuccess: 'Загруженные настройки успешно удалены',
+  deleteUploadedSettingsConfirm:
+    'Вы уверены, что хотите удалить загруженные на бэкенд настройки? Это действие нельзя отменить.',
   upgradeSuccess: 'Обновление до новой версии выполнено успешно',
   numberOfChartsInSidebar: 'Количество графиков в боковой панели',
   flushSmartWeights: 'Очистить Smart веса',
