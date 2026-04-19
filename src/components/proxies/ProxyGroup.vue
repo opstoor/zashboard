@@ -6,19 +6,19 @@
     @contextmenu.prevent.stop="handlerLatencyTest"
   >
     <template v-slot:title>
-      <div class="relative flex items-center gap-2">
-        <div class="flex flex-1 items-center gap-1">
+      <div class="relative flex min-w-0 items-center gap-2">
+        <div class="flex shrink-0 items-center gap-1">
           <ProxyName
             :name="name"
             :icon-size="proxyGroupIconSize"
             :icon-margin="proxyGroupIconMargin"
           />
-          <span class="text-base-content/60 text-xs tabular-nums">
+          <span class="text-base-content/60 shrink-0 text-xs whitespace-nowrap tabular-nums">
             · {{ proxyGroup.type }} · {{ proxiesCount }}
           </span>
           <button
             v-if="manageHiddenGroup"
-            class="btn btn-circle btn-xs z-10 ml-1"
+            class="btn btn-circle btn-xs z-10 ml-1 shrink-0"
             @click.stop="handlerGroupToggle"
           >
             <EyeIcon
@@ -31,8 +31,12 @@
             />
           </button>
         </div>
+        <div class="flex flex-1">
+          <div class="flex-1"></div>
+          <ProxyGroupFilter :group-name="name" />
+        </div>
         <LatencyTag
-          :class="twMerge('bg-base-200/50 hover:bg-base-200 z-10')"
+          :class="twMerge('bg-base-200/50 hover:bg-base-200 z-10 shrink-0')"
           :loading="isLatencyTesting"
           :name="proxyGroup.now"
           :group-name="proxyGroup.name"
@@ -92,6 +96,7 @@ import CollapseCard from '../common/CollapseCard.vue'
 import LatencyTag from './LatencyTag.vue'
 import ProxiesByProvider from './ProxiesByProvider.vue'
 import ProxiesContent from './ProxiesContent.vue'
+import ProxyGroupFilter from './ProxyGroupFilter.vue'
 import ProxyGroupNow from './ProxyGroupNow.vue'
 import ProxyName from './ProxyName.vue'
 import ProxyPreview from './ProxyPreview.vue'

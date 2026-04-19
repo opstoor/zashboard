@@ -25,10 +25,15 @@
           {{ proxyGroup.name }}
         </div>
         <div
-          class="text-base-content/60 truncate text-xs"
-          :class="proxyGroup.icon && 'pr-10'"
+          class="text-base-content/60 flex min-w-0 items-center gap-2 truncate text-xs"
+          :class="proxyGroup.icon && 'pr-12'"
         >
-          {{ proxyGroup.type }} · {{ proxiesCount }}
+          <span class="shrink-0 whitespace-nowrap">{{ proxyGroup.type }} · {{ proxiesCount }}</span>
+          <ProxyGroupFilter
+            v-if="displayContent"
+            class="min-w-0 flex-1"
+            :group-name="name"
+          />
         </div>
         <div class="flex items-center">
           <div class="flex flex-1 items-center gap-1 truncate">
@@ -103,6 +108,7 @@ import { computed, nextTick, ref } from 'vue'
 import LatencyTag from './LatencyTag.vue'
 import ProxiesByProvider from './ProxiesByProvider.vue'
 import ProxiesContent from './ProxiesContent.vue'
+import ProxyGroupFilter from './ProxyGroupFilter.vue'
 import ProxyGroupNow from './ProxyGroupNow.vue'
 import ProxyIcon from './ProxyIcon.vue'
 

@@ -27,25 +27,25 @@
       <div
         :class="getBgColor(lowLatency - 1)"
         :style="{
-          width: `${(goodsCounts * 100) / nodes.length}%`, // cant use tw class, otherwise dynamic classname won't be generated
+          width: getPreviewWidth(goodsCounts), // cant use tw class, otherwise dynamic classname won't be generated
         }"
       />
       <div
         :class="getBgColor(mediumLatency - 1)"
         :style="{
-          width: `${(mediumCounts * 100) / nodes.length}%`,
+          width: getPreviewWidth(mediumCounts),
         }"
       />
       <div
         :class="getBgColor(mediumLatency + 1)"
         :style="{
-          width: `${(badCounts * 100) / nodes.length}%`,
+          width: getPreviewWidth(badCounts),
         }"
       />
       <div
         :class="getBgColor(NOT_CONNECTED)"
         :style="{
-          width: `${(notConnectedCounts * 100) / nodes.length}%`,
+          width: getPreviewWidth(notConnectedCounts),
         }"
       />
     </div>
@@ -92,6 +92,14 @@ const makeTippy = (e: Event, node: { name: string; latency: number }) => {
 
   tag.classList.add('flex', 'items-center', 'gap-2')
   showTip(e, tag)
+}
+
+const getPreviewWidth = (count: number) => {
+  if (!props.nodes.length) {
+    return '0%'
+  }
+
+  return `${(count * 100) / props.nodes.length}%`
 }
 
 const showDots = computed(() => {

@@ -226,7 +226,7 @@ export default defineComponent({
         <TextInput
           class={['w-32 flex-1', isLargeCtrlsBar.value && 'max-w-80']}
           v-model={proxiesFilter.value}
-          placeholder={`${t('search')} | ${t('searchMultiple')}`}
+          placeholder={`${t('searchProxyGroup')} | Regex`}
           clearable={true}
         />
       )

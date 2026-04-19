@@ -1,10 +1,12 @@
 <template>
   <div class="relative">
-    <XMarkIcon
+    <button
       v-if="beforeClose && clearable"
-      class="absolute top-2 right-2 z-10 h-4 w-3 cursor-pointer hover:scale-125"
+      class="btn btn-ghost btn-circle btn-xs absolute top-1/2 right-1 z-10 h-5 min-h-5 w-5 -translate-y-1/2 p-0"
       @click="clearInput"
-    />
+    >
+      <XMarkIcon class="h-3 w-3" />
+    </button>
     <input
       v-model="inputValue"
       ref="inputRef"
@@ -17,11 +19,13 @@
       @input="(emits('input', inputValue || ''), hideTip())"
       @change="emits('change', inputValue || '')"
     />
-    <XMarkIcon
+    <button
       v-if="!beforeClose && clearable"
-      class="absolute top-2 right-2 z-10 h-4 w-3 cursor-pointer hover:scale-125"
+      class="btn btn-ghost btn-circle btn-xs absolute top-1/2 right-1 h-5 min-h-5 w-5 -translate-y-1/2 p-0"
       @click="clearInput"
-    />
+    >
+      <XMarkIcon class="h-3 w-3" />
+    </button>
   </div>
 </template>
 

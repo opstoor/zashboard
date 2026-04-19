@@ -1,7 +1,12 @@
 import { NOT_CONNECTED, PROXY_SORT_TYPE } from '@/constant'
 import { isProxyGroup } from '@/helper'
-import { getLatencyByName, proxiesFilter } from '@/store/proxies'
-import { hideUnavailableProxies, proxySortType, useSmartGroupSort } from '@/store/settings'
+import { getLatencyByName } from '@/store/proxies'
+import {
+  hideUnavailableProxies,
+  proxyGroupFilterMap,
+  proxySortType,
+  useSmartGroupSort,
+} from '@/store/settings'
 import { smartOrderMap } from '@/store/smart'
 import { computed, type ComputedRef } from 'vue'
 
@@ -41,13 +46,9 @@ const getRenderProxies = (proxies: string[], groupName?: string) => {
     })
   }
 
-  if (proxiesFilter.value) {
-    const filters = proxiesFilter.value.split(' ').map((f) => f.toLowerCase().trim())
-
-    proxies = proxies.filter((name) => {
-      name = name.toLowerCase()
-      return filters.every((f) => name.includes(f))
-    })
+  const groupFilter = groupName ? proxyGroupFilterMap.value[groupName] : ''
+  if (groupFilter) {
+    proxies = proxies.filter((name) => matchProxyFilter(name, groupFilter))
   }
 
   if (useSmartGroupSort.value && smartOrderMap.value[groupName!]) {
@@ -90,4 +91,21 @@ const getRenderProxies = (proxies: string[], groupName?: string) => {
   const sortFunc = sortFuncMap[proxySortType.value]
 
   return proxyGroups.concat(proxyNodes.sort(sortFunc))
+}
+
+const matchProxyFilter = (name: string, filter: string) => {
+  const normalizedFilter = filter.trim()
+  if (!normalizedFilter) {
+    return true
+  }
+
+  return toRegex(normalizedFilter)?.test(name) ?? true
+}
+
+const toRegex = (filter: string) => {
+  try {
+    return new RegExp(filter, 'i')
+  } catch {
+    return null
+  }
 }
