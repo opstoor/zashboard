@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative h-22 cursor-pointer"
+    class="group relative h-22 cursor-pointer"
     :data-group-name="proxyGroup.name"
     ref="cardWrapperRef"
     @click="handlerGroupClick"

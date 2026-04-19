@@ -14,6 +14,7 @@ const en = {
   password: 'Password',
   submit: 'Submit',
   cancel: 'Cancel',
+  delete: 'Delete',
   download: 'Download',
   upload: 'Upload',
   downloadSpeed: 'Download speed',
@@ -106,8 +107,10 @@ const en = {
   // Settings page
   exportSettings: 'Export settings',
   importSettings: 'Import settings',
-  importExportSettings: 'Import/Export settings',
-  syncSettingsTitle: 'Sync settings',
+  dashboardSettings: 'Dashboard settings',
+  dashboardSettingsCore: 'Core',
+  dashboardSettingsJsonFile: 'JSON file',
+  dashboardSettingsUrl: 'URL',
   autoSyncSettings: 'Auto-sync settings',
   uploadSettings: 'Upload settings to core',
   syncSettings: 'Sync settings from core',
@@ -253,6 +256,8 @@ const en = {
   importFromFile: 'Import from file',
   importFromUrl: 'Import from URL',
   uploadSettingsSuccess: 'Settings uploaded successfully',
+  uploadSettingsIconReflectListRemoved:
+    'Custom icon data was too large and has been removed during upload. Please reduce it and try again.',
   syncSettingsSuccess: 'Settings synced successfully',
   deleteUploadedSettingsSuccess: 'Uploaded settings deleted successfully',
   deleteUploadedSettingsConfirm:

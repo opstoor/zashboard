@@ -16,6 +16,7 @@ const ru: LANG_MESSAGE = {
   password: 'Пароль',
   submit: 'Отправить',
   cancel: 'Отмена',
+  delete: 'Удалить',
   download: 'Загружено',
   upload: 'Отправлено',
   downloadSpeed: 'Скорость загрузки',
@@ -108,8 +109,10 @@ const ru: LANG_MESSAGE = {
   // Settings page
   exportSettings: 'Экспорт настроек',
   importSettings: 'Импорт настроек',
-  importExportSettings: 'Импорт/Экспорт настроек',
-  syncSettingsTitle: 'Синхронизация настроек',
+  dashboardSettings: 'Настройки панели',
+  dashboardSettingsCore: 'Ядро',
+  dashboardSettingsJsonFile: 'JSON файл',
+  dashboardSettingsUrl: 'URL',
   autoSyncSettings: 'Автосинхронизация настроек',
   uploadSettings: 'Загрузить настройки в ядро',
   syncSettings: 'Синхронизировать настройки из ядра',
@@ -255,6 +258,8 @@ const ru: LANG_MESSAGE = {
   importFromFile: 'Импортировать из файла',
   importFromUrl: 'Импортировать из URL',
   uploadSettingsSuccess: 'Настройки успешно загружены',
+  uploadSettingsIconReflectListRemoved:
+    'Данные пользовательских иконок слишком велики и были удалены при загрузке. Уменьшите их размер и попробуйте снова.',
   syncSettingsSuccess: 'Настройки успешно синхронизированы',
   deleteUploadedSettingsSuccess: 'Загруженные настройки успешно удалены',
   deleteUploadedSettingsConfirm:

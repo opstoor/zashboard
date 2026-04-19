@@ -12,19 +12,19 @@
     </button>
     <div
       class="relative min-w-0 flex-1 overflow-hidden transition-all duration-200 ease-out"
-      :class="showInput ? 'w-full max-w-40 opacity-100' : 'w-0 max-w-0 opacity-0'"
+      :class="showInput ? 'w-full max-w-32 opacity-100' : 'w-0 max-w-0 opacity-0'"
     >
       <input
         ref="inputRef"
         v-model="keyword"
         type="text"
-        class="input input-xs border-base-300 h-7 w-full min-w-0 outline-none"
+        class="border-base-300 h-7 w-full min-w-0 border-b text-xs outline-none"
         :placeholder="placeholder || `${t('search')} | Regex`"
         @blur="handlerBlur"
         @keydown.escape="handlerReset"
       />
       <button
-        class="btn btn-ghost btn-circle btn-xs absolute top-1/2 right-1 h-5 min-h-5 w-5 -translate-y-1/2 p-0"
+        class="btn btn-ghost btn-circle btn-xs absolute top-1/2 right-0 h-5 min-h-5 w-5 -translate-y-1/2 p-0"
         @click.stop="handlerReset"
       >
         <XMarkIcon class="h-3 w-3" />

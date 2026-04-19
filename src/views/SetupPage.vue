@@ -4,7 +4,7 @@
     @keydown.enter="handleSubmit(form)"
   >
     <div class="absolute top-4 right-4 max-sm:hidden">
-      <ImportSettings />
+      <DashboardSettings />
     </div>
     <div class="absolute right-4 bottom-4 max-sm:hidden">
       <LanguageSelect />
@@ -123,7 +123,7 @@
         <LanguageSelect />
       </div>
       <div class="absolute top-2 right-2 sm:hidden">
-        <ImportSettings />
+        <DashboardSettings />
       </div>
     </div>
 
@@ -136,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import ImportSettings from '@/components/common/ImportSettings.vue'
+import DashboardSettings from '@/components/common/DashboardSettings.vue'
 import TextInput from '@/components/common/TextInput.vue'
 import EditBackendModal from '@/components/settings/backend/EditBackendModal.vue'
 import LanguageSelect from '@/components/settings/general/LanguageSelect.vue'
