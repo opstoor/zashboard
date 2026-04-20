@@ -43,6 +43,9 @@ const migrateLegacyStorageKey = (legacyKey: string, nextKey: string) => {
 migrateLegacyStorageKey('config/show-seleted-for-now-node', 'config/show-selected-for-now-node')
 migrateLegacyStorageKey('config/use-connecticon-card', 'config/use-connection-card')
 migrateLegacyStorageKey('config/connecticon-table-size', 'config/connection-table-size')
+migrateLegacyStorageKey('config/ipv6-map', 'cache/ipv6-map')
+migrateLegacyStorageKey('config/collapse-group-map', 'cache/collapse-group-map')
+migrateLegacyStorageKey('config/log-search-history', 'cache/log-search-history')
 
 const migrateLegacyConnectionDisplayStyle = () => {
   if (typeof window === 'undefined') {
@@ -206,7 +209,7 @@ if (missingCards.length > 0) {
 }
 
 // proxies
-export const collapseGroupMap = useStorage<Record<string, boolean>>('config/collapse-group-map', {})
+export const collapseGroupMap = useStorage<Record<string, boolean>>('cache/collapse-group-map', {})
 export const proxyGroupFilterMap = useStorage<Record<string, string>>(
   'cache/proxy-group-filter-map',
   {},
@@ -313,7 +316,7 @@ export const disconnectOnRuleDisable = useStorage('config/disconnect-on-rule-dis
 
 // logs
 export const logRetentionLimit = useStorage<number>('config/log-retention-limit', 1000)
-export const logSearchHistory = useStorage<string[]>('config/log-search-history', [])
+export const logSearchHistory = useStorage<string[]>('cache/log-search-history', [])
 
 // settings visibility
 // 使用扁平结构，key 格式为 "大设置项.小设置项" 或 "大设置项"（仅大设置项）

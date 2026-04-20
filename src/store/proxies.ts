@@ -40,7 +40,7 @@ export const proxiesTabShow = ref(PROXY_TAB_TYPE.PROXIES)
 
 export const proxyGroupList = ref<string[]>([])
 export const proxyMap = ref<Record<string, Proxy>>({})
-export const IPv6Map = useStorage<Record<string, boolean>>('config/ipv6-map', {})
+export const IPv6Map = useStorage<Record<string, boolean>>('cache/ipv6-map', {})
 export const hiddenGroupMap = useStorage<Record<string, boolean>>('config/hidden-group-map', {})
 export const proxyProviederList = ref<ProxyProvider[]>([])
 
