@@ -1,6 +1,6 @@
 import { NOT_CONNECTED, PROXY_SORT_TYPE } from '@/constant'
 import { isProxyGroup } from '@/helper'
-import { getLatencyByName } from '@/store/proxies'
+import { getLatencyByName, proxiesFilter } from '@/store/proxies'
 import {
   hideUnavailableProxies,
   proxyGroupFilterMap,
@@ -46,7 +46,7 @@ const getRenderProxies = (proxies: string[], groupName?: string) => {
     })
   }
 
-  const groupFilter = groupName ? proxyGroupFilterMap.value[groupName] : ''
+  const groupFilter = groupName ? proxyGroupFilterMap.value[groupName] : proxiesFilter.value
   if (groupFilter) {
     proxies = proxies.filter((name) => matchProxyFilter(name, groupFilter))
   }

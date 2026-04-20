@@ -192,6 +192,7 @@ const en = {
     "When enabled, the latency test will use URLs specified in the configuration file instead of zashboard's URL settings. Latency will be displayed independently based on the URLs set in policy groups.",
   search: 'Search',
   searchProxyGroup: 'Search proxy groups',
+  searchProxyNode: 'Search proxy nodes',
   searchMultiple: 'Space-separated keywords',
   importing: 'Importing...',
   hideConnection: 'Hide connection',

@@ -6,37 +6,35 @@
     @contextmenu.prevent.stop="handlerLatencyTest"
   >
     <template v-slot:title>
-      <div class="relative flex min-w-0 items-center gap-2">
-        <div class="flex shrink-0 items-center gap-1">
-          <ProxyName
-            :name="name"
-            :icon-size="proxyGroupIconSize"
-            :icon-margin="proxyGroupIconMargin"
+      <div class="relative flex w-full items-center gap-2 overflow-hidden">
+        <ProxyName
+          :name="name"
+          :icon-size="proxyGroupIconSize"
+          :icon-margin="proxyGroupIconMargin"
+        />
+        <span
+          class="text-base-content/60 min-w-0 flex-1 truncate text-xs tabular-nums"
+          @mouseenter="checkTruncation"
+        >
+          · {{ proxyGroup.type }} · {{ proxiesCount }}
+        </span>
+        <ProxyGroupFilter :group-name="name" />
+        <button
+          v-if="manageHiddenGroup"
+          class="btn btn-circle btn-xs"
+          @click.stop="handlerGroupToggle"
+        >
+          <EyeIcon
+            v-if="!hiddenGroup"
+            class="h-3 w-3"
           />
-          <span class="text-base-content/60 shrink-0 text-xs whitespace-nowrap tabular-nums">
-            · {{ proxyGroup.type }} · {{ proxiesCount }}
-          </span>
-          <button
-            v-if="manageHiddenGroup"
-            class="btn btn-circle btn-xs z-10 ml-1 shrink-0"
-            @click.stop="handlerGroupToggle"
-          >
-            <EyeIcon
-              v-if="!hiddenGroup"
-              class="h-3 w-3"
-            />
-            <EyeSlashIcon
-              v-else
-              class="h-3 w-3"
-            />
-          </button>
-        </div>
-        <div class="flex flex-1">
-          <div class="flex-1"></div>
-          <ProxyGroupFilter :group-name="name" />
-        </div>
+          <EyeSlashIcon
+            v-else
+            class="text-warning h-3 w-3"
+          />
+        </button>
         <LatencyTag
-          :class="twMerge('bg-base-200/50 hover:bg-base-200 z-10 shrink-0')"
+          :class="twMerge('bg-base-200/50 hover:bg-base-200')"
           :loading="isLatencyTesting"
           :name="proxyGroup.now"
           :group-name="proxyGroup.name"
@@ -75,6 +73,7 @@
 import { useBounceOnVisible } from '@/composables/bouncein'
 import { useRenderProxies } from '@/composables/renderProxies'
 import { isHiddenGroup } from '@/helper'
+import { checkTruncation } from '@/helper/tooltip'
 import { prettyBytesHelper } from '@/helper/utils'
 import { activeConnections } from '@/store/connections'
 import {

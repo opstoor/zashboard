@@ -222,11 +222,15 @@ export default defineComponent({
         </button>
       )
 
+      const searchPlaceholder =
+        proxiesTabShow.value === PROXY_TAB_TYPE.PROVIDER
+          ? `${t('searchProxyNode')} | Regex`
+          : `${t('searchProxyGroup')} | Regex`
       const searchInput = (
         <TextInput
           class={['w-32 flex-1', isLargeCtrlsBar.value && 'max-w-80']}
           v-model={proxiesFilter.value}
-          placeholder={`${t('searchProxyGroup')} | Regex`}
+          placeholder={searchPlaceholder}
           clearable={true}
         />
       )

@@ -14,6 +14,9 @@ import { isEmpty } from 'lodash'
 import { computed, ref } from 'vue'
 
 const filterGroups = (all: string[]) => {
+  if (proxiesFilter.value.trim().length) {
+    return all.filter(matchProxyGroupFilter)
+  }
   if (manageHiddenGroup.value) {
     return all
   }
@@ -40,7 +43,7 @@ const getRenderGroups = () => {
   }
 
   if (proxiesTabShow.value === PROXY_TAB_TYPE.PROVIDER) {
-    return proxyProviederList.value.map((group) => group.name).filter(matchProxyGroupFilter)
+    return proxyProviederList.value.map((group) => group.name)
   }
 
   if (displayGlobalByMode.value) {
@@ -50,10 +53,10 @@ const getRenderGroups = () => {
       ].filter(matchProxyGroupFilter)
     }
 
-    return filterGroups(proxyGroupList.value).filter(matchProxyGroupFilter)
+    return filterGroups(proxyGroupList.value)
   }
 
-  return filterGroups([...proxyGroupList.value, GLOBAL]).filter(matchProxyGroupFilter)
+  return filterGroups([...proxyGroupList.value, GLOBAL])
 }
 
 export const disableProxiesPageScroll = ref(false)

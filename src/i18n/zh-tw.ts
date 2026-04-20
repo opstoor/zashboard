@@ -192,6 +192,7 @@ const zhTW: LANG_MESSAGE = {
     '開啟獨立延遲測試會在測速中盡可能的使用配置檔案中的url覆蓋面板設定的url，並展示根據策略組設定的url獲取的延遲。',
   search: '搜尋',
   searchProxyGroup: '搜尋代理組',
+  searchProxyNode: '搜尋節點',
   searchMultiple: '多個關鍵詞用空格分隔',
   importing: '正在匯入',
   hideConnection: '隱藏連接',

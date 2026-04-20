@@ -12,7 +12,7 @@
     </button>
     <div
       class="relative min-w-0 flex-1 overflow-hidden transition-all duration-200 ease-out"
-      :class="showInput ? 'w-full max-w-32 opacity-100' : 'w-0 max-w-0 opacity-0'"
+      :class="showInput ? 'max-w-32 opacity-100' : 'max-w-0 opacity-0'"
     >
       <input
         ref="inputRef"
