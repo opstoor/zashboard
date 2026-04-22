@@ -164,7 +164,7 @@
               ]"
               @contextmenu="handleCellRightClick($event, cell)"
             >
-              <template v-if="cell.column.getIsGrouped()">
+              <template v-if="cell.getIsGrouped()">
                 <template v-if="rows[virtualRow.index].getCanExpand()">
                   <div class="flex items-center overflow-hidden">
                     <component
@@ -187,7 +187,7 @@
                 </template>
               </template>
               <FlexRender
-                v-else
+                v-else-if="!cell.getIsPlaceholder()"
                 :render="
                   cell.getIsAggregated()
                     ? cell.column.columnDef.aggregatedCell
