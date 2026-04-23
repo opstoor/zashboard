@@ -1,15 +1,17 @@
 <template>
-  <div class="flex flex-col gap-4">
-    <div class="flex items-center gap-2">
-      <span class="shrink-0">{{ $t('showFullProxyChain') }}</span>
-      <input
-        type="checkbox"
-        class="toggle"
-        v-model="showFullProxyChain"
-      />
+  <div class="setting-item">
+    <div class="setting-item-label">
+      {{ $t('showFullProxyChain') }}
     </div>
-    <div>{{ $t('customTableColumns') }}</div>
-    <div class="flex gap-4 rounded-sm">
+    <input
+      type="checkbox"
+      class="toggle"
+      v-model="showFullProxyChain"
+    />
+  </div>
+  <div class="flex flex-col">
+    <div class="m-4 mb-0">{{ $t('customTableColumns') }}</div>
+    <div class="flex gap-4 rounded-sm p-4">
       <Draggable
         class="bg-base-200 flex flex-1 flex-col gap-2 p-2"
         v-model="connectionTableColumns"

@@ -105,32 +105,36 @@ export default defineComponent({
             v-model={settingsModel.value}
             title={t('connectionSettings')}
           >
-            <div class="flex flex-col gap-4 p-2 text-sm">
-              <div class="flex items-center gap-2">
-                <span class="shrink-0">{t('hideConnectionRegex')}</span>
-                <TextInput
-                  class="w-32 max-w-64 flex-1"
-                  v-model={quickFilterRegex.value}
-                />
-              </div>
-              <div class="flex items-center gap-2">
-                {t('hideConnection')}
-                <input
-                  type="checkbox"
-                  class="toggle"
-                  v-model={quickFilterEnabled.value}
-                />
-                <div
-                  onMouseenter={(e) =>
-                    showTip(e, t('hideConnectionTip'), {
-                      appendTo: 'parent',
-                    })
-                  }
-                >
-                  <QuestionMarkCircleIcon class="h-4 w-4" />
+            <div class="flex flex-col gap-3 text-sm">
+              <div class="settings-grid">
+                <div class="setting-item">
+                  <div class="setting-item-label shrink-0!">{t('hideConnectionRegex')}</div>
+                  <TextInput
+                    class="w-32 max-w-64 flex-1"
+                    v-model={quickFilterRegex.value}
+                  />
                 </div>
+                <div class="setting-item">
+                  <div class="setting-item-label flex items-center gap-2">
+                    <span>{t('hideConnection')}</span>
+                    <div
+                      onMouseenter={(e) =>
+                        showTip(e, t('hideConnectionTip'), {
+                          appendTo: 'parent',
+                        })
+                      }
+                    >
+                      <QuestionMarkCircleIcon class="h-4 w-4" />
+                    </div>
+                  </div>
+                  <input
+                    type="checkbox"
+                    class="toggle toggle-sm"
+                    v-model={quickFilterEnabled.value}
+                  />
+                </div>
+                {isConnectionCard.value ? <ConnectionCardSettings /> : <TableSettings />}
               </div>
-              {isConnectionCard.value ? <ConnectionCardSettings /> : <TableSettings />}
               <div class="divider m-0"></div>
               <button
                 class="btn btn-block"

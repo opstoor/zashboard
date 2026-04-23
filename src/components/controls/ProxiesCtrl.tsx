@@ -247,83 +247,85 @@ export default defineComponent({
             v-model={settingsModel.value}
             title={t('proxySettings')}
           >
-            <div class="flex flex-col gap-4 p-2 text-sm">
-              <div class="flex items-center gap-2">
-                {t('sortBy')}
-                {sort}
-              </div>
-              {hasSmartGroup.value && (
-                <div class="flex items-center gap-2">
-                  {t('useSmartGroupSort')}
+            <div class="flex flex-col gap-3 text-sm">
+              <div class="settings-grid">
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('sortBy')}</div>
+                  {sort}
+                </div>
+                {hasSmartGroup.value && (
+                  <div class="setting-item">
+                    <div class="setting-item-label">{t('useSmartGroupSort')}</div>
+                    <input
+                      class="toggle toggle-sm"
+                      type="checkbox"
+                      v-model={useSmartGroupSort.value}
+                    />
+                  </div>
+                )}
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('groupProxiesByProvider')}</div>
                   <input
-                    class="toggle"
                     type="checkbox"
-                    v-model={useSmartGroupSort.value}
+                    class="toggle toggle-sm"
+                    v-model={groupProxiesByProvider.value}
                   />
                 </div>
-              )}
-              <div class="flex items-center gap-2">
-                {t('groupProxiesByProvider')}
-                <input
-                  type="checkbox"
-                  class="toggle"
-                  v-model={groupProxiesByProvider.value}
-                />
-              </div>
-              <div class="flex items-center gap-2">
-                {t('unavailableProxy')}
-                <input
-                  type="checkbox"
-                  class="toggle"
-                  v-model={hideUnavailableProxies.value}
-                />
-              </div>
-              <div class="flex items-center gap-2">
-                {t('manageHiddenGroup')}
-                <input
-                  class="toggle"
-                  type="checkbox"
-                  v-model={manageHiddenGroup.value}
-                />
-              </div>
-              <div class="flex items-center gap-2">
-                {t('automaticDisconnection')}
-                <input
-                  class="toggle"
-                  type="checkbox"
-                  v-model={automaticDisconnection.value}
-                />
-              </div>
-              <div class="flex items-center gap-2">
-                {t('displayFinalOutbound')}
-                <input
-                  class="toggle"
-                  type="checkbox"
-                  v-model={displayFinalOutbound.value}
-                />
-              </div>
-              <div class="flex items-center gap-2">
-                {t('disableProxiesPageTextSelect')}
-                <input
-                  class="toggle"
-                  type="checkbox"
-                  v-model={disableProxiesPageTextSelect.value}
-                />
-              </div>
-              <div class="flex items-center gap-2">
-                {t('minProxyCardWidth')}
-                <div class="join">
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('unavailableProxy')}</div>
                   <input
-                    class="input input-sm join-item w-20"
-                    type="number"
-                    v-model={minProxyCardWidth.value}
+                    type="checkbox"
+                    class="toggle toggle-sm"
+                    v-model={hideUnavailableProxies.value}
                   />
-                  <button
-                    class="btn join-item btn-sm"
-                    onClick={handlerResetProxyCardWidth}
-                  >
-                    {t('reset')}
-                  </button>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('manageHiddenGroup')}</div>
+                  <input
+                    class="toggle toggle-sm"
+                    type="checkbox"
+                    v-model={manageHiddenGroup.value}
+                  />
+                </div>
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('automaticDisconnection')}</div>
+                  <input
+                    class="toggle toggle-sm"
+                    type="checkbox"
+                    v-model={automaticDisconnection.value}
+                  />
+                </div>
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('displayFinalOutbound')}</div>
+                  <input
+                    class="toggle toggle-sm"
+                    type="checkbox"
+                    v-model={displayFinalOutbound.value}
+                  />
+                </div>
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('disableProxiesPageTextSelect')}</div>
+                  <input
+                    class="toggle toggle-sm"
+                    type="checkbox"
+                    v-model={disableProxiesPageTextSelect.value}
+                  />
+                </div>
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('minProxyCardWidth')}</div>
+                  <div class="join">
+                    <input
+                      class="input input-sm join-item w-20"
+                      type="number"
+                      v-model={minProxyCardWidth.value}
+                    />
+                    <button
+                      class="btn join-item btn-sm"
+                      onClick={handlerResetProxyCardWidth}
+                    >
+                      {t('reset')}
+                    </button>
+                  </div>
                 </div>
               </div>
               <div class="divider m-0"></div>

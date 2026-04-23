@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-3 p-4">
     <span>{{ $t('customCardLines') }}</span>
     <div class="flex items-center gap-2">
       <button
@@ -19,7 +19,7 @@
       <div
         v-for="(_, index) in connectionCardLines"
         :key="index"
-        :class="`flex items-center gap-2 p-2 ${index % 2 === 0 ? 'bg-base-200' : 'bg-base-300'}`"
+        :class="`flex items-center gap-2 p-2 ${index % 2 === 0 ? 'bg-base-200/30' : 'bg-base-300/30'}`"
       >
         <button
           v-if="connectionCardLines.length > 1"
@@ -43,7 +43,9 @@
           </template>
         </Draggable>
       </div>
-      <div :class="`p-2 ${connectionCardLines.length % 2 === 1 ? 'bg-base-300' : 'bg-base-200'}`">
+      <div
+        :class="`p-2 ${connectionCardLines.length % 2 === 1 ? 'bg-base-300/30' : 'bg-base-200/30'}`"
+      >
         <button
           class="btn btn-circle bg-base-100 hover:bg-base-200 btn-sm shadow-sm"
           @click="addLine"

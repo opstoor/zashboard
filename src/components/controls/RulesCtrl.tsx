@@ -118,30 +118,32 @@ export default defineComponent({
             v-model={settingsModel.value}
             title={t('ruleSettings')}
           >
-            <div class="flex flex-col gap-4 p-2 text-sm">
-              <div class="flex items-center gap-2">
-                <span>{t('displaySelectedNode')}</span>
-                <input
-                  class="toggle toggle-sm"
-                  type="checkbox"
-                  v-model={displayNowNodeInRule.value}
-                />
-              </div>
-              <div class="flex items-center gap-2">
-                <span>{t('displayLatencyNumber')}</span>
-                <input
-                  class="toggle toggle-sm"
-                  type="checkbox"
-                  v-model={displayLatencyInRule.value}
-                />
-              </div>
-              <div class="flex items-center gap-2">
-                <span>{t('disconnectOnRuleDisable')}</span>
-                <input
-                  class="toggle toggle-sm"
-                  type="checkbox"
-                  v-model={disconnectOnRuleDisable.value}
-                />
+            <div class="flex flex-col gap-3 text-sm">
+              <div class="settings-grid">
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('displaySelectedNode')}</div>
+                  <input
+                    class="toggle toggle-sm"
+                    type="checkbox"
+                    v-model={displayNowNodeInRule.value}
+                  />
+                </div>
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('displayLatencyNumber')}</div>
+                  <input
+                    class="toggle toggle-sm"
+                    type="checkbox"
+                    v-model={displayLatencyInRule.value}
+                  />
+                </div>
+                <div class="setting-item">
+                  <div class="setting-item-label">{t('disconnectOnRuleDisable')}</div>
+                  <input
+                    class="toggle toggle-sm"
+                    type="checkbox"
+                    v-model={disconnectOnRuleDisable.value}
+                  />
+                </div>
               </div>
             </div>
           </DialogWrapper>
