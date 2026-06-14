@@ -1,6 +1,7 @@
+import { hasSingboxChannel } from '@/composables/backendCapability'
 import { MIHOMO, MIHOMO_CHANNEL, ROUTE_NAME } from '@/constant'
 import { showNotification } from '@/helper/notification'
-import { getUrlFromBackend } from '@/helper/utils'
+import { getSingboxUrlFromBackend, getUrlFromBackend } from '@/helper/utils'
 import router from '@/router'
 import { autoUpgradeCore, checkUpgradeCore } from '@/store/settings'
 import { activeBackend, activeUuid } from '@/store/setup'
@@ -17,11 +18,19 @@ import type {
 import axios, { AxiosError } from 'axios'
 import { debounce } from 'lodash'
 import ReconnectingWebSocket from 'reconnectingwebsocket'
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch, type Ref } from 'vue'
+import { probeSingboxChannel } from './singbox/client'
+import {
+  subscribeSingboxMemory,
+  subscribeSingboxTraffic,
+  type SingboxSubscription,
+} from './singbox/subscriptions'
 
 axios.interceptors.request.use((config) => {
-  config.baseURL = getUrlFromBackend(activeBackend.value!)
-  config.headers['Authorization'] = 'Bearer ' + activeBackend.value?.password
+  if (activeBackend.value) {
+    config.baseURL = getUrlFromBackend(activeBackend.value)
+    config.headers['Authorization'] = 'Bearer ' + activeBackend.value.password
+  }
   return config
 })
 
@@ -270,7 +279,7 @@ const createWebSocket = <T>(url: string, searchParams?: Record<string, string>) 
   const backend = activeBackend.value!
   const resurl = new URL(`${getUrlFromBackend(backend).replace('http', 'ws')}/${url}`)
 
-  resurl.searchParams.append('token', backend?.password || '')
+  resurl.searchParams.append('token', backend.password || '')
 
   if (searchParams) {
     Object.entries(searchParams).forEach(([key, value]) => {
@@ -297,6 +306,11 @@ const createWebSocket = <T>(url: string, searchParams?: Record<string, string>) 
   }
 }
 
+// When the active backend exposes a sing-box native channel, prefer its gRPC
+// streaming RPCs over the Clash WebSockets for logs / connections / statistics.
+const asWsLike = <T>(sub: SingboxSubscription<unknown>) =>
+  sub as unknown as { data: Ref<T | undefined>; close: () => void }
+
 export const fetchConnectionsAPI = <T>() => {
   return createWebSocket<T>('connections')
 }
@@ -306,17 +320,24 @@ export const fetchLogsAPI = <T>(params: Record<string, string> = {}) => {
 }
 
 export const fetchMemoryAPI = <T>() => {
+  if (hasSingboxChannel.value) {
+    const sub = subscribeSingboxMemory()
+    if (sub) return asWsLike<T>(sub)
+  }
   return createWebSocket<T>('memory')
 }
 
 export const fetchTrafficAPI = <T>() => {
+  if (hasSingboxChannel.value) {
+    const sub = subscribeSingboxTraffic()
+    if (sub) return asWsLike<T>(sub)
+  }
   return createWebSocket<T>('traffic')
 }
 
-export const isBackendAvailable = async (backend: Backend, timeout: number = 10000) => {
+const probeClashChannel = async (backend: Backend, timeout: number) => {
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), timeout)
-
   try {
     const res = await fetch(`${getUrlFromBackend(backend)}/version`, {
       method: 'GET',
@@ -325,7 +346,6 @@ export const isBackendAvailable = async (backend: Backend, timeout: number = 100
       },
       signal: controller.signal,
     })
-
     return res.ok
   } catch {
     return false
@@ -333,6 +353,12 @@ export const isBackendAvailable = async (backend: Backend, timeout: number = 100
     clearTimeout(timeoutId)
   }
 }
+
+export const isSingboxChannelAvailable = (backend: Backend, timeout: number = 10000) =>
+  getSingboxUrlFromBackend(backend) ? probeSingboxChannel(backend, timeout) : Promise.resolve(false)
+
+export const isBackendAvailable = (backend: Backend, timeout: number = 10000) =>
+  probeClashChannel(backend, timeout)
 
 const CACHE_DURATION = 1000 * 60 * 60
 

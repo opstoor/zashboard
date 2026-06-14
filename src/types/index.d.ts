@@ -1,13 +1,21 @@
+export type SingboxChannel = {
+  protocol: string
+  host: string
+  port: string
+  secret: string
+}
+
 export type Backend = {
+  protocol: string
   host: string
   port: string
   secondaryPath: string
   password: string
-  protocol: string
   uuid: string
   label?: string
   disableUpgradeCore?: boolean
   disableTunMode?: boolean
+  singboxChannel?: SingboxChannel
 }
 
 export type Config = {

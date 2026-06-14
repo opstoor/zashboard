@@ -32,10 +32,6 @@
   @apply border-base-border border-t;
 }
 
-@utility badge {
-  @apply bg-base-200/80;
-}
-
 @utility select {
   @apply w-auto;
 }
@@ -97,10 +93,6 @@
 
     .btn.btn-neutral {
       @apply bg-neutral/$(i);
-    }
-
-    .badge {
-      @apply bg-base-200/$(i) border-transparent;
     }
 
     option,

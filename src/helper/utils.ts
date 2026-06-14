@@ -61,9 +61,23 @@ export const resetSettings = () => {
   window.location.reload()
 }
 
-export const getUrlFromBackend = (end: Omit<Backend, 'uuid'>) => {
+export const getUrlFromBackend = (end: {
+  protocol: string
+  host: string
+  port: string
+  secondaryPath?: string
+}) => {
   return `${end.protocol}://${end.host}:${end.port}${end.secondaryPath || ''}`
 }
+
+export const getSingboxUrlFromBackend = (end: Pick<Backend, 'singboxChannel'>) => {
+  const channel = end.singboxChannel
+  if (!channel?.host) return ''
+  return `${channel.protocol}://${channel.host}:${channel.port}`
+}
+
+export const getSingboxSecret = (end: Pick<Backend, 'singboxChannel'>) =>
+  end.singboxChannel?.secret || ''
 
 export const getLabelFromBackend = (end: Omit<Backend, 'uuid'>) => {
   return end.label || getUrlFromBackend(end)

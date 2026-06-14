@@ -34,6 +34,11 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'favicon-dark.svg'],
+      workbox: {
+        // The bundle grew past the 2 MiB default after adding the sing-box
+        // native API client (ConnectRPC/protobuf) and xterm.
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+      },
       manifest: {
         name: 'zashboard',
         short_name: 'zashboard',
