@@ -76,7 +76,10 @@ const activeTab = ref<TOOLS_TAB_TYPE>(TOOLS_TAB_TYPE.network)
 
 // On mobile the CtrlsBar floats fixed over the top, so the scroll area needs
 // padding to keep its content clear of the bar.
-const { padding } = usePaddingForViews()
+const { padding } = usePaddingForViews({
+  offsetTop: 0,
+  offsetBottom: 8,
+})
 
 // The terminal is reachable only by launching SSH from a Tailscale peer; it
 // opens as an overlay over the tools page and closing it returns here. The

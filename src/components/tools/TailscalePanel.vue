@@ -35,7 +35,7 @@
         <div class="border-base-300 divide-base-300 divide-y rounded border text-sm">
           <button
             v-if="endpoint.self"
-            class="hover:bg-base-200 flex w-full items-center justify-between gap-3 px-3 py-2 text-left"
+            class="hover:bg-base-200 flex w-full cursor-pointer items-center justify-between gap-3 px-3 py-2 text-left"
             @click="openPeerDetail(endpoint, endpoint.self, true)"
           >
             <span class="opacity-60">{{ $t('thisDevice') }}</span>
@@ -43,7 +43,7 @@
           </button>
           <button
             v-if="exitCandidates(endpoint).length > 0"
-            class="hover:bg-base-200 flex w-full items-center justify-between gap-3 px-3 py-2 text-left"
+            class="hover:bg-base-200 flex w-full cursor-pointer items-center justify-between gap-3 px-3 py-2 text-left"
             @click="openExitPicker(endpoint)"
           >
             <span class="opacity-60">{{ $t('exitNode') }}</span>
@@ -89,10 +89,10 @@
             <div
               v-for="peer in group.peers"
               :key="peer.stableID"
-              class="bg-base-200 flex flex-wrap items-center gap-2 rounded p-2 text-sm"
+              class="bg-base-200 flex flex-col gap-2 rounded p-2 text-sm sm:flex-row sm:flex-wrap sm:items-center"
             >
               <button
-                class="flex min-w-0 flex-1 items-center gap-2 text-left"
+                class="flex min-w-0 items-center gap-2 text-left"
                 @click="openPeerDetail(endpoint, peer, false)"
               >
                 <span
@@ -101,34 +101,42 @@
                 ></span>
                 <span class="font-medium">{{ peerDisplayName(peer) }}</span>
                 <span class="truncate opacity-60">{{ peer.tailscaleIPs[0] }}</span>
-                <span
-                  v-if="peer.exitNode"
-                  class="badge badge-xs badge-primary"
-                  >{{ $t('exitNode') }}</span
-                >
-                <span
-                  v-if="peer.shareeNode"
-                  class="badge badge-xs badge-error"
-                  >{{ $t('sharedIn') }}</span
-                >
-                <span
-                  v-if="peer.expired"
-                  class="badge badge-xs badge-error"
-                  >{{ $t('expired') }}</span
-                >
-                <span
-                  v-if="peer.sshHostKeys.length > 0"
-                  class="badge badge-xs badge-success"
-                  >SSH</span
-                >
               </button>
-              <button
-                v-if="peerSSHAvailable(peer)"
-                class="btn btn-xs btn-primary btn-outline"
-                @click="connectSSH(endpoint, peer)"
+              <div
+                v-if="hasPeerMeta(peer)"
+                class="flex flex-1 flex-wrap items-center gap-2"
               >
-                SSH
-              </button>
+                <div class="flex flex-1 items-center gap-1">
+                  <span
+                    v-if="peer.exitNode || peer.exitNodeOption"
+                    class="badge badge-xs"
+                    :class="peer.exitNode ? 'badge-primary' : 'badge-info'"
+                    >{{ $t('exitNode') }}</span
+                  >
+                  <span
+                    v-if="peer.shareeNode"
+                    class="badge badge-xs badge-error"
+                    >{{ $t('sharedIn') }}</span
+                  >
+                  <span
+                    v-if="peer.expired"
+                    class="badge badge-xs badge-error"
+                    >{{ $t('expired') }}</span
+                  >
+                  <span
+                    v-if="peer.sshHostKeys.length > 0"
+                    class="badge badge-xs badge-info"
+                    >SSH</span
+                  >
+                </div>
+                <button
+                  v-if="peerSSHAvailable(peer)"
+                  class="btn btn-xs btn-primary btn-outline leading-none"
+                  @click="connectSSH(endpoint, peer)"
+                >
+                  {{ $t('connectViaSSH') }}
+                </button>
+              </div>
             </div>
           </div>
         </template>
@@ -207,6 +215,13 @@ let statusHandle: StreamHandle | null = null
 
 const groupsOf = (endpoint: TailscaleEndpointStatus): TailscaleUserGroup[] =>
   endpoint.userGroups.filter((g) => g.peers.length > 0)
+
+const hasPeerMeta = (peer: TailscalePeer): boolean =>
+  peer.exitNode ||
+  peer.exitNodeOption ||
+  peer.shareeNode ||
+  peer.expired ||
+  peer.sshHostKeys.length > 0
 
 const exitCandidates = (endpoint: TailscaleEndpointStatus): TailscalePeer[] =>
   endpoint.backendState === 'Running'

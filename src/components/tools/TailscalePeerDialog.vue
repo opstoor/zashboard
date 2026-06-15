@@ -165,7 +165,8 @@ import type {
   TailscalePeer,
   TailscalePingResponse,
 } from '@/gen/daemon/started_service_pb'
-import { PlayIcon, StopIcon } from '@heroicons/vue/24/outline'
+import { showNotification } from '@/helper/notification'
+import { DocumentDuplicateIcon, PlayIcon, StopIcon } from '@heroicons/vue/24/outline'
 import { useClipboard } from '@vueuse/core'
 import dayjs from 'dayjs'
 import { computed, defineComponent, h, onBeforeUnmount, ref, watch } from 'vue'
@@ -193,22 +194,31 @@ const DataRow = defineComponent({
       ]),
 })
 
+const copyValue = (value?: string) => {
+  if (!value) return
+  copy(value)
+  showNotification({ content: 'copySuccess', type: 'alert-success', timeout: 2000 })
+}
+
 const CopyLine = defineComponent({
   props: { label: String, value: String },
   setup: (lineProps) => () =>
-    h(
-      'button',
-      {
-        class:
-          'flex w-full items-center justify-between gap-3 px-3 py-2 text-left hover:bg-base-200',
-        onClick: () => lineProps.value && copy(lineProps.value),
-        title: t('copy'),
-      },
-      [
-        h('span', { class: 'opacity-60' }, lineProps.label),
+    h('div', { class: 'flex items-center justify-between gap-3 px-3 py-2' }, [
+      h('span', { class: 'opacity-60' }, lineProps.label),
+      h('div', { class: 'flex items-center gap-2' }, [
         h('span', { class: 'text-right font-medium break-all' }, lineProps.value),
-      ],
-    ),
+        h(
+          'button',
+          {
+            class: 'btn btn-ghost btn-xs btn-circle shrink-0',
+            onClick: () => copyValue(lineProps.value),
+            title: t('copy'),
+            'aria-label': t('copy'),
+          },
+          h(DocumentDuplicateIcon, { class: 'h-4 w-4' }),
+        ),
+      ]),
+    ]),
 })
 
 const magicDNS = computed(() => props.peer.dnsName.replace(/\.$/, ''))
