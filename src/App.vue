@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import { useKeyboard } from './composables/keyboard'
+import { useViewportHeight } from './composables/useViewportHeight'
 import { EMOJIS, FONTS } from './constant'
 import {
   autoImportSettings,
@@ -140,6 +141,10 @@ const blurClass = computed(() => {
 })
 
 useKeyboard()
+
+// Track the visual viewport so the soft keyboard shrinks the app instead of
+// overlapping it (notably iOS Safari, which never resizes the layout viewport).
+useViewportHeight()
 </script>
 
 <template>
@@ -147,13 +152,13 @@ useKeyboard()
     ref="app"
     id="app-content"
     :class="[
-      'bg-base-100 flex h-dvh w-screen overflow-hidden',
+      'bg-base-100 flex w-screen overflow-hidden',
       fontClassName,
       backgroundImage &&
         `custom-background-${dashboardTransparent} custom-background bg-cover bg-center`,
       blurClass,
     ]"
-    :style="backgroundImage"
+    :style="[backgroundImage, { height: 'var(--app-height, 100dvh)' }]"
   >
     <RouterView />
     <div

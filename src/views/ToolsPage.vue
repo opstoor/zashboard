@@ -36,7 +36,9 @@
       </KeepAlive>
     </div>
 
-    <!-- SSH terminal overlay: only reachable by connecting to a Tailscale peer. -->
+    <!-- SSH terminal overlay: only reachable by connecting to a Tailscale peer.
+         The app root tracks the visual viewport (useViewportHeight), so this
+         content area already shrinks above the soft keyboard. -->
     <div
       v-if="sshSession"
       class="absolute inset-0 z-200"

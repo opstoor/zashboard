@@ -1,7 +1,7 @@
 <template>
   <div
-    class="border-base-300 bg-base-200/95 fixed right-0 left-0 z-[71] flex items-center gap-1.5 overflow-x-auto border-t px-2.5 py-1 backdrop-blur-lg"
-    :style="{ bottom: `${bottom}px` }"
+    class="border-base-300 bg-base-200/95 flex w-full flex-none items-center gap-1.5 overflow-x-auto border-t px-2.5 py-1 backdrop-blur-lg"
+    style="padding-bottom: calc(0.25rem + env(safe-area-inset-bottom, 0px))"
     role="toolbar"
     :aria-label="$t('terminalKeys')"
   >
@@ -68,7 +68,7 @@ import {
 } from '@/composables/terminalKeys'
 import { ClipboardIcon } from '@heroicons/vue/24/outline'
 
-defineProps<{ modifiers: Modifiers; bottom: number }>()
+defineProps<{ modifiers: Modifiers }>()
 const emit = defineEmits<{ modifier: [mod: ModKey]; key: [key: TerminalKey]; paste: [] }>()
 
 const BASE_KEY =

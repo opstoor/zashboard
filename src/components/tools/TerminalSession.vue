@@ -1,18 +1,17 @@
 <template>
   <div
-    class="relative min-h-0 flex-1"
+    class="flex min-h-0 flex-1 flex-col"
     v-show="active"
   >
     <div
       ref="terminalEl"
-      class="h-full overflow-hidden rounded p-1"
+      class="min-h-0 flex-1 overflow-hidden rounded p-1"
       :style="hostStyle"
     ></div>
 
     <TerminalSymbolBar
       v-if="barVisible"
       :modifiers="modifiers"
-      :bottom="keyboardInset"
       @modifier="handleModifier"
       @key="handleKey"
       @paste="handlePaste"
@@ -46,7 +45,7 @@ import { activeBackend } from '@/store/setup'
 import { FitAddon } from '@xterm/addon-fit'
 import { Terminal, type ITheme } from '@xterm/xterm'
 import '@xterm/xterm/css/xterm.css'
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -58,21 +57,17 @@ const emit = defineEmits<{
   exit: [clean: boolean]
 }>()
 
-const SYMBOL_BAR_HEIGHT = 46
-
 const terminalBg = ref('#000000')
 const modifiers = ref<Modifiers>({ ctrl: 'off', alt: 'off' })
 const keyboardInset = useKeyboardInset()
 
 // Mobile symbol bar: only while this session is active and the soft keyboard is
-// up (desktop keeps the inset at 0).
+// up (desktop keeps the inset at 0). The app root tracks the visual viewport
+// (useViewportHeight), so this container's bottom sits just above the keyboard;
+// the bar is a flex child that takes its own space and the terminal flexes into
+// what remains, so they never overlap.
 const barVisible = computed(() => props.active && keyboardInset.value > 100)
-const hostStyle = computed(() => ({
-  background: terminalBg.value,
-  paddingBottom: barVisible.value
-    ? `calc(${keyboardInset.value + SYMBOL_BAR_HEIGHT + 8}px + env(safe-area-inset-bottom, 0px))`
-    : undefined,
-}))
+const hostStyle = computed(() => ({ background: terminalBg.value }))
 
 const terminalEl = useTemplateRef<HTMLDivElement>('terminalEl')
 let terminal: Terminal | null = null
@@ -146,6 +141,37 @@ const handlePaste = () => {
   terminal?.focus()
 }
 
+// xterm.js has no built-in touch scrolling, so a one-finger drag inside the
+// terminal would otherwise scroll the page. Translate vertical drags into
+// terminal scrolling (or arrow keys on the alternate screen, e.g. vim/less) and
+// swallow the gesture so it never bubbles to the document.
+let touchY = 0
+let touchAccum = 0
+
+const onTouchStart = (e: TouchEvent) => {
+  if (e.touches.length !== 1) return
+  touchY = e.touches[0].clientY
+  touchAccum = 0
+}
+
+const onTouchMove = (e: TouchEvent) => {
+  if (e.touches.length !== 1 || !terminal || !terminalEl.value) return
+  const y = e.touches[0].clientY
+  touchAccum += touchY - y
+  touchY = y
+  const cellHeight = terminalEl.value.clientHeight / terminal.rows || 20
+  const lines = Math.trunc(touchAccum / cellHeight)
+  if (lines !== 0) {
+    touchAccum -= lines * cellHeight
+    if (terminal.buffer.active.type === 'alternate') {
+      sendRaw((lines > 0 ? '\x1b[B' : '\x1b[A').repeat(Math.abs(lines)))
+    } else {
+      terminal.scrollLines(lines)
+    }
+  }
+  e.preventDefault()
+}
+
 const connect = () => {
   const backend = activeBackend.value
   const baseUrl = backend ? getSingboxUrlFromBackend(backend) : ''
@@ -164,6 +190,9 @@ const connect = () => {
   terminal.open(terminalEl.value)
   fitAddon.fit()
   terminal.focus()
+
+  terminalEl.value.addEventListener('touchstart', onTouchStart, { passive: true })
+  terminalEl.value.addEventListener('touchmove', onTouchMove, { passive: false })
 
   resizeObserver = new ResizeObserver(() => {
     if (terminalEl.value && terminalEl.value.clientWidth > 0 && terminalEl.value.clientHeight > 0) {
@@ -265,6 +294,17 @@ const connect = () => {
 // Apply font/theme changes from the settings dialog to the live terminal.
 watch(terminalConfig, applyConfig, { deep: true })
 
+// Re-fit when the soft keyboard opens/closes so the prompt stays above it.
+// The host's bottom padding changes with the inset; refit after the DOM
+// updates instead of relying on the ResizeObserver alone.
+watch(keyboardInset, () => {
+  nextTick(() => {
+    if (terminalEl.value && terminalEl.value.clientWidth > 0 && terminalEl.value.clientHeight > 0) {
+      fitAddon?.fit()
+    }
+  })
+})
+
 // Re-fit and refocus when this session becomes the active one.
 watch(
   () => props.active,
@@ -278,6 +318,8 @@ watch(
 )
 
 const teardown = () => {
+  terminalEl.value?.removeEventListener('touchstart', onTouchStart)
+  terminalEl.value?.removeEventListener('touchmove', onTouchMove)
   resizeObserver?.disconnect()
   resizeObserver = null
   themeObserver?.disconnect()
