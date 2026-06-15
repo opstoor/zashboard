@@ -245,7 +245,7 @@ const handleSubmit = async (setupForm: ClashSetupForm, quiet = false) => {
     }
 
     addBackend(setupForm)
-    if (String(version).includes('sing-box')) {
+    if (__SINGBOX_NATIVE__ && String(version).includes('sing-box')) {
       singboxBackendUuid.value = activeUuid.value
       showSingboxPrompt.value = true
       return

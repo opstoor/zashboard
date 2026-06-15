@@ -4,7 +4,10 @@ import { computed } from 'vue'
 
 export const hasClashChannel = computed(() => !!activeBackend.value)
 export const hasSingboxChannel = computed(
-  () => !!activeBackend.value && getSingboxUrlFromBackend(activeBackend.value) !== '',
+  () =>
+    __SINGBOX_NATIVE__ &&
+    !!activeBackend.value &&
+    getSingboxUrlFromBackend(activeBackend.value) !== '',
 )
 
 export const isFusionBackend = computed(() => hasClashChannel.value && hasSingboxChannel.value)

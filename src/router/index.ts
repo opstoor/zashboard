@@ -12,7 +12,6 @@ import ProxiesPage from '@/views/ProxiesPage.vue'
 import RulesPage from '@/views/RulesPage.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
 import SetupPage from '@/views/SetupPage.vue'
-import ToolsPage from '@/views/ToolsPage.vue'
 import { useTitle } from '@vueuse/core'
 import { watch } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
@@ -43,11 +42,18 @@ const childrenRouter = [
     name: ROUTE_NAME.rules,
     component: RulesPage,
   },
-  {
-    path: 'tools',
-    name: ROUTE_NAME.tools,
-    component: ToolsPage,
-  },
+  // The Tools page pulls in the sing-box native API client, xterm and qrcode.
+  // Lazy-import it behind the build flag so it is dropped entirely when the
+  // native API support is disabled at build time.
+  ...(__SINGBOX_NATIVE__
+    ? [
+        {
+          path: 'tools',
+          name: ROUTE_NAME.tools,
+          component: () => import('@/views/ToolsPage.vue'),
+        },
+      ]
+    : []),
   {
     path: 'settings',
     name: ROUTE_NAME.settings,

@@ -18,13 +18,7 @@ import type {
 import axios, { AxiosError } from 'axios'
 import { debounce } from 'lodash'
 import ReconnectingWebSocket from 'reconnectingwebsocket'
-import { computed, nextTick, ref, watch, type Ref } from 'vue'
-import { probeSingboxChannel } from './singbox/client'
-import {
-  subscribeSingboxMemory,
-  subscribeSingboxTraffic,
-  type SingboxSubscription,
-} from './singbox/subscriptions'
+import { computed, nextTick, ref, watch } from 'vue'
 
 axios.interceptors.request.use((config) => {
   if (activeBackend.value) {
@@ -307,9 +301,30 @@ const createWebSocket = <T>(url: string, searchParams?: Record<string, string>) 
 }
 
 // When the active backend exposes a sing-box native channel, prefer its gRPC
-// streaming RPCs over the Clash WebSockets for logs / connections / statistics.
-const asWsLike = <T>(sub: SingboxSubscription<unknown>) =>
-  sub as unknown as { data: Ref<T | undefined>; close: () => void }
+// streaming RPCs over the Clash WebSockets for statistics (memory / traffic).
+// The native client is dynamically imported so that, with __SINGBOX_NATIVE__
+// disabled at build time, the whole ConnectRPC/protobuf chain is dropped.
+const createSingboxStat = <T>(kind: 'memory' | 'traffic') => {
+  const data = ref<T>()
+  let closer: (() => void) | null = null
+  let cancelled = false
+
+  import('./singbox/subscriptions').then((m) => {
+    if (cancelled) return
+    const sub = kind === 'memory' ? m.subscribeSingboxMemory() : m.subscribeSingboxTraffic()
+    if (!sub) return
+    watch(sub.data, (value) => (data.value = value as T), { immediate: true })
+    closer = sub.close
+  })
+
+  return {
+    data,
+    close: () => {
+      cancelled = true
+      closer?.()
+    },
+  }
+}
 
 export const fetchConnectionsAPI = <T>() => {
   return createWebSocket<T>('connections')
@@ -320,17 +335,15 @@ export const fetchLogsAPI = <T>(params: Record<string, string> = {}) => {
 }
 
 export const fetchMemoryAPI = <T>() => {
-  if (hasSingboxChannel.value) {
-    const sub = subscribeSingboxMemory()
-    if (sub) return asWsLike<T>(sub)
+  if (__SINGBOX_NATIVE__ && hasSingboxChannel.value) {
+    return createSingboxStat<T>('memory')
   }
   return createWebSocket<T>('memory')
 }
 
 export const fetchTrafficAPI = <T>() => {
-  if (hasSingboxChannel.value) {
-    const sub = subscribeSingboxTraffic()
-    if (sub) return asWsLike<T>(sub)
+  if (__SINGBOX_NATIVE__ && hasSingboxChannel.value) {
+    return createSingboxStat<T>('traffic')
   }
   return createWebSocket<T>('traffic')
 }
@@ -354,8 +367,10 @@ const probeClashChannel = async (backend: Backend, timeout: number) => {
   }
 }
 
-export const isSingboxChannelAvailable = (backend: Backend, timeout: number = 10000) =>
-  getSingboxUrlFromBackend(backend) ? probeSingboxChannel(backend, timeout) : Promise.resolve(false)
+export const isSingboxChannelAvailable = (backend: Backend, timeout: number = 10000) => {
+  if (!__SINGBOX_NATIVE__ || !getSingboxUrlFromBackend(backend)) return Promise.resolve(false)
+  return import('./singbox/client').then((m) => m.probeSingboxChannel(backend, timeout))
+}
 
 export const isBackendAvailable = (backend: Backend, timeout: number = 10000) =>
   probeClashChannel(backend, timeout)

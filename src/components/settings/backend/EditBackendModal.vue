@@ -84,55 +84,57 @@
           />
         </div>
 
-        <div class="divider my-0 text-xs">{{ t('singboxApiChannel') }} ({{ t('optional') }})</div>
+        <template v-if="singboxNativeEnabled">
+          <div class="divider my-0 text-xs">{{ t('singboxApiChannel') }} ({{ t('optional') }})</div>
 
-        <label class="flex cursor-pointer items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            class="toggle toggle-sm"
-            v-model="enableSingboxChannel"
-          />
-          <span>{{ t('enableSingboxApi') }}</span>
-        </label>
-
-        <template v-if="enableSingboxChannel">
-          <div class="flex flex-col gap-1">
-            <label class="text-sm">{{ t('protocol') }}</label>
-            <select
-              class="select select-sm w-full"
-              v-model="singboxForm.protocol"
-            >
-              <option value="http">HTTP</option>
-              <option value="https">HTTPS</option>
-            </select>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <label class="text-sm">{{ t('host') }}</label>
-            <TextInput
-              class="w-full"
-              v-model="singboxForm.host"
-              placeholder="127.0.0.1"
-            />
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <label class="text-sm">{{ t('port') }}</label>
-            <TextInput
-              class="w-full"
-              v-model="singboxForm.port"
-              placeholder="9090"
-            />
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <label class="text-sm">{{ t('password') }} ({{ t('optional') }})</label>
+          <label class="flex cursor-pointer items-center gap-2 text-sm">
             <input
-              type="password"
-              class="input input-sm w-full"
-              v-model="singboxForm.secret"
+              type="checkbox"
+              class="toggle toggle-sm"
+              v-model="enableSingboxChannel"
             />
-          </div>
+            <span>{{ t('enableSingboxApi') }}</span>
+          </label>
+
+          <template v-if="enableSingboxChannel">
+            <div class="flex flex-col gap-1">
+              <label class="text-sm">{{ t('protocol') }}</label>
+              <select
+                class="select select-sm w-full"
+                v-model="singboxForm.protocol"
+              >
+                <option value="http">HTTP</option>
+                <option value="https">HTTPS</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label class="text-sm">{{ t('host') }}</label>
+              <TextInput
+                class="w-full"
+                v-model="singboxForm.host"
+                placeholder="127.0.0.1"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label class="text-sm">{{ t('port') }}</label>
+              <TextInput
+                class="w-full"
+                v-model="singboxForm.port"
+                placeholder="9090"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <label class="text-sm">{{ t('password') }} ({{ t('optional') }})</label>
+              <input
+                type="password"
+                class="input input-sm w-full"
+                v-model="singboxForm.secret"
+              />
+            </div>
+          </template>
         </template>
       </div>
 
@@ -184,6 +186,9 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 const { t } = useI18n()
+
+// Hidden on builds where the sing-box native API support is dropped.
+const singboxNativeEnabled = __SINGBOX_NATIVE__
 
 const isVisible = computed({
   get: () => props.modelValue,

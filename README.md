@@ -24,6 +24,18 @@ You can access the online zashboard at the following link:
 
 You can download the zashboard files here:
 
+> By default the builds **do not** include sing-box native API support (the Tools
+> page: terminal, Tailscale, network tools, QR code — which pull in extra
+> ConnectRPC/protobuf and xterm code). To get a release build **with** it, append
+> `-singbox-native` to any variant below, e.g.
+> [`dist-singbox-native.zip`](https://github.com/Zephyruso/zashboard/releases/latest/download/dist-singbox-native.zip)
+> or `dist-misans-only-singbox-native.zip`. The same suffix works for the
+> `gh-pages-*` dev branches too (e.g. `gh-pages-no-fonts-singbox-native`).
+>
+> The online site at [board.zash.run.place](http://board.zash.run.place) (the
+> root `gh-pages` branch) is the one exception: it always ships the full build —
+> all fonts **and** sing-box native support.
+
 release:
 
 - [dist.zip (7.81 MB)](https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip) – Includes better font-loading experience.
