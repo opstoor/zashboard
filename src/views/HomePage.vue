@@ -25,15 +25,18 @@
           >
             <Component :is="Component" />
           </Transition>
-          <Component
+          <Transition
             v-else
-            :is="Component"
-          />
+            name="page"
+            mode="out-in"
+          >
+            <Component :is="Component" />
+          </Transition>
         </div>
 
         <template v-if="isMiddleScreen">
           <div
-            class="bg-base-100/20 dock dock-xs z-10 h-14 w-auto shadow-sm backdrop-blur-sm"
+            class="bg-base-100/20 dock dock-xs z-10 h-14 w-auto"
             :style="{
               padding: '0',
               bottom: 'calc(var(--spacing) * 2 + env(safe-area-inset-bottom))',
@@ -61,11 +64,11 @@
             style="
               background: linear-gradient(
                 to top,
-                rgba(0, 0, 0, 0.3),
-                rgba(0, 0, 0, 0.16),
-                rgba(0, 0, 0, 0.08),
-                rgba(0, 0, 0, 0.02),
-                rgba(0, 0, 0, 0)
+                rgba(0, 0, 0, 0.18) 0%,
+                rgba(0, 0, 0, 0.1) 30%,
+                rgba(0, 0, 0, 0.04) 60%,
+                rgba(0, 0, 0, 0.01) 85%,
+                rgba(0, 0, 0, 0) 100%
               );
               height: env(safe-area-inset-bottom);
             "
