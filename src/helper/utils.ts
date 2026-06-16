@@ -80,7 +80,7 @@ export const getSingboxSecret = (end: Pick<Backend, 'singboxChannel'>) =>
   end.singboxChannel?.secret || ''
 
 export const getLabelFromBackend = (end: Omit<Backend, 'uuid'>) => {
-  return end.label || getUrlFromBackend(end)
+  return end.label || `${end.host}:${end.port}`
 }
 
 export const getMinCardWidth = (size: PROXY_CARD_SIZE) => {

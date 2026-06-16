@@ -118,6 +118,7 @@ const zhTW: LANG_MESSAGE = {
   downloadSpeed: '下載速度',
   uploadSpeed: '上傳速度',
   memoryUsage: '記憶體使用',
+  goroutines: 'Goroutines',
   noData: '暫無資料',
 
   // Backend actions and feedback

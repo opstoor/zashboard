@@ -118,6 +118,7 @@ const zh: LANG_MESSAGE = {
   downloadSpeed: '下载速度',
   uploadSpeed: '上传速度',
   memoryUsage: '内存使用',
+  goroutines: 'Goroutines',
   noData: '暂无数据',
 
   // Backend actions and feedback

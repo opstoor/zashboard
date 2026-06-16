@@ -116,6 +116,7 @@ const en = {
   downloadSpeed: 'Download speed',
   uploadSpeed: 'Upload speed',
   memoryUsage: 'Memory usage',
+  goroutines: 'Goroutines',
   noData: 'No data',
 
   // Backend actions and feedback

@@ -16,7 +16,7 @@ export interface SingboxSubscription<T> {
 }
 
 const subscribeSingboxStatus = <T>(
-  map: (status: { memory: bigint; uplink: bigint; downlink: bigint }) => T,
+  map: (status: { memory: bigint; goroutines: number; uplink: bigint; downlink: bigint }) => T,
 ): SingboxSubscription<T> | null => {
   const client = getSingboxClient()?.client
   if (!client) return null
@@ -32,8 +32,14 @@ const subscribeSingboxStatus = <T>(
   return { data, close: handle.close }
 }
 
-export const subscribeSingboxMemory = (): SingboxSubscription<{ inuse: number }> | null =>
-  subscribeSingboxStatus((status) => ({ inuse: Number(status.memory) }))
+export const subscribeSingboxMemory = (): SingboxSubscription<{
+  inuse: number
+  goroutines: number
+}> | null =>
+  subscribeSingboxStatus((status) => ({
+    inuse: Number(status.memory),
+    goroutines: status.goroutines,
+  }))
 
 export const subscribeSingboxTraffic = (): SingboxSubscription<{
   down: number
