@@ -62,7 +62,7 @@ const modifiers = ref<Modifiers>({ ctrl: 'off', alt: 'off' })
 const keyboardInset = useKeyboardInset()
 
 // Mobile symbol bar: only while this session is active and the soft keyboard is
-// up (desktop keeps the inset at 0). The app root tracks the visual viewport
+// up (desktop keeps the inset at 0). TerminalPanel tracks the visual viewport
 // (useViewportHeight), so this container's bottom sits just above the keyboard;
 // the bar is a flex child that takes its own space and the terminal flexes into
 // what remains, so they never overlap.

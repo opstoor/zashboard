@@ -102,6 +102,7 @@ import {
   sshPrefs,
   type SSHSessionOptions,
 } from '@/composables/tailscaleSSH'
+import { useViewportHeight } from '@/composables/useViewportHeight'
 import type { TailscaleEndpointStatus } from '@/gen/daemon/started_service_pb'
 import {
   Cog6ToothIcon,
@@ -123,6 +124,11 @@ const props = defineProps<{
   launch: SSHSessionOptions & { seq: number }
 }>()
 const emit = defineEmits<{ close: [] }>()
+
+// Track the visual viewport only while the terminal is open, so the soft
+// keyboard shrinks the app instead of overlapping it (notably iOS Safari, which
+// never resizes the layout viewport). Scoped here so other views keep `100dvh`.
+useViewportHeight()
 
 const sessions = ref<ManagedSession[]>([])
 const activeId = ref(0)
