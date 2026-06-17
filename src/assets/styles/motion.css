@@ -61,7 +61,7 @@
 }
 
 .sidebar-tab-active {
-  color: var(--color-primary-content);
+  color: var(--color-neutral-content);
   transition: color 0.18s ease-out;
 }
 
