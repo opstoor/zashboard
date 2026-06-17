@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        ['low-latency']: 'var(--color-low-latency, oklch(0.648 0.15 160))',
+        ['low-latency']: 'var(--color-low-latency, oklch(0.66 0.1 160))',
         ['medium-latency']: 'var(--color-medium-latency, rgb(250, 210, 75))',
         ['high-latency']: 'var(--color-high-latency, rgb(244, 96, 108))',
       },
