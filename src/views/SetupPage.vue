@@ -29,7 +29,7 @@
             :class="form.type === 'singbox' ? 'btn-primary' : 'border-base-border border'"
             @click="form.type = 'singbox'"
           >
-            {{ $t('singboxNative') }}
+            {{ $t('singboxApi') }}
           </button>
         </div>
       </div>

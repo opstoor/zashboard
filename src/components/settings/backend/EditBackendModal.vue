@@ -26,7 +26,7 @@
         class="flex flex-col gap-3"
       >
         <div class="divider my-0 text-xs">
-          {{ editForm.type === 'singbox' ? t('singboxNative') : t('clashApi') }}
+          {{ editForm.type === 'singbox' ? t('singboxApi') : t('clashApi') }}
         </div>
 
         <div class="flex gap-2">

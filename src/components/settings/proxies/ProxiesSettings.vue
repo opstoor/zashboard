@@ -151,7 +151,7 @@
         </SettingItem>
         <SettingItem
           :setting-key="k.customGlobalNode"
-          :when="displayGlobalByMode && isSingBox"
+          :when="displayGlobalByMode && isSingBoxCore"
         >
           <div class="setting-item-label">
             {{ $t('customGlobalNode') }}
@@ -231,7 +231,7 @@
 </template>
 
 <script setup lang="ts">
-import { isSingBox } from '@/assembly/version'
+import { isSingBoxCore } from '@/assembly/version'
 import SettingItem from '@/components/settings/SettingItem.vue'
 import { useIsSettingVisible } from '@/composables/settings'
 import { PROXIES_ITEM_KEYS } from '@/config/settingsItems'
@@ -317,7 +317,7 @@ const hasVisibleProxyStyleItems = computed(() => {
     isVisibleProxyFolderMode.value ||
     isVisibleTruncateProxyName.value ||
     isVisibleDisplayGlobalByMode.value ||
-    (displayGlobalByMode.value && isSingBox.value && isVisibleCustomGlobalNode.value) ||
+    (displayGlobalByMode.value && isSingBoxCore.value && isVisibleCustomGlobalNode.value) ||
     isVisibleProxyPreviewType.value ||
     isVisibleProxyCardSize.value ||
     isVisibleProxyGroupIconSize.value ||

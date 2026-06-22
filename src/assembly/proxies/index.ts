@@ -2,7 +2,7 @@
 // 持有两种后端(clash / sing-box native)共用的代理「视图状态」与纯读取 helper,
 // 并按后端类型路由到 clash(拉取式)/ singbox(流驱动)的组装实现。
 import { isSingboxBackend } from '@/assembly/backend'
-import { isSingBox } from '@/assembly/version'
+import { isSingBoxCore } from '@/assembly/version'
 import { NOT_CONNECTED, PROXY_TAB_TYPE, PROXY_TYPE, TEST_URL } from '@/constant'
 import { groupTestUrls, independentLatencyTest, speedtestUrl } from '@/store/settings'
 import type { Proxy, ProxyProvider } from '@/types'
@@ -51,7 +51,7 @@ export const getLatencyByName = (proxyName: string, groupName?: string) => {
 }
 
 export const getHistoryByName = (proxyName: string, groupName?: string) => {
-  if (independentLatencyTest.value && !isSingBox.value) {
+  if (independentLatencyTest.value && !isSingBoxCore.value) {
     const proxyNode = proxyMap.value[proxyName]
     const url = getTestUrl(groupName)
 

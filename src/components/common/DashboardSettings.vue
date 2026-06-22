@@ -173,7 +173,7 @@
 
 <script setup lang="ts">
 import { deleteStorageAPI, setStorageAPI } from '@/assembly/storage'
-import { isSingBox } from '@/assembly/version'
+import { isSingBoxCore } from '@/assembly/version'
 import {
   autoImportSettings,
   autoSyncSettings,
@@ -207,7 +207,7 @@ import TextInput from './TextInput.vue'
 const inputRef = ref<HTMLInputElement>()
 const dashboardSettingsDialogShow = ref(false)
 const isStorageSubmitting = ref(false)
-const showSyncSettings = computed(() => !isSingBox.value || displayAllFeatures.value)
+const showSyncSettings = computed(() => !isSingBoxCore.value || displayAllFeatures.value)
 
 const { showTip } = useTooltip()
 const { t } = useI18n()

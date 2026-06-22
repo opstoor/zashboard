@@ -10,7 +10,7 @@ import {
   proxyProviederList,
   updateProxyProviderAPI,
 } from '@/assembly/proxies'
-import { isSingBox } from '@/assembly/version'
+import { isSingBoxCore } from '@/assembly/version'
 import { renderProxiesPageItems } from '@/composables/proxies'
 import { isProxyNodeSearchMode, toggleProxySearchMode } from '@/composables/proxySearch'
 import { useCtrlsBar } from '@/composables/useCtrlsBar'
@@ -87,7 +87,7 @@ export default defineComponent({
     const handlerModeChange = (e: Event) => {
       const mode = (e.target as HTMLSelectElement).value
       updateConfigs({ mode })
-      if (isSingBox.value && automaticDisconnection.value) {
+      if (isSingBoxCore.value && automaticDisconnection.value) {
         activeConnections.value.forEach((connection) => {
           if (connection.rule.includes('clash_mode')) {
             disconnectByIdAPI(connection.id)

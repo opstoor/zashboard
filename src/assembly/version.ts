@@ -1,7 +1,7 @@
 // 组装层 · 版本与升级。
 // fetchVersionAPI 按后端类型选择 Clash /version 或 sing-box gRPC getVersion,
 // 并把结果统一成 { data: { version } } 形状。
-// isSingBox 基于「运行时内核版本字符串」,与 assembly/backend.ts 的 isSingboxBackend
+// isSingBoxCore 基于「运行时内核版本字符串」,与 assembly/backend.ts 的 isSingboxBackend
 //(基于配置类型)语义不同:Clash 通道也可能连到 sing-box 兼容核心。
 import { fetchClashVersion, restartCoreAPI, upgradeCoreAPI, upgradeUIAPI } from '@/api/clash'
 import { MIHOMO, MIHOMO_CHANNEL } from '@/constant'
@@ -14,10 +14,10 @@ export const version = ref()
 export const isCoreUpdateAvailable = ref(false)
 export const zashboardVersion = ref(__APP_VERSION__)
 
-export const isSingBox = computed(() => version.value?.includes('sing-box'))
+export const isSingBoxCore = computed(() => version.value?.includes('sing-box'))
 
 export const mihomo = computed<[MIHOMO, string] | undefined>(() => {
-  if (isSingBox.value) return undefined
+  if (isSingBoxCore.value) return undefined
   else {
     const match = /(alpha-smart|alpha|beta|meta)-?(\w+)/.exec(version.value)
     switch (match?.[1]) {
@@ -52,7 +52,7 @@ watch(
       const { data } = await fetchVersionAPI()
 
       version.value = data?.version || ''
-      if (isSingBox.value || !checkUpgradeCore.value || activeBackend.value?.disableUpgradeCore)
+      if (isSingBoxCore.value || !checkUpgradeCore.value || activeBackend.value?.disableUpgradeCore)
         return
       isCoreUpdateAvailable.value = await fetchBackendUpdateAvailableAPI()
 

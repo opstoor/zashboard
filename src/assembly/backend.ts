@@ -1,7 +1,7 @@
 // 组装层 · 后端判定与能力门控。
 // 这里的 isSingboxBackend 基于「用户配置的后端类型」(activeBackend.type),决定
 // 走 sing-box native gRPC 还是 Clash REST/WS —— 是整个 assembly 层做后端选择的依据。
-// 注意与 assembly/version.ts 的 isSingBox 区分:后者基于运行时内核版本字符串,
+// 注意与 assembly/version.ts 的 isSingBoxCore 区分:后者基于运行时内核版本字符串,
 // Clash 通道也可能连到 sing-box 兼容核心,两者语义不同,不可互相替代。
 
 import { probeClashChannel } from '@/api/clash'

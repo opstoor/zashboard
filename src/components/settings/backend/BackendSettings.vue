@@ -16,7 +16,7 @@
         <a
           class="flex cursor-pointer items-center gap-2 text-lg font-semibold"
           :href="
-            isSingBox
+            isSingBoxCore
               ? 'https://github.com/sagernet/sing-box'
               : MIHOMO_CHANNEL[mihomo?.[0] ?? MIHOMO.Meta].url
           "
@@ -41,84 +41,86 @@
 
       <div
         v-if="isVisibleActions && !isSingboxBackend"
-        class="relative grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-2"
+        class="relative"
         :class="settingsEditMode && isSettingHidden(k.actions) ? 'opacity-40' : ''"
       >
         <SettingVisibilityToggle
           :setting-key="k.actions"
-          class="absolute top-1 right-1 z-10"
+          class="absolute top-2 left-2 z-10"
         />
-        <template v-if="!isSingBox || displayAllFeatures">
+        <div class="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-2">
+          <template v-if="!isSingBoxCore || displayAllFeatures">
+            <button
+              v-if="!activeBackend?.disableUpgradeCore"
+              class="btn btn-neutral btn-sm"
+              @click="showUpgradeCoreModal = true"
+            >
+              {{ $t('upgradeCore') }}
+            </button>
+            <button
+              class="btn btn-sm"
+              @click="handlerClickRestartCore"
+            >
+              <span
+                v-if="isCoreRestarting"
+                class="loading loading-spinner loading-md"
+              ></span>
+              {{ $t('restartCore') }}
+            </button>
+            <button
+              class="btn btn-sm"
+              @click="handlerClickReloadConfigs"
+            >
+              <span
+                v-if="isConfigReloading"
+                class="loading loading-spinner loading-md"
+              ></span>
+              {{ $t('reloadConfigs') }}
+            </button>
+            <button
+              v-if="!isSingBoxCore"
+              class="btn btn-sm"
+              @click="showUpdateConfigModal = true"
+            >
+              {{ $t('updateConfigs') }}
+            </button>
+            <button
+              class="btn btn-sm"
+              @click="handlerClickUpdateGeo"
+            >
+              <span
+                v-if="isGeoUpdating"
+                class="loading loading-spinner loading-md"
+              ></span>
+              {{ $t('updateGeoDatabase') }}
+            </button>
+          </template>
           <button
-            v-if="!activeBackend?.disableUpgradeCore"
-            class="btn btn-neutral btn-sm"
-            @click="showUpgradeCoreModal = true"
+            class="btn btn-sm"
+            @click="handleFlushDNSCache"
           >
-            {{ $t('upgradeCore') }}
+            {{ $t('flushDNSCache') }}
           </button>
           <button
             class="btn btn-sm"
-            @click="handlerClickRestartCore"
+            @click="handleFlushFakeIP"
           >
-            <span
-              v-if="isCoreRestarting"
-              class="loading loading-spinner loading-md"
-            ></span>
-            {{ $t('restartCore') }}
+            {{ $t('flushFakeIP') }}
           </button>
           <button
+            v-if="hasSmartGroup"
             class="btn btn-sm"
-            @click="handlerClickReloadConfigs"
+            @click="handleFlushSmartWeights"
           >
-            <span
-              v-if="isConfigReloading"
-              class="loading loading-spinner loading-md"
-            ></span>
-            {{ $t('reloadConfigs') }}
+            {{ $t('flushSmartWeights') }}
           </button>
-          <button
-            v-if="!isSingBox"
-            class="btn btn-sm"
-            @click="showUpdateConfigModal = true"
-          >
-            {{ $t('updateConfigs') }}
-          </button>
-          <button
-            class="btn btn-sm"
-            @click="handlerClickUpdateGeo"
-          >
-            <span
-              v-if="isGeoUpdating"
-              class="loading loading-spinner loading-md"
-            ></span>
-            {{ $t('updateGeoDatabase') }}
-          </button>
-        </template>
-        <button
-          class="btn btn-sm"
-          @click="handleFlushDNSCache"
-        >
-          {{ $t('flushDNSCache') }}
-        </button>
-        <button
-          class="btn btn-sm"
-          @click="handleFlushFakeIP"
-        >
-          {{ $t('flushFakeIP') }}
-        </button>
-        <button
-          v-if="hasSmartGroup"
-          class="btn btn-sm"
-          @click="handleFlushSmartWeights"
-        >
-          {{ $t('flushSmartWeights') }}
-        </button>
+        </div>
       </div>
 
       <SettingItem
         :setting-key="k.DNSQuery"
         :when="!isSingboxBackend"
-        class="flex-col items-start py-3"
+        class="py-3"
       >
         <div class="flex w-full flex-col">
           <div class="settings-section-label">
@@ -130,7 +132,7 @@
     </div>
 
     <div
-      v-if="!isSingBox && configs && hasVisibleSettings"
+      v-if="!isSingBoxCore && configs && hasVisibleSettings"
       class="grid"
     >
       <div class="settings-section-label">
@@ -219,7 +221,7 @@ import {
   reloadConfigsAPI,
   updateGeoDataAPI,
 } from '@/assembly/config'
-import { isCoreUpdateAvailable, isSingBox, mihomo, restartCoreAPI } from '@/assembly/version'
+import { isCoreUpdateAvailable, isSingBoxCore, mihomo, restartCoreAPI } from '@/assembly/version'
 import BackendVersion from '@/components/common/BackendVersion.vue'
 import BackendPortsGrid from '@/components/settings/backend/BackendPortsGrid.vue'
 import BackendSwitch from '@/components/settings/backend/BackendSwitch.vue'
@@ -265,7 +267,7 @@ const hasVisibleItems = computed(() => {
 
 const hasVisibleSettings = computed(() => {
   return (
-    !isSingBox.value &&
+    !isSingBoxCore.value &&
     !!configs.value &&
     (isVisiblePorts.value ||
       (configs.value.tun && canShowTunMode.value) ||
