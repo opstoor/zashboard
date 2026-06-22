@@ -46,3 +46,11 @@ div {
     }
   }
 }
+
+/* 编辑模式下：已隐藏的设置项整体置灰，仅保留 +/- 控制可交互 */
+.setting-item:has(> .vis-toggle[data-hidden='true']) > :not(.vis-toggle) {
+  @apply pointer-events-none opacity-40;
+}
+.settings-category--hidden > .settings-category-body {
+  @apply pointer-events-none opacity-40;
+}

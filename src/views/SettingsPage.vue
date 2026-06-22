@@ -21,6 +21,36 @@
       {{ $t('refresh') }}
     </button>
 
+    <!-- Edit mode toolbar -->
+    <div
+      v-if="settingsEditMode"
+      class="bg-base-100 mx-auto flex w-full max-w-7xl flex-wrap items-center gap-2 p-3 md:px-8"
+    >
+      <button
+        class="btn btn-sm"
+        @click="applyShowAllPreset"
+      >
+        {{ $t('showAllPreset') }}
+      </button>
+      <button
+        class="btn btn-sm"
+        @click="applyMinimalPreset"
+      >
+        {{ $t('minimalPreset') }}
+      </button>
+      <label
+        v-if="twoColumnsAvailable"
+        class="ml-auto flex items-center gap-2 text-sm"
+      >
+        {{ $t('settingsPageTwoColumns') }}
+        <input
+          v-model="settingsPageTwoColumns"
+          type="checkbox"
+          class="toggle"
+        />
+      </label>
+    </div>
+
     <!-- Content Area -->
     <template v-if="isTwoColumns">
       <div
@@ -37,15 +67,15 @@
             :key="item.key"
             :id="`item-${item.key}`"
             :data-key="item.key"
-            class="mb-4 rounded-lg p-2 md:mb-6"
+            class="settings-category mb-4 rounded-lg p-2 md:mb-6"
+            :class="
+              settingsEditMode && isSettingHidden(item.key) ? 'settings-category--hidden' : ''
+            "
           >
-            <div
-              class="text-base-content/85 mt-1 mb-2.5 px-1 text-base font-semibold tracking-tight"
-              v-if="![SETTINGS_MENU_KEY.general, SETTINGS_MENU_KEY.backend].includes(item.key)"
-            >
-              {{ $t(item.label) }}
+            <SettingsCategoryHeader :item="item" />
+            <div class="settings-category-body">
+              <component :is="item.component" />
             </div>
-            <component :is="item.component" />
           </div>
         </div>
       </div>
@@ -60,15 +90,13 @@
         :key="item.key"
         :id="`item-${item.key}`"
         :data-key="item.key"
-        class="mb-4 md:mb-6"
+        class="settings-category mb-4 md:mb-6"
+        :class="settingsEditMode && isSettingHidden(item.key) ? 'settings-category--hidden' : ''"
       >
-        <div
-          class="text-base-content/85 mt-1 mb-2.5 px-1 text-base font-semibold tracking-tight"
-          v-if="![SETTINGS_MENU_KEY.general, SETTINGS_MENU_KEY.backend].includes(item.key)"
-        >
-          {{ $t(item.label) }}
+        <SettingsCategoryHeader :item="item" />
+        <div class="settings-category-body">
+          <component :is="item.component" />
         </div>
-        <component :is="item.component" />
       </div>
     </div>
   </div>
@@ -81,8 +109,15 @@ import ConnectionsSettings from '@/components/settings/connections/ConnectionsSe
 import ZashboardSettings from '@/components/settings/general/ZashboardSettings.vue'
 import OverviewSettings from '@/components/settings/overview/OverviewSettings.vue'
 import ProxiesSettings from '@/components/settings/proxies/ProxiesSettings.vue'
+import SettingsCategoryHeader from '@/components/settings/SettingsCategoryHeader.vue'
 import { usePaddingForViews } from '@/composables/paddingViews'
-import { isSettingVisible } from '@/composables/settings'
+import {
+  applyMinimalPreset,
+  applyShowAllPreset,
+  isSettingHidden,
+  isSettingVisible,
+  settingsEditMode,
+} from '@/composables/settings'
 import { SETTINGS_MENU_KEY } from '@/constant'
 import { isPWA } from '@/helper/utils'
 import { settingsMenuOrder, settingsPageTwoColumns } from '@/store/settings'
@@ -97,7 +132,7 @@ import {
 import { useElementSize } from '@vueuse/core'
 import { throttle } from 'lodash'
 import type { Component } from 'vue'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 type MenuItem = {
@@ -308,6 +343,10 @@ const refreshPages = async () => {
   }
   window.location.reload()
 }
+
+onUnmounted(() => {
+  settingsEditMode.value = false
+})
 
 onMounted(() => {
   rebalanceColumns()

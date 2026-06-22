@@ -436,6 +436,8 @@ const ru: LANG_MESSAGE = {
   showAllPreset: 'Показать все',
   minimalPreset: 'Минимальный вид',
   settingsPageTwoColumns: 'Двухколоночный режим',
+  moveUp: 'Вверх',
+  moveDown: 'Вниз',
   aggregateBy: 'Агрегация по',
   aggregateBySourceIP: 'По исходному IP',
   aggregateByDestination: 'По назначению',

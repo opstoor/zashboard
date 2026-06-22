@@ -434,6 +434,8 @@ const en = {
   showAllPreset: 'Show all',
   minimalPreset: 'Minimal view',
   settingsPageTwoColumns: 'Two column layout',
+  moveUp: 'Move up',
+  moveDown: 'Move down',
   aggregateBy: 'Aggregate by',
   aggregateBySourceIP: 'By source IP',
   aggregateByDestination: 'By destination',

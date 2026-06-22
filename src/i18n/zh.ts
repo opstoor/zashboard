@@ -428,6 +428,8 @@ const zh: LANG_MESSAGE = {
   showAllPreset: '全部显示',
   minimalPreset: '精简显示',
   settingsPageTwoColumns: '双列布局',
+  moveUp: '上移',
+  moveDown: '下移',
   aggregateBy: '聚合方式',
   aggregateBySourceIP: '按源IP',
   aggregateByDestination: '按目标地址',

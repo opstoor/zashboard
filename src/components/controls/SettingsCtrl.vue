@@ -42,20 +42,19 @@
         </div>
         <button
           class="btn btn-circle btn-sm my-auto"
-          @click="showVisibilityDialog = true"
+          :class="settingsEditMode ? 'btn-primary' : ''"
+          :title="$t('settingsVisibility')"
+          @click="settingsEditMode = !settingsEditMode"
         >
           <Cog6ToothIcon class="h-4 w-4" />
         </button>
       </div>
-      <SettingsVisibilityDialog
-        v-model="showVisibilityDialog"
-        :two-columns-available="twoColumnsAvailable"
-      />
     </div>
   </CtrlsBar>
 </template>
 
 <script setup lang="ts">
+import { settingsEditMode } from '@/composables/settings'
 import { useCtrlsBar } from '@/composables/useCtrlsBar'
 import { SETTINGS_MENU_KEY } from '@/constant'
 import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
@@ -63,7 +62,6 @@ import { useElementSize, useSwipe } from '@vueuse/core'
 import type { Component } from 'vue'
 import { computed, nextTick, ref, watch } from 'vue'
 import CtrlsBar from '../common/CtrlsBar.vue'
-import SettingsVisibilityDialog from './SettingsVisibilityDialog.vue'
 
 type MenuItem = {
   key: SETTINGS_MENU_KEY
@@ -82,8 +80,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'menu-click', key: SETTINGS_MENU_KEY): void
 }>()
-
-const showVisibilityDialog = ref(false)
 
 const menuRef = ref<HTMLDivElement>()
 const menuItemRefs = ref<HTMLLIElement[]>([])

@@ -32,18 +32,23 @@
       class="settings-grid"
       v-if="isVisibleActions || isVisibleBackendSwitch || isVisibleDnsQuery"
     >
-      <div
-        v-if="isVisibleBackendSwitch"
-        class="setting-item p-4"
+      <SettingItem
+        :setting-key="k.backend"
+        class="p-4"
       >
         <BackendSwitch />
-      </div>
+      </SettingItem>
 
       <div
-        v-if="isVisibleActions"
-        class="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-2"
+        v-if="isVisibleActions && !isSingboxBackend"
+        class="relative grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-2"
+        :class="settingsEditMode && isSettingHidden(k.actions) ? 'opacity-40' : ''"
       >
-        <template v-if="(!isSingBox || displayAllFeatures) && !isSingboxBackend">
+        <SettingVisibilityToggle
+          :setting-key="k.actions"
+          class="absolute top-1 right-1 z-10"
+        />
+        <template v-if="!isSingBox || displayAllFeatures">
           <button
             v-if="!activeBackend?.disableUpgradeCore"
             class="btn btn-neutral btn-sm"
@@ -90,14 +95,12 @@
           </button>
         </template>
         <button
-          v-if="!isSingboxBackend"
           class="btn btn-sm"
           @click="handleFlushDNSCache"
         >
           {{ $t('flushDNSCache') }}
         </button>
         <button
-          v-if="!isSingboxBackend"
           class="btn btn-sm"
           @click="handleFlushFakeIP"
         >
@@ -112,9 +115,10 @@
         </button>
       </div>
 
-      <div
-        v-if="isVisibleDnsQuery && !isSingboxBackend"
-        class="setting-item flex-col items-start py-3"
+      <SettingItem
+        :setting-key="k.DNSQuery"
+        :when="!isSingboxBackend"
+        class="flex-col items-start py-3"
       >
         <div class="flex w-full flex-col">
           <div class="settings-section-label">
@@ -122,7 +126,7 @@
           </div>
           <DnsQuery />
         </div>
-      </div>
+      </SettingItem>
     </div>
 
     <div
@@ -133,11 +137,22 @@
         {{ $t('settings') }}
       </div>
       <div class="settings-grid">
-        <BackendPortsGrid v-if="isVisiblePorts" />
+        <div
+          v-if="isVisiblePorts"
+          class="relative"
+          :class="settingsEditMode && isSettingHidden(k.ports) ? 'opacity-40' : ''"
+        >
+          <SettingVisibilityToggle
+            :setting-key="k.ports"
+            class="absolute top-1 right-1 z-10"
+          />
+          <BackendPortsGrid />
+        </div>
         <div
           v-if="configs?.tun && canShowTunMode"
           class="setting-item"
         >
+          <SettingVisibilityToggle :setting-key="k.tunMode" />
           <div class="setting-item-label">
             {{ $t('tunMode') }}
           </div>
@@ -149,9 +164,10 @@
           />
         </div>
         <div
-          v-if="isVisibleAllowLan"
+          v-if="configs && isVisibleAllowLan"
           class="setting-item"
         >
+          <SettingVisibilityToggle :setting-key="k.allowLan" />
           <div class="setting-item-label">
             {{ $t('allowLan') }}
           </div>
@@ -163,10 +179,7 @@
           />
         </div>
         <template v-if="!activeBackend?.disableUpgradeCore">
-          <div
-            v-if="isVisibleCheckUpgrade"
-            class="setting-item"
-          >
+          <SettingItem :setting-key="k.checkCoreUpgrade">
             <div class="setting-item-label">
               {{ $t('checkCoreUpgrade') }}
             </div>
@@ -176,10 +189,10 @@
               v-model="checkUpgradeCore"
               @change="handlerCheckUpgradeCoreChange"
             />
-          </div>
-          <div
-            v-if="checkUpgradeCore && isVisibleAutoUpgrade"
-            class="setting-item"
+          </SettingItem>
+          <SettingItem
+            :setting-key="k.autoUpgradeCore"
+            :when="checkUpgradeCore"
           >
             <div class="setting-item-label">
               {{ $t('autoUpgradeCore') }}
@@ -189,7 +202,7 @@
               type="checkbox"
               v-model="autoUpgradeCore"
             />
-          </div>
+          </SettingItem>
         </template>
       </div>
     </div>
@@ -212,7 +225,9 @@ import BackendPortsGrid from '@/components/settings/backend/BackendPortsGrid.vue
 import BackendSwitch from '@/components/settings/backend/BackendSwitch.vue'
 import DnsQuery from '@/components/settings/backend/DnsQuery.vue'
 import { isSingboxBackend } from '@/assembly/backend'
-import { useIsSettingVisible } from '@/composables/settings'
+import SettingItem from '@/components/settings/SettingItem.vue'
+import SettingVisibilityToggle from '@/components/settings/SettingVisibilityToggle.vue'
+import { isSettingHidden, settingsEditMode, useIsSettingVisible } from '@/composables/settings'
 import { BACKEND_ITEM_KEYS } from '@/config/settingsItems'
 import { MIHOMO, MIHOMO_CHANNEL } from '@/constant'
 import { showNotification } from '@/helper/notification'
