@@ -81,7 +81,7 @@
 
 <script setup lang="ts">
 import { useTooltip } from '@/helper/tooltip'
-import { proxyGroupList } from '@/store/proxies'
+import { proxyGroupList } from '@/assembly/proxies'
 import { groupTestUrls } from '@/store/settings'
 import {
   ArrowRightCircleIcon,

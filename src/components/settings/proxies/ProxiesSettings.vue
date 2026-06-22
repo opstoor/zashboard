@@ -276,13 +276,13 @@
 </template>
 
 <script setup lang="ts">
-import { isSingBox } from '@/api'
+import { isSingBox } from '@/assembly/version'
 import { useIsSettingVisible } from '@/composables/settings'
 import { PROXIES_ITEM_KEYS } from '@/config/settingsItems'
 import { FOLDER_MODE, PROXY_CARD_SIZE, PROXY_PREVIEW_TYPE, SPEEDTEST_MODE } from '@/constant'
 import { useTooltip } from '@/helper/tooltip'
 import { getMinCardWidth } from '@/helper/utils'
-import { proxyMap } from '@/store/proxies'
+import { proxyMap } from '@/assembly/proxies'
 import {
   customGlobalNode,
   displayGlobalByMode,

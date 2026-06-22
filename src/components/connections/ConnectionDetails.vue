@@ -110,7 +110,7 @@ import ProxyChainPath from '@/components/common/ProxyChainPath.vue'
 import ProxyGroup from '@/components/proxies/ProxyGroup.vue'
 import SourceIPLabels from '@/components/settings/connections/SourceIPLabels.vue'
 import { useConnections } from '@/composables/connections'
-import { proxyMap } from '@/store/proxies'
+import { proxyMap } from '@/assembly/proxies'
 import {
   ArrowRightCircleIcon,
   MapPinIcon,

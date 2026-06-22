@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { ctrlsBottom } from '@/composables/paddingViews'
 import { disableSwipe } from '@/composables/swipe'
-import { proxyGroupList } from '@/store/proxies'
+import { proxyGroupList } from '@/assembly/proxies'
 import {
   activeFolderId,
   folderCount,

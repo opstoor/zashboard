@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCalculateMaxProxies } from '@/composables/proxiesScroll'
-import { handlerProxySelect } from '@/composables/proxiesAssembly'
-import { proxyMap, proxyProviederList } from '@/store/proxies'
+import { handlerProxySelect } from '@/assembly/proxies'
+import { proxyMap, proxyProviederList } from '@/assembly/proxies'
 import { computed } from 'vue'
 import ProxyNodeCard from './ProxyNodeCard.vue'
 import ProxyNodeGrid from './ProxyNodeGrid.vue'

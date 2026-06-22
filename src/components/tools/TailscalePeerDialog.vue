@@ -156,7 +156,7 @@
 </template>
 
 <script setup lang="ts">
-import { getSingboxClient } from '@/api/singbox/client'
+import { getSingboxClient } from '@/assembly/tools'
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
 import PingSparkline from '@/components/tools/PingSparkline.vue'
 import { peerDisplayName, sshPrefs } from '@/composables/tailscaleSSH'

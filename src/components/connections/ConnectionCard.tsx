@@ -1,4 +1,4 @@
-import { blockConnectionByIdAPI, disconnectByIdAPI } from '@/api'
+import { blockConnectionByIdAPI, disconnectByIdAPI } from '@/assembly/connections'
 import { useBounceOnVisible } from '@/composables/bouncein'
 import { useConnections } from '@/composables/connections'
 import {

@@ -1,19 +1,22 @@
-import { disconnectByIdAPI, isSingBox, updateProxyProviderAPI } from '@/api'
-import { renderProxiesPageItems } from '@/composables/proxies'
-import { allProxiesLatencyTest, fetchProxies } from '@/composables/proxiesAssembly'
-import { isProxyNodeSearchMode, toggleProxySearchMode } from '@/composables/proxySearch'
-import { useCtrlsBar } from '@/composables/useCtrlsBar'
-import { PROXY_SORT_TYPE, PROXY_TAB_TYPE, ROUTE_NAME, SETTINGS_MENU_KEY } from '@/constant'
-import { getMinCardWidth } from '@/helper/utils'
-import { configs, updateConfigs } from '@/store/config'
-import { activeConnections } from '@/store/connections'
+import { configs, updateConfigs } from '@/assembly/config'
+import { disconnectByIdAPI } from '@/assembly/connections'
 import {
+  allProxiesLatencyTest,
+  fetchProxies,
   hasSmartGroup,
   proxiesFilter,
   proxiesTabShow,
   proxyGroupList,
   proxyProviederList,
-} from '@/store/proxies'
+  updateProxyProviderAPI,
+} from '@/assembly/proxies'
+import { isSingBox } from '@/assembly/version'
+import { renderProxiesPageItems } from '@/composables/proxies'
+import { isProxyNodeSearchMode, toggleProxySearchMode } from '@/composables/proxySearch'
+import { useCtrlsBar } from '@/composables/useCtrlsBar'
+import { PROXY_SORT_TYPE, PROXY_TAB_TYPE, ROUTE_NAME, SETTINGS_MENU_KEY } from '@/constant'
+import { getMinCardWidth } from '@/helper/utils'
+import { activeConnections } from '@/store/connections'
 import {
   automaticDisconnection,
   collapseGroupMap,

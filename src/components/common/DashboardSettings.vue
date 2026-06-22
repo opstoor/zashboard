@@ -172,7 +172,8 @@
 </template>
 
 <script setup lang="ts">
-import { deleteStorageAPI, isSingBox, setStorageAPI } from '@/api'
+import { deleteStorageAPI, setStorageAPI } from '@/assembly/storage'
+import { isSingBox } from '@/assembly/version'
 import {
   autoImportSettings,
   autoSyncSettings,

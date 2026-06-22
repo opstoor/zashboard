@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { GrpcWebSocketStream } from '@/api/singbox/websocket'
+import { GrpcWebSocketStream } from '@/assembly/tools'
 import TerminalSymbolBar from '@/components/tools/TerminalSymbolBar.vue'
 import {
   armModifier,

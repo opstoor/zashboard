@@ -1,22 +1,30 @@
 // Clash REST/WS 后端的代理「组装逻辑」:从 /proxies、/providers/proxies 拉取并
-// 组装视图状态,以及选择/测速等动作。写入 store/proxies.ts 的共享状态。
-
+// 组装视图状态,以及选择/测速等动作。写入门面 index.ts 的共享状态。
 import {
   deleteFixedProxyAPI,
-  disconnectByIdAPI,
   fetchProxiesAPI,
   fetchProxyGroupLatencyAPI,
   fetchProxyLatencyAPI,
   fetchProxyProviderAPI,
   selectProxyAPI,
-} from '@/api'
+} from '@/api/clash'
+import { disconnectByIdAPI } from '@/assembly/connections'
 import { GLOBAL, IPV6_TEST_URL, NOT_CONNECTED, PROXY_TYPE, SPEEDTEST_MODE } from '@/constant'
 import { isProxyGroup } from '@/helper'
 import { showNotification } from '@/helper/notification'
+import { activeConnections } from '@/store/connections'
+import {
+  automaticDisconnection,
+  iconReflectList,
+  independentLatencyTest,
+  IPv6test,
+  speedtestMode,
+  speedtestTimeout,
+} from '@/store/settings'
+import { initSmartWeights } from '@/store/smart'
 import type { Proxy } from '@/types'
 import { last } from 'lodash'
 import pLimit from 'p-limit'
-import { activeConnections } from './connections'
 import {
   getHistoryByName,
   getLatencyByName,
@@ -27,16 +35,7 @@ import {
   proxyMap,
   proxyProviederList,
   speedtestUrlWithDefault,
-} from './proxies'
-import {
-  automaticDisconnection,
-  iconReflectList,
-  independentLatencyTest,
-  IPv6test,
-  speedtestMode,
-  speedtestTimeout,
-} from './settings'
-import { initSmartWeights } from './smart'
+} from './index'
 
 let fetchTime = 0
 

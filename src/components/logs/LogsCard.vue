@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { isSingBox } from '@/api'
+import { isSingBox } from '@/assembly/version'
 import HighlightText from '@/components/common/HighlightText.vue'
 import { useBounceOnVisible } from '@/composables/bouncein'
 import { LOG_LEVEL } from '@/constant'

@@ -116,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { isBackendAvailable, isSingboxChannelAvailable } from '@/api'
+import { isBackendAvailable, isSingboxChannelAvailable } from '@/assembly/backend'
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
 import TextInput from '@/components/common/TextInput.vue'
 import { showNotification } from '@/helper/notification'

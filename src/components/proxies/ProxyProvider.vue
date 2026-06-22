@@ -68,12 +68,12 @@
 </template>
 
 <script setup lang="ts">
-import { proxyProviderHealthCheckAPI, updateProxyProviderAPI } from '@/api'
+import { proxyProviderHealthCheckAPI, updateProxyProviderAPI } from '@/assembly/proxies'
 import { useBounceOnVisible } from '@/composables/bouncein'
 import { useRenderProxyList } from '@/composables/renderProxies'
 import { fromNow, prettyBytesHelper } from '@/helper/utils'
-import { fetchProxies } from '@/composables/proxiesAssembly'
-import { proxyProviederList } from '@/store/proxies'
+import { fetchProxies } from '@/assembly/proxies'
+import { proxyProviederList } from '@/assembly/proxies'
 import { ArrowPathIcon, BoltIcon } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
 import { toFinite } from 'lodash'

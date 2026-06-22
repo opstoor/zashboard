@@ -1,17 +1,16 @@
 // sing-box native(gRPC daemon.StartedService)后端的代理「组装逻辑」。
 // 与 clash 的「拉取式」不同,这里是「流驱动」:订阅 SubscribeGroups / SubscribeOutbounds,
-// 每次推送直接重建 store/proxies.ts 的共享状态,因此选择/测速后无需手动刷新,
+// 每次推送直接重建门面 index.ts 的共享状态,因此选择/测速后无需手动刷新,
 // 结果会随流自动回填到 UI。
-
-import { disconnectByIdAPI } from '@/api'
 import { getSingboxClient } from '@/api/singbox/client'
 import { runStream, type StreamHandle } from '@/api/singbox/streams'
+import { disconnectByIdAPI } from '@/assembly/connections'
 import type { Group, GroupItem } from '@/gen/daemon/started_service_pb'
+import { activeConnections } from '@/store/connections'
+import { automaticDisconnection } from '@/store/settings'
+import { activeBackend } from '@/store/setup'
 import type { Proxy } from '@/types'
-import { activeConnections } from './connections'
-import { proxyGroupList, proxyMap, proxyProviederList } from './proxies'
-import { automaticDisconnection } from './settings'
-import { activeBackend } from './setup'
+import { proxyGroupList, proxyMap, proxyProviederList } from './index'
 
 const nodeToProxy = (item: GroupItem): Proxy => ({
   name: item.tag,

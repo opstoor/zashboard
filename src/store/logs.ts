@@ -1,4 +1,4 @@
-import { fetchLogsAPI } from '@/api'
+import { fetchLogsAPI } from '@/assembly/logs'
 import { LOG_LEVEL } from '@/constant'
 import type { Log, LogWithSeq } from '@/types'
 import { useStorage } from '@vueuse/core'

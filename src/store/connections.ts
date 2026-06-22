@@ -1,4 +1,4 @@
-import { disconnectByIdAPI, fetchConnectionsAPI } from '@/api'
+import { disconnectByIdAPI, fetchConnectionsAPI } from '@/assembly/connections'
 import { CONNECTION_TAB_TYPE, SORT_DIRECTION, SORT_TYPE } from '@/constant'
 import { getChainsStringFromConnection, getInboundUserFromConnection } from '@/helper'
 import { getConnectionVisibleSearchValues } from '@/helper/connection'

@@ -126,7 +126,7 @@
 
 <script setup lang="ts">
 import ProxyIcon from '@/components/proxies/ProxyIcon.vue'
-import { proxyGroupList } from '@/store/proxies'
+import { proxyGroupList } from '@/assembly/proxies'
 import { iconReflectList } from '@/store/settings'
 import {
   ArrowUpTrayIcon,

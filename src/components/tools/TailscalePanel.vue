@@ -186,8 +186,7 @@
 </template>
 
 <script setup lang="ts">
-import { getSingboxClient } from '@/api/singbox/client'
-import { runStream, type StreamHandle } from '@/api/singbox/streams'
+import { getSingboxClient, runStream, type StreamHandle } from '@/assembly/tools'
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
 import QRCodeView from '@/components/tools/QRCodeView.vue'
 import TailscaleExitNodeDialog from '@/components/tools/TailscaleExitNodeDialog.vue'

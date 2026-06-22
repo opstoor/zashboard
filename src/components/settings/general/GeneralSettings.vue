@@ -175,7 +175,7 @@
 </template>
 
 <script setup lang="ts">
-import { isSingBox, upgradeUIAPI } from '@/api'
+import { isSingBox, upgradeUIAPI } from '@/assembly/version'
 import DashboardSettings from '@/components/common/DashboardSettings.vue'
 import KeyboardShortcutsSettings from '@/components/settings/general/KeyboardShortcutsSettings.vue'
 import LanguageSelect from '@/components/settings/general/LanguageSelect.vue'

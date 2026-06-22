@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
-import { getSingboxClient } from '@/api/singbox/client'
+import { getSingboxClient } from '@/assembly/tools'
 import { peerDisplayName } from '@/composables/tailscaleSSH'
 import type { TailscaleEndpointStatus, TailscalePeer } from '@/gen/daemon/started_service_pb'
 import { CheckIcon } from '@heroicons/vue/24/outline'

@@ -87,8 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { getSingboxClient } from '@/api/singbox/client'
-import { runStream, type StreamHandle } from '@/api/singbox/streams'
+import { getSingboxClient, runStream, type StreamHandle } from '@/assembly/tools'
 import TerminalSession from '@/components/tools/TerminalSession.vue'
 import TerminalSettingsDialog from '@/components/tools/TerminalSettingsDialog.vue'
 import {

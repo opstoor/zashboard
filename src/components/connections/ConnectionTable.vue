@@ -204,7 +204,7 @@
 </template>
 
 <script setup lang="ts">
-import { blockConnectionByIdAPI, disconnectByIdAPI } from '@/api'
+import { blockConnectionByIdAPI, disconnectByIdAPI } from '@/assembly/connections'
 import { useConnections } from '@/composables/connections'
 import {
   CONNECTION_TAB_TYPE,

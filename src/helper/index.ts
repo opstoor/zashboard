@@ -1,8 +1,8 @@
-import { capabilities } from '@/composables/backendCapability'
+import { capabilities } from '@/assembly/backend'
+import { hiddenGroupMap, proxyMap } from '@/assembly/proxies'
 import { NOT_CONNECTED, PROXY_CHAIN_DIRECTION, PROXY_TYPE, ROUTE_NAME } from '@/constant'
 import { showNotification } from '@/helper/notification'
 import { timeSaved } from '@/store/overview'
-import { hiddenGroupMap, proxyMap } from '@/store/proxies'
 import {
   customThemes,
   lowLatency,

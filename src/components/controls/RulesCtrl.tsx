@@ -1,8 +1,14 @@
-import { updateRuleProviderAPI } from '@/api'
+import {
+  fetchRules,
+  ruleProviderList,
+  rules,
+  rulesFilter,
+  rulesTabShow,
+  updateRuleProviderAPI,
+} from '@/assembly/rules'
 import { useCtrlsBar } from '@/composables/useCtrlsBar'
 import { RULE_TAB_TYPE } from '@/constant'
 import { showNotification } from '@/helper/notification'
-import { fetchRules, ruleProviderList, rules, rulesFilter, rulesTabShow } from '@/store/rules'
 import {
   disconnectOnRuleDisable,
   displayLatencyInRule,

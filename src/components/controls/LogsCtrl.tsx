@@ -1,4 +1,4 @@
-import { isSingBox } from '@/api'
+import { isSingBox } from '@/assembly/version'
 import { useCtrlsBar } from '@/composables/useCtrlsBar'
 import { LOG_LEVEL } from '@/constant'
 import { useTooltip } from '@/helper/tooltip'

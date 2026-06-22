@@ -100,23 +100,23 @@
 </template>
 
 <script setup lang="ts">
-import { isBackendAvailable } from '@/api'
+import { isBackendAvailable } from '@/assembly/backend'
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
 import SideBar from '@/components/sidebar/SideBar.vue'
 import { dockTop } from '@/composables/paddingViews'
-import { useSettings } from '@/composables/settings'
+import { checkUIUpdate } from '@/assembly/version'
 import { useSwipeRouter } from '@/composables/swipe'
 import { PROXY_TAB_TYPE, ROUTE_ICON_MAP, RULE_TAB_TYPE } from '@/constant'
 import { renderRoutes } from '@/helper'
 import { showNotification } from '@/helper/notification'
 import { getLabelFromBackend, isMiddleScreen } from '@/helper/utils'
-import { fetchConfigs } from '@/store/config'
+import { fetchConfigs } from '@/assembly/config'
 import { initConnections } from '@/store/connections'
 import { initLogs } from '@/store/logs'
 import { initSatistic } from '@/store/overview'
-import { fetchProxies, resetProxiesAssembly } from '@/composables/proxiesAssembly'
-import { proxiesTabShow } from '@/store/proxies'
-import { fetchRules, rulesTabShow } from '@/store/rules'
+import { fetchProxies, resetProxies } from '@/assembly/proxies'
+import { proxiesTabShow } from '@/assembly/proxies'
+import { fetchRules, rulesTabShow } from '@/assembly/rules'
 import { isSidebarCollapsed } from '@/store/settings'
 import { activeBackend, activeUuid, backendList } from '@/store/setup'
 import type { Backend } from '@/types'
@@ -162,7 +162,7 @@ watch(
 watch(
   activeUuid,
   async () => {
-    await resetProxiesAssembly()
+    await resetProxies()
     if (!activeUuid.value) return
     rulesTabShow.value = RULE_TAB_TYPE.RULES
     proxiesTabShow.value = PROXY_TAB_TYPE.PROXIES
@@ -247,8 +247,6 @@ watch(documentVisible, () => {
   if (documentVisible.value !== 'visible') return
   fetchProxies()
 })
-
-const { checkUIUpdate } = useSettings()
 
 checkUIUpdate()
 </script>

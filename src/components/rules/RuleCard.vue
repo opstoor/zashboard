@@ -101,17 +101,19 @@
 </template>
 
 <script setup lang="ts">
-import {
-  disconnectByIdAPI,
-  toggleRuleDisabledAPI,
-  toggleRuleDisabledSingBoxAPI,
-  updateRuleProviderAPI,
-} from '@/api'
+import { disconnectByIdAPI } from '@/assembly/connections'
 import { useBounceOnVisible } from '@/composables/bouncein'
 import { useTooltip } from '@/helper/tooltip'
 import { activeConnections } from '@/store/connections'
-import { proxyGroupList } from '@/store/proxies'
-import { fetchRules, ruleProviderList, rulesFilter } from '@/store/rules'
+import { proxyGroupList } from '@/assembly/proxies'
+import {
+  fetchRules,
+  ruleProviderList,
+  rulesFilter,
+  toggleRuleDisabledAPI,
+  toggleRuleDisabledSingBoxAPI,
+  updateRuleProviderAPI,
+} from '@/assembly/rules'
 import {
   disconnectOnRuleDisable,
   displayLatencyInRule,

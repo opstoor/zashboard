@@ -203,27 +203,23 @@
 import {
   flushDNSCacheAPI,
   flushFakeIPAPI,
-  flushSmartGroupWeightsAPI,
-  isCoreUpdateAvailable,
-  isSingBox,
-  mihomo,
   reloadConfigsAPI,
-  restartCoreAPI,
   updateGeoDataAPI,
-} from '@/api'
+} from '@/assembly/config'
+import { isCoreUpdateAvailable, isSingBox, mihomo, restartCoreAPI } from '@/assembly/version'
 import BackendVersion from '@/components/common/BackendVersion.vue'
 import BackendPortsGrid from '@/components/settings/backend/BackendPortsGrid.vue'
 import BackendSwitch from '@/components/settings/backend/BackendSwitch.vue'
 import DnsQuery from '@/components/settings/backend/DnsQuery.vue'
-import { isSingboxBackend } from '@/composables/backendCapability'
+import { isSingboxBackend } from '@/assembly/backend'
 import { useIsSettingVisible } from '@/composables/settings'
 import { BACKEND_ITEM_KEYS } from '@/config/settingsItems'
 import { MIHOMO, MIHOMO_CHANNEL } from '@/constant'
 import { showNotification } from '@/helper/notification'
-import { fetchProxies } from '@/composables/proxiesAssembly'
-import { configs, fetchConfigs, updateConfigs } from '@/store/config'
-import { hasSmartGroup } from '@/store/proxies'
-import { fetchRules } from '@/store/rules'
+import { fetchProxies, flushSmartGroupWeightsAPI } from '@/assembly/proxies'
+import { configs, fetchConfigs, updateConfigs } from '@/assembly/config'
+import { hasSmartGroup } from '@/assembly/proxies'
+import { fetchRules } from '@/assembly/rules'
 import { autoUpgradeCore, checkUpgradeCore, displayAllFeatures } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
 import { computed, ref } from 'vue'

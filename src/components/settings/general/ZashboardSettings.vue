@@ -34,12 +34,9 @@
 </template>
 
 <script setup lang="ts">
-import { zashboardVersion } from '@/api'
-import { useSettings } from '@/composables/settings'
+import { isUIUpdateAvailable, zashboardVersion } from '@/assembly/version'
 import GeneralSettings from './GeneralSettings.vue'
 import StyleSettings from './StyleSettings.vue'
 
 const commitId = __COMMIT_ID__
-
-const { isUIUpdateAvailable } = useSettings()
 </script>

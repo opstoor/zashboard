@@ -163,7 +163,7 @@
 </template>
 
 <script setup lang="ts">
-import { isBackendAvailable, isSingboxChannelAvailable } from '@/api'
+import { isBackendAvailable, isSingboxChannelAvailable } from '@/assembly/backend'
 import DashboardSettings from '@/components/common/DashboardSettings.vue'
 import TextInput from '@/components/common/TextInput.vue'
 import EditBackendModal from '@/components/settings/backend/EditBackendModal.vue'

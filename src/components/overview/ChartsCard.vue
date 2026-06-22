@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import MiniSparkline from '@/components/overview/MiniSparkline.vue'
-import { hasSingboxChannel } from '@/composables/backendCapability'
+import { hasSingboxChannel } from '@/assembly/backend'
 import { getToolTipForParams } from '@/helper'
 import { prettyBytesHelper } from '@/helper/utils'
 import { activeConnections, downloadTotal, uploadTotal } from '@/store/connections'
