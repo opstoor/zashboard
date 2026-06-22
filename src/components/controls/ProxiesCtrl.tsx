@@ -1,5 +1,6 @@
 import { disconnectByIdAPI, isSingBox, updateProxyProviderAPI } from '@/api'
 import { renderProxiesPageItems } from '@/composables/proxies'
+import { allProxiesLatencyTest, fetchProxies } from '@/composables/proxiesAssembly'
 import { isProxyNodeSearchMode, toggleProxySearchMode } from '@/composables/proxySearch'
 import { useCtrlsBar } from '@/composables/useCtrlsBar'
 import { PROXY_SORT_TYPE, PROXY_TAB_TYPE, ROUTE_NAME, SETTINGS_MENU_KEY } from '@/constant'
@@ -7,8 +8,6 @@ import { getMinCardWidth } from '@/helper/utils'
 import { configs, updateConfigs } from '@/store/config'
 import { activeConnections } from '@/store/connections'
 import {
-  allProxiesLatencyTest,
-  fetchProxies,
   hasSmartGroup,
   proxiesFilter,
   proxiesTabShow,

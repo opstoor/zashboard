@@ -12,7 +12,6 @@
     "build:no-fonts": "FONT=none vite build",
     "build:pingfang-only": "FONT=pingfang vite build",
     "build:sarasa-only": "FONT=sarasa vite build",
-    "build:singbox": "SINGBOX_NATIVE=true vite build",
     "dev": "vite",
     "format": "prettier --write src/",
     "generate": "buf generate",

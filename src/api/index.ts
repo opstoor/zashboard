@@ -1,4 +1,4 @@
-import { hasSingboxChannel } from '@/composables/backendCapability'
+import { isSingboxBackend } from '@/composables/backendCapability'
 import { MIHOMO, MIHOMO_CHANNEL, ROUTE_NAME } from '@/constant'
 import { showNotification } from '@/helper/notification'
 import { getSingboxUrlFromBackend, getUrlFromBackend } from '@/helper/utils'
@@ -19,6 +19,13 @@ import axios, { AxiosError } from 'axios'
 import { debounce } from 'lodash'
 import ReconnectingWebSocket from 'reconnectingwebsocket'
 import { computed, nextTick, ref, watch } from 'vue'
+import {
+  closeAllSingboxConnections,
+  closeSingboxConnection,
+  fetchSingboxConnections,
+  fetchSingboxLogs,
+  fetchSingboxVersion,
+} from './singbox/adapter'
 
 axios.interceptors.request.use((config) => {
   if (activeBackend.value) {
@@ -65,6 +72,7 @@ axios.interceptors.response.use(
 export const version = ref()
 export const isCoreUpdateAvailable = ref(false)
 export const fetchVersionAPI = () => {
+  if (isSingboxBackend.value) return fetchSingboxVersion()
   return axios.get<{ version: string }>('/version')
 }
 export const isSingBox = computed(() => version.value?.includes('sing-box'))
@@ -196,10 +204,12 @@ export const blockConnectionByIdAPI = (id: string) => {
 }
 
 export const disconnectByIdAPI = (id: string) => {
+  if (isSingboxBackend.value) return closeSingboxConnection(id)
   return axios.delete(`/connections/${id}`)
 }
 
 export const disconnectAllAPI = () => {
+  if (isSingboxBackend.value) return closeAllSingboxConnections()
   return axios.delete('/connections')
 }
 
@@ -257,15 +267,19 @@ export const queryDNSAPI = (params: { name: string; type: string }) => {
   })
 }
 
+// /storage/zashboard 为 Clash core 提供的设置同步端点,sing-box native 不支持。
 export const getStorageAPI = () => {
+  if (isSingboxBackend.value) return Promise.reject(new Error('unsupported'))
   return axios.get<Record<string, unknown>>(`/storage/zashboard`)
 }
 
 export const setStorageAPI = (value: Record<string, string>) => {
+  if (isSingboxBackend.value) return Promise.resolve()
   return axios.put(`/storage/zashboard`, value)
 }
 
 export const deleteStorageAPI = () => {
+  if (isSingboxBackend.value) return Promise.resolve()
   return axios.delete(`/storage/zashboard`)
 }
 
@@ -302,8 +316,6 @@ const createWebSocket = <T>(url: string, searchParams?: Record<string, string>) 
 
 // When the active backend exposes a sing-box native channel, prefer its gRPC
 // streaming RPCs over the Clash WebSockets for statistics (memory / traffic).
-// The native client is dynamically imported so that, with __SINGBOX_NATIVE__
-// disabled at build time, the whole ConnectRPC/protobuf chain is dropped.
 const createSingboxStat = <T>(kind: 'memory' | 'traffic') => {
   const data = ref<T>()
   let closer: (() => void) | null = null
@@ -327,22 +339,24 @@ const createSingboxStat = <T>(kind: 'memory' | 'traffic') => {
 }
 
 export const fetchConnectionsAPI = <T>() => {
+  if (isSingboxBackend.value) return fetchSingboxConnections<T>()
   return createWebSocket<T>('connections')
 }
 
 export const fetchLogsAPI = <T>(params: Record<string, string> = {}) => {
+  if (isSingboxBackend.value) return fetchSingboxLogs<T>(params)
   return createWebSocket<T>('logs', params)
 }
 
 export const fetchMemoryAPI = <T>() => {
-  if (__SINGBOX_NATIVE__ && hasSingboxChannel.value) {
+  if (isSingboxBackend.value) {
     return createSingboxStat<T>('memory')
   }
   return createWebSocket<T>('memory')
 }
 
 export const fetchTrafficAPI = <T>() => {
-  if (__SINGBOX_NATIVE__ && hasSingboxChannel.value) {
+  if (isSingboxBackend.value) {
     return createSingboxStat<T>('traffic')
   }
   return createWebSocket<T>('traffic')
@@ -368,12 +382,14 @@ const probeClashChannel = async (backend: Backend, timeout: number) => {
 }
 
 export const isSingboxChannelAvailable = (backend: Backend, timeout: number = 10000) => {
-  if (!__SINGBOX_NATIVE__ || !getSingboxUrlFromBackend(backend)) return Promise.resolve(false)
+  if (!getSingboxUrlFromBackend(backend)) return Promise.resolve(false)
   return import('./singbox/client').then((m) => m.probeSingboxChannel(backend, timeout))
 }
 
 export const isBackendAvailable = (backend: Backend, timeout: number = 10000) =>
-  probeClashChannel(backend, timeout)
+  backend.type === 'singbox'
+    ? isSingboxChannelAvailable(backend, timeout)
+    : probeClashChannel(backend, timeout)
 
 const CACHE_DURATION = 1000 * 60 * 60
 

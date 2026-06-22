@@ -114,7 +114,8 @@ import { fetchConfigs } from '@/store/config'
 import { initConnections } from '@/store/connections'
 import { initLogs } from '@/store/logs'
 import { initSatistic } from '@/store/overview'
-import { fetchProxies, proxiesTabShow } from '@/store/proxies'
+import { fetchProxies, resetProxiesAssembly } from '@/composables/proxiesAssembly'
+import { proxiesTabShow } from '@/store/proxies'
 import { fetchRules, rulesTabShow } from '@/store/rules'
 import { isSidebarCollapsed } from '@/store/settings'
 import { activeBackend, activeUuid, backendList } from '@/store/setup'
@@ -160,7 +161,8 @@ watch(
 
 watch(
   activeUuid,
-  () => {
+  async () => {
+    await resetProxiesAssembly()
     if (!activeUuid.value) return
     rulesTabShow.value = RULE_TAB_TYPE.RULES
     proxiesTabShow.value = PROXY_TAB_TYPE.PROXIES

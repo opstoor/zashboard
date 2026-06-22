@@ -1,21 +1,18 @@
-export type SingboxChannel = {
-  protocol: string
-  host: string
-  port: string
-  secret: string
-}
+export type BackendType = 'clash' | 'singbox'
 
 export type Backend = {
+  // 后端登录类型:'clash' 走 Clash REST/WS API,'singbox' 走 sing-box native gRPC。
+  // 旧记录缺省按 'clash' 迁移。
+  type: BackendType
   protocol: string
   host: string
   port: string
-  secondaryPath: string
-  password: string
+  secondaryPath: string // 仅 clash
+  password: string // 通用:Clash secret / sing-box gRPC Bearer token
   uuid: string
   label?: string
-  disableUpgradeCore?: boolean
-  disableTunMode?: boolean
-  singboxChannel?: SingboxChannel
+  disableUpgradeCore?: boolean // 仅 clash
+  disableTunMode?: boolean // 仅 clash
 }
 
 export type Config = {
@@ -59,6 +56,7 @@ export type Proxy = {
   fixed?: string
   icon: string
   hidden?: boolean
+  selectable?: boolean
   testUrl?: string
   'dialer-proxy'?: string
   'provider-name'?: string
@@ -116,7 +114,7 @@ export type ConnectionRawMessage = {
   chains: string[]
   rule: string
   rulePayload: string
-  start: string
+  start: string | number
   metadata: {
     destinationGeoIP: string
     destinationIP: string

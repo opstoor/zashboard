@@ -56,7 +56,7 @@
 import { updateConfigsAPI } from '@/api'
 import { showNotification } from '@/helper/notification'
 import { fetchConfigs } from '@/store/config'
-import { fetchProxies } from '@/store/proxies'
+import { fetchProxies } from '@/composables/proxiesAssembly'
 import { fetchRules } from '@/store/rules'
 import { ref } from 'vue'
 import DialogWrapper from '../../common/DialogWrapper.vue'

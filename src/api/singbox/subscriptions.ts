@@ -2,9 +2,10 @@
 // the same `{ data, close }` shape that the Clash WebSocket factories return,
 // so the statistics (memory / traffic) store can consume it without changes.
 
+import type { Status } from '@/gen/daemon/started_service_pb'
 import { ref, type Ref } from 'vue'
 import { getSingboxClient } from './client'
-import { runStream } from './streams'
+import { runStream, type StreamHandle } from './streams'
 
 // SubscribeStatus reports at this interval (1s in ns), matching the cadence of
 // the Clash traffic/memory WebSockets.
@@ -15,21 +16,55 @@ export interface SingboxSubscription<T> {
   close: () => void
 }
 
-const subscribeSingboxStatus = <T>(
-  map: (status: { memory: bigint; goroutines: number; uplink: bigint; downlink: bigint }) => T,
-): SingboxSubscription<T> | null => {
-  const client = getSingboxClient()?.client
-  if (!client) return null
+type StatusListener = (status: Status) => void
 
-  const data = ref<T>()
-  const handle = runStream(
+const statusListeners = new Set<StatusListener>()
+let statusHandle: StreamHandle | null = null
+let latestStatus: Status | null = null
+
+const closeSharedStatusStream = () => {
+  statusHandle?.close()
+  statusHandle = null
+  latestStatus = null
+}
+
+const ensureSharedStatusStream = () => {
+  if (statusHandle) return true
+
+  const client = getSingboxClient()?.client
+  if (!client) return false
+
+  statusHandle = runStream(
     (signal) => client.subscribeStatus({ interval: SUBSCRIPTION_INTERVAL }, { signal }),
     (status) => {
-      data.value = map(status)
+      latestStatus = status
+      statusListeners.forEach((listener) => listener(status))
     },
   )
 
-  return { data, close: handle.close }
+  return true
+}
+
+const subscribeSingboxStatus = <T>(map: (status: Status) => T): SingboxSubscription<T> | null => {
+  const data = ref<T>()
+  const listener: StatusListener = (status) => {
+    data.value = map(status)
+  }
+
+  statusListeners.add(listener)
+  if (!ensureSharedStatusStream()) {
+    statusListeners.delete(listener)
+    return null
+  }
+  if (latestStatus) listener(latestStatus)
+
+  return {
+    data,
+    close: () => {
+      statusListeners.delete(listener)
+      if (statusListeners.size === 0) closeSharedStatusStream()
+    },
+  }
 }
 
 export const subscribeSingboxMemory = (): SingboxSubscription<{

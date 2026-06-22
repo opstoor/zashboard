@@ -1,4 +1,5 @@
 import { fetchRuleProvidersAPI, fetchRulesAPI } from '@/api'
+import { isSingboxBackend } from '@/composables/backendCapability'
 import { RULE_TAB_TYPE } from '@/constant'
 import { toSearchRegex } from '@/helper/search'
 import type { Rule, RuleProvider } from '@/types'
@@ -35,6 +36,12 @@ export const renderRulesProvider = computed(() => {
 })
 
 export const fetchRules = async () => {
+  // sing-box native 不支持 rules 列表。
+  if (isSingboxBackend.value) {
+    rules.value = []
+    ruleProviderList.value = []
+    return
+  }
   const { data: ruleData } = await fetchRulesAPI()
   const { data: providerData } = await fetchRuleProvidersAPI()
 

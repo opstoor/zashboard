@@ -43,7 +43,7 @@
         v-if="isVisibleActions"
         class="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-2"
       >
-        <template v-if="!isSingBox || displayAllFeatures">
+        <template v-if="(!isSingBox || displayAllFeatures) && !isSingboxBackend">
           <button
             v-if="!activeBackend?.disableUpgradeCore"
             class="btn btn-neutral btn-sm"
@@ -90,12 +90,14 @@
           </button>
         </template>
         <button
+          v-if="!isSingboxBackend"
           class="btn btn-sm"
           @click="handleFlushDNSCache"
         >
           {{ $t('flushDNSCache') }}
         </button>
         <button
+          v-if="!isSingboxBackend"
           class="btn btn-sm"
           @click="handleFlushFakeIP"
         >
@@ -111,7 +113,7 @@
       </div>
 
       <div
-        v-if="isVisibleDnsQuery"
+        v-if="isVisibleDnsQuery && !isSingboxBackend"
         class="setting-item flex-col items-start py-3"
       >
         <div class="flex w-full flex-col">
@@ -213,12 +215,14 @@ import BackendVersion from '@/components/common/BackendVersion.vue'
 import BackendPortsGrid from '@/components/settings/backend/BackendPortsGrid.vue'
 import BackendSwitch from '@/components/settings/backend/BackendSwitch.vue'
 import DnsQuery from '@/components/settings/backend/DnsQuery.vue'
+import { isSingboxBackend } from '@/composables/backendCapability'
 import { useIsSettingVisible } from '@/composables/settings'
 import { BACKEND_ITEM_KEYS } from '@/config/settingsItems'
 import { MIHOMO, MIHOMO_CHANNEL } from '@/constant'
 import { showNotification } from '@/helper/notification'
+import { fetchProxies } from '@/composables/proxiesAssembly'
 import { configs, fetchConfigs, updateConfigs } from '@/store/config'
-import { fetchProxies, hasSmartGroup } from '@/store/proxies'
+import { hasSmartGroup } from '@/store/proxies'
 import { fetchRules } from '@/store/rules'
 import { autoUpgradeCore, checkUpgradeCore, displayAllFeatures } from '@/store/settings'
 import { activeBackend } from '@/store/setup'

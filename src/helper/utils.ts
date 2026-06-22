@@ -17,7 +17,7 @@ export const prettyBytesHelper = (bytes: number, opts?: Options) => {
   })
 }
 
-export const fromNow = (timestamp: string) => {
+export const fromNow = (timestamp: string | number) => {
   return dayjs(timestamp).fromNow()
 }
 
@@ -70,14 +70,16 @@ export const getUrlFromBackend = (end: {
   return `${end.protocol}://${end.host}:${end.port}${end.secondaryPath || ''}`
 }
 
-export const getSingboxUrlFromBackend = (end: Pick<Backend, 'singboxChannel'>) => {
-  const channel = end.singboxChannel
-  if (!channel?.host) return ''
-  return `${channel.protocol}://${channel.host}:${channel.port}`
+// sing-box native 后端复用顶层连接字段作为 gRPC baseUrl(secondaryPath 留空)。
+export const getSingboxUrlFromBackend = (
+  end: Pick<Backend, 'type' | 'protocol' | 'host' | 'port'>,
+) => {
+  if (end.type !== 'singbox' || !end.host) return ''
+  return `${end.protocol}://${end.host}:${end.port}`
 }
 
-export const getSingboxSecret = (end: Pick<Backend, 'singboxChannel'>) =>
-  end.singboxChannel?.secret || ''
+export const getSingboxSecret = (end: Pick<Backend, 'type' | 'password'>) =>
+  end.type === 'singbox' ? end.password || '' : ''
 
 export const getLabelFromBackend = (end: Omit<Backend, 'uuid'>) => {
   return end.label || `${end.host}:${end.port}`

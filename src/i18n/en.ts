@@ -14,6 +14,9 @@ const en = {
   default: 'Default',
   singboxApiChannel: 'sing-box API',
   clashApiChannel: 'Clash API',
+  backendType: 'Backend Type',
+  clashApi: 'Clash API',
+  singboxNative: 'sing-box Native',
   enableSingboxApi: 'Enable sing-box native API',
   enableSingboxApiTip:
     'The Clash API remains the primary connection. Add the native API only for sing-box-specific tools, Tailscale, and terminal features.',

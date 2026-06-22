@@ -14,6 +14,26 @@
     >
       <h1 class="mb-1 text-lg font-medium">{{ $t('setup') }}</h1>
 
+      <div class="flex flex-col gap-1">
+        <label class="text-sm">{{ $t('backendType') }}</label>
+        <div class="join w-full">
+          <button
+            class="btn btn-sm join-item flex-1"
+            :class="form.type === 'clash' ? 'btn-primary' : 'border-base-border border'"
+            @click="form.type = 'clash'"
+          >
+            {{ $t('clashApi') }}
+          </button>
+          <button
+            class="btn btn-sm join-item flex-1"
+            :class="form.type === 'singbox' ? 'btn-primary' : 'border-base-border border'"
+            @click="form.type = 'singbox'"
+          >
+            {{ $t('singboxNative') }}
+          </button>
+        </div>
+      </div>
+
       <div class="flex gap-2">
         <div class="flex w-24 flex-none flex-col gap-1">
           <label class="text-sm">{{ $t('protocol') }}</label>
@@ -44,7 +64,10 @@
       </div>
 
       <div class="flex gap-2">
-        <div class="flex min-w-0 flex-1 flex-col gap-1">
+        <div
+          v-if="form.type === 'clash'"
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
           <label class="flex items-center gap-1 text-sm">
             <span class="truncate">{{ $t('secondaryPath') }} ({{ $t('optional') }})</span>
             <span
@@ -136,27 +159,22 @@
       v-model="showEditModal"
       :default-backend-uuid="editingBackendUuid"
     />
-
-    <SingboxApiPromptModal
-      v-model="showSingboxPrompt"
-      :backend-uuid="singboxBackendUuid"
-    />
   </div>
 </template>
 
 <script setup lang="ts">
+import { isBackendAvailable, isSingboxChannelAvailable } from '@/api'
 import DashboardSettings from '@/components/common/DashboardSettings.vue'
 import TextInput from '@/components/common/TextInput.vue'
 import EditBackendModal from '@/components/settings/backend/EditBackendModal.vue'
-import SingboxApiPromptModal from '@/components/settings/backend/SingboxApiPromptModal.vue'
 import LanguageSelect from '@/components/settings/general/LanguageSelect.vue'
 import { ROUTE_NAME } from '@/constant'
 import { syncSettingsFromCore } from '@/helper/autoImportSettings'
 import { showNotification } from '@/helper/notification'
-import { getBackendFromUrl, getLabelFromBackend, getUrlFromBackend } from '@/helper/utils'
+import { getBackendFromUrl, getLabelFromBackend } from '@/helper/utils'
 import router from '@/router'
 import { activeUuid, addBackend, backendList, removeBackend } from '@/store/setup'
-import type { Backend } from '@/types'
+import type { Backend, BackendType } from '@/types'
 import {
   ChevronUpDownIcon,
   PencilIcon,
@@ -164,9 +182,13 @@ import {
   TrashIcon,
 } from '@heroicons/vue/24/outline'
 import { reactive, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Draggable from 'vuedraggable'
 
+const { t } = useI18n()
+
 const form = reactive({
+  type: 'clash' as BackendType,
   protocol: 'http',
   host: '127.0.0.1',
   port: '9090',
@@ -177,8 +199,6 @@ const form = reactive({
 
 const showEditModal = ref(false)
 const editingBackendUuid = ref('')
-const showSingboxPrompt = ref(false)
-const singboxBackendUuid = ref('')
 
 watch(
   () => router.currentRoute.value.query.editBackend,
@@ -202,7 +222,7 @@ const editBackend = (backend: Backend) => {
   showEditModal.value = true
 }
 
-type ClashSetupForm = Omit<Backend, 'uuid' | 'singboxChannel'>
+type SetupForm = Omit<Backend, 'uuid'>
 
 const finishLogin = async () => {
   try {
@@ -214,8 +234,8 @@ const finishLogin = async () => {
   router.push({ name: ROUTE_NAME.proxies })
 }
 
-const handleSubmit = async (setupForm: ClashSetupForm, quiet = false) => {
-  const { protocol, host, port, password } = setupForm
+const handleSubmit = async (setupForm: SetupForm, quiet = false) => {
+  const { protocol, host, port } = setupForm
 
   if (!protocol || !host || !port) {
     if (!quiet) alert('Please fill in all the fields.')
@@ -231,32 +251,22 @@ const handleSubmit = async (setupForm: ClashSetupForm, quiet = false) => {
     showNotification({ content: 'protocolTips' })
   }
 
+  const candidate: Backend = { uuid: '', ...setupForm }
+
   try {
-    const response = await fetch(`${getUrlFromBackend(setupForm)}/version`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${password}`,
-      },
-    })
-
-    if (!response.ok) {
-      if (!quiet) alert(response.statusText)
-      return
-    }
-
-    const { version, message } = await response.json()
-    if (!version) {
-      if (!quiet) alert(message)
-      return
+    if (setupForm.type === 'singbox') {
+      if (!(await isSingboxChannelAvailable(candidate, 10000))) {
+        if (!quiet) alert(t('singboxConnectionFailed'))
+        return
+      }
+    } else {
+      if (!(await isBackendAvailable(candidate, 10000))) {
+        if (!quiet) alert(t('backendConnectionFailed'))
+        return
+      }
     }
 
     addBackend(setupForm)
-    if (__SINGBOX_NATIVE__ && String(version).includes('sing-box')) {
-      singboxBackendUuid.value = activeUuid.value
-      showSingboxPrompt.value = true
-      return
-    }
-
     await finishLogin()
   } catch (error) {
     if (!quiet) alert(error)
@@ -266,7 +276,7 @@ const handleSubmit = async (setupForm: ClashSetupForm, quiet = false) => {
 const backend = getBackendFromUrl()
 
 if (backend) {
-  handleSubmit(backend)
+  handleSubmit({ type: 'clash', ...backend })
 } else if (backendList.value.length === 0) {
   handleSubmit(form, true)
 }

@@ -16,6 +16,9 @@ const zh: LANG_MESSAGE = {
   default: '默认',
   singboxApiChannel: 'sing-box API',
   clashApiChannel: 'Clash API',
+  backendType: '后端类型',
+  clashApi: 'Clash API',
+  singboxNative: 'sing-box 原生',
   enableSingboxApi: '启用 sing-box 原生 API',
   enableSingboxApiTip:
     'Clash API 始终作为主连接。原生 API 仅用于 sing-box 特有的工具、Tailscale 和终端能力。',

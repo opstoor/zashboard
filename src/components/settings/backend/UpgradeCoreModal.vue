@@ -46,7 +46,7 @@
 import { upgradeCoreAPI } from '@/api'
 import { handlerUpgradeSuccess } from '@/helper'
 import { fetchConfigs } from '@/store/config'
-import { fetchProxies } from '@/store/proxies'
+import { fetchProxies } from '@/composables/proxiesAssembly'
 import { fetchRules } from '@/store/rules'
 import { ref } from 'vue'
 import DialogWrapper from '../../common/DialogWrapper.vue'

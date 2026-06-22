@@ -132,7 +132,7 @@ watch(
   },
 )
 
-const isSameBackend = (b1: Omit<Backend, 'uuid'>, b2: Omit<Backend, 'uuid'>) => {
+const isSameBackend = (b1: Omit<Backend, 'uuid' | 'type'>, b2: Omit<Backend, 'uuid' | 'type'>) => {
   return (
     b1.host === b2.host &&
     b1.port === b2.port &&

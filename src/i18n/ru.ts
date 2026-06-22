@@ -16,6 +16,9 @@ const ru: LANG_MESSAGE = {
   default: 'По умолчанию',
   singboxApiChannel: 'sing-box API',
   clashApiChannel: 'Clash API',
+  backendType: 'Тип бэкенда',
+  clashApi: 'Clash API',
+  singboxNative: 'sing-box Native',
   enableSingboxApi: 'Включить нативный API sing-box',
   enableSingboxApiTip:
     'Clash API остается основным подключением. Нативный API используется только для инструментов sing-box, Tailscale и терминала.',

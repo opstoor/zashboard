@@ -40,17 +40,6 @@ jobs:
           - { key: pingfang, suffix: '-pingfang-only' }
           - { key: sarasa, suffix: '-sarasa-only' }
           - { key: none, suffix: '-no-fonts' }
-        # ... crossed with the sing-box native API dimension. The default
-        # (no-suffix) build drops it; the -singbox-native variant includes it.
-        singbox:
-          - { enable: 'false', suffix: '' }
-          - { enable: 'true', suffix: '-singbox-native' }
-        # The production root `gh-pages` branch is an exception: it always ships
-        # the full build (all fonts + sing-box native, see the env below), so the
-        # separate all-fonts `-singbox-native` branch would be redundant.
-        exclude:
-          - font: { key: all, suffix: '' }
-            singbox: { enable: 'true', suffix: '-singbox-native' }
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -59,8 +48,6 @@ jobs:
       - name: Install and Build 🔧
         env:
           FONT: ${{ matrix.font.key }}
-          # Force sing-box native ON for the full-font root build (-> gh-pages).
-          SINGBOX_NATIVE: ${{ matrix.font.key == 'all' || matrix.singbox.enable }}
         run: |
           pnpm i
           pnpm run build
@@ -71,7 +58,7 @@ jobs:
         with:
           github_token: ${{ secrets.PAT }}
           publish_dir: ./dist
-          publish_branch: gh-pages${{ matrix.font.suffix }}${{ matrix.singbox.suffix }}
+          publish_branch: gh-pages${{ matrix.font.suffix }}
           force_orphan: true
 
   release-dist:
@@ -89,11 +76,6 @@ jobs:
           - { key: pingfang, suffix: '-pingfang-only' }
           - { key: sarasa, suffix: '-sarasa-only' }
           - { key: none, suffix: '-no-fonts' }
-        # The default (no-suffix) build drops the sing-box native API; the
-        # -singbox variant includes it.
-        singbox:
-          - { enable: 'false', suffix: '' }
-          - { enable: 'true', suffix: '-singbox-native' }
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -102,16 +84,15 @@ jobs:
       - name: Build and Zip the dist folder
         env:
           FONT: ${{ matrix.font.key }}
-          SINGBOX_NATIVE: ${{ matrix.singbox.enable }}
         run: |
           pnpm i
           pnpm run build
-          zip -r dist${{ matrix.font.suffix }}${{ matrix.singbox.suffix }}.zip dist
+          zip -r dist${{ matrix.font.suffix }}.zip dist
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v3
         with:
-          files: dist${{ matrix.font.suffix }}${{ matrix.singbox.suffix }}.zip
+          files: dist${{ matrix.font.suffix }}.zip
           tag_name: ${{ needs.release-please.outputs.tag_name }}
 
   release-image:
