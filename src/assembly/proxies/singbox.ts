@@ -6,6 +6,7 @@ import { getSingboxClient } from '@/api/singbox/client'
 import { runStream, type StreamHandle } from '@/api/singbox/streams'
 import { disconnectByIdAPI } from '@/assembly/connections'
 import type { Group, GroupItem } from '@/gen/daemon/started_service_pb'
+import { getConnectionChains } from '@/helper'
 import { activeConnections } from '@/store/connections'
 import { automaticDisconnection } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
@@ -150,7 +151,7 @@ export const handlerProxySelect = async (proxyGroupName: string, proxyName: stri
 
   if (automaticDisconnection.value) {
     activeConnections.value
-      .filter((c) => c.chains.includes(proxyGroupName))
+      .filter((c) => getConnectionChains(c).includes(proxyGroupName))
       .forEach((c) => disconnectByIdAPI(c.id))
   }
 }

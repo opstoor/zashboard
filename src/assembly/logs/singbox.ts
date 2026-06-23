@@ -1,4 +1,4 @@
-// sing-box native 后端的日志组装:订阅 gRPC SubscribeLog,剥离 ANSI 颜色码、
+// sing-box native 后端的日志组装:订阅 gRPC SubscribeLog,保留 ANSI 颜色码、
 // 映射日志级别,并把按批到达的日志逐条投递成与 Clash WS 相同的 { data, close } 流。
 import { getSingboxClient } from '@/api/singbox/client'
 import { runStream } from '@/api/singbox/streams'
@@ -10,10 +10,6 @@ interface SingboxStream<T> {
   data: Ref<T | undefined>
   close: () => void
 }
-
-// sing-box 的日志消息携带 ANSI 颜色转义码(如 \x1b[36m ... \x1b[0m),需剥离。
-const ANSI_PATTERN = /\x1b\[[0-9;]*m/g
-const stripAnsi = (s: string) => s.replace(ANSI_PATTERN, '')
 
 const logLevelToType = (level: LogLevel): Log['type'] => {
   switch (level) {
@@ -85,7 +81,7 @@ const fetchSingboxLogs = <T>(params: Record<string, string> = {}): SingboxStream
       if (msg.reset) queue.length = 0
       for (const m of msg.messages) {
         if (levelFilter === null || (levelFilter !== undefined && m.level > levelFilter)) continue
-        queue.push({ type: logLevelToType(m.level), payload: stripAnsi(m.message) })
+        queue.push({ type: logLevelToType(m.level), payload: m.message })
       }
       drain()
     },

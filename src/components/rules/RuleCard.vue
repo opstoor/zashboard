@@ -103,6 +103,7 @@
 <script setup lang="ts">
 import { disconnectByIdAPI } from '@/assembly/connections'
 import { useBounceOnVisible } from '@/composables/bouncein'
+import { getConnectionRulePayload } from '@/helper'
 import { useTooltip } from '@/helper/tooltip'
 import { activeConnections } from '@/store/connections'
 import { proxyGroupList } from '@/assembly/proxies'
@@ -222,7 +223,8 @@ const toggleRuleDisabledHandler = async () => {
     if (willBeDisabled && disconnectOnRuleDisable.value) {
       const matchingConnections = activeConnections.value.filter((conn) => {
         const ruleTypeMatches = conn.rule === props.rule.type
-        const rulePayloadMatches = (conn.rulePayload || '') === (props.rule.payload || '')
+        const rulePayloadMatches = getConnectionRulePayload(conn) === (props.rule.payload || '')
+
         return ruleTypeMatches && rulePayloadMatches
       })
 

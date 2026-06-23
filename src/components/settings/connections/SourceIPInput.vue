@@ -51,6 +51,7 @@
 <script setup lang="ts">
 import { checkTruncation, useTooltip } from '@/helper/tooltip'
 import { getLabelFromBackend } from '@/helper/utils'
+import { getConnectionSourceIP } from '@/helper'
 import { connections } from '@/store/connections'
 import { sourceIPLabelList } from '@/store/settings'
 import { backendList } from '@/store/setup'
@@ -67,7 +68,7 @@ const sourceIPLabel = defineModel<Partial<SourceIPLabel>>({
   },
 })
 const sourceList = computed(() => {
-  return uniq(connections.value.map((conn) => conn.metadata.sourceIP))
+  return uniq(connections.value.map(getConnectionSourceIP))
     .filter(Boolean)
     .filter((ip) => !sourceIPLabelList.value.find((item) => item.key === ip))
     .sort()

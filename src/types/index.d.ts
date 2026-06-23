@@ -1,3 +1,5 @@
+import type { Connection as SingboxConnectionRawMessage } from '@/gen/daemon/started_service_pb'
+
 export type BackendType = 'clash' | 'singbox'
 
 export type Backend = {
@@ -107,7 +109,7 @@ export type RuleProvider = {
   vehicleType: string
 }
 
-export type ConnectionRawMessage = {
+export type ClashConnectionRawMessage = {
   id: string
   download: number
   upload: number
@@ -143,6 +145,8 @@ export type ConnectionRawMessage = {
     smartBlock: string
   }
 }
+
+export type ConnectionRawMessage = ClashConnectionRawMessage | SingboxConnectionRawMessage
 
 export type Connection = ConnectionRawMessage & {
   downloadSpeed: number

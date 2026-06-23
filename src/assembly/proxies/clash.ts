@@ -10,7 +10,7 @@ import {
 } from '@/api/clash'
 import { disconnectByIdAPI } from '@/assembly/connections'
 import { GLOBAL, IPV6_TEST_URL, NOT_CONNECTED, PROXY_TYPE, SPEEDTEST_MODE } from '@/constant'
-import { isProxyGroup } from '@/helper'
+import { getConnectionChains, isProxyGroup } from '@/helper'
 import { showNotification } from '@/helper/notification'
 import { activeConnections } from '@/store/connections'
 import {
@@ -126,7 +126,7 @@ export const handlerProxySelect = async (proxyGroupName: string, proxyName: stri
 
   if (automaticDisconnection.value) {
     activeConnections.value
-      .filter((c) => c.chains.includes(proxyGroupName))
+      .filter((c) => getConnectionChains(c).includes(proxyGroupName))
       .forEach((c) => disconnectByIdAPI(c.id))
   }
   fetchProxies()

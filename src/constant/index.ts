@@ -54,6 +54,9 @@ export enum CONNECTIONS_TABLE_ACCESSOR_KEY {
   DestinationType = 'destinationType',
   RemoteAddress = 'remoteAddress',
   InboundUser = 'inboundUser',
+  Protocol = 'protocol',
+  OutboundType = 'outboundType',
+  FromOutbound = 'fromOutbound',
 }
 
 export enum TABLE_WIDTH_MODE {

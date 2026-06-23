@@ -1,13 +1,18 @@
 // sing-box native 后端的连接组装:订阅 gRPC SubscribeConnections,把 protobuf 事件
-// 维护成一张连接表,按 100ms 批量产出与 Clash WS 相同形状的 { data, close } 流。
+// 维护成一张连接表,按 100ms 批量产出 { data, close } 流。
 import { getSingboxClient } from '@/api/singbox/client'
 import { runStream, type StreamHandle } from '@/api/singbox/streams'
 import {
   ConnectionEventType,
   type Connection as PbConnection,
 } from '@/gen/daemon/started_service_pb'
-import type { ConnectionRawMessage } from '@/types'
+import type { Connection } from '@/types'
 import { ref, type Ref } from 'vue'
+import {
+  createGetConnectionDisplayValue,
+  createGetConnectionVisibleSearchValues,
+  type ConnectionAccessor,
+} from './accessor'
 
 const SUBSCRIPTION_INTERVAL = 1_000_000_000n // 1s(ns)
 
@@ -16,55 +21,12 @@ interface SingboxStream<T> {
   close: () => void
 }
 
-// 拆分 "ip:port" / "[ipv6]:port"
-const splitHostPort = (s: string): [string, string] => {
-  if (!s) return ['', '']
-  const idx = s.lastIndexOf(':')
-  if (idx === -1) return [s, '']
-  let host = s.slice(0, idx)
-  const port = s.slice(idx + 1)
-  if (host.startsWith('[') && host.endsWith(']')) host = host.slice(1, -1)
-  return [host, port]
-}
-
-const mapConnection = (c: PbConnection): ConnectionRawMessage => {
-  const [sourceIP, sourcePort] = splitHostPort(c.source)
-  const [destinationIP, destinationPort] = splitHostPort(c.destination)
-  const processPath = c.processInfo?.processPath ?? ''
-  const process = processPath.split(/[\\/]/).pop() ?? ''
-
-  return {
-    id: c.id,
-    download: Number(c.downlinkTotal),
-    upload: Number(c.uplinkTotal),
-    chains: c.chainList.length ? [...c.chainList] : [c.outbound].filter(Boolean),
-    rule: c.rule,
-    start: Number(c.createdAt),
-    metadata: {
-      destinationIP,
-      destinationPort,
-      host: c.domain,
-      inboundName: c.inbound,
-      inboundUser: c.user,
-      network: c.network,
-      process,
-      processPath,
-      remoteDestination: destinationIP,
-      sniffHost: c.domain,
-      sourceIP,
-      sourcePort,
-      type: c.inboundType,
-      uid: c.processInfo?.userId ?? 0,
-    },
-  } as ConnectionRawMessage
-}
-
 const fetchSingboxConnections = <T>(): SingboxStream<T> => {
   const data = ref<T>()
   const client = getSingboxClient()?.client
   if (!client) return { data, close: () => {} }
 
-  const conns = new Map<string, ConnectionRawMessage>()
+  const conns = new Map<string, PbConnection>()
   let downloadTotal = 0
   let uploadTotal = 0
   let timer: ReturnType<typeof setTimeout> | null = null
@@ -95,16 +57,19 @@ const fetchSingboxConnections = <T>(): SingboxStream<T> => {
 
         switch (event.type) {
           case ConnectionEventType.CONNECTION_EVENT_NEW:
-            if (event.connection) conns.set(event.id, mapConnection(event.connection))
+            if (event.connection) conns.set(event.id, event.connection)
             break
           case ConnectionEventType.CONNECTION_EVENT_UPDATE: {
             if (event.connection) {
-              conns.set(event.id, mapConnection(event.connection))
+              conns.set(event.id, event.connection)
             } else {
               const existing = conns.get(event.id)
               if (existing) {
-                existing.upload += Number(event.uplinkDelta)
-                existing.download += Number(event.downlinkDelta)
+                conns.set(event.id, {
+                  ...existing,
+                  uplinkTotal: existing.uplinkTotal + event.uplinkDelta,
+                  downlinkTotal: existing.downlinkTotal + event.downlinkDelta,
+                })
               }
             }
             break
@@ -144,3 +109,91 @@ export const disconnectByIdAPI = closeSingboxConnection
 export const disconnectAllAPI = closeAllSingboxConnections
 
 export const fetchConnectionsAPI = fetchSingboxConnections
+
+// 拆分 "ip:port" / "[ipv6]:port"
+const splitHostPort = (value: string): [string, string] => {
+  if (!value) return ['', '']
+  const idx = value.lastIndexOf(':')
+  if (idx === -1) return [value, '']
+
+  let host = value.slice(0, idx)
+  const port = value.slice(idx + 1)
+
+  if (host.startsWith('[') && host.endsWith(']')) {
+    host = host.slice(1, -1)
+  }
+
+  return [host, port]
+}
+
+const asSingbox = (connection: Connection) => connection as PbConnection
+
+const getNetwork = (c: PbConnection) => {
+  const [, destinationPort] = splitHostPort(c.destination)
+
+  if ((destinationPort === '443' || c.domain) && c.network === 'udp') {
+    return 'quic'
+  }
+
+  return c.network
+}
+
+const getHostname = (c: PbConnection) => c.domain || splitHostPort(c.destination)[0]
+
+export const connectionAccessor: ConnectionAccessor = {
+  chains: (connection) => {
+    const c = asSingbox(connection)
+
+    return c.chainList.length ? c.chainList : [c.outbound].filter(Boolean)
+  },
+  download: (connection) => Number(asSingbox(connection).downlinkTotal),
+  upload: (connection) => Number(asSingbox(connection).uplinkTotal),
+  start: (connection) => Number(asSingbox(connection).createdAt),
+  rule: (connection) => asSingbox(connection).rule,
+  rulePayload: () => '',
+  sourceIP: (connection) => splitHostPort(asSingbox(connection).source)[0],
+  sourcePort: (connection) => splitHostPort(asSingbox(connection).source)[1],
+  network: (connection) => getNetwork(asSingbox(connection)),
+  networkType: (connection) => {
+    const c = asSingbox(connection)
+
+    return `${c.inboundType} | ${getNetwork(c)}`
+  },
+  hostname: (connection) => getHostname(asSingbox(connection)),
+  host: (connection) => {
+    const c = asSingbox(connection)
+    const [, destinationPort] = splitHostPort(c.destination)
+    const host = getHostname(c)
+
+    if (host.includes(':')) {
+      return `[${host}]:${destinationPort}`
+    }
+    return `${host}:${destinationPort}`
+  },
+  process: (connection) => {
+    const processPath = asSingbox(connection).processInfo?.processPath ?? ''
+
+    return processPath.replace(/^.*[/\\](.*)$/, '$1') || '-'
+  },
+  destination: (connection) => {
+    const c = asSingbox(connection)
+
+    return splitHostPort(c.destination)[0] || c.domain
+  },
+  inboundUser: (connection) => {
+    const c = asSingbox(connection)
+
+    return c.user || c.inbound || '-'
+  },
+  sniffHost: (connection) => asSingbox(connection).domain,
+  remoteAddress: (connection) => asSingbox(connection).destination,
+  protocol: (connection) => asSingbox(connection).protocol,
+  outboundType: (connection) => asSingbox(connection).outboundType,
+  fromOutbound: (connection) => asSingbox(connection).fromOutbound,
+  smartBlock: () => undefined,
+}
+
+export const getConnectionDisplayValue = createGetConnectionDisplayValue(connectionAccessor)
+
+export const getConnectionVisibleSearchValues =
+  createGetConnectionVisibleSearchValues(connectionAccessor)

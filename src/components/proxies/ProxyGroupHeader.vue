@@ -49,6 +49,7 @@
 import { isHiddenGroup } from '@/helper'
 import { checkTruncation } from '@/helper/tooltip'
 import { prettyBytesHelper } from '@/helper/utils'
+import { getConnectionChains } from '@/helper'
 import { activeConnections } from '@/store/connections'
 import { hiddenGroupMap, proxyMap } from '@/assembly/proxies'
 import { manageHiddenGroup, proxyGroupIconMargin, proxyGroupIconSize } from '@/store/settings'
@@ -74,7 +75,7 @@ const proxyGroup = computed(() => proxyMap.value[props.name])
 
 const downloadTotal = computed(() => {
   return activeConnections.value
-    .filter((conn) => conn.chains.includes(props.name))
+    .filter((conn) => getConnectionChains(conn).includes(props.name))
     .reduce((total, conn) => total + conn.downloadSpeed, 0)
 })
 
