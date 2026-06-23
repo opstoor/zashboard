@@ -7,8 +7,6 @@
     <SettingsMenu
       :menu-items="menuItems"
       :active-menu-key="activeMenuKey"
-      :show-active-indicator="!isTwoColumns"
-      :two-columns-available="twoColumnsAvailable"
       @menu-click="handleMenuClick"
     />
 
