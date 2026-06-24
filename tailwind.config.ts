@@ -7,7 +7,7 @@ export default {
     extend: {
       colors: {
         ['low-latency']: 'var(--color-low-latency, oklch(0.66 0.1 160))',
-        ['medium-latency']: 'var(--color-medium-latency, rgb(250, 210, 75))',
+        ['medium-latency']: 'var(--color-medium-latency, rgb(255, 197, 4))',
         ['high-latency']: 'var(--color-high-latency, rgb(244, 96, 108))',
       },
     },
