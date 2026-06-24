@@ -1,8 +1,8 @@
 <template>
-  <div class="mx-auto flex max-w-3xl flex-col gap-4 p-2 sm:p-4">
+  <div class="mx-auto flex max-w-2xl flex-col p-2 sm:p-4">
     <div
       v-if="servers.length === 0"
-      class="text-base-content/60 p-8 text-center text-sm"
+      class="text-base-content/50 p-12 text-center text-sm"
     >
       {{ $t('usbipNoServer') }}
     </div>

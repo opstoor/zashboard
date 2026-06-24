@@ -5,7 +5,7 @@
         <div class="flex flex-1 items-center gap-1">
           <span class="text-base font-semibold tracking-tight">{{ proxyProvider.name }}</span>
           <span class="text-base-content/60 text-xs tabular-nums">
-            · {{ proxyProvider.vehicleType }} · {{ proxiesCount }}
+            {{ proxyProvider.vehicleType }} · {{ proxiesCount }}
           </span>
         </div>
         <div class="flex items-center gap-1.5">

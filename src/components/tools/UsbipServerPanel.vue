@@ -1,142 +1,140 @@
 <template>
-  <div class="card bg-base-100">
-    <div class="card-body gap-3 p-4">
-      <div class="flex flex-wrap items-center justify-between gap-2">
-        <h2 class="card-title text-base">
-          {{ title }}
-        </h2>
-        <div
-          v-if="provider.available.value"
-          class="dropdown dropdown-end"
+  <!-- Header -->
+  <div class="settings-section-label flex items-center justify-between gap-2 normal-case">
+    <span class="text-base-content/90 text-sm font-semibold tracking-normal">{{ title }}</span>
+    <div
+      v-if="provider.available.value"
+      class="dropdown dropdown-end"
+    >
+      <button
+        tabindex="0"
+        class="text-primary hover:bg-primary/10 flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium tracking-normal transition-colors"
+        @click="openAddMenu"
+      >
+        <PlusIcon class="h-4 w-4" />
+        {{ $t('usbipConnectDevice') }}
+      </button>
+      <ul
+        tabindex="0"
+        class="dropdown-content menu bg-base-100 rounded-box z-1 mt-1 max-h-80 w-64 flex-nowrap overflow-y-auto p-2 shadow-lg"
+      >
+        <li
+          v-if="permitted === null"
+          class="p-2"
         >
-          <button
-            tabindex="0"
-            class="btn btn-xs btn-primary btn-outline gap-1"
-            @click="openAddMenu"
+          <span class="loading loading-spinner loading-sm mx-auto"></span>
+        </li>
+        <template v-else>
+          <li
+            v-if="permitted.length > 0"
+            class="menu-title"
           >
-            <PlusIcon class="h-4 w-4" />
-            {{ $t('usbipConnectDevice') }}
-          </button>
-          <ul
-            tabindex="0"
-            class="dropdown-content menu bg-base-100 rounded-box z-1 mt-1 max-h-80 w-64 flex-nowrap overflow-y-auto p-2 shadow"
+            {{ $t('usbipAuthorizedDevices') }}
+          </li>
+          <li
+            v-for="(entry, index) in permitted"
+            :key="`${entry.vidPid}-${index}`"
           >
-            <li
-              v-if="permitted === null"
-              class="p-2"
+            <button
+              :disabled="entry.attached"
+              class="flex items-center justify-between gap-2"
+              @click="pick(entry)"
             >
-              <span class="loading loading-spinner loading-sm mx-auto"></span>
-            </li>
-            <template v-else>
-              <li
-                v-if="permitted.length > 0"
-                class="menu-title"
-              >
-                {{ $t('usbipAuthorizedDevices') }}
-              </li>
-              <li
-                v-for="(entry, index) in permitted"
-                :key="`${entry.vidPid}-${index}`"
-              >
-                <button
-                  :disabled="entry.attached"
-                  class="flex items-center justify-between gap-2"
-                  @click="pick(entry)"
-                >
-                  <span class="truncate">{{ entry.label }}</span>
-                  <span class="font-mono text-xs opacity-60">{{ entry.vidPid }}</span>
-                </button>
-              </li>
-              <li
-                v-if="permitted.length > 0"
-                class="menu-title pt-1"
-              ></li>
-              <li>
-                <button
-                  class="gap-2"
-                  @click="pickOther"
-                >
-                  <PlusIcon class="h-4 w-4" />
-                  {{ $t('usbipOtherDevice') }}
-                </button>
-              </li>
-            </template>
-          </ul>
-        </div>
-      </div>
-
-      <div class="text-xs font-medium opacity-60">{{ $t('usbipDevices') }}</div>
-
-      <div
-        v-if="provider.endError.value"
-        class="alert alert-error alert-soft py-2 text-sm"
-      >
-        <ExclamationTriangleIcon class="h-4 w-4 flex-shrink-0" />
-        <span class="break-all">{{ provider.endError.value }}</span>
-      </div>
-
-      <div
-        v-if="rows.length === 0"
-        class="text-base-content/60 p-6 text-center text-sm"
-      >
-        {{ provider.available.value ? $t('usbipPickDeviceHint') : $t('usbipNoDevicesShared') }}
-      </div>
-      <div
-        v-else
-        class="border-base-300 divide-base-300 divide-y rounded border text-sm"
-      >
-        <div
-          v-for="row in rows"
-          :key="row.key"
-          class="flex items-center gap-2 px-3 py-2"
-        >
-          <component
-            :is="row.descriptor ? 'button' : 'div'"
-            class="flex min-w-0 flex-1 flex-col gap-1 text-left"
-            :class="row.descriptor && 'hover:opacity-80'"
-            @click="row.descriptor && openDetail(row)"
-          >
-            <div class="flex items-center gap-2">
-              <span
-                class="inline-block h-2 w-2 flex-shrink-0 rounded-full"
-                :class="dotClass(row.state?.tone)"
-              ></span>
-              <span class="font-medium break-all">{{ row.name }}</span>
-              <span
-                v-if="row.state"
-                class="text-xs opacity-60"
-                >{{ row.state.label }}</span
-              >
-            </div>
-            <div
-              v-if="row.error"
-              class="text-error text-xs break-all"
+              <span class="truncate">{{ entry.label }}</span>
+              <span class="font-mono text-xs opacity-60">{{ entry.vidPid }}</span>
+            </button>
+          </li>
+          <li
+            v-if="permitted.length > 0"
+            class="menu-title pt-1"
+          ></li>
+          <li>
+            <button
+              class="gap-2"
+              @click="pickOther"
             >
-              {{ row.error }}
-            </div>
-          </component>
-          <button
-            v-if="row.onDetach"
-            class="btn btn-xs btn-error btn-ghost"
-            :title="$t('usbipDetach')"
-            @click="row.onDetach()"
-          >
-            <XMarkIcon class="h-4 w-4" />
-          </button>
-        </div>
-      </div>
-
-      <div
-        v-if="!provider.available.value"
-        class="text-base-content/60 text-xs"
-      >
-        {{
-          provider.reason.value === 'insecure'
-            ? $t('usbipInsecureContext')
-            : $t('usbipUnsupportedBrowser')
-        }}
-      </div>
+              <PlusIcon class="h-4 w-4" />
+              {{ $t('usbipOtherDevice') }}
+            </button>
+          </li>
+        </template>
+      </ul>
     </div>
+  </div>
+
+  <div
+    v-if="provider.endError.value"
+    class="alert alert-error alert-soft mb-2 rounded-xl py-2 text-sm"
+  >
+    <ExclamationTriangleIcon class="h-4 w-4 flex-shrink-0" />
+    <span class="break-all">{{ provider.endError.value }}</span>
+  </div>
+
+  <!-- Devices -->
+  <div
+    v-if="rows.length === 0"
+    class="bg-base-200/40 text-base-content/50 rounded-xl p-6 text-center text-sm"
+  >
+    {{ provider.available.value ? $t('usbipPickDeviceHint') : $t('usbipNoDevicesShared') }}
+  </div>
+  <div
+    v-else
+    class="settings-grid"
+  >
+    <div
+      v-for="row in rows"
+      :key="row.key"
+      class="setting-item"
+    >
+      <component
+        :is="row.descriptor ? 'button' : 'div'"
+        class="flex min-w-0 flex-1 flex-col gap-0.5 text-left"
+        @click="row.descriptor && openDetail(row)"
+      >
+        <div class="flex items-center gap-2.5">
+          <span
+            class="inline-block h-2 w-2 shrink-0 rounded-full"
+            :class="dotClass(row.state?.tone)"
+          ></span>
+          <span class="truncate text-sm font-medium">{{ row.name }}</span>
+          <span
+            v-if="row.state"
+            class="text-base-content/40 truncate text-xs"
+            >{{ row.state.label }}</span
+          >
+        </div>
+        <div
+          v-if="row.error"
+          class="text-error pl-[1.125rem] text-xs break-all"
+        >
+          {{ row.error }}
+        </div>
+      </component>
+      <button
+        v-if="row.onDetach"
+        class="text-error/80 hover:bg-error/10 shrink-0 rounded-md p-1 transition-colors"
+        :title="$t('usbipDetach')"
+        @click="row.onDetach()"
+      >
+        <XMarkIcon class="h-4 w-4" />
+      </button>
+      <ChevronRightIcon
+        v-if="row.descriptor"
+        class="text-base-content/25 h-4 w-4 shrink-0 cursor-pointer"
+        @click="openDetail(row)"
+      />
+    </div>
+  </div>
+
+  <div
+    v-if="!provider.available.value"
+    class="text-base-content/50 px-1 pt-2 text-xs"
+  >
+    {{
+      provider.reason.value === 'insecure'
+        ? $t('usbipInsecureContext')
+        : $t('usbipUnsupportedBrowser')
+    }}
   </div>
 
   <!-- Device detail -->
@@ -149,8 +147,10 @@
       class="flex flex-col gap-4 text-sm"
     >
       <div>
-        <div class="mb-1 text-xs font-medium opacity-60">{{ $t('usbipIdentity') }}</div>
-        <div class="border-base-300 divide-base-300 divide-y rounded border">
+        <div class="text-base-content/45 mb-1 px-1 text-xs font-medium">
+          {{ $t('usbipIdentity') }}
+        </div>
+        <div class="divide-base-content/8 bg-base-200/40 divide-y overflow-hidden rounded-xl">
           <DataLine
             v-if="detail.descriptor.product"
             :label="$t('usbipProduct')"
@@ -178,8 +178,10 @@
       </div>
 
       <div>
-        <div class="mb-1 text-xs font-medium opacity-60">{{ $t('usbipConnection') }}</div>
-        <div class="border-base-300 divide-base-300 divide-y rounded border">
+        <div class="text-base-content/45 mb-1 px-1 text-xs font-medium">
+          {{ $t('usbipConnection') }}
+        </div>
+        <div class="divide-base-content/8 bg-base-200/40 divide-y overflow-hidden rounded-xl">
           <DataLine
             v-if="detail.busId"
             :label="$t('usbipBusId')"
@@ -207,8 +209,10 @@
       </div>
 
       <div>
-        <div class="mb-1 text-xs font-medium opacity-60">{{ $t('usbipClassInterfaces') }}</div>
-        <div class="border-base-300 divide-base-300 divide-y rounded border">
+        <div class="text-base-content/45 mb-1 px-1 text-xs font-medium">
+          {{ $t('usbipClassInterfaces') }}
+        </div>
+        <div class="divide-base-content/8 bg-base-200/40 divide-y overflow-hidden rounded-xl">
           <DataLine
             :label="$t('usbipDeviceClass')"
             :value="
@@ -265,7 +269,12 @@ import {
 import { showNotification } from '@/helper/notification'
 import { bcdToVersion, usbClassTriplet, usbSpeedLabel } from '@/helper/usbInfo'
 import { formatVidPid } from '@/helper/webusb'
-import { ExclamationTriangleIcon, PlusIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import {
+  ChevronRightIcon,
+  ExclamationTriangleIcon,
+  PlusIcon,
+  XMarkIcon,
+} from '@heroicons/vue/24/outline'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -338,7 +347,7 @@ const dotClass = (tone: Tone | undefined): string => {
     case 'bad':
       return 'bg-error'
     default:
-      return 'bg-base-300'
+      return 'bg-base-content/20'
   }
 }
 

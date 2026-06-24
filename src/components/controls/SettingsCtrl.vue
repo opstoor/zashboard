@@ -8,7 +8,7 @@
     >
       <div class="flex w-full gap-2">
         <SegmentedControl
-          class="mx-auto max-w-6xl flex-1"
+          class="mx-auto max-w-3xl flex-1"
           block
           :model-value="activeMenuKey"
           :options="segmentOptions"

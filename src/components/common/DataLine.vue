@@ -1,6 +1,6 @@
 <template>
-  <div class="flex items-center justify-between gap-3 px-3 py-2">
-    <span class="flex-shrink-0 opacity-60">{{ label }}</span>
+  <div class="flex min-h-11 items-center justify-between gap-3 px-4 py-2">
+    <span class="text-base-content/55 flex-shrink-0">{{ label }}</span>
     <span
       class="text-right break-all"
       :class="mono && 'font-mono text-xs'"
