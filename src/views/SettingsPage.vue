@@ -3,8 +3,9 @@
     class="relative h-full overflow-y-auto"
     @scroll.passive="handleScroll"
     ref="scrollContainerRef"
+    :style="padding"
   >
-    <SettingsMenu
+    <SettingsCtrl
       :menu-items="menuItems"
       :active-menu-key="activeMenuKey"
       @menu-click="handleMenuClick"
@@ -51,10 +52,7 @@
 
     <!-- Content Area -->
     <template v-if="isTwoColumns">
-      <div
-        class="mx-auto grid w-full max-w-7xl grid-cols-2 gap-12 p-3"
-        :style="padding"
-      >
+      <div class="mx-auto grid w-full max-w-7xl grid-cols-2 gap-12 p-3">
         <div
           v-for="col in [0, 1]"
           :key="col"
@@ -81,7 +79,6 @@
     <div
       v-else
       class="mx-auto w-full max-w-3xl space-y-1 p-3 md:space-y-2 md:px-8 md:py-6"
-      :style="padding"
     >
       <div
         v-for="item in menuItems"
@@ -101,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import SettingsMenu from '@/components/controls/SettingsCtrl.vue'
+import SettingsCtrl from '@/components/controls/SettingsCtrl.vue'
 import BackendSettings from '@/components/settings/backend/BackendSettings.vue'
 import ConnectionsSettings from '@/components/settings/connections/ConnectionsSettings.vue'
 import ZashboardSettings from '@/components/settings/general/ZashboardSettings.vue'
@@ -140,7 +137,10 @@ type MenuItem = {
   component: Component
 }
 
-const { padding } = usePaddingForViews()
+const { padding } = usePaddingForViews({
+  offsetTop: 0,
+  offsetBottom: 8,
+})
 
 const route = useRoute()
 

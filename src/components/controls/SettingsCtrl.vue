@@ -1,7 +1,7 @@
 <template>
   <CtrlsBar>
     <div
-      class="scrollbar-hidden p-1 px-2"
+      class="scrollbar-hidden p-2"
       @touchstart.passive.stop
       @touchmove.passive.stop
       @touchend.passive.stop
