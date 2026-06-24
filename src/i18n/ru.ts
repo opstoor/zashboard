@@ -103,6 +103,46 @@ const ru: LANG_MESSAGE = {
   fontSize: 'Размер шрифта',
   defaultFont: 'По умолчанию',
 
+  // USB/IP
+  usbip: 'USB/IP',
+  usbipNoServer: 'usbip-server не найден',
+  usbipServerTagged: 'USB/IP: {tag}',
+  usbipDevices: 'Устройства',
+  usbipConnectDevice: 'Подключить устройство',
+  usbipAuthorizedDevices: 'Авторизованные устройства',
+  usbipOtherDevice: 'Другое устройство…',
+  usbipDetach: 'Отключить',
+  usbipPickDeviceHint: 'Выберите USB-устройство для предоставления через этот usbip-server.',
+  usbipNoDevicesShared: 'Устройства ещё не предоставлены.',
+  usbipInsecureContext:
+    'WebUSB требует безопасного контекста. Откройте панель через localhost или по HTTPS.',
+  usbipUnsupportedBrowser:
+    'Чтобы предоставлять устройства, используйте браузер на базе Chromium либо графический клиент sing-box на macOS или Android.',
+  usbipClaimBlockedClass:
+    'Не удаётся предоставить «{label}»: браузер блокирует общий доступ к классу интерфейса этого устройства (HID, накопитель, аудио или видео).',
+  usbipClaimBlockedBusy:
+    'Не удаётся предоставить «{label}»: устройство используется другой программой или драйвером. Закройте их и повторите попытку.',
+  usbipStateAttaching: 'Подключение...',
+  usbipStateReady: 'Готово',
+  usbipStateError: 'Ошибка',
+  usbipStateIdle: 'Простаивает',
+  usbipStateAttached: 'Подключено',
+  usbipStateUnavailable: 'Недоступно',
+  usbipIdentity: 'Идентификация',
+  usbipProduct: 'Продукт',
+  usbipSerialNumber: 'Серийный номер',
+  usbipVersion: 'Версия',
+  usbipConnection: 'Подключение',
+  usbipBusId: 'ID шины',
+  usbipBackend: 'Бэкенд',
+  usbipSpeed: 'Скорость',
+  usbipBusDevice: 'Шина / Устройство',
+  usbipClassInterfaces: 'Класс и интерфейсы',
+  usbipDeviceClass: 'Класс устройства',
+  usbipDefinedAtInterface: 'Определяется на уровне интерфейса',
+  usbipConfigurations: 'Конфигурации',
+  usbipInterfaceN: 'Интерфейс {n}',
+
   // Shared labels and actions
   protocol: 'Протокол',
   host: 'Хост',

@@ -14,6 +14,10 @@ export const version = ref()
 export const isCoreUpdateAvailable = ref(false)
 export const zashboardVersion = ref(__APP_VERSION__)
 
+// sing-box gRPC API version (0 when unknown / non-sing-box). Gates capabilities
+// such as usbip, which requires apiVersion >= 2.
+export const singboxApiVersion = ref(0)
+
 export const isSingBoxCore = computed(() => version.value?.includes('sing-box'))
 
 export const mihomo = computed<[MIHOMO, string] | undefined>(() => {
@@ -38,12 +42,16 @@ const fetchSingboxVersion = async () => {
   const client = getSingboxClient()?.client
   if (!client) return { data: { version: 'sing-box' } }
   const v = await client.getVersion({})
+  singboxApiVersion.value = v.apiVersion
   const version = v.version.includes('sing-box') ? v.version : `sing-box ${v.version}`
   return { data: { version } }
 }
 
-export const fetchVersionAPI = () =>
-  isSingboxBackend.value ? fetchSingboxVersion() : fetchClashVersion()
+export const fetchVersionAPI = () => {
+  if (isSingboxBackend.value) return fetchSingboxVersion()
+  singboxApiVersion.value = 0
+  return fetchClashVersion()
+}
 
 watch(
   activeBackend,

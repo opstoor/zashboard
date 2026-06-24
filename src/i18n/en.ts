@@ -101,6 +101,46 @@ const en = {
   fontSize: 'Font Size',
   defaultFont: 'Default',
 
+  // USB/IP
+  usbip: 'USB/IP',
+  usbipNoServer: 'No usbip-server found',
+  usbipServerTagged: 'USB/IP: {tag}',
+  usbipDevices: 'Devices',
+  usbipConnectDevice: 'Connect device',
+  usbipAuthorizedDevices: 'Authorized devices',
+  usbipOtherDevice: 'Other device…',
+  usbipDetach: 'Detach',
+  usbipPickDeviceHint: 'Pick a USB device to share it through this usbip-server.',
+  usbipNoDevicesShared: 'No devices shared yet.',
+  usbipInsecureContext:
+    'WebUSB requires a secure context. Open the dashboard via localhost or over HTTPS.',
+  usbipUnsupportedBrowser:
+    'To provide devices, use a Chromium-based browser with the dashboard, or the sing-box graphical client on macOS or Android.',
+  usbipClaimBlockedClass:
+    "Can't share “{label}”: the browser blocks sharing this device's interface class (such as HID, storage, audio or video).",
+  usbipClaimBlockedBusy:
+    "Can't share “{label}”: another program or driver is using it. Close anything using the device, then try again.",
+  usbipStateAttaching: 'Attaching...',
+  usbipStateReady: 'Ready',
+  usbipStateError: 'Error',
+  usbipStateIdle: 'Idle',
+  usbipStateAttached: 'Attached',
+  usbipStateUnavailable: 'Unavailable',
+  usbipIdentity: 'Identity',
+  usbipProduct: 'Product',
+  usbipSerialNumber: 'Serial number',
+  usbipVersion: 'Version',
+  usbipConnection: 'Connection',
+  usbipBusId: 'Bus ID',
+  usbipBackend: 'Backend',
+  usbipSpeed: 'Speed',
+  usbipBusDevice: 'Bus / Device',
+  usbipClassInterfaces: 'Class & Interfaces',
+  usbipDeviceClass: 'Device class',
+  usbipDefinedAtInterface: 'Defined at interface level',
+  usbipConfigurations: 'Configurations',
+  usbipInterfaceN: 'Interface {n}',
+
   // Shared labels and actions
   protocol: 'Protocol',
   host: 'Host',

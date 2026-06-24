@@ -2,4 +2,4 @@
 // 工具面板是 sing-box native 专属能力,经此统一出口消费,使 view 不直接依赖 api 层。
 export { getSingboxClient } from '@/api/singbox/client'
 export { runStream, type StreamHandle } from '@/api/singbox/streams'
-export { GrpcWebSocketStream } from '@/api/singbox/websocket'
+export { GrpcWebSocketStream, type GrpcStatus } from '@/api/singbox/websocket'
