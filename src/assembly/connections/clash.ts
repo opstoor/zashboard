@@ -4,17 +4,72 @@ import { proxyMap } from '@/assembly/proxies'
 import { PROXY_TYPE } from '@/constant'
 import type { ClashConnectionRawMessage, Connection } from '@/types'
 import { head } from 'lodash'
+import { ref, watch } from 'vue'
 import {
   createGetConnectionDisplayValue,
   createGetConnectionVisibleSearchValues,
   type ConnectionAccessor,
+  type ConnectionsSnapshot,
 } from './accessor'
 
 export const disconnectByIdAPI = disconnectClashByIdAPI
 
 export const disconnectAllAPI = disconnectAllClashAPI
 
-export const fetchConnectionsAPI = <T>() => createClashWebSocket<T>('connections')
+// Clash WS 每拍推送活跃连接全量快照。瞬时速率与已关闭连接需与上一拍 diff 求得 —— 这是 clash
+// 协议固有的内部细节,在此完成,对外只暴露统一的 ConnectionsSnapshot。
+export const fetchConnectionsAPI = () => {
+  const ws = createClashWebSocket<{
+    connections: ClashConnectionRawMessage[]
+    downloadTotal: number
+    uploadTotal: number
+    memory: number
+  }>('connections')
+
+  const data = ref<ConnectionsSnapshot>()
+  let previousMap = new Map<string, Connection>()
+
+  const unwatch = watch(ws.data, (raw) => {
+    if (!raw) return
+
+    const currentMap = new Map<string, Connection>()
+    const active = (raw.connections ?? []).map((conn) => {
+      const connection = conn as Connection
+      const pre = previousMap.get(connection.id)
+
+      if (!pre) {
+        connection.downloadSpeed = 0
+        connection.uploadSpeed = 0
+      } else {
+        connection.downloadSpeed = asClash(connection).download - asClash(pre).download
+        connection.uploadSpeed = asClash(connection).upload - asClash(pre).upload
+      }
+
+      previousMap.delete(connection.id)
+      currentMap.set(connection.id, connection)
+      return connection
+    })
+
+    // 上一拍存在、这一拍消失的连接即新关闭。
+    const closed = Array.from(previousMap.values())
+    previousMap = currentMap
+
+    data.value = {
+      active,
+      closed,
+      downloadTotal: raw.downloadTotal,
+      uploadTotal: raw.uploadTotal,
+    }
+  })
+
+  return {
+    data,
+    close: () => {
+      unwatch()
+      ws.close()
+    },
+  }
+}
 
 const asClash = (connection: Connection) => connection as ClashConnectionRawMessage
 

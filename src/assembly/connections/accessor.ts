@@ -15,6 +15,17 @@ export type ConnectionDisplayOptions = {
   showFullProxyChain: boolean
 }
 
+// 各后端连接流统一产出的快照。active/closed 的归类与瞬时速率均由各后端 assembly 内部算好,
+// store 直接消费,无需再做快照 diff(那只是 clash 全量快照的内部细节)。
+export interface ConnectionsSnapshot {
+  // 当前活跃连接,已带瞬时速率(downloadSpeed/uploadSpeed)。
+  active: Connection[]
+  // 本拍新关闭的连接(增量),供 store 追加进已关闭列表并落历史。
+  closed: Connection[]
+  downloadTotal: number
+  uploadTotal: number
+}
+
 // 各后端原始数据 → view 字段的读取契约。实现内部按各自后端的原始类型取值。
 export interface ConnectionAccessor {
   chains(connection: Connection): string[]

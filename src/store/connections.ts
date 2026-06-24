@@ -17,7 +17,7 @@ import {
   getNetworkTypeFromConnection,
 } from '@/helper'
 import { toSearchRegex } from '@/helper/search'
-import type { Connection, ConnectionRawMessage } from '@/types'
+import type { Connection } from '@/types'
 import { useStorage, watchOnce } from '@vueuse/core'
 import dayjs from 'dayjs'
 import { computed, ref, watch } from 'vue'
@@ -55,7 +55,6 @@ export const downloadTotal = ref(0)
 export const uploadTotal = ref(0)
 
 let cancel: () => void
-let previousConnectionsMap = new Map<string, Connection>()
 
 export const initConnections = () => {
   cancel?.()
@@ -63,54 +62,25 @@ export const initConnections = () => {
   closedConnections.value = []
   downloadTotal.value = 0
   uploadTotal.value = 0
-  previousConnectionsMap.clear()
   initAggregatedDataMap()
-  const ws = fetchConnectionsAPI<{
-    connections: ConnectionRawMessage[]
-    downloadTotal: number
-    uploadTotal: number
-    memory: number
-  }>()
-  const unwatch = watch(ws.data, (data) => {
-    if (!data) return
+  // active(已带瞬时速率)与 closed(本拍新关闭增量)均由各后端 assembly 算好,store 只消费。
+  const ws = fetchConnectionsAPI()
+  const unwatch = watch(ws.data, (snapshot) => {
+    if (!snapshot) return
 
-    downloadTotal.value = data.downloadTotal
-    uploadTotal.value = data.uploadTotal
+    downloadTotal.value = snapshot.downloadTotal
+    uploadTotal.value = snapshot.uploadTotal
 
     if (isPaused.value) {
       return
     }
 
-    const currentConnectionsMap = new Map<string, Connection>()
+    activeConnections.value = snapshot.active
 
-    activeConnections.value =
-      data.connections?.map((conn) => {
-        const connection = conn as Connection
-        const preConnection = previousConnectionsMap.get(connection.id)
-
-        if (!preConnection) {
-          connection.downloadSpeed = 0
-          connection.uploadSpeed = 0
-        } else {
-          connection.downloadSpeed =
-            getConnectionDownload(connection) - getConnectionDownload(preConnection)
-          connection.uploadSpeed =
-            getConnectionUpload(connection) - getConnectionUpload(preConnection)
-        }
-
-        previousConnectionsMap.delete(connection.id)
-        currentConnectionsMap.set(connection.id, connection)
-        return connection
-      }) ?? []
-
-    const newlyClosedConnections = Array.from(previousConnectionsMap.values())
-    closedConnections.value = closedConnections.value.concat(newlyClosedConnections).slice(-500)
-
-    if (newlyClosedConnections.length > 0) {
-      saveConnectionHistory(newlyClosedConnections)
+    if (snapshot.closed.length > 0) {
+      closedConnections.value = closedConnections.value.concat(snapshot.closed).slice(-500)
+      saveConnectionHistory(snapshot.closed)
     }
-
-    previousConnectionsMap = currentConnectionsMap
   })
 
   if (autoDisconnectIdleUDP.value) {
