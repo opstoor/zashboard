@@ -18,6 +18,10 @@ export const zashboardVersion = ref(__APP_VERSION__)
 // such as usbip, which requires apiVersion >= 2.
 export const singboxApiVersion = ref(0)
 
+// sing-box 内核启动时刻(ms epoch);0 表示未知 / 当前后端无此能力。
+// 仅 sing-box native gRPC(GetStartedAt)提供,Clash /version 无运行时长。
+export const startedAt = ref(0)
+
 export const isSingBoxCore = computed(() => version.value?.includes('sing-box'))
 
 export const mihomo = computed<[MIHOMO, string] | undefined>(() => {
@@ -53,6 +57,18 @@ export const fetchVersionAPI = () => {
   return fetchClashVersion()
 }
 
+const fetchSingboxStartedAt = async (): Promise<number> => {
+  const { getSingboxClient } = await import('@/api/singbox/client')
+  const client = getSingboxClient()?.client
+  if (!client) return 0
+  try {
+    const res = await client.getStartedAt({})
+    return Number(res.startedAt)
+  } catch {
+    return 0
+  }
+}
+
 watch(
   activeBackend,
   async (val) => {
@@ -60,6 +76,7 @@ watch(
       const { data } = await fetchVersionAPI()
 
       version.value = data?.version || ''
+      startedAt.value = isSingboxBackend.value ? await fetchSingboxStartedAt() : 0
       if (isSingBoxCore.value || !checkUpgradeCore.value || activeBackend.value?.disableUpgradeCore)
         return
       isCoreUpdateAvailable.value = await fetchBackendUpdateAvailableAPI()

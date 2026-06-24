@@ -36,6 +36,7 @@ const zhTW: LANG_MESSAGE = {
   results: '結果',
   http3: 'HTTP/3',
   maxRuntime: '最長執行時間',
+  startTime: '啟動時間',
   notSupportedByServer: '伺服器不支援',
   configURL: '設定 URL',
   serial: '串列測試',

@@ -36,6 +36,7 @@ const ru: LANG_MESSAGE = {
   results: 'Результаты',
   http3: 'HTTP/3',
   maxRuntime: 'Макс. время',
+  startTime: 'Время запуска',
   notSupportedByServer: 'Не поддерживается сервером',
   configURL: 'URL конфигурации',
   serial: 'Последовательно',

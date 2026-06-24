@@ -34,6 +34,7 @@ const en = {
   results: 'Results',
   http3: 'HTTP/3',
   maxRuntime: 'Max runtime',
+  startTime: 'Start time',
   notSupportedByServer: 'Not supported by server',
   configURL: 'Configuration URL',
   serial: 'Serial',

@@ -4,7 +4,10 @@
       {{ $t('general') }}
     </div>
     <div class="settings-grid">
-      <SettingItem :setting-key="k.actions">
+      <SettingItem
+        :setting-key="k.actions"
+        :when="!isSingboxBackend"
+      >
         <div class="setting-item-label">
           {{ $t('upgradeDashboard') }}
         </div>
@@ -22,7 +25,10 @@
         <DashboardSettings />
       </SettingItem>
       <LanguageSelect />
-      <SettingItem :setting-key="k.autoUpgradeDashboard">
+      <SettingItem
+        :setting-key="k.autoUpgradeDashboard"
+        :when="!isSingboxBackend"
+      >
         <div class="setting-item-label">
           {{ $t('autoUpgradeDashboard') }}
         </div>
@@ -161,6 +167,7 @@
 </template>
 
 <script setup lang="ts">
+import { isSingboxBackend } from '@/assembly/backend'
 import { isSingBoxCore, upgradeUIAPI } from '@/assembly/version'
 import DashboardSettings from '@/components/common/DashboardSettings.vue'
 import KeyboardShortcutsSettings from '@/components/settings/general/KeyboardShortcutsSettings.vue'

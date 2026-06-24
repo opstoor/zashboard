@@ -36,6 +36,7 @@ const zh: LANG_MESSAGE = {
   results: '结果',
   http3: 'HTTP/3',
   maxRuntime: '最长运行时间',
+  startTime: '启动时间',
   notSupportedByServer: '服务器不支持',
   configURL: '配置 URL',
   serial: '串行测试',
