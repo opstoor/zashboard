@@ -1,8 +1,7 @@
-// sing-box native 后端的日志订阅:订阅 gRPC SubscribeLog,保留 ANSI 颜色码、映射日志级别。
-// 日志本就按批到达,这里直接整批产出(不再伪装成 Clash 那样逐条投递)。
-import { getSingboxClient } from '@/api/singbox/client'
-import { runStream } from '@/api/singbox/streams'
-import { LogLevel } from '@/gen/daemon/started_service_pb'
+// sing-box native 后端的日志订阅:经跨 tab 共享流拿到原始 gRPC Log,保留 ANSI 颜色码、
+// 按本 tab 选定的级别过滤并映射级别。日志本就按批到达,直接整批产出(不再伪装成 Clash 逐条投递)。
+import { subscribeSharedStream } from '@/api/singbox/sharedStream'
+import { LogLevel, type Log as PbLog } from '@/gen/daemon/started_service_pb'
 import type { Log } from '@/types'
 import type { LogsSubscription } from './types'
 
@@ -50,22 +49,14 @@ export const subscribeLogs = (
   params: Record<string, string>,
   onBatch: (batch: Log[]) => void,
 ): LogsSubscription => {
-  const client = getSingboxClient()?.client
-  if (!client) return { close: () => {} }
-
   const levelFilter = logLevelFilterFromParam(params.level)
 
-  const handle = runStream(
-    (signal) => client.subscribeLog({}, { signal }),
-    (msg) => {
-      const batch: Log[] = []
-      for (const m of msg.messages) {
-        if (levelFilter === null || (levelFilter !== undefined && m.level > levelFilter)) continue
-        batch.push({ type: logLevelToType(m.level), payload: m.message })
-      }
-      if (batch.length) onBatch(batch)
-    },
-  )
-
-  return { close: () => handle.close() }
+  return subscribeSharedStream<PbLog>('logs', (msg) => {
+    const batch: Log[] = []
+    for (const m of msg.messages) {
+      if (levelFilter === null || (levelFilter !== undefined && m.level > levelFilter)) continue
+      batch.push({ type: logLevelToType(m.level), payload: m.message })
+    }
+    if (batch.length) onBatch(batch)
+  })
 }

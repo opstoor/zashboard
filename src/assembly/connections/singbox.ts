@@ -2,9 +2,10 @@
 // 维护成活跃连接表,并直接产出统一的 ConnectionsSnapshot(active 带瞬时速率、closed 为本拍增量)。
 // 速率由事件自带的 uplinkDelta/downlinkDelta 累计得到,CLOSED 事件直接产出已关闭连接 —— 无需快照 diff。
 import { getSingboxClient } from '@/api/singbox/client'
-import { runStream, type StreamHandle } from '@/api/singbox/streams'
+import { subscribeSharedStream } from '@/api/singbox/sharedStream'
 import {
   ConnectionEventType,
+  type ConnectionEvents,
   type Connection as PbConnection,
 } from '@/gen/daemon/started_service_pb'
 import type { Connection } from '@/types'
@@ -16,15 +17,11 @@ import {
   type ConnectionsSnapshot,
 } from './accessor'
 
-const SUBSCRIPTION_INTERVAL = 1_000_000_000n // 1s(ns)
-
 const fetchSingboxConnections = (): {
   data: Ref<ConnectionsSnapshot | undefined>
   close: () => void
 } => {
   const data = ref<ConnectionsSnapshot>()
-  const client = getSingboxClient()?.client
-  if (!client) return { data, close: () => {} }
 
   // 活跃连接表,条目已带瞬时速率。每次变更都整体替换条目(immutable),不就地改写,
   // 因此 emit 直接产出表内引用即可,无需再拷贝。
@@ -54,60 +51,57 @@ const fetchSingboxConnections = (): {
     timer = setTimeout(emit, 100)
   }
 
-  const handle: StreamHandle = runStream(
-    (signal) => client.subscribeConnections({ interval: SUBSCRIPTION_INTERVAL }, { signal }),
-    (msg) => {
-      if (msg.reset) {
-        conns.clear()
-      }
-      for (const event of msg.events) {
-        const downDelta = Number(event.downlinkDelta)
-        const upDelta = Number(event.uplinkDelta)
-        uploadTotal += upDelta
-        downloadTotal += downDelta
+  const handle = subscribeSharedStream<ConnectionEvents>('connections', (msg) => {
+    if (msg.reset) {
+      conns.clear()
+    }
+    for (const event of msg.events) {
+      const downDelta = Number(event.downlinkDelta)
+      const upDelta = Number(event.uplinkDelta)
+      uploadTotal += upDelta
+      downloadTotal += downDelta
 
-        switch (event.type) {
-          case ConnectionEventType.CONNECTION_EVENT_NEW:
-            // 新建连接当拍速率记 0(delta 是建连前的累计,不代表瞬时速率)。
-            if (event.connection) conns.set(event.id, enrich(event.connection, 0, 0))
-            break
-          case ConnectionEventType.CONNECTION_EVENT_UPDATE: {
-            if (event.connection) {
-              conns.set(event.id, enrich(event.connection, downDelta, upDelta))
-            } else {
-              // 仅 delta:沿用上次的连接,累加总量,速率取本拍 delta。
-              const prev = conns.get(event.id)
-              if (prev) {
-                const s = asSingbox(prev)
-                conns.set(
-                  event.id,
-                  enrich(
-                    {
-                      ...s,
-                      uplinkTotal: s.uplinkTotal + event.uplinkDelta,
-                      downlinkTotal: s.downlinkTotal + event.downlinkDelta,
-                    },
-                    downDelta,
-                    upDelta,
-                  ),
-                )
-              }
+      switch (event.type) {
+        case ConnectionEventType.CONNECTION_EVENT_NEW:
+          // 新建连接当拍速率记 0(delta 是建连前的累计,不代表瞬时速率)。
+          if (event.connection) conns.set(event.id, enrich(event.connection, 0, 0))
+          break
+        case ConnectionEventType.CONNECTION_EVENT_UPDATE: {
+          if (event.connection) {
+            conns.set(event.id, enrich(event.connection, downDelta, upDelta))
+          } else {
+            // 仅 delta:沿用上次的连接,累加总量,速率取本拍 delta。
+            const prev = conns.get(event.id)
+            if (prev) {
+              const s = asSingbox(prev)
+              conns.set(
+                event.id,
+                enrich(
+                  {
+                    ...s,
+                    uplinkTotal: s.uplinkTotal + event.uplinkDelta,
+                    downlinkTotal: s.downlinkTotal + event.downlinkDelta,
+                  },
+                  downDelta,
+                  upDelta,
+                ),
+              )
             }
-            break
           }
-          case ConnectionEventType.CONNECTION_EVENT_CLOSED: {
-            // CLOSED 可能带最终连接快照(最终流量、closedAt);否则回退到活跃表内现有数据。
-            // 同窗口内 NEW+CLOSED 的短连接也能在此被收入 closed,不丢失。
-            const base = event.connection ?? conns.get(event.id)
-            conns.delete(event.id)
-            if (base) newlyClosed.push(enrich(base, 0, 0))
-            break
-          }
+          break
+        }
+        case ConnectionEventType.CONNECTION_EVENT_CLOSED: {
+          // CLOSED 可能带最终连接快照(最终流量、closedAt);否则回退到活跃表内现有数据。
+          // 同窗口内 NEW+CLOSED 的短连接也能在此被收入 closed,不丢失。
+          const base = event.connection ?? conns.get(event.id)
+          conns.delete(event.id)
+          if (base) newlyClosed.push(enrich(base, 0, 0))
+          break
         }
       }
-      scheduleEmit()
-    },
-  )
+    }
+    scheduleEmit()
+  })
 
   return {
     data,
