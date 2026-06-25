@@ -154,7 +154,7 @@ export type Connection = ConnectionRawMessage & {
 }
 
 export type Log = {
-  type: 'info' | 'warning' | 'error' | 'debug'
+  type: LOG_LEVEL
   payload: string
 }
 
