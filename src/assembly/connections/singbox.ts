@@ -36,6 +36,14 @@ const fetchSingboxConnections = (): {
   const enrich = (c: PbConnection | Connection, down: number, up: number): Connection =>
     Object.assign({}, c, { downloadSpeed: down, uploadSpeed: up }) as Connection
 
+  // 把一个连接归入「本拍新关闭」并从活跃表移除。NEW/UPDATE/CLOSED 任意事件携带的连接,只要
+  // closedAt > 0(初始快照里夹带的历史已关闭连接、或最终关闭快照)都走这里,避免遗留在活跃表。
+  const close = (id: string, base?: PbConnection | Connection) => {
+    const c = base ?? conns.get(id)
+    conns.delete(id)
+    if (c) newlyClosed.push(enrich(c, 0, 0))
+  }
+
   const emit = () => {
     timer = null
     data.value = {
@@ -64,11 +72,16 @@ const fetchSingboxConnections = (): {
       switch (event.type) {
         case ConnectionEventType.CONNECTION_EVENT_NEW:
           // 新建连接当拍速率记 0(delta 是建连前的累计,不代表瞬时速率)。
-          if (event.connection) conns.set(event.id, enrich(event.connection, 0, 0))
+          // 初始快照可能把已关闭连接也当 NEW 下发(closedAt > 0),这类不进活跃表,直接归 closed。
+          if (event.connection) {
+            if (event.connection.closedAt > 0n) close(event.id, event.connection)
+            else conns.set(event.id, enrich(event.connection, 0, 0))
+          }
           break
         case ConnectionEventType.CONNECTION_EVENT_UPDATE: {
           if (event.connection) {
-            conns.set(event.id, enrich(event.connection, downDelta, upDelta))
+            if (event.connection.closedAt > 0n) close(event.id, event.connection)
+            else conns.set(event.id, enrich(event.connection, downDelta, upDelta))
           } else {
             // 仅 delta:沿用上次的连接,累加总量,速率取本拍 delta。
             const prev = conns.get(event.id)
@@ -93,9 +106,7 @@ const fetchSingboxConnections = (): {
         case ConnectionEventType.CONNECTION_EVENT_CLOSED: {
           // CLOSED 可能带最终连接快照(最终流量、closedAt);否则回退到活跃表内现有数据。
           // 同窗口内 NEW+CLOSED 的短连接也能在此被收入 closed,不丢失。
-          const base = event.connection ?? conns.get(event.id)
-          conns.delete(event.id)
-          if (base) newlyClosed.push(enrich(base, 0, 0))
+          close(event.id, event.connection)
           break
         }
       }
