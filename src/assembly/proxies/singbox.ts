@@ -9,7 +9,7 @@ import { disconnectByIdAPI } from '@/assembly/connections'
 import type { Group, GroupItem, Groups, OutboundList } from '@/gen/daemon/started_service_pb'
 import { getConnectionChains } from '@/helper'
 import { activeConnections } from '@/store/connections'
-import { automaticDisconnection } from '@/store/settings'
+import { automaticDisconnection, iconReflectList } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
 import type { Proxy } from '@/types'
 import { proxyGroupList, proxyMap, proxyProviederList } from './index'
@@ -66,6 +66,11 @@ const rebuild = () => {
         node.history = [{ time: new Date().toISOString(), delay: item.urlTestDelay }]
       }
     }
+  }
+  // 5) 应用用户配置的「名称→图标」映射(与 clash 一致,sing-box 流不含图标)
+  for (const iconReflect of iconReflectList.value) {
+    const node = proxies[iconReflect.name]
+    if (node) node.icon = iconReflect.icon
   }
 
   proxyMap.value = proxies
