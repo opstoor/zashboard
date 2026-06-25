@@ -1,15 +1,10 @@
-// sing-box native 后端的日志组装:订阅 gRPC SubscribeLog,保留 ANSI 颜色码、
-// 映射日志级别,并把按批到达的日志逐条投递成与 Clash WS 相同的 { data, close } 流。
+// sing-box native 后端的日志订阅:订阅 gRPC SubscribeLog,保留 ANSI 颜色码、映射日志级别。
+// 日志本就按批到达,这里直接整批产出(不再伪装成 Clash 那样逐条投递)。
 import { getSingboxClient } from '@/api/singbox/client'
 import { runStream } from '@/api/singbox/streams'
 import { LogLevel } from '@/gen/daemon/started_service_pb'
 import type { Log } from '@/types'
-import { ref, type Ref } from 'vue'
-
-interface SingboxStream<T> {
-  data: Ref<T | undefined>
-  close: () => void
-}
+import type { LogsSubscription } from './types'
 
 const logLevelToType = (level: LogLevel): Log['type'] => {
   switch (level) {
@@ -51,49 +46,26 @@ const logLevelFilterFromParam = (level?: string): LogLevel | null | undefined =>
   }
 }
 
-const fetchSingboxLogs = <T>(params: Record<string, string> = {}): SingboxStream<T> => {
-  const data = ref<T>()
+export const subscribeLogs = (
+  params: Record<string, string>,
+  onBatch: (batch: Log[]) => void,
+): LogsSubscription => {
   const client = getSingboxClient()?.client
-  if (!client) return { data, close: () => {} }
-  const levelFilter = logLevelFilterFromParam(params.level)
+  if (!client) return { close: () => {} }
 
-  // 日志按批到达,但消费方(logs store)逐条 watch ws.data,需要逐条投递。
-  const queue: Log[] = []
-  let draining = false
-  const drain = () => {
-    if (draining) return
-    draining = true
-    const step = () => {
-      const next = queue.shift()
-      if (!next) {
-        draining = false
-        return
-      }
-      data.value = next as T
-      setTimeout(step, 0)
-    }
-    step()
-  }
+  const levelFilter = logLevelFilterFromParam(params.level)
 
   const handle = runStream(
     (signal) => client.subscribeLog({}, { signal }),
     (msg) => {
-      if (msg.reset) queue.length = 0
+      const batch: Log[] = []
       for (const m of msg.messages) {
         if (levelFilter === null || (levelFilter !== undefined && m.level > levelFilter)) continue
-        queue.push({ type: logLevelToType(m.level), payload: m.message })
+        batch.push({ type: logLevelToType(m.level), payload: m.message })
       }
-      drain()
+      if (batch.length) onBatch(batch)
     },
   )
 
-  return {
-    data,
-    close: () => {
-      queue.length = 0
-      handle.close()
-    },
-  }
+  return { close: () => handle.close() }
 }
-
-export const fetchLogsAPI = fetchSingboxLogs
