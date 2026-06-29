@@ -276,7 +276,7 @@ const handleSubmit = async (setupForm: SetupForm, quiet = false) => {
 const backend = getBackendFromUrl()
 
 if (backend) {
-  handleSubmit({ type: 'clash', ...backend })
+  handleSubmit(backend)
 } else if (backendList.value.length === 0) {
   handleSubmit(form, true)
 }

@@ -99,4 +99,8 @@ http://host:port/#/setup?hostname=ipordomain&port=9090&secret=123456
 7. **`disableTunMode`**
    - Set '1' to hide tun switch
 
+8. **`type`**
+   - Selects the backend API: `clash` (Clash REST/WS) or `singbox` (sing-box native).
+   - Default: `clash`
+
 ### I code just for fun, not for money. If you really want to donate, please consider donating to [UNICEF](https://www.unicef.org/) to help hungry children.
