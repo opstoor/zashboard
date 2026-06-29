@@ -20,20 +20,12 @@
     </div>
     <div class="flex items-center">
       <div class="flex flex-1 items-center gap-1 truncate">
-        <button
+        <VisibilityToggle
           v-if="manageHiddenGroup"
-          class="btn btn-circle btn-xs z-10"
-          @click.stop="handlerGroupToggle"
-        >
-          <EyeIcon
-            v-if="!hiddenGroup"
-            class="h-3 w-3"
-          />
-          <EyeSlashIcon
-            v-else
-            class="h-3 w-3"
-          />
-        </button>
+          :hidden="hiddenGroup"
+          class="z-10"
+          @toggle="handlerGroupToggle"
+        />
         <ProxyGroupNow
           :name="proxyGroup.name"
           :mobile="true"
@@ -61,9 +53,9 @@
 import { isHiddenGroup } from '@/helper'
 import { hiddenGroupMap, proxyMap } from '@/assembly/proxies'
 import { manageHiddenGroup } from '@/store/settings'
-import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'
 import { twMerge } from 'tailwind-merge'
 import { computed } from 'vue'
+import VisibilityToggle from '../common/VisibilityToggle.vue'
 import LatencyTag from './LatencyTag.vue'
 import ProxyGroupFilter from './ProxyGroupFilter.vue'
 import ProxyGroupNow from './ProxyGroupNow.vue'
@@ -83,7 +75,7 @@ const emit = defineEmits<{
 const proxyGroup = computed(() => proxyMap.value[props.name])
 
 const hiddenGroup = computed({
-  get: () => isHiddenGroup(props.name),
+  get: () => Boolean(isHiddenGroup(props.name)),
   set: (value: boolean) => {
     hiddenGroupMap.value[props.name] = value
   },
