@@ -131,13 +131,13 @@
                 {{ getLabelFromBackend(element) }}
               </button>
               <button
-                class="btn btn-circle btn-ghost btn-xs text-base-content/40 hover:text-base-content opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                class="btn btn-circle btn-ghost btn-xs text-base-content/40 hover:text-base-content opacity-0 group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100"
                 @click="editBackend(element)"
               >
                 <PencilIcon class="h-4 w-4" />
               </button>
               <button
-                class="btn btn-circle btn-ghost btn-xs text-base-content/40 hover:text-error opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                class="btn btn-circle btn-ghost btn-xs text-base-content/40 hover:text-error opacity-0 group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100"
                 @click="removeBackend(element.uuid)"
               >
                 <TrashIcon class="h-4 w-4" />
