@@ -156,16 +156,11 @@ export const handlerProxySelect = async (proxyGroupName: string, proxyName: stri
   }
 }
 
-// sing-box native API 的 URLTest 是组级别;节点卡片触发测速时转为所在组测速。
-export const proxyLatencyTest = async (
-  proxyName: string,
-  _url?: string,
-  _timeout?: number,
-  groupName?: string,
-) => {
+// sing-box native API 支持直接测试单个 outbound;节点卡片传节点自身的 tag。
+export const proxyLatencyTest = async (proxyName: string) => {
   const client = getSingboxClient()?.client
   if (!client) return
-  await client.uRLTest({ outboundTag: groupName || proxyName })
+  await client.uRLTest({ outboundTag: proxyName })
 }
 
 export const proxyGroupLatencyTest = async (proxyGroupName: string) => {
