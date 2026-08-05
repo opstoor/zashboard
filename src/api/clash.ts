@@ -4,7 +4,7 @@
 //   1. 两方言共用   —— mihomo 与 sing-box 的 Clash 兼容 API 都提供
 //   2. mihomo 专属  —— mihomo(含 smart 分支)的扩展端点,sing-box 官方版没有
 //   3. sing-box 的 Clash 兼容 API 专属 —— 仅 sing-box 提供的端点
-// sing-box native gRPC 是另一条通道,不在这里,见 api/singbox/。
+// sing-box API(gRPC)是另一条通道,不在这里,见 api/singbox/。
 //
 // 新增端点时请放进对应分区。是否向用户暴露由 assembly/backend.ts 的能力表决定,
 // 本层不做任何后端判断。

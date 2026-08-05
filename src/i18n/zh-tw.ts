@@ -17,7 +17,7 @@ const zhTW: LANG_MESSAGE = {
   backendType: '後端類型',
   clashApi: 'Clash API',
   singboxApi: 'sing-box API',
-  singboxConnectionFailed: '無法連線 sing-box 原生 API',
+  singboxConnectionFailed: '無法連線 sing-box API',
   skip: '跳過',
   // 工具頁
   networkQuality: '網路品質',

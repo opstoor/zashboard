@@ -15,7 +15,7 @@ const en = {
   backendType: 'Backend Type',
   clashApi: 'Clash API',
   singboxApi: 'sing-box API',
-  singboxConnectionFailed: 'Failed to connect to the sing-box native API',
+  singboxConnectionFailed: 'Failed to connect to the sing-box API',
   skip: 'Skip',
   // Tools page
   networkQuality: 'Network Quality',

@@ -16,7 +16,7 @@ export const isCoreUpdateAvailable = ref(false)
 export const zashboardVersion = ref(__APP_VERSION__)
 
 // sing-box 内核启动时刻(ms epoch);0 表示未知 / 当前后端无此能力。
-// 仅 sing-box native gRPC(GetStartedAt)提供,Clash /version 无运行时长。
+// 仅 sing-box API(GetStartedAt)提供,Clash /version 无运行时长。
 export const startedAt = ref(0)
 
 const detectCore = (versionString: string): Core => {

@@ -4,14 +4,14 @@
 //(components / views / composables 由 eslint no-restricted-imports 禁止导入):
 //
 //   channel —— 用户配置的连接通道(activeBackend.type)。确定性事实,同步可知,
-//              决定走 sing-box native gRPC 还是 Clash REST/WS。
+//              决定走 sing-box API(gRPC)还是 Clash REST/WS。
 //   core    —— 运行时内核品牌。靠 /version 字符串嗅探得来,是启发式猜测,
 //              可能误判(分支核 / 兼容核),且拉取完成前为 'unknown'。
 //
 // 两轴交叉出三种实际在用的 API 形态:
-//   A. channel=clash   + core=mihomo   原生 Clash API
+//   A. channel=clash   + core=mihomo   mihomo 的 Clash API
 //   B. channel=clash   + core=singbox  sing-box 的 Clash 兼容 API(端点子集 + 少量专属端点)
-//   C. channel=singbox + core=singbox  sing-box native gRPC
+//   C. channel=singbox + core=singbox  sing-box API(gRPC)
 //
 // 能力表据此分两类,一律通过 can() 读取:
 //   hard —— 由 channel / apiVersion 决定。确定事实,任何情况下都掰不开。
@@ -61,7 +61,7 @@ export const resetCore = () => {
 
 const hard = computed(() => {
   const clash = !!activeBackend.value && channel.value === Channel.Clash
-  const native = !!activeBackend.value && channel.value === Channel.Singbox
+  const singbox = !!activeBackend.value && channel.value === Channel.Singbox
 
   return {
     rules: clash,
@@ -73,11 +73,11 @@ const hard = computed(() => {
     // 面板自升级 /upgrade/ui,两种方言都提供,故按通道门控即可
     dashboardUpgrade: clash,
 
-    tools: native,
-    goroutines: native,
-    startedAt: native,
-    usbip: native && apiVersion.value >= USBIP_MIN_API_VERSION,
-    openvpn: native && apiVersion.value >= OPENVPN_MIN_API_VERSION,
+    tools: singbox,
+    goroutines: singbox,
+    startedAt: singbox,
+    usbip: singbox && apiVersion.value >= USBIP_MIN_API_VERSION,
+    openvpn: singbox && apiVersion.value >= OPENVPN_MIN_API_VERSION,
   }
 })
 

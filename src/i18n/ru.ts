@@ -17,7 +17,7 @@ const ru: LANG_MESSAGE = {
   backendType: 'Тип бэкенда',
   clashApi: 'Clash API',
   singboxApi: 'sing-box API',
-  singboxConnectionFailed: 'Не удалось подключиться к нативному API sing-box',
+  singboxConnectionFailed: 'Не удалось подключиться к API sing-box',
   skip: 'Пропустить',
   // Tools
   networkQuality: 'Качество сети',
