@@ -2,23 +2,24 @@
   <div
     :class="
       twMerge(
-        'latency-tag bg-base-100 flex h-5 w-10 items-center justify-center rounded-xl text-xs select-none md:hover:shadow-sm',
+        'latency-tag bg-base-100 h-5 w-10 rounded-xl text-xs select-none md:hover:shadow-sm',
         color,
       )
     "
     @mouseenter="handlerHistoryTip"
   >
     <span
-      v-if="loading"
-      class="loading loading-dots loading-xs text-base-content/80"
+      class="latency-state loading loading-dots loading-xs text-base-content/80"
+      :class="stateClass('loading')"
     ></span>
     <BoltIcon
-      v-else-if="latency === NOT_CONNECTED || !latency"
-      class="text-base-content h-3 w-3"
+      class="latency-state text-base-content h-3 w-3"
+      :class="stateClass('empty')"
     />
     <div
-      v-show="latency !== NOT_CONNECTED && !loading"
       ref="latencyRef"
+      class="latency-state tabular-nums"
+      :class="stateClass('value')"
     >
       {{ latency }}
     </div>
@@ -100,4 +101,52 @@ onUnmounted(() => {
 const color = computed(() => {
   return getColorForLatency(latency.value)
 })
+
+// 三态(测速中 / 无数据 / 有延迟)叠在同一个网格单元里交叉淡入淡出,
+// 数字节点始终挂载,CountUp 才能持有稳定的 DOM 引用。
+type LatencyState = 'loading' | 'empty' | 'value'
+
+const state = computed<LatencyState>(() => {
+  if (props.loading) return 'loading'
+  if (latency.value === NOT_CONNECTED || !latency.value) return 'empty'
+  return 'value'
+})
+
+const stateClass = (target: LatencyState) =>
+  state.value === target ? 'latency-state-in' : 'latency-state-out'
 </script>
+
+<style scoped>
+.latency-tag {
+  display: grid;
+  place-items: center;
+  transition:
+    color 0.35s ease-out,
+    background-color 0.35s ease-out;
+}
+
+.latency-state {
+  grid-area: 1 / 1;
+  transition:
+    opacity 0.2s ease-out,
+    scale 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.latency-state-in {
+  opacity: 1;
+  scale: 1;
+}
+
+.latency-state-out {
+  opacity: 0;
+  scale: 0.6;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .latency-tag,
+  .latency-state {
+    transition: none;
+  }
+}
+</style>

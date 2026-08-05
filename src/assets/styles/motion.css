@@ -92,6 +92,70 @@
   }
 }
 
+/* 代理节点网格:重排 FLIP + 增删淡入淡出 */
+.proxy-node-move {
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* 无限滚动追加的批次淡入 */
+.proxy-node-enter-active {
+  transition:
+    opacity 0.2s ease-out,
+    scale 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.proxy-node-enter-from {
+  opacity: 0;
+  scale: 0.92;
+}
+
+/*
+ * 离场不脱离文档流:网格里用 absolute 会让所有离场卡片堆到左上角,
+ * 搜索过滤时一次消失几十张会非常噪。就地淡出、结束后再重排。
+ */
+.proxy-node-leave-active {
+  transition:
+    opacity 0.15s ease-in,
+    scale 0.15s ease-in;
+}
+.proxy-node-leave-to {
+  opacity: 0;
+  scale: 0.92;
+}
+
+/*
+ * 测速后节点被重新排序时的定位提示。用 animation 而非 transition,
+ * 才不会和 .proxy-node-move 的 FLIP 抢 transition-property。
+ */
+.latency-highlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-color: var(--color-info);
+  animation: latencyHighlightFade 1.5s ease-out forwards;
+}
+
+@keyframes latencyHighlightFade {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proxy-node-move,
+  .proxy-node-enter-active,
+  .proxy-node-leave-active {
+    transition: none;
+  }
+  .latency-highlight::after {
+    animation: none;
+  }
+}
+
 @keyframes progressBar {
   from {
     width: 100%;
