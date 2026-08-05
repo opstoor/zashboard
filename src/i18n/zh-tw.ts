@@ -419,7 +419,7 @@ const zhTW: LANG_MESSAGE = {
   pressAnyKey: '按下任意鍵',
   displayAllFeatures: '顯示所有功能',
   displayAllFeaturesTip:
-    '顯示所有功能，包括sing-box官方版本不支援的功能，如果您使用了fork版本的sing-box支援其中的某些功能，可以嘗試啟用',
+    '顯示所有功能，包括目前核心（sing-box / honk）官方版本不支援的功能，如果您使用的 fork 版本支援其中的某些功能，可以嘗試啟用',
   blurIntensity: '毛玻璃強度',
   scrollAnimationEffect: '滾動動畫效果',
 

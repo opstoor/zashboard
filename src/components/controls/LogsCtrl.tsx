@@ -11,6 +11,7 @@ import {
   logLevel,
   logTypeFilter,
   logs,
+  supportedLogLevels,
 } from '@/store/logs'
 import { logRetentionLimit, logSearchHistory } from '@/store/settings'
 import {
@@ -56,12 +57,8 @@ export default defineComponent({
 
     watch(logFilter, insertLogSearchHistory)
 
-    const logLevels = computed(() => {
-      if (can('extraLogLevels')) {
-        return Object.values(LOG_LEVEL)
-      }
-      return [LOG_LEVEL.Debug, LOG_LEVEL.Info, LOG_LEVEL.Warning, LOG_LEVEL.Error, LOG_LEVEL.Silent]
-    })
+    // 可选级别由内核决定,收敛在组装层(见 assembly/logs)。
+    const logLevels = supportedLogLevels
 
     const logFilterOptions = computed(() => {
       const types: string[] = []

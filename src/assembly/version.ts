@@ -4,6 +4,9 @@
 // 版本字符串是 core 轴(assembly/backend.ts)的唯一来源:这里探测完成后写入 core,
 // 后端切换的瞬间先重置为 'unknown',避免沿用上一个后端的结论。
 import { fetchClashVersion, restartCoreAPI, upgradeCoreAPI, upgradeUIAPI } from '@/api/clash'
+import HonkLogo from '@/assets/images/honk.svg'
+import MetacubexLogo from '@/assets/images/metacubex.jpg'
+import SingBoxLogo from '@/assets/images/sing-box.svg'
 import { MIHOMO, MIHOMO_CHANNEL } from '@/constant'
 import { autoUpgradeCore, autoUpgradeDashboard, checkUpgradeCore } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
@@ -19,19 +22,28 @@ export const zashboardVersion = ref(__APP_VERSION__)
 // 仅 sing-box API(GetStartedAt)提供,Clash /version 无运行时长。
 export const startedAt = ref(0)
 
+// honk 的 /version 返回 "honk <semver>"(见 honk-core/src/clash_api.rs 的 version handler)。
 const detectCore = (versionString: string): Core => {
   if (!versionString) return Core.Unknown
-  return versionString.includes('sing-box') ? Core.Singbox : Core.Mihomo
+  if (versionString.includes('sing-box')) return Core.Singbox
+  if (/\bhonk\b/i.test(versionString)) return Core.Honk
+  return Core.Mihomo
 }
 
 // 内核品牌的展示信息(logo / 官网链接)。纯展示,不是能力门控,故允许 view 使用。
-export const coreBrand = computed(() => ({
-  isSingbox: core.value === Core.Singbox,
-  url:
-    core.value === Core.Singbox
-      ? 'https://github.com/sagernet/sing-box'
-      : MIHOMO_CHANNEL[mihomo.value?.[0] ?? MIHOMO.Meta].url,
-}))
+export const coreBrand = computed(() => {
+  switch (core.value) {
+    case Core.Singbox:
+      return { logo: SingBoxLogo, url: 'https://github.com/sagernet/sing-box' }
+    case Core.Honk:
+      return { logo: HonkLogo, url: 'https://github.com/Glassyiris/honk' }
+    default:
+      return {
+        logo: MetacubexLogo,
+        url: MIHOMO_CHANNEL[mihomo.value?.[0] ?? MIHOMO.Meta].url,
+      }
+  }
+})
 
 export const mihomo = computed<[MIHOMO, string] | undefined>(() => {
   if (core.value !== Core.Mihomo) return undefined

@@ -25,7 +25,7 @@ const logLevelToType = (level: PbLogLevel): Log['type'] => {
   }
 }
 
-const logLevelFilterFromParam = (level?: string): PbLogLevel | null | undefined => {
+const logLevelFilterFromParam = (level?: string): PbLogLevel | undefined => {
   switch (level?.toLowerCase()) {
     case 'panic':
       return PbLogLevel.PANIC
@@ -42,8 +42,6 @@ const logLevelFilterFromParam = (level?: string): PbLogLevel | null | undefined 
       return PbLogLevel.DEBUG
     case 'trace':
       return PbLogLevel.TRACE
-    case 'silent':
-      return null
     default:
       return undefined
   }
@@ -58,7 +56,7 @@ export const subscribeLogs = (
   return subscribeStream<PbLog>('logs', (msg) => {
     const batch: Log[] = []
     for (const m of msg.messages) {
-      if (levelFilter === null || (levelFilter !== undefined && m.level > levelFilter)) continue
+      if (levelFilter !== undefined && m.level > levelFilter) continue
       batch.push({ type: logLevelToType(m.level), payload: m.message })
     }
     if (batch.length) onBatch(batch)

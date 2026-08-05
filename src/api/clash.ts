@@ -1,9 +1,10 @@
 // api 层 · Clash 通道(REST / WebSocket)的纯请求函数。
 //
-// 「Clash 通道」上跑着两种方言,本文件按方言分区:
-//   1. 两方言共用   —— mihomo 与 sing-box 的 Clash 兼容 API 都提供
-//   2. mihomo 专属  —— mihomo(含 smart 分支)的扩展端点,sing-box 官方版没有
+// 「Clash 通道」上跑着三种方言(mihomo / sing-box / honk),本文件按方言分区:
+//   1. 通用         —— 三种方言都提供
+//   2. mihomo 专属  —— mihomo(含 smart 分支)的扩展端点,sing-box 与 honk 没有
 //   3. sing-box 的 Clash 兼容 API 专属 —— 仅 sing-box 提供的端点
+// honk 实现的是通用分区的子集(没有 /upgrade/ui),故不单列分区,差异见能力表。
 // sing-box API(gRPC)是另一条通道,不在这里,见 api/singbox/。
 //
 // 新增端点时请放进对应分区。是否向用户暴露由 assembly/backend.ts 的能力表决定,
@@ -140,7 +141,7 @@ export const queryDNSAPI = (params: { name: string; type: string }) => {
   })
 }
 
-// 面板自升级。mihomo 与 sing-box 的 Clash 兼容 API 都提供。
+// 面板自升级。mihomo 与 sing-box 的 Clash 兼容 API 都提供,honk 没有(见 dashboardUpgrade)。
 export const upgradeUIAPI = () => {
   return axios.post('/upgrade/ui')
 }

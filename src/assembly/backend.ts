@@ -8,10 +8,11 @@
 //   core    —— 运行时内核品牌。靠 /version 字符串嗅探得来,是启发式猜测,
 //              可能误判(分支核 / 兼容核),且拉取完成前为 'unknown'。
 //
-// 两轴交叉出三种实际在用的 API 形态:
+// 两轴交叉出四种实际在用的 API 形态:
 //   A. channel=clash   + core=mihomo   mihomo 的 Clash API
 //   B. channel=clash   + core=singbox  sing-box 的 Clash 兼容 API(端点子集 + 少量专属端点)
-//   C. channel=singbox + core=singbox  sing-box API(gRPC)
+//   C. channel=clash   + core=honk     honk 的 Clash 兼容 API(又一个端点子集)
+//   D. channel=singbox + core=singbox  sing-box API(gRPC)
 //
 // 能力表据此分两类,一律通过 can() 读取:
 //   hard —— 由 channel / apiVersion 决定。确定事实,任何情况下都掰不开。
@@ -42,6 +43,7 @@ export enum Channel {
 export enum Core {
   Mihomo = 'mihomo',
   Singbox = 'singbox',
+  Honk = 'honk',
   Unknown = 'unknown',
 }
 
@@ -59,17 +61,21 @@ export const resetCore = () => {
   apiVersion.value = 0
 }
 
-// displayAllFeatures 的适用范围:只有「Clash 通道 + sing-box 内核」这一种形态。
-// 该开关的语义是「我用的 fork 版 sing-box 也支持这些 mihomo 扩展端点,先显示出来」——
+// displayAllFeatures 的适用范围:Clash 通道上跑着非 mihomo 内核(sing-box / honk)时。
+// 该开关的语义是「我用的 fork 版内核也支持这些 mihomo 扩展端点,先显示出来」——
 // 只有在 Clash 通道上,那些端点才有可能存在。sing-box API(gRPC)通道上它们压根不是
 // 同一套协议,掰开只会打出必然失败的请求,所以那里既不显示开关,存量的 true 也不生效。
-const isForkSingBoxOverride = computed(
-  () => channel.value === Channel.Clash && core.value === Core.Singbox && displayAllFeatures.value,
+// core 未探测出结论(Unknown)时不掰,免得凭空点亮一堆按钮。
+const isNonMihomoClashCore = computed(
+  () =>
+    channel.value === Channel.Clash && (core.value === Core.Singbox || core.value === Core.Honk),
 )
+
+const isForkCoreOverride = computed(() => isNonMihomoClashCore.value && displayAllFeatures.value)
 
 // 开关自身的可见性与其生效范围保持一致。
 export const showDisplayAllFeatures = computed(
-  () => !!activeBackend.value && channel.value === Channel.Clash && core.value === Core.Singbox,
+  () => !!activeBackend.value && isNonMihomoClashCore.value,
 )
 
 const hard = computed(() => {
@@ -81,9 +87,7 @@ const hard = computed(() => {
     dnsQuery: clash,
     dnsFlush: clash,
     fakeIPFlush: clash,
-    // 内核操作区(升级/重启/重载/更新配置/更新 Geo)的容器,gRPC 通道整块没有
     coreActions: clash,
-    // 面板自升级 /upgrade/ui,两种方言都提供,故按通道门控即可
     dashboardUpgrade: clash,
 
     tools: singbox,
@@ -97,33 +101,40 @@ const hard = computed(() => {
 const soft = computed(() => {
   const singbox = core.value === Core.Singbox
   const mihomo = core.value === Core.Mihomo
-  const mihomoOrForkSingBox = mihomo || isForkSingBoxOverride.value
+  const honk = core.value === Core.Honk
+  const mihomoOrForkCore = mihomo || isForkCoreOverride.value
 
   return {
     // ---------- mihomo 内核侧 ----------
-    coreUpgrade: mihomoOrForkSingBox,
-    coreRestart: mihomoOrForkSingBox,
-    reloadConfigs: mihomoOrForkSingBox,
-    updateConfigs: mihomoOrForkSingBox,
-    updateGeoDatabase: mihomoOrForkSingBox,
-    coreUpdateCheck: mihomoOrForkSingBox,
+    coreUpgrade: mihomoOrForkCore,
+    coreRestart: mihomoOrForkCore,
+    reloadConfigs: mihomoOrForkCore,
+    updateConfigs: mihomoOrForkCore,
+    updateGeoDatabase: mihomoOrForkCore,
+    coreUpdateCheck: mihomoOrForkCore,
     // /storage/zashboard 设置同步,mihomo 扩展
-    syncSettings: mihomoOrForkSingBox,
-    independentLatency: mihomoOrForkSingBox,
-    // ports / tun / allow-lan 等 PATCH /configs 配置块
+    syncSettings: mihomoOrForkCore,
+    independentLatency: mihomoOrForkCore,
+    // ports / tun / allow-lan 等 PATCH /configs 配置块。
     configPatch: mihomo,
 
     // ---------- sing-box 内核侧 ----------
     // 自定义全局节点
     customGlobalNode: singbox,
-    // sing-box 提供 trace / fatal / panic 等 mihomo 没有的日志级别
-    extraLogLevels: singbox,
     // sing-box 日志 payload 带 "[type]:" 前缀,可据此做类型分面过滤
     logTypeFilter: singbox,
     // sing-box 日志以 "[连接id 耗时]" 开头,可据此从日志跳到对应连接
     logConnectionDetail: singbox,
     // sing-box 切换模式后需要主动断开命中 clash_mode 规则的连接
     disconnectOnModeChange: singbox,
+
+    // ---------- 日志级别集合 ----------
+    // /logs?level= 传了内核不认的级别会被 400 掉,WS 随后陷入无限重连,
+    // 所以按内核各自支持的取值逐档点亮,拼装见 assembly/logs。
+    // trace:sing-box 与 honk 有,mihomo 没有
+    traceLogLevel: singbox || honk,
+    // fatal / panic:仅 sing-box
+    extraLogLevels: singbox,
   }
 })
 
