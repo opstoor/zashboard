@@ -59,6 +59,19 @@ export const resetCore = () => {
   apiVersion.value = 0
 }
 
+// displayAllFeatures 的适用范围:只有「Clash 通道 + sing-box 内核」这一种形态。
+// 该开关的语义是「我用的 fork 版 sing-box 也支持这些 mihomo 扩展端点,先显示出来」——
+// 只有在 Clash 通道上,那些端点才有可能存在。sing-box API(gRPC)通道上它们压根不是
+// 同一套协议,掰开只会打出必然失败的请求,所以那里既不显示开关,存量的 true 也不生效。
+const isForkSingBoxOverride = computed(
+  () => channel.value === Channel.Clash && core.value === Core.Singbox && displayAllFeatures.value,
+)
+
+// 开关自身的可见性与其生效范围保持一致。
+export const showDisplayAllFeatures = computed(
+  () => !!activeBackend.value && channel.value === Channel.Clash && core.value === Core.Singbox,
+)
+
 const hard = computed(() => {
   const clash = !!activeBackend.value && channel.value === Channel.Clash
   const singbox = !!activeBackend.value && channel.value === Channel.Singbox
@@ -83,11 +96,8 @@ const hard = computed(() => {
 
 const soft = computed(() => {
   const singbox = core.value === Core.Singbox
-  // displayAllFeatures 只放开 mihomo 侧能力 —— 该开关的语义就是
-  //「我用的 fork 版 sing-box 也支持这些官方版没有的功能,先显示出来」。
-  // 对 sing-box 侧能力掰它没有意义(mihomo 本来就不具备),故不参与。
   const mihomo = core.value === Core.Mihomo
-  const mihomoOrForkSingBox = mihomo || displayAllFeatures.value
+  const mihomoOrForkSingBox = mihomo || isForkSingBoxOverride.value
 
   return {
     // ---------- mihomo 内核侧 ----------
@@ -134,10 +144,6 @@ export const can = (cap: Cap): boolean => {
   // displayAllFeatures 的覆盖已在 soft 表内按行决定,这里只查表。
   return soft.value[cap as SoftCap]
 }
-
-export const showDisplayAllFeatures = computed(
-  () => !!activeBackend.value && core.value !== Core.Mihomo,
-)
 
 // 后端连通性探测(供 Setup / EditBackend 测试连接使用)。
 export const isSingboxChannelAvailable = (backend: Backend, timeout: number = 10000) => {
