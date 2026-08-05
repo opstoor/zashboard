@@ -96,13 +96,15 @@ export const scrollIntoCenter = (el: HTMLElement) => {
 
   if (!scrollableParent) return
 
-  const elRect = el.getBoundingClientRect()
-  const parentRect = scrollableParent.getBoundingClientRect()
-
-  if (elRect.top >= parentRect.top && elRect.bottom <= parentRect.bottom) return
-
   const parentTop = scrollableParent.offsetTop
   const childTop = el.offsetTop
+
+  // 判断可见性只能用布局位置(offsetTop),不能用 getBoundingClientRect:
+  // 列表重排时 TransitionGroup 的 FLIP 会给卡片挂 transform,rect 停在动画起点(旧位置,
+  // 通常还在视口内),会被误判成"已经可见"而跳过滚动。
+  const relativeTop = childTop - parentTop - scrollableParent.scrollTop
+
+  if (relativeTop >= 0 && relativeTop + el.clientHeight <= scrollableParent.clientHeight) return
 
   const centerOffset =
     childTop - parentTop - scrollableParent.clientHeight / 2 + el.clientHeight / 2

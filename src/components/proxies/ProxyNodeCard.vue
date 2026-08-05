@@ -59,7 +59,7 @@ import { getIPv6ByName, getTestUrl, proxyMap } from '@/assembly/proxies'
 import { IPv6test, proxyCardSize, proxySortType, truncateProxyName } from '@/store/settings'
 import { smartWeightsMap } from '@/store/smart'
 import { twMerge } from 'tailwind-merge'
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import LatencyTag from './LatencyTag.vue'
 import ProxyIcon from './ProxyIcon.vue'
@@ -109,6 +109,8 @@ const handlerLatencyTest = async () => {
     [PROXY_SORT_TYPE.LATENCY_ASC, PROXY_SORT_TYPE.LATENCY_DESC].includes(proxySortType.value) &&
     cardRef.value
   ) {
+    // 等排序后的 DOM 落地再量位置,否则拿到的还是重排前的旧坐标。
+    await nextTick()
     scrollIntoCenter(cardRef.value)
     latencyTipAnimationClass.value = ['latency-highlight']
     setTimeout(() => {
