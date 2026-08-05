@@ -1,7 +1,7 @@
 <template>
   <div class="relative flex h-18 shrink-0 flex-col justify-between">
     <div
-      class="text-md truncate font-medium"
+      class="text-md truncate"
       :class="proxyGroup.icon && 'pr-10'"
     >
       {{ proxyGroup.name }}
@@ -10,7 +10,7 @@
       class="text-base-content/40 flex min-w-0 items-center gap-2 truncate text-[11px]"
       :class="proxyGroup.icon && 'pr-12'"
     >
-      <span class="shrink-0 font-medium tracking-wider whitespace-nowrap uppercase tabular-nums">
+      <span class="shrink-0 tracking-wider whitespace-nowrap uppercase tabular-nums">
         {{ proxyGroup.type }} · {{ proxiesCount }}
       </span>
       <ProxyGroupFilter

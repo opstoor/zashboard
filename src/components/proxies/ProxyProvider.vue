@@ -3,9 +3,9 @@
     <template v-slot:title>
       <div class="flex items-center justify-between gap-2">
         <div class="flex flex-1 items-center gap-2.5">
-          <span class="text-base-content font-medium">{{ proxyProvider.name }}</span>
+          <span class="text-base-content">{{ proxyProvider.name }}</span>
           <span
-            class="text-base-content/40 min-w-0 flex-1 truncate text-[11px] font-medium tracking-wider uppercase tabular-nums"
+            class="text-base-content/40 min-w-0 flex-1 truncate text-[11px] tracking-wider uppercase tabular-nums"
           >
             {{ proxyProvider.vehicleType }} · {{ proxiesCount }}
           </span>

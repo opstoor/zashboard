@@ -36,12 +36,10 @@
       >
         <div class="min-w-0 flex-1">
           <div class="flex items-center gap-2">
-            <span
-              class="bg-base-200 text-base-content/70 rounded-full px-2 py-0.5 text-[11px] font-medium"
-            >
+            <span class="bg-base-200 text-base-content/70 rounded-full px-2 py-0.5 text-[11px]">
               {{ getDnsTypeLabel(item.type) }}
             </span>
-            <span class="text-base-content truncate text-sm font-medium">
+            <span class="text-base-content truncate text-sm">
               {{ item.name }}
             </span>
           </div>

@@ -28,7 +28,7 @@ div {
 }
 
 .settings-section-label {
-  @apply px-1 pt-5 pb-2 text-xs font-medium tracking-wider uppercase first:pt-2;
+  @apply px-1 pt-5 pb-2 text-xs tracking-wider uppercase first:pt-2;
   color: color-mix(in srgb, var(--color-base-content) 40%, transparent);
 }
 .settings-grid {
