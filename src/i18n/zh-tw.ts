@@ -52,7 +52,6 @@ const zhTW: LANG_MESSAGE = {
   online: '線上',
   offline: '離線',
   peers: '節點',
-  noEndpoints: '沒有 Tailscale 端點',
   backendState: '狀態',
   statusLabel: '狀態',
   thisDevice: '本裝置',
@@ -108,7 +107,6 @@ const zhTW: LANG_MESSAGE = {
 
   // USB/IP
   usbip: 'USB/IP',
-  usbipNoServer: '未找到 usbip-server',
   usbipServerTagged: 'USB/IP：{tag}',
   usbipDevices: '裝置',
   usbipConnectDevice: '連接裝置',
@@ -147,7 +145,6 @@ const zhTW: LANG_MESSAGE = {
 
   // OpenVPN
   openvpn: 'OpenVPN',
-  ovpnNoEndpoints: '沒有 OpenVPN 端點',
   ovpnAuthentication: '認證',
   ovpnServer: '伺服器',
   ovpnNetwork: '網路',

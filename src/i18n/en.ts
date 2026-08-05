@@ -50,7 +50,6 @@ const en = {
   online: 'Online',
   offline: 'Offline',
   peers: 'Peers',
-  noEndpoints: 'No Tailscale endpoints',
   backendState: 'State',
   statusLabel: 'Status',
   thisDevice: 'This device',
@@ -106,7 +105,6 @@ const en = {
 
   // USB/IP
   usbip: 'USB/IP',
-  usbipNoServer: 'No usbip-server found',
   usbipServerTagged: 'USB/IP: {tag}',
   usbipDevices: 'Devices',
   usbipConnectDevice: 'Connect device',
@@ -146,7 +144,6 @@ const en = {
 
   // OpenVPN
   openvpn: 'OpenVPN',
-  ovpnNoEndpoints: 'No OpenVPN endpoints',
   ovpnAuthentication: 'Authentication',
   ovpnServer: 'Server',
   ovpnNetwork: 'Network',

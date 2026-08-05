@@ -52,7 +52,6 @@ const zh: LANG_MESSAGE = {
   online: '在线',
   offline: '离线',
   peers: '节点',
-  noEndpoints: '没有 Tailscale 端点',
   backendState: '状态',
   statusLabel: '状态',
   thisDevice: '本设备',
@@ -108,7 +107,6 @@ const zh: LANG_MESSAGE = {
 
   // USB/IP
   usbip: 'USB/IP',
-  usbipNoServer: '未找到 usbip-server',
   usbipServerTagged: 'USB/IP：{tag}',
   usbipDevices: '设备',
   usbipConnectDevice: '连接设备',
@@ -147,7 +145,6 @@ const zh: LANG_MESSAGE = {
 
   // OpenVPN
   openvpn: 'OpenVPN',
-  ovpnNoEndpoints: '没有 OpenVPN 端点',
   ovpnAuthentication: '认证',
   ovpnServer: '服务器',
   ovpnNetwork: '网络',

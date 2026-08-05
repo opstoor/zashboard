@@ -52,7 +52,6 @@ const ru: LANG_MESSAGE = {
   online: 'В сети',
   offline: 'Не в сети',
   peers: 'Узлы',
-  noEndpoints: 'Нет конечных точек Tailscale',
   backendState: 'Состояние',
   statusLabel: 'Состояние',
   thisDevice: 'Это устройство',
@@ -108,7 +107,6 @@ const ru: LANG_MESSAGE = {
 
   // USB/IP
   usbip: 'USB/IP',
-  usbipNoServer: 'usbip-server не найден',
   usbipServerTagged: 'USB/IP: {tag}',
   usbipDevices: 'Устройства',
   usbipConnectDevice: 'Подключить устройство',
@@ -148,7 +146,6 @@ const ru: LANG_MESSAGE = {
 
   // OpenVPN
   openvpn: 'OpenVPN',
-  ovpnNoEndpoints: 'Нет конечных точек OpenVPN',
   ovpnAuthentication: 'Аутентификация',
   ovpnServer: 'Сервер',
   ovpnNetwork: 'Сеть',
