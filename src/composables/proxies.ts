@@ -1,3 +1,4 @@
+import { can } from '@/assembly/backend'
 import { configs } from '@/assembly/config'
 import {
   getProxyGroupChains,
@@ -6,7 +7,6 @@ import {
   proxyMap,
   proxyProviederList,
 } from '@/assembly/proxies'
-import { isSingBoxCore } from '@/assembly/version'
 import { GLOBAL, PROXY_TAB_TYPE } from '@/constant'
 import { isHiddenGroup } from '@/helper'
 import { groupsInActiveFolder, isProxyFolderModeActive } from '@/store/proxyFolders'
@@ -45,7 +45,7 @@ const getRenderProxyGroups = () => {
   if (displayGlobalByMode.value) {
     if (configs.value?.mode.toUpperCase() === GLOBAL) {
       const globalName =
-        isSingBoxCore.value && proxyMap.value[customGlobalNode.value]
+        can('customGlobalNode') && proxyMap.value[customGlobalNode.value]
           ? customGlobalNode.value
           : GLOBAL
 
