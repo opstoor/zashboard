@@ -132,7 +132,7 @@ export default defineComponent({
     return () => {
       const levelSelect = (
         <select
-          class={['join-item select select-sm min-w-30']}
+          class={['select select-sm min-w-30']}
           v-model={logLevel.value}
           onChange={initLogs}
         >
@@ -149,8 +149,7 @@ export default defineComponent({
       const searchInput = (
         <TextInput
           v-model={logFilter.value}
-          beforeClose={true}
-          class="flex-1"
+          class="join-item min-w-0 flex-1"
           placeholder={`${t('search')} | Regex`}
           clearable={true}
           menus={logSearchHistory.value}
@@ -291,7 +290,7 @@ export default defineComponent({
       const content = !isLargeCtrlsBar.value ? (
         <div class="flex flex-col gap-2 p-2">
           <div class="flex w-full justify-between gap-2">
-            <div class="join flex-1">{levelSelect}</div>
+            <div class="flex flex-1">{levelSelect}</div>
             {buttons}
           </div>
           <div class="join">
