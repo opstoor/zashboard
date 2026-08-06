@@ -49,7 +49,11 @@
     >
       <div
         ref="canvasRef"
-        class="absolute inset-0"
+        class="absolute inset-0 touch-none"
+        @touchstart.stop
+        @touchmove.stop.prevent
+        @touchend.stop
+        @touchcancel.stop
       />
 
       <div class="pointer-events-none absolute top-2 right-2 left-2 flex flex-wrap gap-1.5 text-xs">
