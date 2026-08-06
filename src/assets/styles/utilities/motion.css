@@ -1,6 +1,9 @@
 /*
  * 全部动画与过渡：@keyframes、Vue <Transition> 的类、以及各处的运动曲线。
  * 静态外观不要写在这里。每个分节都要给出对应的 prefers-reduced-motion 降级。
+ *
+ * 已知例外：弹窗/底部抽屉的过渡（.modal-enter-* / .modal-leave-*）有意留在
+ * components/common/DialogWrapper.vue 的 <style scoped> 里，不在本文件。
  */
 
 /* ---------- 入场 / 强调 ---------- */
