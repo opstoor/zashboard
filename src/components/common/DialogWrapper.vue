@@ -27,7 +27,7 @@
         <!-- 弹层内容，阻止点击穿透 -->
         <div
           ref="modalBoxRef"
-          class="modal-box bg-base-100 relative flex flex-col overflow-hidden p-0 outline-none max-md:max-h-[85dvh]"
+          class="modal-box bg-base-100 relative flex flex-col overflow-hidden p-0 outline-none max-md:max-h-[85dvh] max-md:min-h-[calc(var(--dialog-viewport-height,100dvh)*0.4)]"
           :class="[blurIntensity < 5 && 'backdrop-blur-sm!', boxClass]"
           tabindex="-1"
           @click.stop
@@ -50,8 +50,10 @@
             </button>
           </div>
           <!--
-            高度上限在移动端由 .modal-box 统一约束（见上面的 max-h-[85dvh]），这里只负责
-            吃掉剩余空间；桌面端维持原本加在滚动容器上的 90dvh 不变。
+            高度区间在移动端由 .modal-box 统一约束（见上面的 max-h-[85dvh] / min-h 40%），
+            这里只负责吃掉剩余空间；桌面端维持原本加在滚动容器上的 90dvh 不变。
+            下限跟 --dialog-viewport-height 走而不是 dvh：内容很少的抽屉也不至于矮成一条，
+            软键盘弹起时又不会撑破 .modal 的可视高度。
             safe-area 补在滚动容器的 padding 上而不是 .modal-box 上，这样最后一条内容能
             滚到 home indicator 上方，抽屉背景仍然铺满到屏幕物理下缘。
           -->

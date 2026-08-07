@@ -9,6 +9,7 @@ import {
   bumpMap,
   cameraPosition,
   color,
+  float,
   max,
   mix,
   normalize,
@@ -27,7 +28,11 @@ import * as THREE from 'three/webgpu'
 import type { EarthEndpointInfo, EarthHostTraffic, EarthLocation, EarthRoute } from './types'
 
 const EARTH_RADIUS = 1
-const ENDPOINT_RADIUS = 1.018
+// The bead sits partly below the surface so it reads as planted on the globe
+// rather than floating above it; the globe's depth buffer clips the lower part.
+const ENDPOINT_RADIUS = 1.005
+const ENDPOINT_CORE_RADIUS = 0.011
+const ENDPOINT_GLOW_RADIUS = 0.032
 const ARC_SEGMENTS = 36
 const MAX_INITIAL_LATITUDE = 15
 const FLOW_DURATION_SECONDS = 0.85
@@ -39,7 +44,17 @@ const LINE_ORIGIN_COLOR = new THREE.Color('#b8f7ff')
 const LINE_DESTINATION_COLOR = new THREE.Color('#4f9dff')
 const ROLE_COLORS = {
   origin: new THREE.Color('#ffffff'),
-  destination: new THREE.Color('#5fcaff'),
+  destination: new THREE.Color('#79d8ff'),
+} as const
+const ROLE_GLOW_COLORS = {
+  origin: new THREE.Color('#a9e9ff'),
+  destination: new THREE.Color('#3fa8ff'),
+} as const
+// The user's own location is the anchor of every arc, so it gets a slightly
+// wider bead and halo than the destinations radiating out of it.
+const ROLE_SCALES = {
+  origin: 1.18,
+  destination: 1,
 } as const
 
 interface RendererOptions {
@@ -353,9 +368,54 @@ export const createEarthRenderer = async (
   earthGroup.add(flowGlow)
   earthGroup.add(flows)
 
-  const endpointGeometry = new THREE.SphereGeometry(0.018, 10, 8)
-  const endpointMaterial = new THREE.MeshBasicNodeMaterial({ vertexColors: true })
+  // Endpoints are unlit beads, so their volume has to be faked in the shader:
+  // `facing` is 1 at the point of the sphere aimed straight at the camera and 0
+  // along the silhouette, which drives both the specular-like hot core and the
+  // rim light that separates the bead from the globe behind it.
+  const endpointPulse = uniform(1)
+  const endpointFacing = positionWorld
+    .sub(cameraPosition)
+    .normalize()
+    .dot(normalWorldGeometry)
+    .abs()
+    .toVar()
+  const endpointSunOrientation = normalLocal.dot(normalize(sunDirection))
+  const endpointShade = float(0.7).add(endpointSunOrientation.smoothstep(-0.7, 0.9).mul(0.5))
+  const endpointRim = endpointFacing.oneMinus().pow(2.6).mul(0.85)
+  const endpointHotCore = endpointFacing.pow(8).mul(0.5)
+  const endpointGeometry = new THREE.SphereGeometry(ENDPOINT_CORE_RADIUS, 12, 8)
+  const endpointMaterial = new THREE.MeshBasicNodeMaterial()
+
+  endpointMaterial.outputNode = vec4(
+    output.rgb
+      .mul(endpointShade.add(endpointRim))
+      .add(mix(output.rgb, vec3(1), 0.65).mul(endpointHotCore)),
+    output.a,
+  )
+
+  // A halo shell around each bead. Combining a wide and a tight falloff in one
+  // shader gives a dense centre that fades out smoothly, without a second mesh.
+  // Where the shell sinks into the globe the alpha is already near zero, so the
+  // depth-buffer cut stays invisible except at grazing angles.
+  const endpointGlowGeometry = new THREE.SphereGeometry(ENDPOINT_GLOW_RADIUS, 16, 12)
+  const endpointGlowMaterial = new THREE.MeshBasicNodeMaterial({
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  })
+
+  endpointGlowMaterial.outputNode = vec4(
+    output.rgb,
+    endpointFacing
+      .pow(2.4)
+      .mul(0.34)
+      .add(endpointFacing.pow(9).mul(0.5))
+      .mul(endpointPulse)
+      .clamp(0, 1),
+  )
+
   let endpointMesh: THREE.InstancedMesh | null = null
+  let endpointGlowMesh: THREE.InstancedMesh | null = null
   let endpointRuntime: EndpointRuntime[] = []
   let runtimeRoutes: RuntimeRoute[] = []
   let currentSignature = ''
@@ -366,12 +426,15 @@ export const createEarthRenderer = async (
   let visible = !document.hidden
   let intersecting = true
   let pinnedEndpoint = false
+  let pulseTime = 0
   const flowProgress = new Map<string, number>()
   let flowPositions = new Float32Array(0)
   let flowColors = new Float32Array(0)
   let flowPositionBuffer: THREE.InterleavedBuffer | null = null
   let flowColorBuffer: THREE.InterleavedBuffer | null = null
   const matrix = new THREE.Matrix4()
+  const endpointRotation = new THREE.Quaternion()
+  const endpointScale = new THREE.Vector3()
   const flowStart = new THREE.Vector3()
   const flowEnd = new THREE.Vector3()
   const raycaster = new THREE.Raycaster()
@@ -463,6 +526,8 @@ export const createEarthRenderer = async (
     const elapsed = clock.getDelta()
     const delta = Math.min(0.05, elapsed)
     if (autoRotation) earthGroup.rotation.y += delta * 0.025
+    pulseTime += delta
+    endpointPulse.value = 0.82 + Math.sin(pulseTime * 2.1) * 0.18
     syncSunLight()
     controls.update(delta)
     updateFlows(elapsed, true)
@@ -489,7 +554,14 @@ export const createEarthRenderer = async (
   }
 
   const rebuildEndpoints = (routes: EarthRoute[]) => {
-    if (endpointMesh) earthGroup.remove(endpointMesh)
+    if (endpointMesh) {
+      earthGroup.remove(endpointMesh)
+      endpointMesh.dispose()
+    }
+    if (endpointGlowMesh) {
+      earthGroup.remove(endpointGlowMesh)
+      endpointGlowMesh.dispose()
+    }
 
     const endpoints = new Map<string, EndpointRuntime>()
 
@@ -518,23 +590,34 @@ export const createEarthRenderer = async (
     }
 
     endpointRuntime = [...endpoints.values()]
-    endpointMesh = new THREE.InstancedMesh(
-      endpointGeometry,
-      endpointMaterial,
-      Math.max(1, endpointRuntime.length),
-    )
+    const capacity = Math.max(1, endpointRuntime.length)
+    endpointMesh = new THREE.InstancedMesh(endpointGeometry, endpointMaterial, capacity)
+    endpointGlowMesh = new THREE.InstancedMesh(endpointGlowGeometry, endpointGlowMaterial, capacity)
     endpointMesh.count = endpointRuntime.length
+    endpointGlowMesh.count = endpointRuntime.length
+    endpointRotation.identity()
 
     for (let index = 0; index < endpointRuntime.length; index += 1) {
       const endpoint = endpointRuntime[index]
-      matrix.makeTranslation(endpoint.position.x, endpoint.position.y, endpoint.position.z)
+      const scale = ROLE_SCALES[endpoint.role]
+
+      matrix.compose(endpoint.position, endpointRotation, endpointScale.setScalar(scale))
       endpointMesh.setMatrixAt(index, matrix)
+      endpointGlowMesh.setMatrixAt(index, matrix)
       endpointMesh.setColorAt(index, ROLE_COLORS[endpoint.role])
+      endpointGlowMesh.setColorAt(index, ROLE_GLOW_COLORS[endpoint.role])
     }
 
     endpointMesh.instanceMatrix.needsUpdate = true
+    endpointGlowMesh.instanceMatrix.needsUpdate = true
     if (endpointMesh.instanceColor) endpointMesh.instanceColor.needsUpdate = true
+    if (endpointGlowMesh.instanceColor) endpointGlowMesh.instanceColor.needsUpdate = true
+    // Draw the beads above the arcs and the halos last, so the additive glow
+    // blends over everything already on screen.
+    endpointMesh.renderOrder = 5
+    endpointGlowMesh.renderOrder = 6
     earthGroup.add(endpointMesh)
+    earthGroup.add(endpointGlowMesh)
   }
 
   const refreshEndpointCounts = (routes: EarthRoute[]) => {
@@ -672,13 +755,15 @@ export const createEarthRenderer = async (
   }
 
   const hitTestEndpoint = (event: PointerEvent) => {
-    if (!endpointMesh || endpointRuntime.length === 0) return null
+    if (!endpointGlowMesh || endpointRuntime.length === 0) return null
 
     const bounds = renderer.domElement.getBoundingClientRect()
     pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1
     pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1
     raycaster.setFromCamera(pointer, camera)
-    const hit = raycaster.intersectObject(endpointMesh, false)[0]
+    // The halo shares the bead's instance order and is a far easier target to
+    // hit than the core.
+    const hit = raycaster.intersectObject(endpointGlowMesh, false)[0]
 
     if (hit?.instanceId == null) return null
     return endpointRuntime[hit.instanceId] ?? null
@@ -796,8 +881,12 @@ export const createEarthRenderer = async (
       flowGeometry.dispose()
       flowGlowMaterial.dispose()
       flowMaterial.dispose()
+      endpointMesh?.dispose()
+      endpointGlowMesh?.dispose()
       endpointGeometry.dispose()
+      endpointGlowGeometry.dispose()
       endpointMaterial.dispose()
+      endpointGlowMaterial.dispose()
       sphereGeometry.dispose()
       globeMaterial.dispose()
       atmosphereMaterial.dispose()
