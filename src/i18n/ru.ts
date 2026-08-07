@@ -196,6 +196,7 @@ const ru: LANG_MESSAGE = {
   sourceIP: 'Исходный IP',
   activeConnections: 'Активные',
   closedConnections: 'Закрытые',
+  allConnections: 'Все',
   logLevel: 'Уровень журнала',
   logType: 'Тип журнала',
 

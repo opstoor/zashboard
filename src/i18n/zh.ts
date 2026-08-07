@@ -195,6 +195,7 @@ const zh: LANG_MESSAGE = {
   sourceIP: '源IP',
   activeConnections: '活跃',
   closedConnections: '已关闭',
+  allConnections: '全部',
   logLevel: '日志等级',
   logType: '日志类型',
 

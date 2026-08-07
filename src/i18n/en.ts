@@ -194,6 +194,7 @@ const en = {
   sourceIP: 'Source IP',
   activeConnections: 'Active',
   closedConnections: 'Closed',
+  allConnections: 'All',
   logLevel: 'Log level',
   logType: 'Log type',
 

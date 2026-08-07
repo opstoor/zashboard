@@ -195,6 +195,7 @@ const zhTW: LANG_MESSAGE = {
   sourceIP: '源IP',
   activeConnections: '活躍',
   closedConnections: '已關閉',
+  allConnections: '全部',
   logLevel: '日誌等級',
   logType: '日誌類型',
 
