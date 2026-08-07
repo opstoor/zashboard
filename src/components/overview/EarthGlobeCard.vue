@@ -352,6 +352,14 @@ let refreshQueued = false
 let disposed = false
 let originRequestID = 0
 
+// 初始化 Worker 与 three/webgpu 渲染器开销较大,先让路由切换动画跑完(0.35s)再在空闲时段执行,
+// 否则移动端切到概览页时主线程被占满,页面要卡一两秒才出现。
+const INIT_DELAY = 400
+const INIT_IDLE_TIMEOUT = 1000
+let initTimer: ReturnType<typeof setTimeout> | null = null
+let initIdleTimer: ReturnType<typeof setTimeout> | null = null
+let initIdleHandle: number | null = null
+
 const isValidIP = (value: string) => Boolean(value && ipaddr.isValid(value))
 
 const maskIP = (value: string) => {
@@ -605,8 +613,9 @@ watch(language, () => {
 })
 watch(reducedMotion, (value) => renderer.value?.setReducedMotion(value))
 
-onMounted(async () => {
-  window.addEventListener('keydown', handleKeydown)
+const initialize = async () => {
+  if (disposed) return
+
   worker = new Worker(new URL('./earth/geoip.worker.ts', import.meta.url), { type: 'module' })
   worker.addEventListener('message', handleWorkerMessage)
   postWorker({ type: 'init' })
@@ -635,12 +644,41 @@ onMounted(async () => {
     canvasRef.value?.replaceChildren()
     rendererError.value = t('earthRendererError')
   }
+}
+
+const scheduleInitialization = () => {
+  initTimer = setTimeout(() => {
+    initTimer = null
+
+    if (typeof requestIdleCallback === 'function') {
+      initIdleHandle = requestIdleCallback(
+        () => {
+          initIdleHandle = null
+          void initialize()
+        },
+        { timeout: INIT_IDLE_TIMEOUT },
+      )
+    } else {
+      initIdleTimer = setTimeout(() => {
+        initIdleTimer = null
+        void initialize()
+      })
+    }
+  }, INIT_DELAY)
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+  scheduleInitialization()
 })
 
 onBeforeUnmount(() => {
   disposed = true
   window.removeEventListener('keydown', handleKeydown)
   if (refreshTimer) clearTimeout(refreshTimer)
+  if (initTimer) clearTimeout(initTimer)
+  if (initIdleTimer) clearTimeout(initIdleTimer)
+  if (initIdleHandle !== null) cancelIdleCallback(initIdleHandle)
   renderer.value?.dispose()
   renderer.value = undefined
   worker?.removeEventListener('message', handleWorkerMessage)

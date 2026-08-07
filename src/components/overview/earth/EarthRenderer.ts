@@ -29,6 +29,10 @@ import type { EarthEndpointInfo, EarthHostTraffic, EarthLocation, EarthRoute } f
 const EARTH_RADIUS = 1
 const ENDPOINT_RADIUS = 1.018
 const ARC_SEGMENTS = 36
+const MAX_INITIAL_LATITUDE = 15
+const FLOW_DURATION_SECONDS = 0.85
+const FLOW_STREAK_LENGTH = 0.14
+const FLOW_STREAK_SEGMENTS = 14
 const UPLOAD_COLOR = new THREE.Color('#ffb45e')
 const DOWNLOAD_COLOR = new THREE.Color('#64d8ff')
 const LINE_ORIGIN_COLOR = new THREE.Color('#b8f7ff')
@@ -133,17 +137,6 @@ const greatCircle = (from: EarthLocation, to: EarthLocation) => {
   }
 
   return points
-}
-
-const hashProgress = (value: string) => {
-  let hash = 2166136261
-
-  for (let index = 0; index < value.length; index += 1) {
-    hash ^= value.charCodeAt(index)
-    hash = Math.imul(hash, 16777619)
-  }
-
-  return (hash >>> 0) / 0xffffffff
 }
 
 const samplePoints = (points: THREE.Vector3[], progress: number, target: THREE.Vector3) => {
@@ -330,12 +323,39 @@ export const createEarthRenderer = async (
   earthGroup.add(lineGlow)
   earthGroup.add(lines)
 
+  let flowGeometry = new LineSegmentsGeometry()
+  const flowGlowMaterial = new THREE.Line2NodeMaterial({
+    color: '#ffffff',
+    linewidth: 9,
+    transparent: true,
+    opacity: 0.3,
+    vertexColors: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  })
+  const flowMaterial = new THREE.Line2NodeMaterial({
+    color: '#ffffff',
+    linewidth: 2.6,
+    transparent: true,
+    opacity: 0.96,
+    vertexColors: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  })
+  const flowGlow = new LineSegments2(flowGeometry, flowGlowMaterial)
+  const flows = new LineSegments2(flowGeometry, flowMaterial)
+  flowGlow.frustumCulled = false
+  flows.frustumCulled = false
+  flowGlow.visible = false
+  flows.visible = false
+  flowGlow.renderOrder = 3
+  flows.renderOrder = 4
+  earthGroup.add(flowGlow)
+  earthGroup.add(flows)
+
   const endpointGeometry = new THREE.SphereGeometry(0.018, 10, 8)
   const endpointMaterial = new THREE.MeshBasicNodeMaterial({ vertexColors: true })
-  const particleGeometry = new THREE.SphereGeometry(0.012, 8, 6)
-  const particleMaterial = new THREE.MeshBasicNodeMaterial({ vertexColors: true })
   let endpointMesh: THREE.InstancedMesh | null = null
-  let particleMesh: THREE.InstancedMesh | null = null
   let endpointRuntime: EndpointRuntime[] = []
   let runtimeRoutes: RuntimeRoute[] = []
   let currentSignature = ''
@@ -346,10 +366,14 @@ export const createEarthRenderer = async (
   let visible = !document.hidden
   let intersecting = true
   let pinnedEndpoint = false
-  const particleProgress = new Map<string, number>()
+  const flowProgress = new Map<string, number>()
+  let flowPositions = new Float32Array(0)
+  let flowColors = new Float32Array(0)
+  let flowPositionBuffer: THREE.InterleavedBuffer | null = null
+  let flowColorBuffer: THREE.InterleavedBuffer | null = null
   const matrix = new THREE.Matrix4()
-  const particlePosition = new THREE.Vector3()
-  const particleScale = new THREE.Vector3()
+  const flowStart = new THREE.Vector3()
+  const flowEnd = new THREE.Vector3()
   const raycaster = new THREE.Raycaster()
   const pointer = new THREE.Vector2()
   const clock = new THREE.Clock()
@@ -358,52 +382,90 @@ export const createEarthRenderer = async (
     if (!disposed && visible && intersecting) renderer.render(scene, camera)
   }
 
-  const updateParticles = (delta: number, advance: boolean) => {
-    if (particleMesh) {
-      let instanceIndex = 0
+  const updateFlows = (delta: number, advance: boolean) => {
+    if (flowPositions.length === 0) return
 
-      for (const runtime of runtimeRoutes) {
-        for (const direction of ['upload', 'download'] as const) {
-          const rate = runtime.route[direction]
-          const phaseKey = `${runtime.route.key}:${direction}`
-          let progress = particleProgress.get(phaseKey) ?? hashProgress(phaseKey)
+    let flowSegmentIndex = 0
 
-          if (rate > 0) {
-            if (advance) {
-              progress =
-                (progress + delta * (0.045 + Math.min(0.24, Math.log10(rate + 1) * 0.035))) % 1
-            }
-            particleProgress.set(phaseKey, progress)
-            samplePoints(
-              runtime.points,
-              direction === 'download' ? 1 - progress : progress,
-              particlePosition,
-            )
-            const size = 0.7 + Math.min(1.1, Math.log10(rate + 1) * 0.12)
-            particleScale.setScalar(size)
-          } else {
-            particlePosition.set(0, 0, 0)
-            particleScale.setScalar(0.0001)
-          }
+    for (const runtime of runtimeRoutes) {
+      for (const direction of ['upload', 'download'] as const) {
+        const rate = runtime.route[direction]
+        const progressKey = `${runtime.route.key}:${direction}`
+        let progress = flowProgress.get(progressKey) ?? 0
 
-          matrix.compose(particlePosition, new THREE.Quaternion(), particleScale)
-          particleMesh.setMatrixAt(instanceIndex, matrix)
-          instanceIndex += 1
+        if (rate <= 0) continue
+
+        if (advance) {
+          progress = Math.min(
+            1 + FLOW_STREAK_LENGTH,
+            progress + (delta * (1 + FLOW_STREAK_LENGTH)) / FLOW_DURATION_SECONDS,
+          )
+        }
+        flowProgress.set(progressKey, progress)
+
+        const trailStart = Math.max(0, progress - FLOW_STREAK_LENGTH)
+        const trailEnd = Math.min(1, progress)
+        const visibleLength = trailEnd - trailStart
+        if (visibleLength <= 0) continue
+
+        const segmentCount = Math.max(
+          1,
+          Math.ceil((visibleLength / FLOW_STREAK_LENGTH) * FLOW_STREAK_SEGMENTS),
+        )
+        const color = direction === 'upload' ? UPLOAD_COLOR : DOWNLOAD_COLOR
+
+        for (let segmentIndex = 0; segmentIndex < segmentCount; segmentIndex += 1) {
+          const startRatio = segmentIndex / segmentCount
+          const endRatio = (segmentIndex + 1) / segmentCount
+          const startProgress = THREE.MathUtils.lerp(trailStart, trailEnd, startRatio)
+          const endProgress = THREE.MathUtils.lerp(trailStart, trailEnd, endRatio)
+          samplePoints(
+            runtime.points,
+            direction === 'download' ? 1 - startProgress : startProgress,
+            flowStart,
+          )
+          samplePoints(
+            runtime.points,
+            direction === 'download' ? 1 - endProgress : endProgress,
+            flowEnd,
+          )
+
+          const offset = flowSegmentIndex * 6
+          flowPositions[offset] = flowStart.x
+          flowPositions[offset + 1] = flowStart.y
+          flowPositions[offset + 2] = flowStart.z
+          flowPositions[offset + 3] = flowEnd.x
+          flowPositions[offset + 4] = flowEnd.y
+          flowPositions[offset + 5] = flowEnd.z
+          const startStrength = 0.06 + Math.pow(startRatio, 1.7) * 0.94
+          const endStrength = 0.06 + Math.pow(endRatio, 1.7) * 0.94
+          flowColors[offset] = color.r * startStrength
+          flowColors[offset + 1] = color.g * startStrength
+          flowColors[offset + 2] = color.b * startStrength
+          flowColors[offset + 3] = color.r * endStrength
+          flowColors[offset + 4] = color.g * endStrength
+          flowColors[offset + 5] = color.b * endStrength
+          flowSegmentIndex += 1
         }
       }
-
-      particleMesh.instanceMatrix.needsUpdate = true
     }
+
+    flowGeometry.instanceCount = flowSegmentIndex
+    flowGlow.visible = flowSegmentIndex > 0
+    flows.visible = flowSegmentIndex > 0
+    if (flowPositionBuffer) flowPositionBuffer.needsUpdate = true
+    if (flowColorBuffer) flowColorBuffer.needsUpdate = true
   }
 
   const animate = () => {
     if (disposed) return
 
-    const delta = Math.min(0.05, clock.getDelta())
+    const elapsed = clock.getDelta()
+    const delta = Math.min(0.05, elapsed)
     if (autoRotation) earthGroup.rotation.y += delta * 0.025
     syncSunLight()
     controls.update(delta)
-    updateParticles(delta, true)
+    updateFlows(elapsed, true)
 
     render()
   }
@@ -513,11 +575,8 @@ export const createEarthRenderer = async (
     const positions: number[] = []
     const colors: number[] = []
     runtimeRoutes = []
-    const activeParticleKeys = new Set<string>()
 
     for (const route of routes) {
-      activeParticleKeys.add(`${route.key}:upload`)
-      activeParticleKeys.add(`${route.key}:download`)
       const routePoints: THREE.Vector3[] = []
 
       for (let pathIndex = 0; pathIndex < route.path.length - 1; pathIndex += 1) {
@@ -547,10 +606,6 @@ export const createEarthRenderer = async (
       runtimeRoutes.push({ route, points: routePoints })
     }
 
-    for (const key of particleProgress.keys()) {
-      if (!activeParticleKeys.has(key)) particleProgress.delete(key)
-    }
-
     const previousGeometry = lineGeometry
     lineGeometry = new LineSegmentsGeometry()
 
@@ -569,22 +624,25 @@ export const createEarthRenderer = async (
     previousGeometry.dispose()
     rebuildEndpoints(routes)
 
-    if (particleMesh) earthGroup.remove(particleMesh)
-    particleMesh = new THREE.InstancedMesh(
-      particleGeometry,
-      particleMaterial,
-      Math.max(1, runtimeRoutes.length * 2),
-    )
-    particleMesh.count = runtimeRoutes.length * 2
-
-    for (let index = 0; index < runtimeRoutes.length; index += 1) {
-      particleMesh.setColorAt(index * 2, UPLOAD_COLOR)
-      particleMesh.setColorAt(index * 2 + 1, DOWNLOAD_COLOR)
-    }
-
-    if (particleMesh.instanceColor) particleMesh.instanceColor.needsUpdate = true
-    earthGroup.add(particleMesh)
-    updateParticles(0, false)
+    const previousFlowGeometry = flowGeometry
+    const flowCapacity = Math.max(1, runtimeRoutes.length * 2 * FLOW_STREAK_SEGMENTS)
+    flowPositions = new Float32Array(flowCapacity * 6)
+    flowColors = new Float32Array(flowCapacity * 6)
+    flowGeometry = new LineSegmentsGeometry()
+    flowGeometry.setPositions(flowPositions)
+    flowGeometry.setColors(flowColors)
+    flowPositionBuffer = (
+      flowGeometry.getAttribute('instanceStart') as THREE.InterleavedBufferAttribute
+    ).data
+    flowColorBuffer = (
+      flowGeometry.getAttribute('instanceColorStart') as THREE.InterleavedBufferAttribute
+    ).data
+    flowPositionBuffer.setUsage(THREE.DynamicDrawUsage)
+    flowColorBuffer.setUsage(THREE.DynamicDrawUsage)
+    flowGeometry.instanceCount = 0
+    flowGlow.geometry = flowGeometry
+    flows.geometry = flowGeometry
+    previousFlowGeometry.dispose()
   }
 
   const setRoutes = (incomingRoutes: EarthRoute[]) => {
@@ -604,7 +662,12 @@ export const createEarthRenderer = async (
       refreshEndpointCounts(routes)
     }
 
-    updateParticles(0, false)
+    flowProgress.clear()
+    for (const route of routes) {
+      if (route.upload > 0) flowProgress.set(`${route.key}:upload`, 0)
+      if (route.download > 0) flowProgress.set(`${route.key}:download`, 0)
+    }
+    updateFlows(0, false)
     if (reducedMotion) render()
   }
 
@@ -693,7 +756,16 @@ export const createEarthRenderer = async (
 
       initialLocationSet = true
       const distance = camera.position.distanceTo(controls.target)
-      const direction = toVector(location).applyQuaternion(earthGroup.quaternion).normalize()
+      const direction = toVector({
+        latitude: THREE.MathUtils.clamp(
+          location.latitude,
+          -MAX_INITIAL_LATITUDE,
+          MAX_INITIAL_LATITUDE,
+        ),
+        longitude: location.longitude,
+      })
+        .applyQuaternion(earthGroup.quaternion)
+        .normalize()
       camera.position.copy(controls.target).addScaledVector(direction, distance)
       controls.update()
       render()
@@ -721,10 +793,11 @@ export const createEarthRenderer = async (
       lineGeometry.dispose()
       lineGlowMaterial.dispose()
       lineMaterial.dispose()
+      flowGeometry.dispose()
+      flowGlowMaterial.dispose()
+      flowMaterial.dispose()
       endpointGeometry.dispose()
       endpointMaterial.dispose()
-      particleGeometry.dispose()
-      particleMaterial.dispose()
       sphereGeometry.dispose()
       globeMaterial.dispose()
       atmosphereMaterial.dispose()
