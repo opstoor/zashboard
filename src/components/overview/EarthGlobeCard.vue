@@ -8,6 +8,15 @@
         {{ t('earthGlobeTitle') }}
       </div>
       <div class="flex items-center gap-1">
+        <select
+          v-model="earthVisualMode"
+          class="select select-ghost select-sm h-8 min-h-8 w-auto border-0"
+          :aria-label="t('earthVisualStyle')"
+          :title="t('earthVisualStyle')"
+        >
+          <option value="space">{{ t('earthVisualStyle_space') }}</option>
+          <option value="flat">{{ t('earthVisualStyle_flat') }}</option>
+        </select>
         <button
           class="btn btn-ghost btn-sm btn-square"
           :aria-label="t(rotationPaused ? 'earthResumeRotation' : 'earthPauseRotation')"
@@ -44,8 +53,11 @@
     </div>
 
     <div
-      class="bg-base-200/30 relative mt-2 w-full overflow-hidden rounded-xl bg-black"
-      :class="expanded ? 'min-h-0 flex-1' : 'h-96'"
+      class="relative mt-2 w-full overflow-hidden rounded-xl"
+      :class="[
+        expanded ? 'min-h-0 flex-1' : 'h-96',
+        earthVisualMode === 'flat' ? 'bg-base-200/30' : 'bg-black',
+      ]"
     >
       <div
         ref="canvasRef"
@@ -104,18 +116,20 @@
           <i class="h-0.5 w-4 bg-[#5fcaff]" />{{ t('earthConnectionLine') }}
         </span>
         <span class="flex items-center gap-1">
-          <i class="h-1.5 w-1.5 rounded-full bg-[#ffb45e]" />{{ t('upload') }}
+          <i class="h-1.5 w-1.5 rounded-full bg-[#ffdc5e]" />{{ t('upload') }}
         </span>
         <span class="flex items-center gap-1">
-          <i class="h-1.5 w-1.5 rounded-full bg-[#64d8ff]" />{{ t('download') }}
+          <i class="h-1.5 w-1.5 rounded-full bg-[#3235ee]" />{{ t('download') }}
         </span>
       </div>
 
       <div
-        class="absolute bottom-2 left-2 flex flex-col items-start gap-0.5 text-[10px] text-white/65"
+        class="absolute bottom-2 left-2 flex flex-col items-start gap-0.5 text-[10px]"
+        :class="earthVisualMode === 'flat' ? 'text-base-content/55' : 'text-white/65'"
       >
         <a
-          class="hover:text-white hover:underline"
+          class="hover:underline"
+          :class="earthVisualMode === 'flat' ? 'hover:text-base-content' : 'hover:text-white'"
           href="https://db-ip.com/db/lite.php"
           target="_blank"
           rel="noopener noreferrer"
@@ -123,7 +137,8 @@
           DB-IP City Lite
         </a>
         <a
-          class="hover:text-white hover:underline"
+          class="hover:underline"
+          :class="earthVisualMode === 'flat' ? 'hover:text-base-content' : 'hover:text-white'"
           href="https://www.solarsystemscope.com/textures/"
           target="_blank"
           rel="noopener noreferrer"
@@ -296,7 +311,7 @@ import { getIPFromIpipnetAPI, getIPFromIpsbAPI } from '@/api/geoip'
 import { ipForChina, ipForGlobal } from '@/composables/overview'
 import { prettyBytesHelper } from '@/helper/utils'
 import { activeConnections } from '@/store/connections'
-import { earthOriginSource, language } from '@/store/settings'
+import { earthOriginSource, earthVisualMode, language, theme } from '@/store/settings'
 import {
   ArrowPathIcon,
   ArrowsPointingInIcon,
@@ -414,6 +429,12 @@ const tooltipStyle = computed<CSSProperties>(() => ({
   left: `${Math.min(window.innerWidth - 190, tooltipPosition.value.x + 12)}px`,
   top: `${Math.min(window.innerHeight - 100, tooltipPosition.value.y + 12)}px`,
 }))
+
+const getEarthColorScheme = (): 'dark' | 'light' => {
+  const colorScheme = getComputedStyle(document.body).getPropertyValue('color-scheme').trim()
+
+  return colorScheme.split(/\s+/).includes('dark') ? 'dark' : 'light'
+}
 
 const postWorker = (message: GeoWorkerRequest) => worker?.postMessage(message)
 
@@ -612,6 +633,15 @@ watch(language, () => {
   scheduleRouteRefresh()
 })
 watch(reducedMotion, (value) => renderer.value?.setReducedMotion(value))
+watch(earthVisualMode, (value) => renderer.value?.setVisualMode(value))
+watch(
+  theme,
+  async () => {
+    await nextTick()
+    renderer.value?.setColorScheme(getEarthColorScheme())
+  },
+  { flush: 'post' },
+)
 
 const initialize = async () => {
   if (disposed) return
@@ -629,6 +659,8 @@ const initialize = async () => {
     if (!canvasRef.value || disposed) return
     const createdRenderer = await createEarthRenderer(canvasRef.value, {
       reducedMotion: reducedMotion.value,
+      visualMode: earthVisualMode.value,
+      colorScheme: getEarthColorScheme(),
       onEndpointHover: handleEndpointHover,
     })
 

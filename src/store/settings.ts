@@ -239,6 +239,7 @@ export const earthOriginSource = useStorage<'global' | 'china'>(
   'config/earth-origin-source',
   'china',
 )
+export const earthVisualMode = useStorage<'flat' | 'space'>('config/earth-visual-mode', 'flat')
 
 // proxies
 export const collapseGroupMap = useStorage<Record<string, boolean>>('cache/collapse-group-map', {})
