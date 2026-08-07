@@ -84,7 +84,7 @@ export const buildEarthRoutes = async (
 ) => {
   const normalizedOrigin = normalizeIP(originIP)
 
-  if (!normalizedOrigin) return { routes: [] as EarthRoute[] }
+  if (!normalizedOrigin) return { routes: [] as EarthRoute[], origin: null }
 
   const candidates = extractCandidates(connections)
   const ips = new Set<string>([normalizedOrigin])
@@ -94,7 +94,7 @@ export const buildEarthRoutes = async (
   const locations = await lookup([...ips], locale)
   const origin = locations[normalizedOrigin]
 
-  if (!origin) return { routes: [] as EarthRoute[] }
+  if (!origin) return { routes: [] as EarthRoute[], origin: null }
 
   const aggregated = new Map<string, EarthRoute>()
 
@@ -132,5 +132,5 @@ export const buildEarthRoutes = async (
     }
   }
 
-  return { routes: [...aggregated.values()] }
+  return { routes: [...aggregated.values()], origin }
 }

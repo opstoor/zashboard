@@ -55,6 +55,7 @@ interface EndpointRuntime extends EarthEndpointInfo {
 
 export interface EarthRenderer {
   setRoutes: (routes: EarthRoute[]) => void
+  setInitialLocation: (location: EarthLocation) => void
   setReducedMotion: (reduced: boolean) => void
   setAutoRotation: (enabled: boolean) => void
   dispose: () => void
@@ -340,6 +341,7 @@ export const createEarthRenderer = async (
   let currentSignature = ''
   let reducedMotion = options.reducedMotion
   let autoRotation = true
+  let initialLocationSet = false
   let disposed = false
   let visible = !document.hidden
   let intersecting = true
@@ -680,6 +682,22 @@ export const createEarthRenderer = async (
 
   return {
     setRoutes,
+    setInitialLocation(location) {
+      if (
+        initialLocationSet ||
+        !Number.isFinite(location.latitude) ||
+        !Number.isFinite(location.longitude)
+      ) {
+        return
+      }
+
+      initialLocationSet = true
+      const distance = camera.position.distanceTo(controls.target)
+      const direction = toVector(location).applyQuaternion(earthGroup.quaternion).normalize()
+      camera.position.copy(controls.target).addScaledVector(direction, distance)
+      controls.update()
+      render()
+    },
     setReducedMotion(value) {
       reducedMotion = value
       updateAnimationLoop()

@@ -470,6 +470,7 @@ const refreshRoutes = async () => {
 
       if (!disposed) {
         routeCount.value = result.routes.length
+        if (result.origin) renderer.value?.setInitialLocation(result.origin)
         renderer.value?.setRoutes(result.routes)
       }
     } catch {
