@@ -111,10 +111,10 @@ const soft = computed(() => {
     reloadConfigs: mihomoOrForkCore,
     updateConfigs: mihomoOrForkCore,
     updateGeoDatabase: mihomoOrForkCore,
-    coreUpdateCheck: mihomoOrForkCore,
     // /storage/zashboard 设置同步,mihomo 扩展
     syncSettings: mihomoOrForkCore,
     independentLatency: mihomoOrForkCore,
+    coreUpdateCheck: mihomo,
     // ports / tun / allow-lan 等 PATCH /configs 配置块。
     configPatch: mihomo,
 
