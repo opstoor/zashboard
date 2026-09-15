@@ -201,7 +201,7 @@ const filterConnections = (items: readonly Connection[]) => {
   const visibleKeys = isConnectionCard.value
     ? connectionCardLines.value.flat()
     : connectionTableColumns.value
-  // 隐藏列只放宽搜索范围，「隐藏连接」正则仍按展示内容判定。
+  // 「隐藏连接」正则始终按全部字段判定，不受搜索范围开关影响。
   const searchKeys = searchHiddenColumns.value ? CONNECTION_SEARCHABLE_KEYS : visibleKeys
 
   return items.filter((conn) => {
@@ -213,18 +213,18 @@ const filterConnections = (items: readonly Connection[]) => {
       return true
     }
 
-    const visibleValues = hideRegex
-      ? getConnectionVisibleSearchValues(conn, visibleKeys, displayOptions)
+    const allValues = hideRegex
+      ? getConnectionVisibleSearchValues(conn, CONNECTION_SEARCHABLE_KEYS, displayOptions)
       : null
 
-    if (visibleValues && hideRegex?.testAny(visibleValues)) {
+    if (allValues && hideRegex?.testAny(allValues)) {
       return false
     }
 
     if (searchRegex) {
       return searchRegex.testAny(
-        searchKeys === visibleKeys && visibleValues
-          ? visibleValues
+        searchKeys === CONNECTION_SEARCHABLE_KEYS && allValues
+          ? allValues
           : getConnectionVisibleSearchValues(conn, searchKeys, displayOptions),
       )
     }
