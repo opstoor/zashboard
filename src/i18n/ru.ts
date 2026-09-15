@@ -66,7 +66,7 @@ const ru: LANG_MESSAGE = {
   activeConnections: 'Активные',
   closedConnections: 'Закрытые',
   allConnections: 'Все',
-  logLevel: 'Уровень журнала',
+  logLevel: 'Уровень',
   logType: 'Тип журнала',
 
   // Connections, proxies, and rules pages
@@ -111,6 +111,7 @@ const ru: LANG_MESSAGE = {
   ruleCount: 'Количество правил',
   hitCount: 'Совпадения',
   missCount: 'Промахи',
+  hitMissCount: 'Совпадения / Промахи',
   behavior: 'Поведение',
   vehicleType: 'Тип источника',
   customTableColumns: 'Пользовательские столбцы таблицы',

@@ -109,6 +109,7 @@ const en = {
   ruleCount: 'Rule count',
   hitCount: 'Hits',
   missCount: 'Misses',
+  hitMissCount: 'Hits / Misses',
   behavior: 'Behavior',
   vehicleType: 'Vehicle type',
   customTableColumns: 'Custom table columns',

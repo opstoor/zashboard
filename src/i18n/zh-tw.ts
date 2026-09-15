@@ -111,6 +111,7 @@ const zhTW: LANG_MESSAGE = {
   ruleCount: '規則數',
   hitCount: '命中',
   missCount: '未命中',
+  hitMissCount: '命中 / 未命中',
   behavior: '行為',
   vehicleType: '來源類型',
   customTableColumns: '自訂表格列',
