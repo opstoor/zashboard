@@ -268,6 +268,8 @@ const zh: LANG_MESSAGE = {
   independentLatencyTestTip:
     '开启独立延迟测试会在测速中尽可能的使用配置文件中的url覆盖面板设置的url，并展示根据策略组设置的url获取的延迟。',
   search: '搜索',
+  searchVisibleColumns: '仅搜索展示的列',
+  searchHiddenColumns: '搜索包含隐藏的列',
   searchProxyGroup: '搜索代理组',
   searchProxyNode: '搜索节点',
   proxySearchModeGlobal: '节点搜索',
