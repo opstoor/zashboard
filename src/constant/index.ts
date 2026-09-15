@@ -1,5 +1,6 @@
 import {
   ArrowsRightLeftIcon,
+  ChartBarIcon,
   Cog6ToothIcon,
   CubeTransparentIcon,
   DocumentTextIcon,
@@ -255,7 +256,7 @@ export enum ROUTE_NAME {
 }
 
 export const ROUTE_ICON_MAP = {
-  [ROUTE_NAME.overview]: CubeTransparentIcon,
+  [ROUTE_NAME.overview]: ChartBarIcon,
   [ROUTE_NAME.proxies]: GlobeAltIcon,
   [ROUTE_NAME.connections]: ArrowsRightLeftIcon,
   [ROUTE_NAME.rules]: SwatchIcon,
