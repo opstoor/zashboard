@@ -109,6 +109,8 @@
   }
   @apply border-separate border-spacing-0;
   --table-stripe: color-mix(in oklab, var(--color-base-content) 3%, transparent);
+  /* 行 hover 的高亮色。行本身用 hover:bg-(--table-hover) 吃它,横向固定列走下面的渐变 */
+  --table-hover: color-mix(in oklab, var(--color-base-content) 10%, transparent);
 }
 
 /*
@@ -130,6 +132,11 @@
 
 tr.table-row-stripe > .pinned-td {
   background-image: linear-gradient(var(--table-stripe), var(--table-stripe));
+}
+
+/* 固定列自己不透明,行的 hover 底色透不上来,同样用渐变补一层,高亮才贯通整行 */
+tbody tr:hover > .pinned-td {
+  background-image: linear-gradient(var(--table-hover), var(--table-hover));
 }
 
 /*
