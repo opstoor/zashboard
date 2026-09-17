@@ -70,12 +70,12 @@
 
 .nav-item {
   @apply relative z-10 flex min-w-0 items-center rounded-lg outline-none select-none;
-  color: color-mix(in srgb, var(--color-base-content) 80%, transparent);
+  color: var(--color-base-content);
 }
 
 .nav-item-icon {
   @apply shrink-0;
-  color: color-mix(in srgb, var(--color-primary) 75%, var(--color-base-content));
+  color: var(--color-base-content);
   stroke-width: 1.75;
 }
 
