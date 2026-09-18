@@ -93,7 +93,7 @@ import {
   isSettingHidden,
   moveSettingsCategory,
   toggleSettingHidden,
-} from '@/composables/settings'
+} from '@/helper/settings'
 import {
   DEFAULT_SETTINGS_MENU_ORDER,
   SETTINGS_CATEGORIES,

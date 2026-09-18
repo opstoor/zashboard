@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { NOT_CONNECTED } from '@/constant'
 import { getColorForLatency } from '@/helper'
-import { useTooltip } from '@/helper/tooltip'
+import { useTooltip } from '@/composables/use-tooltip'
 import { getHistoryByName, getLatencyByName } from '@/assembly/proxies'
 import { BoltIcon } from '@heroicons/vue/24/outline'
 import { CountUp } from 'countup.js'

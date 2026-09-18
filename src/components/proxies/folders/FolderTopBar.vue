@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { ctrlsBottom } from '@/composables/padding-views'
+import { ctrlsBottom } from '@/helper/padding-views'
 import { proxyGroupList } from '@/assembly/proxies'
 import {
   activeFolderId,

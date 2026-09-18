@@ -48,7 +48,7 @@
 import { rulesFilter } from '@/store/rules'
 import { updateRuleProvider } from '@/assembly/rules'
 import HighlightText from '@/components/common/HighlightText.vue'
-import { useBounceOnVisible } from '@/composables/bounce-in'
+import { useBounceOnVisible } from '@/composables/use-bounce-on-visible'
 import { notifyRequestError } from '@/helper/request-error'
 import { fromNow } from '@/helper/utils'
 import { fetchRules } from '@/assembly/rules'

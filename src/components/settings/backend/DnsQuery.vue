@@ -86,7 +86,7 @@
 import { queryDNS } from '@/assembly/config'
 import { getIPInfo, type IPInfo } from '@/api/geoip'
 import { notifyRequestError } from '@/helper/request-error'
-import { useStorage } from '@/helper/storage'
+import { useStorage } from '@/composables/use-storage'
 import type { DNSQuery } from '@/types'
 import { MagnifyingGlassIcon, MapPinIcon, ServerIcon } from '@heroicons/vue/24/outline'
 import { reactive, ref } from 'vue'

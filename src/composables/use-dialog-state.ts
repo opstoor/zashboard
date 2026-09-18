@@ -1,8 +1,5 @@
-import { onUnmounted, ref, watch, type Ref } from 'vue'
-
-export const openDialogCount = ref(0)
-
-export const dimmedOverlayCount = ref(0)
+import { dimmedOverlayCount, openDialogCount } from '@/helper/dialog'
+import { onUnmounted, watch, type Ref } from 'vue'
 
 const useCount = (count: Ref<number>, active: Ref<boolean | undefined>) => {
   let held = false

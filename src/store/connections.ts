@@ -3,6 +3,7 @@ import {
   closedConnections,
   getConnectionVisibleSearchValues,
 } from '@/assembly/connections'
+import { useStorage } from '@/composables/use-storage'
 import {
   CONNECTION_SEARCHABLE_KEYS,
   CONNECTION_TAB_TYPE,
@@ -23,7 +24,6 @@ import {
   getNetworkTypeFromConnection,
 } from '@/helper'
 import { toSearchRegex } from '@/helper/search'
-import { useStorage } from '@/helper/storage'
 import type { Connection } from '@/types'
 import { computed, ref } from 'vue'
 import {

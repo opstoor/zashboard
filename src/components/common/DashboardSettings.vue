@@ -219,7 +219,7 @@ import {
 import { LOCAL_IMAGE } from '@/helper/indexeddb'
 import { dismissNotification, notifyActionPending, showNotification } from '@/helper/notification'
 import { notifyRequestError } from '@/helper/request-error'
-import { useTooltip } from '@/helper/tooltip'
+import { useTooltip } from '@/composables/use-tooltip'
 import {
   applyDashboardSettingsToStorage,
   exportSettings,

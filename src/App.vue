@@ -11,9 +11,9 @@ import UpgradeCoreModal from './components/settings/backend/UpgradeCoreModal.vue
 import { useAppearanceVars } from './composables/use-appearance-vars'
 import { useOverscrollLock } from './composables/use-overscroll-lock'
 import { useThemeColor } from './composables/use-theme-color'
-import { showUpdateConfigModal, showUpgradeCoreModal } from './composables/backend-actions'
+import { showUpdateConfigModal, showUpgradeCoreModal } from '@/helper/backend-actions'
 import ConfirmDialogHost from './components/common/ConfirmDialogHost.vue'
-import { useKeyboard } from './composables/keyboard'
+import { useKeyboard } from './composables/use-keyboard'
 import { EMOJIS, FONTS } from './constant'
 import {
   autoImportSettings,

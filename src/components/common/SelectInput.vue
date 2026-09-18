@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts" generic="T = unknown">
-import { useFloatingMenu } from '@/composables/floating-menu'
+import { useFloatingMenu } from '@/composables/use-floating-menu'
 import { CheckIcon } from '@heroicons/vue/24/outline'
 import { isEqual } from 'lodash'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'

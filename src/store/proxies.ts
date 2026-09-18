@@ -1,5 +1,5 @@
+import { useStorage } from '@/composables/use-storage'
 import { PROXY_TAB_TYPE } from '@/constant'
-import { useStorage } from '@/helper/storage'
 import { ref, watch } from 'vue'
 import { activeBackend } from './setup'
 

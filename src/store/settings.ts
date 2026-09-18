@@ -1,3 +1,4 @@
+import { useStorage } from '@/composables/use-storage'
 import { DEFAULT_SETTINGS_MENU_ORDER } from '@/config/settings-items'
 import {
   ALL_THEME,
@@ -26,7 +27,6 @@ import {
   TEST_URL,
   type THEME,
 } from '@/constant'
-import { useStorage } from '@/helper/storage'
 import { getMinCardWidth, isMiddleScreen, isPreferredDark } from '@/helper/utils'
 import type { SourceIPLabel } from '@/types'
 import { computed } from 'vue'

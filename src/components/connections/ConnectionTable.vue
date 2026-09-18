@@ -220,7 +220,7 @@ import {
   disconnectById,
   getConnectionDisplayValue,
 } from '@/assembly/connections'
-import { useConnections } from '@/composables/connections'
+import { useConnections } from '@/composables/use-connections'
 import {
   CONNECTION_GROUPABLE_KEYS,
   CONNECTION_TAB_TYPE,
@@ -239,7 +239,7 @@ import {
 import { backgroundImage } from '@/helper/indexeddb'
 import { showNotification } from '@/helper/notification'
 import { notifyRequestError } from '@/helper/request-error'
-import { useStorage } from '@/helper/storage'
+import { useStorage } from '@/composables/use-storage'
 import {
   connectionFilter,
   connectionTabShow,

@@ -1,4 +1,4 @@
-import { useStorage } from '@/helper/storage'
+import { useStorage } from '@/composables/use-storage'
 import { ref } from 'vue'
 
 export const logFilter = ref('')

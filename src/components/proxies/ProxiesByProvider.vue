@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { groupProxiesByProviderName } from '@/composables/render-proxies'
+import { groupProxiesByProviderName } from '@/helper/render-proxies'
 import { computed, onBeforeUnmount, onBeforeUpdate, ref } from 'vue'
 import ProxiesContent from './ProxiesContent.vue'
 

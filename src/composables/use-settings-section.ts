@@ -1,25 +1,12 @@
-import { isSettingVisible } from '@/composables/settings'
-import { DEFAULT_SETTINGS_MENU_ORDER, SETTINGS_CATEGORIES } from '@/config/settings-items'
 import { SETTINGS_MENU_KEY } from '@/constant'
+import { visibleSectionKeys } from '@/helper/settings-section'
 import { isMiddleScreen } from '@/helper/utils'
-import { settingsMenuOrder } from '@/store/settings'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter, type LocationQueryValue } from 'vue-router'
 
 type SettingsQuery = Record<string, LocationQueryValue | LocationQueryValue[] | undefined>
 
 const enteredFromMobileIndex = ref(false)
-
-export const visibleSectionKeys = computed(() => {
-  const order = [
-    ...settingsMenuOrder.value,
-    ...DEFAULT_SETTINGS_MENU_ORDER.filter((key) => !settingsMenuOrder.value.includes(key)),
-  ]
-
-  return order.filter(
-    (key) => SETTINGS_CATEGORIES.some((category) => category.key === key) && isSettingVisible(key),
-  )
-})
 
 export const useSettingsSection = () => {
   const route = useRoute()

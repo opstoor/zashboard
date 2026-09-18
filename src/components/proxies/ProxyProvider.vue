@@ -68,8 +68,8 @@
 
 <script setup lang="ts">
 import { proxyProviderHealthCheck, updateProxyProvider } from '@/assembly/proxies'
-import { useBounceOnVisible } from '@/composables/bounce-in'
-import { useRenderProxyList } from '@/composables/render-proxies'
+import { useBounceOnVisible } from '@/composables/use-bounce-on-visible'
+import { useRenderProxyList } from '@/composables/use-render-proxy-list'
 import { notifyRequestError } from '@/helper/request-error'
 import { fromNow, prettyBytesHelper } from '@/helper/utils'
 import { fetchProxies } from '@/assembly/proxies'

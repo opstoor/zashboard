@@ -1,4 +1,4 @@
-import { dimmedOverlayCount } from '@/composables/dialog'
+import { dimmedOverlayCount } from '@/helper/dialog'
 import { isPreferredDark } from '@/helper/utils'
 import { onMounted, onUnmounted, watch, type Ref } from 'vue'
 

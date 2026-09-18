@@ -1,4 +1,4 @@
-import { useStorage } from '@/helper/storage'
+import { useStorage } from '@/composables/use-storage'
 import type { Backend } from '@/types'
 import { isEqual, omit } from 'lodash'
 import { v4 as uuid } from 'uuid'

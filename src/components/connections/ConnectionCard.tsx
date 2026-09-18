@@ -3,8 +3,8 @@ import {
   disconnectById,
   getConnectionDisplayValue,
 } from '@/assembly/connections'
-import { useBounceOnVisible } from '@/composables/bounce-in'
-import { useConnections } from '@/composables/connections'
+import { useBounceOnVisible } from '@/composables/use-bounce-on-visible'
+import { useConnections } from '@/composables/use-connections'
 import {
   CONNECTION_TAB_TYPE,
   CONNECTIONS_TABLE_ACCESSOR_KEY,

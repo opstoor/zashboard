@@ -73,8 +73,7 @@ const columns: ColumnDef<LogWithSeq>[] = [
     id: 'payload',
     enableSorting: false,
     accessorFn: (log) => log.payload,
-    cell: ({ row }) =>
-      h(HighlightText, { text: row.original.payload, filter: logFilter.value, ansi: true }),
+    cell: ({ row }) => h(HighlightText, { text: row.original.payload, filter: logFilter.value }),
     meta: { cellClass: 'max-w-none!' },
   },
 ]

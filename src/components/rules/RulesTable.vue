@@ -51,6 +51,7 @@ import VirtualTable from '@/components/common/VirtualTable.vue'
 import ProxyGroup from '@/components/proxies/ProxyGroup.vue'
 import { proxyGroupList } from '@/assembly/proxies'
 import { fetchRules, rules, updateRuleProvider } from '@/assembly/rules'
+import { useRuleHitTooltip } from '@/composables/use-rule-hit-tooltip'
 import {
   EMPTY_CELL,
   formatRuleHitCount,
@@ -58,8 +59,7 @@ import {
   isRuleDisabled,
   isUpdateableRuleSet,
   toggleRuleDisabledWithSideEffects,
-  useRuleHitTooltip,
-} from '@/composables/rules'
+} from '@/helper/rules'
 import { RULE_TAB_TYPE } from '@/constant'
 import { notifyRequestError } from '@/helper/request-error'
 import { fromNow } from '@/helper/utils'

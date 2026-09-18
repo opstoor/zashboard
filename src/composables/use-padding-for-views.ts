@@ -1,8 +1,7 @@
+import { ctrlsBottom, dockTop } from '@/helper/padding-views'
 import { isMiddleScreen } from '@/helper/utils'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
-export const ctrlsBottom = ref(0)
-export const dockTop = ref(0)
 export const usePaddingForViews = (
   config = {
     offsetTop: 8,

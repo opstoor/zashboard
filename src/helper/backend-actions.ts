@@ -9,11 +9,11 @@ import {
 import { fetchProxies, flushSmartGroupWeights, hasSmartGroup } from '@/assembly/proxies'
 import { fetchRules } from '@/assembly/rules'
 import { restartCore } from '@/assembly/version'
-import { isSettingHidden } from '@/composables/settings'
 import { BACKEND_ITEM_KEYS } from '@/config/settings-items'
 import { showConfirmDialog } from '@/helper/confirm-dialog'
 import { notifyActionPending, showNotification } from '@/helper/notification'
 import { notifyRequestError } from '@/helper/request-error'
+import { isSettingHidden } from '@/helper/settings'
 import { i18n } from '@/i18n'
 import { activeBackend } from '@/store/setup'
 import {

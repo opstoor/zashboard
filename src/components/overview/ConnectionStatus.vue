@@ -60,12 +60,7 @@ import {
   getGithubLatencyAPI,
   getYouTubeLatencyAPI,
 } from '@/api/latency'
-import {
-  baiduLatency,
-  cloudflareLatency,
-  githubLatency,
-  youtubeLatency,
-} from '@/composables/overview'
+import { baiduLatency, cloudflareLatency, githubLatency, youtubeLatency } from '@/helper/overview'
 import { getColorForLatency } from '@/helper'
 import { autoConnectionCheck } from '@/store/settings'
 import { BoltIcon } from '@heroicons/vue/24/outline'

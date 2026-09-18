@@ -11,7 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import { registerRenderedSetting, useIsSettingVisible } from '@/composables/settings'
+import { useIsSettingVisible } from '@/composables/use-setting-visibility'
+import { registerRenderedSetting } from '@/helper/settings'
 import { computed, onUnmounted, toRef, watch } from 'vue'
 
 const props = withDefaults(

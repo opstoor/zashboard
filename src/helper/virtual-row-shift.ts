@@ -1,4 +1,4 @@
-import { inject, nextTick, provide, type InjectionKey } from 'vue'
+import { nextTick } from 'vue'
 
 export type VirtualRowShift = {
   begin: (
@@ -22,14 +22,6 @@ type RowShiftState = {
 
 const ROW_CLASS = 'virtual-row-shift-row'
 const SHIFT_VAR = '--virtual-row-shift'
-
-const virtualRowShiftKey: InjectionKey<VirtualRowShift> = Symbol('virtual-row-shift')
-
-export const provideVirtualRowShift = (shift: VirtualRowShift) => {
-  provide(virtualRowShiftKey, shift)
-}
-
-export const useVirtualRowShift = () => inject(virtualRowShiftKey, null)
 
 export const createVirtualRowShift = (
   getColumn: () => HTMLElement | undefined,

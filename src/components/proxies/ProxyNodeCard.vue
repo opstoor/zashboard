@@ -50,7 +50,7 @@ import {
   highlightProxyNode,
   highlightedProxyNode,
   scrollNodeIntoViewKey,
-} from '@/composables/proxies-scroll'
+} from '@/helper/proxies-scroll'
 import { proxyLatencyTest } from '@/assembly/proxies'
 import { getIPv6ByName, getTestUrl, proxyMap } from '@/assembly/proxies'
 import { IPv6test, proxyCardSize, proxySortType, truncateProxyName } from '@/store/settings'

@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDialogOpenState } from '@/composables/dialog'
+import { useDialogOpenState } from '@/composables/use-dialog-state'
 import { blurIntensity } from '@/store/settings'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { computed, ref, watch, type CSSProperties } from 'vue'

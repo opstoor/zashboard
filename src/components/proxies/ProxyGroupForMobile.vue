@@ -50,10 +50,10 @@
 </template>
 
 <script setup lang="ts">
-import { useBounceOnVisible } from '@/composables/bounce-in'
-import { useOverlayDimState } from '@/composables/dialog'
-import { disableProxiesPageScroll } from '@/composables/proxies'
-import { useRenderProxyList } from '@/composables/render-proxies'
+import { useBounceOnVisible } from '@/composables/use-bounce-on-visible'
+import { useOverlayDimState } from '@/composables/use-dialog-state'
+import { disableProxiesPageScroll } from '@/helper/proxies'
+import { useRenderProxyList } from '@/composables/use-render-proxy-list'
 import { PROXIES_PARENT_CLASS } from '@/helper/utils'
 import { proxyGroupLatencyTest } from '@/assembly/proxies'
 import { proxyMap } from '@/assembly/proxies'

@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ReachabilityStatus } from '@/composables/backend-reachability'
+import type { ReachabilityStatus } from '@/composables/use-backend-reachability'
 import { computed } from 'vue'
 
 const props = withDefaults(

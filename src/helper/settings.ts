@@ -1,8 +1,7 @@
 import { DEFAULT_SETTINGS_MENU_ORDER, getAllSettingKeys } from '@/config/settings-items'
 import { SETTINGS_MENU_KEY } from '@/constant'
 import { hiddenSettingsItems, settingsMenuOrder } from '@/store/settings'
-import type { MaybeRef } from 'vue'
-import { computed, ref, unref } from 'vue'
+import { ref } from 'vue'
 
 const renderedSettingCounts = ref<Record<string, number>>({})
 
@@ -38,14 +37,6 @@ export function toggleSettingHidden(key: string): void {
     ...hiddenSettingsItems.value,
     [key]: !hiddenSettingsItems.value[key],
   }
-}
-
-export function useIsSettingVisible(key: MaybeRef<string>) {
-  return computed(() => !hiddenSettingsItems.value[unref(key)])
-}
-
-export function useHasAnyVisibleSetting(keys: MaybeRef<string[]>) {
-  return computed(() => unref(keys).some((k) => !hiddenSettingsItems.value[k]))
 }
 
 export function applyShowAllPreset(): void {

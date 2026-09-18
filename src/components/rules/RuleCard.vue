@@ -102,16 +102,16 @@
 
 <script setup lang="ts">
 import { rulesFilter } from '@/store/rules'
-import { useBounceOnVisible } from '@/composables/bounce-in'
+import { useBounceOnVisible } from '@/composables/use-bounce-on-visible'
+import { useRuleHitTooltip } from '@/composables/use-rule-hit-tooltip'
 import {
   getRuleSize,
   isRuleDisabled,
   isUpdateableRuleSet as checkUpdateableRuleSet,
   toggleRuleDisabledWithSideEffects,
-  useRuleHitTooltip,
-} from '@/composables/rules'
+} from '@/helper/rules'
 import { notifyRequestError } from '@/helper/request-error'
-import { useTooltip } from '@/helper/tooltip'
+import { useTooltip } from '@/composables/use-tooltip'
 import { proxyGroupList } from '@/assembly/proxies'
 import { fetchRules, updateRuleProvider } from '@/assembly/rules'
 import { displayLatencyInRule, displayNowNodeInRule } from '@/store/settings'

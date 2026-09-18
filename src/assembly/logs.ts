@@ -1,5 +1,5 @@
+import { useStorage } from '@/composables/use-storage'
 import { LOG_LEVEL } from '@/constant'
-import { useStorage } from '@/helper/storage'
 import { logRetentionLimit, sourceIPLabelList } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
 import type { Log, LogWithSeq } from '@/types'

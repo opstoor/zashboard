@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { isSettingHidden, isSettingRendered } from '@/composables/settings'
+import { isSettingHidden, isSettingRendered } from '@/helper/settings'
 import {
   SETTINGS_CATEGORIES,
   SETTINGS_MENU_LABELS,

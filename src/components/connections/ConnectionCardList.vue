@@ -47,7 +47,7 @@ import {
   resetConnectionCardGroups,
   syncConnectionCardGroupIds,
   toggleConnectionCardGroup,
-} from '@/composables/connection-card-groups'
+} from '@/helper/connection-card-groups'
 import type { ConnectionGroupableKey } from '@/constant'
 import { connectionCardGroupKey, connectionTabShow, renderConnections } from '@/store/connections'
 import { connectionCardLines, proxyChainDirection, showFullProxyChain } from '@/store/settings'

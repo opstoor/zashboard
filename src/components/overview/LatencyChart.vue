@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTooltip } from '@/helper/tooltip'
+import { useTooltip } from '@/composables/use-tooltip'
 import { lowLatency, mediumLatency } from '@/store/settings'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'

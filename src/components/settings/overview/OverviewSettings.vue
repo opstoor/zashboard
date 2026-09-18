@@ -70,7 +70,7 @@
 <script setup lang="ts">
 import SelectInput from '@/components/common/SelectInput.vue'
 import SettingItem from '@/components/settings/SettingItem.vue'
-import { useIsSettingVisible } from '@/composables/settings'
+import { useIsSettingVisible } from '@/composables/use-setting-visibility'
 import { OVERVIEW_ITEM_KEYS } from '@/config/settings-items'
 import { isMiddleScreen } from '@/helper/utils'
 import {

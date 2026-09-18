@@ -1,10 +1,6 @@
 import { disconnectAll, disconnectById, isPaused } from '@/assembly/connections'
-import {
-  hasConnectionCardGroups,
-  hasExpandedConnectionCardGroups,
-  toggleAllConnectionCardGroups,
-} from '@/composables/connection-card-groups'
 import { useCtrlsBar } from '@/composables/use-ctrls-bar'
+import { useTooltip } from '@/composables/use-tooltip'
 import {
   CONNECTION_GROUPABLE_KEYS,
   naturalSortDirection,
@@ -17,7 +13,11 @@ import {
   SORT_TYPE_VALUE_KIND,
   type ConnectionGroupableKey,
 } from '@/constant'
-import { useTooltip } from '@/helper/tooltip'
+import {
+  hasConnectionCardGroups,
+  hasExpandedConnectionCardGroups,
+  toggleAllConnectionCardGroups,
+} from '@/helper/connection-card-groups'
 import {
   connectionCardGroupKey,
   connectionFilter,

@@ -34,8 +34,8 @@
 </template>
 
 <script setup lang="ts">
-import { sidebarStatItems, statTipOf } from '@/composables/sidebar-stats'
-import { useTooltip } from '@/helper/tooltip'
+import { sidebarStatItems, statTipOf } from '@/helper/sidebar-stats'
+import { useTooltip } from '@/composables/use-tooltip'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()

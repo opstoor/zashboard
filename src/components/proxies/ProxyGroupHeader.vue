@@ -39,10 +39,12 @@
 
 <script setup lang="ts">
 import { hiddenGroupMap } from '@/store/proxies'
-import { KEYBOARD_SHORTCUT_ACTION, useKeyboardShortcuts } from '@/composables/keyboard'
-import { getDownloadSpeedByProxyGroup } from '@/composables/proxy-group-traffic'
+import { useKeyboardShortcuts } from '@/composables/use-keyboard'
+import { KEYBOARD_SHORTCUT_ACTION } from '@/helper/keyboard'
+import { getDownloadSpeedByProxyGroup } from '@/helper/proxy-group-traffic'
 import { isHiddenGroup } from '@/helper'
-import { checkTruncation, useTooltip } from '@/helper/tooltip'
+import { checkTruncation } from '@/helper/tooltip'
+import { useTooltip } from '@/composables/use-tooltip'
 import { prettyBytesHelper } from '@/helper/utils'
 import { proxyMap } from '@/assembly/proxies'
 import { manageHiddenGroup, proxyGroupIconMargin, proxyGroupIconSize } from '@/store/settings'

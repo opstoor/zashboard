@@ -425,11 +425,6 @@ export const SETTINGS_CATEGORIES: SettingsCategory[] = [
   },
 ]
 
-export function getItemKeysByCategory(categoryKey: SETTINGS_MENU_KEY): string[] {
-  const category = SETTINGS_CATEGORIES.find((c) => c.key === categoryKey)
-  return category ? category.items.map((item) => item.key) : []
-}
-
 export function getAllKeysForCategory(categoryKey: SETTINGS_MENU_KEY): string[] {
   const category = SETTINGS_CATEGORIES.find((c) => c.key === categoryKey)
   if (!category) return []

@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTooltip } from '@/helper/tooltip'
+import { useTooltip } from '@/composables/use-tooltip'
 import { useResizeObserver } from '@vueuse/core'
 import { nextTick, ref, watch, type Component } from 'vue'
 import { RouterLink, type RouteLocationRaw } from 'vue-router'

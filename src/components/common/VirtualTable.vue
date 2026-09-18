@@ -99,7 +99,7 @@
 import { TABLE_SIZE } from '@/constant'
 import { backgroundImage } from '@/helper/indexeddb'
 import { showNotification } from '@/helper/notification'
-import { useStorage } from '@/helper/storage'
+import { useStorage } from '@/composables/use-storage'
 import { tableSize } from '@/store/settings'
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, CircleStackIcon } from '@heroicons/vue/24/outline'
 import {

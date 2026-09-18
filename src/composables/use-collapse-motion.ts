@@ -1,6 +1,6 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch, type Ref } from 'vue'
-import { provideCollapseTransition } from './collapse-transition'
-import { useVirtualRowShift } from './virtual-row-shift'
+import { provideCollapseTransition } from './use-collapse-transition'
+import { useVirtualRowShift } from './use-virtual-row-shift'
 
 type Phase = 'idle' | 'preparing' | 'animating' | 'settling'
 

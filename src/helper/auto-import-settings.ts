@@ -1,7 +1,7 @@
 import { getSyncedSettings } from '@/assembly/storage'
+import { useStorage } from '@/composables/use-storage'
 import { showConfirmDialog } from '@/helper/confirm-dialog'
 import { showNotification } from '@/helper/notification'
-import { useStorage } from '@/helper/storage'
 import { applyDashboardSettingsToStorage } from '@/helper/utils'
 import { i18n } from '@/i18n'
 import { isEmpty } from 'lodash'
