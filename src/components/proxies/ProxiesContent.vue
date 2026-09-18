@@ -27,9 +27,12 @@ const columns = computed(() =>
   width.value ? Math.max(1, Math.floor((width.value + GAP) / (minProxyCardWidth.value + GAP))) : 1,
 )
 const rowCount = computed(() => Math.ceil(props.renderProxies.length / columns.value))
-const estimatedRowHeight = computed(
-  () => (proxyCardSize.value === PROXY_CARD_SIZE.SMALL ? 48 : 60) + GAP,
+const estimatedCardHeight = computed(() =>
+  proxyCardSize.value === PROXY_CARD_SIZE.SMALL ? 48 : 60,
 )
+
+const estimateRowHeight = (rowIndex: number) =>
+  rowIndex === rowCount.value - 1 ? estimatedCardHeight.value : estimatedCardHeight.value + GAP
 
 const measureRowHeight = (element: Element, entry: ResizeObserverEntry | undefined) => {
   const box = entry?.borderBoxSize?.[0]
@@ -44,7 +47,7 @@ const rowVirtualizer = useVirtualizer(
   computed(() => ({
     count: rowCount.value,
     getScrollElement: () => scrollEl.value,
-    estimateSize: () => estimatedRowHeight.value,
+    estimateSize: estimateRowHeight,
     measureElement: measureRowHeight,
     scrollMargin: scrollMargin.value,
     overscan: overscan.value,
@@ -241,7 +244,7 @@ onBeforeUnmount(cancelCorrect)
 <template>
   <div
     ref="rootRef"
-    class="-mb-2 min-w-0"
+    class="min-w-0"
   >
     <div :style="{ height: `${topSpacer}px` }" />
     <div
@@ -249,7 +252,8 @@ onBeforeUnmount(cancelCorrect)
       :key="row.key.toString()"
       :data-index="row.index"
       :ref="(el) => measureRow(el as Element | null)"
-      class="grid min-w-0 gap-2 pb-2"
+      class="grid min-w-0 gap-2"
+      :class="row.index < rowCount - 1 && 'pb-2'"
       :style="{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }"
     >
       <ProxyNodeCard
