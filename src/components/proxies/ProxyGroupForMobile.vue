@@ -211,3 +211,27 @@ onUnmounted(() => {
 
 useBounceOnVisible(cardRef)
 </script>
+
+<style scoped>
+.proxy-group-backdrop-enter-active,
+.proxy-group-backdrop-leave-active {
+  transition: opacity 0.25s ease-out;
+}
+
+.proxy-group-backdrop-enter-from,
+.proxy-group-backdrop-leave-to {
+  opacity: 0;
+}
+
+.proxy-group-card {
+  --proxy-group-card-motion: 0.2s cubic-bezier(0, 0, 0.2, 1);
+  transition:
+    width var(--proxy-group-card-motion),
+    transform var(--proxy-group-card-motion),
+    max-height var(--proxy-group-card-motion);
+}
+
+.proxy-group-card-content {
+  transition: opacity var(--proxy-group-card-motion);
+}
+</style>

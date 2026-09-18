@@ -5,7 +5,7 @@
   >
     <mark
       v-if="part.matched"
-      class="search-highlight"
+      class="rounded-xs bg-yellow-300 text-black"
     >
       {{ part.text }}
     </mark>

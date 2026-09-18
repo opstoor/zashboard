@@ -118,3 +118,9 @@ onBeforeUnmount(() => {
   }
 })
 </script>
+
+<style scoped>
+.virtual-row-shift-row {
+  transform: translateY(var(--virtual-row-shift, 0px));
+}
+</style>

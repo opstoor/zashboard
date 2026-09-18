@@ -820,4 +820,21 @@ th .resizer {
 th:hover .resizer {
   @apply opacity-100;
 }
+
+.pinned-td {
+  background-color: var(--color-base-100);
+}
+
+tr.table-row-stripe > .pinned-td {
+  background-image: linear-gradient(var(--table-stripe), var(--table-stripe));
+}
+
+tbody tr:hover > .pinned-td {
+  background-image: linear-gradient(var(--table-hover), var(--table-hover));
+}
+
+.custom-background .pinned-td {
+  background-color: transparent !important;
+  backdrop-filter: var(--app-glass, none);
+}
 </style>

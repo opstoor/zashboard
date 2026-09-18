@@ -121,4 +121,29 @@ const handlerLatencyTest = async () => {
 .tooltip:before {
   z-index: 20;
 }
+
+.latency-highlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-color: var(--color-info);
+  animation: latencyHighlightFade 1.5s ease-out forwards;
+}
+
+@keyframes latencyHighlightFade {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .latency-highlight::after {
+    animation: none;
+  }
+}
 </style>

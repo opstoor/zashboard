@@ -5,7 +5,3 @@ div {
 .text-main {
   @apply text-base-content;
 }
-
-.search-highlight {
-  @apply rounded-xs bg-yellow-300 text-black;
-}

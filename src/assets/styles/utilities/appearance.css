@@ -65,29 +65,11 @@
     );
   }
 
-  .bg-primary\/85 .latency-tag {
-    background-color: color-mix(
-      in oklab,
-      var(--color-base-100) max(var(--app-surface-alpha), 90%),
-      transparent
-    );
-  }
-
-  .home-page {
-    background-color: transparent;
-  }
-
   /* prettier-ignore */
   :is(.bg-base-100, .bg-base-150, .bg-base-200, .card, .collapse, .modal-box, .base-container, .settings-grid, .floating-menu-panel, .surface):not(
     tr, .badge, .latency-tag,
     .custom-background :is(.bg-base-100, .bg-base-150, .bg-base-200, .card, .collapse, .modal-box, .base-container, .settings-grid, .floating-menu-panel, .surface) *
-  ),
-  .glass-over-content {
-    backdrop-filter: var(--app-glass, none);
-  }
-
-  .pinned-td {
-    @apply bg-transparent!;
+  ) {
     backdrop-filter: var(--app-glass, none);
   }
 

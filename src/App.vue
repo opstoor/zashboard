@@ -140,3 +140,99 @@ useKeyboard()
     />
   </div>
 </template>
+
+<style>
+.app-toast-region {
+  position: fixed;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  right: calc(0.75rem + env(safe-area-inset-right, 0px));
+  z-index: 100000;
+  display: flex;
+  width: min(24rem, calc(100vw - 1.5rem));
+  flex-direction: column;
+  gap: 0.625rem;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .app-toast-region {
+    top: calc(2.75rem + env(safe-area-inset-top, 0px));
+    right: calc(1rem + env(safe-area-inset-right, 0px));
+  }
+}
+
+.app-toast {
+  --toast-accent: var(--color-primary);
+  grid-template-columns: 0.25rem 1.75rem minmax(0, 1fr) 1.5rem;
+  animation: appToastIn 0.22s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.app-toast[data-toast-type='success'] {
+  --toast-accent: var(--color-success);
+}
+
+.app-toast[data-toast-type='error'] {
+  --toast-accent: var(--color-error);
+}
+
+.app-toast[data-toast-type='warning'] {
+  --toast-accent: var(--color-warning);
+}
+
+.app-toast[data-toast-type='info'] {
+  --toast-accent: var(--color-info);
+}
+
+.app-toast.is-leaving {
+  pointer-events: none;
+  animation: appToastOut 0.16s ease-in both;
+}
+
+.app-toast__content {
+  min-width: 0;
+  padding-top: 0.2rem;
+  color: var(--color-base-content);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+@keyframes appToastIn {
+  from {
+    opacity: 0;
+    transform: translateX(0.75rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes appToastOut {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(0.5rem) scale(0.98);
+  }
+}
+
+@keyframes progressBar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-toast,
+  .app-toast.is-leaving {
+    animation-duration: 0.01ms;
+  }
+}
+</style>

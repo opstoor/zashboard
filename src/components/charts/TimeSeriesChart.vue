@@ -3,19 +3,21 @@
     class="flex flex-col overflow-hidden"
     data-page-swipe-ignore
   >
-    <div class="sidebar-chart-head">
-      <span class="sidebar-chart-title">{{ title }}</span>
+    <div class="flex min-w-0 items-center gap-2 px-3 pt-2 pb-0.5">
+      <span class="text-base-content/70 min-w-0 flex-1 truncate text-[11px] leading-4 font-medium">
+        {{ title }}
+      </span>
       <span
         v-if="legend.length"
-        class="sidebar-chart-legend"
+        class="text-base-content/70 flex min-w-0 items-center gap-2.5 text-[10px] leading-4"
       >
         <span
           v-for="item in legend"
           :key="item.name"
-          class="sidebar-chart-legend-item"
+          class="flex min-w-0 items-center gap-1 truncate"
         >
           <span
-            class="sidebar-chart-legend-dot"
+            class="size-1.5 shrink-0 rounded-full"
             :style="{ backgroundColor: item.color }"
           />
           {{ item.name }}
@@ -23,7 +25,7 @@
       </span>
       <button
         v-if="showPauseButton"
-        class="sidebar-chart-pause"
+        class="sidebar-chart-pause text-base-content/45 flex size-4 flex-none items-center justify-center rounded transition-opacity duration-150 outline-none"
         :aria-pressed="isPaused"
         :aria-label="title"
         @click="isPaused = !isPaused"
@@ -163,3 +165,24 @@ const options = computed<EChartOption>(() => {
 
 useEChart(chartRef, options, { paused: isPaused })
 </script>
+
+<style scoped>
+@media (hover: hover) {
+  .sidebar-chart-pause {
+    opacity: 0;
+  }
+
+  .sidebar-chart-row:hover .sidebar-chart-pause {
+    opacity: 1;
+  }
+
+  .sidebar-chart-pause:hover {
+    color: var(--color-base-content);
+  }
+}
+
+.sidebar-chart-pause:focus-visible,
+.sidebar-chart-pause[aria-pressed='true'] {
+  opacity: 1;
+}
+</style>

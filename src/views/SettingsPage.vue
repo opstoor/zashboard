@@ -446,3 +446,69 @@ watch(
 
 onMounted(normalizeQuery)
 </script>
+
+<style>
+@keyframes highlightFlash {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 100%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 0%, transparent);
+  }
+}
+
+.highlight-flash {
+  animation: highlightFlash 0.6s ease-out 2;
+}
+
+@keyframes settingsPanePush {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes settingsPanePop {
+  from {
+    opacity: 0;
+    transform: translateX(-25%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes settingsPanePopWithoutFade {
+  from {
+    transform: translateX(-25%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.settings-pane-push {
+  animation: settingsPanePush var(--page-transition-duration) var(--page-transition-ease);
+}
+
+.settings-pane-pop {
+  animation: settingsPanePop var(--page-transition-duration) var(--page-transition-ease);
+}
+
+.custom-background .settings-pane-pop {
+  animation-name: settingsPanePopWithoutFade;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-pane-push,
+  .settings-pane-pop {
+    animation-duration: 0.01ms;
+  }
+}
+</style>

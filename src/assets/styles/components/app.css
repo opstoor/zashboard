@@ -2,10 +2,6 @@
   @apply bg-base-100 overflow-hidden rounded-xl shadow-xs;
 }
 
-.home-page {
-  @apply bg-base-200;
-}
-
 @utility floating-menu-panel {
   @apply border-base-border bg-base-100 text-base-content fixed z-[100000] overflow-y-auto rounded-lg border p-1 shadow-lg;
 }
@@ -32,16 +28,6 @@
   .floating-menu-leave-active {
     transition: none;
   }
-}
-
-.dock {
-  @apply absolute right-2 left-2 z-30 rounded-3xl;
-  backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid color-mix(in srgb, var(--color-base-content) 8%, transparent);
-  box-shadow:
-    0 4px 16px color-mix(in srgb, var(--color-base-content) 6%, transparent),
-    inset 0 1px 0 color-mix(in srgb, white 35%, transparent),
-    inset 0 0 0 1px color-mix(in srgb, white 6%, transparent);
 }
 
 .nav-menu {
@@ -91,80 +77,6 @@
   color: color-mix(in srgb, var(--color-base-content) 45%, transparent);
 }
 
-.sidebar-chart-group {
-  --sidebar-chart-row: 7.5rem;
-  @apply flex min-h-0 flex-col;
-}
-
-.sidebar-chart-group[data-rows='1'] {
-  max-height: var(--sidebar-chart-row);
-}
-.sidebar-chart-group[data-rows='2'] {
-  max-height: calc(var(--sidebar-chart-row) * 2);
-}
-.sidebar-chart-group[data-rows='3'] {
-  max-height: calc(var(--sidebar-chart-row) * 3);
-}
-
-.sidebar-chart-scroller {
-  @apply flex min-h-0 flex-1 flex-col overflow-y-auto;
-}
-
-.sidebar-chart-row {
-  @apply shrink-0;
-  height: var(--sidebar-chart-row);
-}
-
-.sidebar-chart-row + .sidebar-chart-row {
-  border-top: 1px solid var(--color-base-border);
-}
-
-.sidebar-chart-head {
-  @apply flex min-w-0 items-center gap-2 px-3 pt-2 pb-0.5;
-}
-
-.sidebar-chart-title {
-  @apply min-w-0 flex-1 truncate text-[11px] leading-4 font-medium;
-  color: color-mix(in srgb, var(--color-base-content) 70%, transparent);
-}
-
-.sidebar-chart-legend {
-  @apply flex min-w-0 items-center gap-2.5 text-[10px] leading-4;
-  color: color-mix(in srgb, var(--color-base-content) 70%, transparent);
-}
-
-.sidebar-chart-legend-item {
-  @apply flex min-w-0 items-center gap-1 truncate;
-}
-
-.sidebar-chart-legend-dot {
-  @apply size-1.5 shrink-0 rounded-full;
-}
-
-.sidebar-chart-pause {
-  @apply flex size-4 flex-none items-center justify-center rounded transition-opacity duration-150 outline-none;
-  color: color-mix(in srgb, var(--color-base-content) 45%, transparent);
-}
-
-@media (hover: hover) {
-  .sidebar-chart-pause {
-    @apply opacity-0;
-  }
-
-  .sidebar-chart-row:hover .sidebar-chart-pause {
-    @apply opacity-100;
-  }
-
-  .sidebar-chart-pause:hover {
-    color: var(--color-base-content);
-  }
-}
-
-.sidebar-chart-pause:focus-visible,
-.sidebar-chart-pause[aria-pressed='true'] {
-  @apply opacity-100;
-}
-
 .settings-section-label {
   @apply px-1 pt-5 pb-2 text-xs tracking-wider uppercase first:pt-2;
   color: color-mix(in srgb, var(--color-base-content) 40%, transparent);
@@ -192,11 +104,4 @@
 }
 .settings-dependent-item {
   @apply bg-base-200/25 pl-7;
-}
-
-.setting-item:has(> .vis-toggle[data-hidden='true']) > :not(.vis-toggle) {
-  @apply pointer-events-none opacity-40;
-}
-.settings-category--hidden > .settings-category-body {
-  @apply pointer-events-none opacity-40;
 }
