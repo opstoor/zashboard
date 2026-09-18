@@ -81,6 +81,7 @@ const VERTICAL_DOMINANCE_RATIO = 1.2
 const MIN_FLING_DISTANCE = 48
 const CLOSE_VELOCITY = 0.5
 const SWIPE_TRANSITION = 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
+const SETTLE_TIMEOUT = 450
 
 type SwipeState = 'idle' | 'pending' | 'dragging' | 'settling' | 'dismissing' | 'rejected'
 
@@ -103,6 +104,7 @@ let startX = 0
 let startY = 0
 let startTime = 0
 let endY = 0
+let settleTimer: ReturnType<typeof setTimeout> | undefined
 
 const swipeProgress = computed(() => {
   const height = modalBoxRef.value?.offsetHeight || 1
@@ -183,6 +185,7 @@ function onTouchStart(event: TouchEvent) {
     settleSwipe()
     return
   }
+  if (swipeState.value === 'settling') resetSwipe()
   if (swipeState.value !== 'idle') return
 
   if (
@@ -282,7 +285,7 @@ function onTouchCancel() {
 }
 
 function settleSwipe() {
-  if (prefersReducedMotion()) {
+  if (prefersReducedMotion() || swipeOffset.value === 0) {
     resetSwipe()
     return
   }
@@ -290,6 +293,7 @@ function settleSwipe() {
   swipeState.value = 'settling'
   swipeAnimating.value = true
   swipeOffset.value = 0
+  settleTimer = setTimeout(resetSwipe, SETTLE_TIMEOUT)
 }
 
 function onBoxTransitionEnd(event: TransitionEvent) {
@@ -297,6 +301,8 @@ function onBoxTransitionEnd(event: TransitionEvent) {
 }
 
 function resetSwipe() {
+  clearTimeout(settleTimer)
+  settleTimer = undefined
   swipeState.value = 'idle'
   swipeOffset.value = 0
   swipeAnimating.value = false
