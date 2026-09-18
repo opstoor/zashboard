@@ -238,7 +238,7 @@ import {
 } from '@/helper'
 import { backgroundImage } from '@/helper/indexeddb'
 import { showNotification } from '@/helper/notification'
-import { notifyRequestError } from '@/helper/requestError'
+import { notifyRequestError } from '@/helper/request-error'
 import { useStorage } from '@/helper/storage'
 import {
   connectionFilter,

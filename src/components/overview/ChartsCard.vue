@@ -86,8 +86,8 @@ import SparklineChart from '@/components/charts/SparklineChart.vue'
 import {
   formatHistoryTooltipParam,
   formatTimeSeriesTooltipParam,
-} from '@/components/charts/chartTooltip'
-import type { ChartTooltipParam } from '@/components/charts/chartTypes'
+} from '@/components/charts/chart-tooltip'
+import type { ChartTooltipParam } from '@/components/charts/chart-types'
 import { prettyBytesHelper } from '@/helper/utils'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'

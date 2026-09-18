@@ -215,10 +215,10 @@ import {
   skipImportSettingsConfirm,
   skipSyncSettingsConfirm,
   syncSettingsFromCore,
-} from '@/helper/autoImportSettings'
+} from '@/helper/auto-import-settings'
 import { LOCAL_IMAGE } from '@/helper/indexeddb'
 import { dismissNotification, notifyActionPending, showNotification } from '@/helper/notification'
-import { notifyRequestError } from '@/helper/requestError'
+import { notifyRequestError } from '@/helper/request-error'
 import { useTooltip } from '@/helper/tooltip'
 import {
   applyDashboardSettingsToStorage,

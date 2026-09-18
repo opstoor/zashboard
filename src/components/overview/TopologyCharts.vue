@@ -96,11 +96,11 @@
 
 <script setup lang="ts">
 import { activeConnections } from '@/assembly/connections'
-import { escapeChartHtml } from '@/components/charts/chartTooltip'
-import { useChartTheme, useEChart, type EChartOption } from '@/composables/useEChart'
+import { escapeChartHtml } from '@/components/charts/chart-tooltip'
+import { useChartTheme, useEChart, type EChartOption } from '@/composables/use-echart'
 import { getConnectionChains, getConnectionRule, getConnectionSourceIP } from '@/helper'
 import { backgroundImage } from '@/helper/indexeddb'
-import { getIPLabelFromMap } from '@/helper/sourceip'
+import { getIPLabelFromMap } from '@/helper/source-ip'
 import { isMiddleScreen } from '@/helper/utils'
 import { filteredActiveConnections } from '@/store/connections'
 import { topologyApplyConnectionFilter } from '@/store/settings'

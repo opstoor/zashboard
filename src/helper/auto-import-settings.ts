@@ -1,5 +1,5 @@
 import { getSyncedSettings } from '@/assembly/storage'
-import { showConfirmDialog } from '@/helper/confirmDialog'
+import { showConfirmDialog } from '@/helper/confirm-dialog'
 import { showNotification } from '@/helper/notification'
 import { useStorage } from '@/helper/storage'
 import { applyDashboardSettingsToStorage } from '@/helper/utils'

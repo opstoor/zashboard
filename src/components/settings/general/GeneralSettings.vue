@@ -202,11 +202,11 @@ import KeyboardShortcutsSettings from '@/components/settings/general/KeyboardSho
 import LanguageSelect from '@/components/settings/general/LanguageSelect.vue'
 import SettingItem from '@/components/settings/SettingItem.vue'
 import { useIsSettingVisible } from '@/composables/settings'
-import { GENERAL_ITEM_KEYS } from '@/config/settingsItems'
+import { GENERAL_ITEM_KEYS } from '@/config/settings-items'
 import { IP_INFO_API } from '@/constant'
 import { handlerUpgradeSuccess } from '@/helper'
 import { notifyActionPending } from '@/helper/notification'
-import { notifyRequestError } from '@/helper/requestError'
+import { notifyRequestError } from '@/helper/request-error'
 import { useTooltip } from '@/helper/tooltip'
 import { isMiddleScreen } from '@/helper/utils'
 import {

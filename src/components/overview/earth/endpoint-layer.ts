@@ -12,10 +12,10 @@ import {
   vec4,
 } from 'three/tsl'
 import * as THREE from 'three/webgpu'
-import { ENDPOINT_RADIUS } from './earthMath'
+import { ENDPOINT_RADIUS } from './earth-math'
 import { ENDPOINT_PALETTE } from './palette'
 import { projectEarthSample, projectionMorph, toLocalSample, type EarthView } from './projection'
-import type { EarthRenderEndpoint, EarthRenderSnapshot, EarthVisualMode } from './rendererTypes'
+import type { EarthRenderEndpoint, EarthRenderSnapshot, EarthVisualMode } from './renderer-types'
 
 const ENDPOINT_CORE_RADIUS = 0.011
 const ENDPOINT_GLOW_RADIUS = 0.032

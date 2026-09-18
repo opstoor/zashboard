@@ -61,7 +61,7 @@ import {
   useRuleHitTooltip,
 } from '@/composables/rules'
 import { RULE_TAB_TYPE } from '@/constant'
-import { notifyRequestError } from '@/helper/requestError'
+import { notifyRequestError } from '@/helper/request-error'
 import { fromNow } from '@/helper/utils'
 import { displayLatencyInRule, displayNowNodeInRule } from '@/store/settings'
 import type { Rule, RuleProvider } from '@/types'

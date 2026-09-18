@@ -371,7 +371,7 @@ import {
   type GeoWorkerRequest,
   type GeoWorkerResponse,
 } from './earth/types'
-import type { EarthRenderer } from './earth/earthRenderer'
+import type { EarthRenderer } from './earth/earth-renderer'
 
 const { t } = useI18n()
 const apiOptions = Object.values(IP_INFO_API).map((value) => ({ value, label: value }))
@@ -765,7 +765,7 @@ const initialize = async () => {
   await nextTick()
 
   try {
-    const { createEarthRenderer } = await import('./earth/earthRenderer')
+    const { createEarthRenderer } = await import('./earth/earth-renderer')
 
     if (!canvasRef.value || disposed) return
     const createdRenderer = await createEarthRenderer(canvasRef.value, {

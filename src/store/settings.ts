@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS_MENU_ORDER } from '@/config/settingsItems'
+import { DEFAULT_SETTINGS_MENU_ORDER } from '@/config/settings-items'
 import {
   ALL_THEME,
   CONNECTION_DISPLAY_STYLE,

@@ -1,4 +1,4 @@
-import { getReverseDNSHostname } from '@/helper/reverseDns'
+import { getReverseDNSHostname } from '@/helper/reverse-dns'
 import { sourceIPLabelList } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
 import * as ipaddr from 'ipaddr.js'

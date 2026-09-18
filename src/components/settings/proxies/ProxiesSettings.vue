@@ -207,7 +207,7 @@
 import SelectInput from '@/components/common/SelectInput.vue'
 import SettingItem from '@/components/settings/SettingItem.vue'
 import { useIsSettingVisible } from '@/composables/settings'
-import { PROXIES_ITEM_KEYS } from '@/config/settingsItems'
+import { PROXIES_ITEM_KEYS } from '@/config/settings-items'
 import { FOLDER_MODE, PROXY_CARD_SIZE, PROXY_PREVIEW_TYPE, SPEEDTEST_MODE } from '@/constant'
 import { useTooltip } from '@/helper/tooltip'
 import { getMinCardWidth } from '@/helper/utils'

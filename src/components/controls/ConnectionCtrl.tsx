@@ -3,8 +3,8 @@ import {
   hasConnectionCardGroups,
   hasExpandedConnectionCardGroups,
   toggleAllConnectionCardGroups,
-} from '@/composables/connectionCardGroups'
-import { useCtrlsBar } from '@/composables/useCtrlsBar'
+} from '@/composables/connection-card-groups'
+import { useCtrlsBar } from '@/composables/use-ctrls-bar'
 import {
   CONNECTION_GROUPABLE_KEYS,
   naturalSortDirection,

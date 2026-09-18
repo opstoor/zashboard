@@ -1,5 +1,5 @@
 import { initLogs, isPaused, logLevel, logs, supportedLogLevels } from '@/assembly/logs'
-import { useCtrlsBar } from '@/composables/useCtrlsBar'
+import { useCtrlsBar } from '@/composables/use-ctrls-bar'
 import { LIST_DISPLAY_STYLE, LOG_LEVEL } from '@/constant'
 import { useTooltip } from '@/helper/tooltip'
 import { logFilter, logFilterEnabled, logFilterRegex, logTypeFilter } from '@/store/logs'

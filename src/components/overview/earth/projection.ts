@@ -1,5 +1,5 @@
 import * as THREE from 'three/webgpu'
-import { ARC_SEGMENTS, createGreatCircle, EARTH_RADIUS, toEarthVector } from './earthMath'
+import { ARC_SEGMENTS, createGreatCircle, EARTH_RADIUS, toEarthVector } from './earth-math'
 import type { EarthLocation, EarthSample } from './types'
 
 export type EarthProjection = '3d' | '2d'

@@ -3,7 +3,7 @@ import {
   disconnectById,
   getConnectionDisplayValue,
 } from '@/assembly/connections'
-import { useBounceOnVisible } from '@/composables/bouncein'
+import { useBounceOnVisible } from '@/composables/bounce-in'
 import { useConnections } from '@/composables/connections'
 import {
   CONNECTION_TAB_TYPE,
@@ -11,7 +11,7 @@ import {
   PROXY_CHAIN_DIRECTION,
 } from '@/constant'
 import { getConnectionChains, getConnectionSmartBlock } from '@/helper'
-import { notifyRequestError } from '@/helper/requestError'
+import { notifyRequestError } from '@/helper/request-error'
 import { connectionFilter, connectionTabShow, isClosedConnection } from '@/store/connections'
 import { connectionCardLines, proxyChainDirection, showFullProxyChain } from '@/store/settings'
 import type { Connection } from '@/types'

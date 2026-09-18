@@ -98,7 +98,7 @@ import {
   SETTINGS_MENU_LABELS,
   type SettingsCategory,
   type SettingsCategoryItem,
-} from '@/config/settingsItems'
+} from '@/config/settings-items'
 import { SETTINGS_MENU_KEY } from '@/constant'
 import {
   ChevronRightIcon,

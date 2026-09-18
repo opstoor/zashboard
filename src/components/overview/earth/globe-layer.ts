@@ -23,9 +23,9 @@ import {
   vec4,
 } from 'three/tsl'
 import * as THREE from 'three/webgpu'
-import { EARTH_RADIUS } from './earthMath'
+import { EARTH_RADIUS } from './earth-math'
 import { PLANE_EDGE_EXTENSION, PLANE_HALF_HEIGHT, PLANE_HALF_WIDTH } from './projection'
-import type { EarthColorScheme, EarthVisualMode } from './rendererTypes'
+import type { EarthColorScheme, EarthVisualMode } from './renderer-types'
 
 const FLAT_GLOBE_PALETTES = {
   light: {

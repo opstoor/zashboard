@@ -42,8 +42,8 @@
 </template>
 
 <script setup lang="ts">
-import { useBounceOnVisible } from '@/composables/bouncein'
-import { useRenderProxyList } from '@/composables/renderProxies'
+import { useBounceOnVisible } from '@/composables/bounce-in'
+import { useRenderProxyList } from '@/composables/render-proxies'
 import { isMiddleScreen } from '@/helper/utils'
 import { handlerProxySelect, proxyGroupLatencyTest } from '@/assembly/proxies'
 import { proxyMap } from '@/assembly/proxies'

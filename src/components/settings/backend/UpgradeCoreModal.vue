@@ -46,9 +46,9 @@
 <script setup lang="ts">
 import { upgradeCore } from '@/assembly/version'
 import { handlerUpgradeSuccess } from '@/helper'
-import { showConfirmDialog } from '@/helper/confirmDialog'
+import { showConfirmDialog } from '@/helper/confirm-dialog'
 import { notifyActionPending } from '@/helper/notification'
-import { notifyRequestError } from '@/helper/requestError'
+import { notifyRequestError } from '@/helper/request-error'
 import { fetchConfigs } from '@/assembly/config'
 import { fetchProxies } from '@/assembly/proxies'
 import { fetchRules } from '@/assembly/rules'

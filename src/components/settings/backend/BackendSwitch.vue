@@ -137,8 +137,8 @@
 
 <script setup lang="ts">
 import BackendStatusDot from '@/components/common/BackendStatusDot.vue'
-import { menuBackendActions, type BackendAction } from '@/composables/backendActions'
-import { useBackendListProbe } from '@/composables/backendListProbe'
+import { menuBackendActions, type BackendAction } from '@/composables/backend-actions'
+import { useBackendListProbe } from '@/composables/backend-list-probe'
 import { useTooltip } from '@/helper/tooltip'
 import { getLabelFromBackend } from '@/helper/utils'
 import {

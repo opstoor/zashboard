@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { handlerProxySelect } from '@/assembly/proxies'
 import { PROXY_CARD_SIZE } from '@/constant'
-import { useCollapseTransition } from '@/composables/collapseTransition'
-import { scrollNodeIntoViewKey } from '@/composables/proxiesScroll'
+import { useCollapseTransition } from '@/composables/collapse-transition'
+import { scrollNodeIntoViewKey } from '@/composables/proxies-scroll'
 import { PROXIES_PARENT_CLASS } from '@/helper/utils'
 import { minProxyCardWidth, proxyCardSize } from '@/store/settings'
 import { useVirtualizer } from '@tanstack/vue-virtual'

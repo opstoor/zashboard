@@ -1,9 +1,9 @@
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js'
 import { LineSegments2 } from 'three/addons/lines/webgpu/LineSegments2.js'
 import * as THREE from 'three/webgpu'
-import { sampleEarthPath } from './earthMath'
+import { sampleEarthPath } from './earth-math'
 import { createRouteArc, type EarthView } from './projection'
-import type { EarthColorScheme, EarthRenderSnapshot, EarthVisualMode } from './rendererTypes'
+import type { EarthColorScheme, EarthRenderSnapshot, EarthVisualMode } from './renderer-types'
 import type { EarthRoute } from './types'
 
 const FLOW_DURATION_SECONDS = 0.85

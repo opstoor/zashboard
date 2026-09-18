@@ -1,7 +1,7 @@
 import { proxyProviederList } from '@/assembly/proxies'
 import { ruleProviderList } from '@/assembly/rules'
 import { openDialogCount } from '@/composables/dialog'
-import { useSettingsSection } from '@/composables/settingsSection'
+import { useSettingsSection } from '@/composables/settings-section'
 import { CONNECTION_TAB_TYPE, PROXY_TAB_TYPE, ROUTE_NAME, RULE_TAB_TYPE } from '@/constant'
 import { renderRoutes } from '@/helper'
 import { isMiddleScreen } from '@/helper/utils'

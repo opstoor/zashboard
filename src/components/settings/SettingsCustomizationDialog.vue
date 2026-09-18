@@ -98,7 +98,7 @@ import {
   DEFAULT_SETTINGS_MENU_ORDER,
   SETTINGS_CATEGORIES,
   SETTINGS_MENU_LABELS,
-} from '@/config/settingsItems'
+} from '@/config/settings-items'
 import { settingsMenuOrder } from '@/store/settings'
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import { computed } from 'vue'

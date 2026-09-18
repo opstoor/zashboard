@@ -2,7 +2,7 @@ import type { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { CSS2DObject, type CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
 import * as THREE from 'three/webgpu'
 import type { EarthView } from './projection'
-import type { EarthRenderEndpoint } from './rendererTypes'
+import type { EarthRenderEndpoint } from './renderer-types'
 
 const CITY_LABEL_CLASS_NAME =
   'pointer-events-none whitespace-nowrap rounded-md bg-base-100/80 px-1.5 py-1 text-[10px] font-semibold leading-none text-base-content shadow-sm backdrop-blur-sm'

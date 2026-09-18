@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { loadConfigs } from '@/assembly/config'
 import { notifyActionPending, showNotification } from '@/helper/notification'
-import { notifyRequestError } from '@/helper/requestError'
+import { notifyRequestError } from '@/helper/request-error'
 import { fetchConfigs } from '@/assembly/config'
 import { fetchProxies } from '@/assembly/proxies'
 import { fetchRules } from '@/assembly/rules'

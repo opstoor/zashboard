@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS_MENU_ORDER, getAllSettingKeys } from '@/config/settingsItems'
+import { DEFAULT_SETTINGS_MENU_ORDER, getAllSettingKeys } from '@/config/settings-items'
 import { SETTINGS_MENU_KEY } from '@/constant'
 import { hiddenSettingsItems, settingsMenuOrder } from '@/store/settings'
 import type { MaybeRef } from 'vue'

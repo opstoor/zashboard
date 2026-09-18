@@ -14,7 +14,7 @@ import {
   useSmartGroupSort,
 } from '@/store/settings'
 import { computed, type ComputedRef } from 'vue'
-import { isProxyNodeSearchMode, matchProxySearchKeyword, proxySearchKeyword } from './proxySearch'
+import { isProxyNodeSearchMode, matchProxySearchKeyword, proxySearchKeyword } from './proxy-search'
 
 export type ProxiesProviderSection = {
   providerName: string

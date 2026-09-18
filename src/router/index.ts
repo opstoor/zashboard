@@ -1,4 +1,4 @@
-import { resolvePageTransition } from '@/composables/pageTransition'
+import { resolvePageTransition } from '@/composables/page-transition'
 import { ROUTE_NAME } from '@/constant'
 import { i18n } from '@/i18n'
 import { language } from '@/store/settings'

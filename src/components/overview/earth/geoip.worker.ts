@@ -4,7 +4,7 @@ import {
   GeoIPChunkStoreError,
   geoIPChunkStore,
   type GeoIPFileManifest,
-} from '@/helper/geoipChunkStore'
+} from '@/helper/geoip-chunk-store'
 import { AsyncMMDBReader } from '@/helper/mmdb'
 import type { CityResponse } from 'mmdb-lib'
 import {

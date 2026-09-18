@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import './assembly/session'
-import './store/connHistory'
+import './store/conn-history'
 import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import BackendConnectionError from './components/common/BackendConnectionError.vue'
@@ -8,10 +8,10 @@ import BackendSwitchToast from './components/common/BackendSwitchToast.vue'
 import BackendManager from './components/settings/backend/BackendManager.vue'
 import UpdateConfigModal from './components/settings/backend/UpdateConfigModal.vue'
 import UpgradeCoreModal from './components/settings/backend/UpgradeCoreModal.vue'
-import { useAppearanceVars } from './composables/useAppearanceVars'
-import { useOverscrollLock } from './composables/useOverscrollLock'
-import { useThemeColor } from './composables/useThemeColor'
-import { showUpdateConfigModal, showUpgradeCoreModal } from './composables/backendActions'
+import { useAppearanceVars } from './composables/use-appearance-vars'
+import { useOverscrollLock } from './composables/use-overscroll-lock'
+import { useThemeColor } from './composables/use-theme-color'
+import { showUpdateConfigModal, showUpgradeCoreModal } from './composables/backend-actions'
 import ConfirmDialogHost from './components/common/ConfirmDialogHost.vue'
 import { useKeyboard } from './composables/keyboard'
 import { EMOJIS, FONTS } from './constant'
@@ -20,7 +20,7 @@ import {
   autoSyncSettings,
   importSettingsFromUrl,
   syncSettingsFromCore,
-} from './helper/autoImportSettings'
+} from './helper/auto-import-settings'
 import { backgroundImage } from './helper/indexeddb'
 import { initNotification } from './helper/notification'
 import { getBackendFromUrl } from './helper/utils'

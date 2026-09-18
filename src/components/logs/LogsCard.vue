@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import HighlightText from '@/components/common/HighlightText.vue'
-import { useBounceOnVisible } from '@/composables/bouncein'
+import { useBounceOnVisible } from '@/composables/bounce-in'
 import { LOG_LEVEL } from '@/constant'
 import { logFilter } from '@/store/logs'
 import type { LogWithSeq } from '@/types'

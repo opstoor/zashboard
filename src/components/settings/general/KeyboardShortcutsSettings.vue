@@ -75,7 +75,7 @@ import {
   useKeyboardShortcuts,
 } from '@/composables/keyboard'
 import SettingItem from '@/components/settings/SettingItem.vue'
-import { GENERAL_ITEM_KEYS } from '@/config/settingsItems'
+import { GENERAL_ITEM_KEYS } from '@/config/settings-items'
 import { renderRoutes } from '@/helper'
 import { isMiddleScreen } from '@/helper/utils'
 import { keyboardShortcuts } from '@/store/settings'

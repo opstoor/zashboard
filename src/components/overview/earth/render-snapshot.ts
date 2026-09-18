@@ -1,5 +1,5 @@
 import * as THREE from 'three/webgpu'
-import type { EarthRenderEndpoint, EarthRenderSnapshot } from './rendererTypes'
+import type { EarthRenderEndpoint, EarthRenderSnapshot } from './renderer-types'
 import type { EarthHostTraffic, EarthRoute } from './types'
 
 const mergeTopHosts = (...groups: readonly EarthHostTraffic[][]) =>

@@ -71,7 +71,7 @@
 import SelectInput from '@/components/common/SelectInput.vue'
 import SettingItem from '@/components/settings/SettingItem.vue'
 import { useIsSettingVisible } from '@/composables/settings'
-import { OVERVIEW_ITEM_KEYS } from '@/config/settingsItems'
+import { OVERVIEW_ITEM_KEYS } from '@/config/settings-items'
 import { isMiddleScreen } from '@/helper/utils'
 import {
   autoConnectionCheck,

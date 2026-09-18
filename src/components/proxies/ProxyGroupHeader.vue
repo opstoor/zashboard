@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import { hiddenGroupMap } from '@/store/proxies'
 import { KEYBOARD_SHORTCUT_ACTION, useKeyboardShortcuts } from '@/composables/keyboard'
-import { getDownloadSpeedByProxyGroup } from '@/composables/proxyGroupTraffic'
+import { getDownloadSpeedByProxyGroup } from '@/composables/proxy-group-traffic'
 import { isHiddenGroup } from '@/helper'
 import { checkTruncation, useTooltip } from '@/helper/tooltip'
 import { prettyBytesHelper } from '@/helper/utils'

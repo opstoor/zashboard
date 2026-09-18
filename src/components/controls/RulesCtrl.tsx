@@ -1,5 +1,5 @@
 import { fetchRules, ruleProviderList, rules, updateRuleProvider } from '@/assembly/rules'
-import { useCtrlsBar } from '@/composables/useCtrlsBar'
+import { useCtrlsBar } from '@/composables/use-ctrls-bar'
 import { LIST_DISPLAY_STYLE, RULE_TAB_TYPE } from '@/constant'
 import { showNotification } from '@/helper/notification'
 import { rulesFilter, rulesTabShow } from '@/store/rules'

@@ -1,6 +1,6 @@
 import { probeBackend } from '@/assembly/probe'
 import { backendProbe } from '@/assembly/version'
-import type { ReachabilityStatus } from '@/composables/backendReachability'
+import type { ReachabilityStatus } from '@/composables/backend-reachability'
 import { backendList } from '@/store/setup'
 import { computed, onScopeDispose, ref, watch, type Ref } from 'vue'
 

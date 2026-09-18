@@ -1,6 +1,6 @@
-import { getConnectionGeoIPInfoSync } from '@/api/connectionGeoip'
+import { getConnectionGeoIPInfoSync } from '@/api/connection-geoip'
 import { CONNECTIONS_TABLE_ACCESSOR_KEY, PROXY_CHAIN_DIRECTION } from '@/constant'
-import { getIPLabelFromMap } from '@/helper/sourceip'
+import { getIPLabelFromMap } from '@/helper/source-ip'
 import { fromNow, prettyBytesHelper } from '@/helper/utils'
 import { autoDisconnectIdleUDP, autoDisconnectIdleUDPTime } from '@/store/settings'
 import type { Connection } from '@/types'

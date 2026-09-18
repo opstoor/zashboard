@@ -18,6 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { sidebarStatGrid } from '@/composables/sidebarStats'
+import { sidebarStatGrid } from '@/composables/sidebar-stats'
 import { checkTruncation } from '@/helper/tooltip'
 </script>

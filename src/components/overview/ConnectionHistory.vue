@@ -136,7 +136,7 @@ import { activeConnections } from '@/assembly/connections'
 import { ConnectionHistoryType } from '@/helper/indexeddb'
 import SelectInput from '@/components/common/SelectInput.vue'
 import { showNotification } from '@/helper/notification'
-import { getIPLabelFromMap } from '@/helper/sourceip'
+import { getIPLabelFromMap } from '@/helper/source-ip'
 import { useStorage } from '@/helper/storage'
 import { useTooltip } from '@/helper/tooltip'
 import { prettyBytesHelper } from '@/helper/utils'
@@ -146,7 +146,7 @@ import {
   aggregatedDataMap,
   clearConnectionHistory,
   mergeAggregatedData,
-} from '@/store/connHistory'
+} from '@/store/conn-history'
 import { QuestionMarkCircleIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import type { ColumnDef } from '@tanstack/vue-table'
 import dayjs from 'dayjs'

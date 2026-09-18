@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { ctrlsBottom } from '@/composables/paddingViews'
+import { ctrlsBottom } from '@/composables/padding-views'
 import { proxyGroupList } from '@/assembly/proxies'
 import {
   activeFolderId,
@@ -57,11 +57,11 @@ import {
   folders,
   VIRTUAL_ALL,
   VIRTUAL_UNCAT,
-} from '@/store/proxyFolders'
+} from '@/store/proxy-folders'
 import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import FolderItem from './FolderItem.vue'
-import { displayFolderName } from './folderName'
+import { displayFolderName } from './folder-name'
 import { isMiddleScreen } from '@/helper/utils.ts'
 
 const foldersSorted = computed(() => [...folders.value].sort((a, b) => a.order - b.order))

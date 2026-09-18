@@ -1,5 +1,5 @@
 import { isSettingVisible } from '@/composables/settings'
-import { DEFAULT_SETTINGS_MENU_ORDER, SETTINGS_CATEGORIES } from '@/config/settingsItems'
+import { DEFAULT_SETTINGS_MENU_ORDER, SETTINGS_CATEGORIES } from '@/config/settings-items'
 import { SETTINGS_MENU_KEY } from '@/constant'
 import { isMiddleScreen } from '@/helper/utils'
 import { settingsMenuOrder } from '@/store/settings'

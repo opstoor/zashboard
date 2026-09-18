@@ -23,7 +23,7 @@ const loadLookup = () => {
     return
   }
 
-  const currentLoad = import('./connectionGeoipDatabase')
+  const currentLoad = import('./connection-geoip-database')
     .then((module) => {
       lookup.value = module.getConnectionGeoIPInfoSync
     })

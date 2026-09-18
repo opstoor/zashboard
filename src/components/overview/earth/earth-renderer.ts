@@ -1,10 +1,10 @@
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
 import * as THREE from 'three/webgpu'
-import { createCityLabelLayer } from './cityLabelLayer'
-import { getRealtimeSunDirection, toEarthVector } from './earthMath'
-import { createEndpointLayer } from './endpointLayer'
-import { createGlobeLayer } from './globeLayer'
+import { createCityLabelLayer } from './city-label-layer'
+import { getRealtimeSunDirection, toEarthVector } from './earth-math'
+import { createEndpointLayer } from './endpoint-layer'
+import { createGlobeLayer } from './globe-layer'
 import {
   easeMorph,
   PLANE_HALF_HEIGHT,
@@ -14,12 +14,12 @@ import {
   type EarthProjection,
   type EarthView,
 } from './projection'
-import { createEarthRenderSnapshot } from './renderSnapshot'
-import type { EarthRenderer as EarthRendererContract, EarthRendererOptions } from './rendererTypes'
-import { createRouteLayer } from './routeLayer'
+import { createEarthRenderSnapshot } from './render-snapshot'
+import type { EarthRenderer as EarthRendererContract, EarthRendererOptions } from './renderer-types'
+import { createRouteLayer } from './route-layer'
 import type { EarthLocation } from './types'
 
-export type { EarthRenderer } from './rendererTypes'
+export type { EarthRenderer } from './renderer-types'
 
 const MAX_INITIAL_LATITUDE = 15
 const ORBIT_MIN_DISTANCE = 2.65

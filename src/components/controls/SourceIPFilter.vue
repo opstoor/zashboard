@@ -9,8 +9,8 @@
 <script setup lang="ts">
 import { getConnectionSourceIP } from '@/helper'
 import SelectInput from '@/components/common/SelectInput.vue'
-import { reverseDNSRevision } from '@/helper/reverseDns'
-import { getIPLabelFromMap } from '@/helper/sourceip'
+import { reverseDNSRevision } from '@/helper/reverse-dns'
+import { getIPLabelFromMap } from '@/helper/source-ip'
 import { connections, sourceIPFilter } from '@/store/connections'
 import { resolveClientHostname } from '@/store/settings'
 import { activeUuid } from '@/store/setup'

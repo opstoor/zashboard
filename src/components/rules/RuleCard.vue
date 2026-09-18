@@ -102,7 +102,7 @@
 
 <script setup lang="ts">
 import { rulesFilter } from '@/store/rules'
-import { useBounceOnVisible } from '@/composables/bouncein'
+import { useBounceOnVisible } from '@/composables/bounce-in'
 import {
   getRuleSize,
   isRuleDisabled,
@@ -110,7 +110,7 @@ import {
   toggleRuleDisabledWithSideEffects,
   useRuleHitTooltip,
 } from '@/composables/rules'
-import { notifyRequestError } from '@/helper/requestError'
+import { notifyRequestError } from '@/helper/request-error'
 import { useTooltip } from '@/helper/tooltip'
 import { proxyGroupList } from '@/assembly/proxies'
 import { fetchRules, updateRuleProvider } from '@/assembly/rules'

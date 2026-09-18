@@ -1,7 +1,7 @@
 import { activeConnections, connectionAccessor, disconnectById } from '@/assembly/connections'
 import { driver } from '@/assembly/driver'
 import { GLOBAL, IPV6_TEST_URL, NOT_CONNECTED, PROXY_TYPE } from '@/constant'
-import { notifyRequestError } from '@/helper/requestError'
+import { notifyRequestError } from '@/helper/request-error'
 import { automaticDisconnection, iconReflectList, IPv6test } from '@/store/settings'
 
 import type { Proxy } from '@/types'
