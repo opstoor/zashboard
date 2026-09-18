@@ -231,7 +231,7 @@ export const showStatisticsWhenSidebarCollapsed = useStorage(
 )
 export const numberOfChartsInSidebar = useStorage<1 | 2 | 3>(
   'config/number-of-charts-in-sidebar',
-  2,
+  1,
 )
 const defaultOverviewCardOrder: { card: OVERVIEW_CARD; visible: boolean }[] = [
   {
