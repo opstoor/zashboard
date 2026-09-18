@@ -1,7 +1,3 @@
-// 组装层 · connection 字段访问器。
-// ConnectionAccessor 直接从「原始数据」读取/派生 view 需要的字段。
-// createGetConnectionDisplayValue 基于该 accessor 生成 getConnectionDisplayValue,
-// 由 index.ts 门面暴露给 view。
 import { getConnectionGeoIPInfoSync } from '@/api/connectionGeoip'
 import { CONNECTIONS_TABLE_ACCESSOR_KEY, PROXY_CHAIN_DIRECTION } from '@/constant'
 import { getIPLabelFromMap } from '@/helper/sourceip'
@@ -15,19 +11,13 @@ export type ConnectionDisplayOptions = {
   showFullProxyChain: boolean
 }
 
-// 各后端连接流统一产出的快照。active/closed 的归类与瞬时速率均由各后端 assembly 内部算好,
-// store 直接消费,无需再做快照 diff(那只是 clash 全量快照的内部细节)。
 export interface ConnectionsSnapshot {
-  // 当前活跃连接,已带瞬时速率(downloadSpeed/uploadSpeed)。
   active: Connection[]
-  // 本拍新关闭的连接(增量),供 store 追加进已关闭列表并落历史。
   closed: Connection[]
-  // 内核自启动的上/下行累计,由连接 WS 消息原生携带,在此透传。
   downloadTotal?: number
   uploadTotal?: number
 }
 
-// 各后端原始数据 → view 字段的读取契约。实现内部按各自后端的原始类型取值。
 export interface ConnectionAccessor {
   chains(connection: Connection): string[]
   download(connection: Connection): number
@@ -39,9 +29,7 @@ export interface ConnectionAccessor {
   sourcePort(connection: Connection): string
   network(connection: Connection): string
   networkType(connection: Connection): string
-  // 目的地主机名,裸值(无端口、无 IPv6 方括号),供聚合/分组按主机归类。
   hostname(connection: Connection): string
-  // 目的地 `host:port`(IPv6 加方括号),供展示。
   host(connection: Connection): string
   process(connection: Connection): string
   destination(connection: Connection): string
@@ -49,7 +37,6 @@ export interface ConnectionAccessor {
   sniffHost(connection: Connection): string
   remoteAddress(connection: Connection): string
   isDirect(connection: Connection): boolean
-  // smart 内核的降级标记;非 smart 时为 undefined。
   smartBlock(connection: Connection): string | undefined
 }
 
@@ -136,9 +123,6 @@ export const createGetConnectionDisplayValue =
   }
 
 export const createGetConnectionVisibleSearchValues = (accessor: ConnectionAccessor) => {
-  // getDisplayValue 在工厂层建一次、keys 过滤结果按引用缓存 —— 二者原先都在
-  // 每条连接的每次调用里重建,每拍数千次纯浪费。展示列与「搜索隐藏列」的键全集会在
-  // 同一拍里交替传入,故按引用建表而非只记上一次。
   const getDisplayValue = createGetConnectionDisplayValue(accessor)
   const searchableKeysCache = new WeakMap<
     CONNECTIONS_TABLE_ACCESSOR_KEY[],

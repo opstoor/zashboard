@@ -149,8 +149,6 @@ const triggerAttrs = () => {
   return rest
 }
 const ariaLabel = () => attrs['aria-label']?.toString()
-// 非原始值（如 SourceIPFilter 的 string[]）在选项重建后引用会变，只比引用会让已选项
-// 显示为空，所以对象/数组回退到深比较。
 const isSameValue = (a: T, b: T) =>
   Object.is(a, b) ||
   (typeof a === 'object' && a !== null && typeof b === 'object' && b !== null && isEqual(a, b))

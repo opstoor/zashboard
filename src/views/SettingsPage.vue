@@ -5,7 +5,6 @@
     :class="settingsPaneTransition && 'overflow-x-hidden'"
     :style="padding"
   >
-    <!-- 移动端与窄内容区共用顶部控制栏；宽屏改用页内左侧导航。 -->
     <CtrlsBar v-if="!showSideNavigation">
       <div class="mx-auto flex w-full max-w-4xl flex-wrap items-center gap-2 p-2">
         <button
@@ -85,7 +84,6 @@
       </div>
     </CtrlsBar>
 
-    <!-- 移动端先展示分类首页，组件仍在下方挂载以维护准确的可搜索项目索引。 -->
     <main
       v-if="showMobileIndex"
       class="mx-auto w-full max-w-2xl p-3 pb-6"

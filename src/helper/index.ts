@@ -30,8 +30,6 @@ export const isProxyGroup = (name: string) => {
   return PROXY_GROUP_TYPES.has(proxyNode.type.toLowerCase())
 }
 
-// 以下 getConnectionXxx 均委托给 assembly 层「按当前后端动态选用」的访问器,
-// view / store 直接读取这些 view 友好的派生值,无需感知后端差异。
 export const getConnectionChains = (connection: Connection) =>
   connectionAccessor().chains(connection)
 

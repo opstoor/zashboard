@@ -16,13 +16,11 @@ export type SidebarStatItem = {
   iconClass?: string
   label: string
   value: string | number
-  /** 折叠态要把单位另起一行，所以数值和单位始终分开给 */
   unit?: string
   total?: string
   totalLabel?: string
 }
 
-/** 展开态不画图标，只留文字 */
 export type SidebarStatGridItem = Omit<SidebarStatItem, 'icon' | 'iconClass'>
 
 const splitText = (text: string) => {
@@ -80,10 +78,6 @@ export const sidebarStatItems = computed<SidebarStatItem[]>(() => {
   ]
 })
 
-/*
- * 展开态：宽度够，累计量各占一格，六格按 2×3 排 —— 上一行是连接和内存，
- * 下两行左边下载、右边上传，先累计后速度。
- */
 export const sidebarStatGrid = computed<SidebarStatGridItem[]>(() => {
   const download = splitSpeed(downloadSpeed.value)
   const upload = splitSpeed(uploadSpeed.value)

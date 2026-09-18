@@ -1,4 +1,3 @@
-// Clash WS 后端的连接流、断连动作,以及「原始 Clash 连接数据 → view 字段」的访问器。
 import { createClashWebSocket, disconnectAllClashAPI, disconnectClashByIdAPI } from '@/api/clash'
 import { proxyMap } from '@/assembly/proxies'
 import { PROXY_TYPE } from '@/constant'
@@ -16,8 +15,6 @@ export const disconnectByIdAPI = disconnectClashByIdAPI
 
 export const disconnectAllAPI = disconnectAllClashAPI
 
-// Clash WS 每拍推送活跃连接全量快照。瞬时速率与已关闭连接需与上一拍 diff 求得 —— 这是 clash
-// 协议固有的内部细节,在此完成,对外只暴露统一的 ConnectionsSnapshot。
 export const fetchConnectionsAPI = () => {
   const ws = createClashWebSocket<{
     connections: ClashConnectionRawMessage[]
@@ -50,7 +47,6 @@ export const fetchConnectionsAPI = () => {
       return connection
     })
 
-    // 上一拍存在、这一拍消失的连接即新关闭。
     const closed = Array.from(previousMap.values())
     previousMap = currentMap
 

@@ -1,5 +1,4 @@
 <template>
-  <!-- PC: inline slide-out aside -->
   <aside
     v-if="!isMiddleScreen"
     class="bg-base-100 m-3 flex flex-col overflow-hidden rounded-xl"
@@ -8,7 +7,6 @@
     <FolderManagerContent v-if="folderManagerOpen" />
   </aside>
 
-  <!-- Mobile: dialog -->
   <DialogWrapper
     v-else
     v-model="folderManagerOpen"

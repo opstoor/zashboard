@@ -32,9 +32,7 @@ const preprocessSourceIPList = () => {
         const cidr = ipaddr.parseCIDR(key)
         sourceIPCIDRList.push({ cidr, label })
         continue
-      } catch {
-        // 无效 CIDR，忽略
-      }
+      } catch {}
     }
 
     sourceIPMap.set(key, label)

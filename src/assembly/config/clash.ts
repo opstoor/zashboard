@@ -1,4 +1,3 @@
-// Clash REST 后端的 config 组装:拉取 /configs、PATCH /configs,写入门面状态。
 import { getConfigsAPI, patchConfigsAPI } from '@/api/clash'
 import { configs } from './index'
 

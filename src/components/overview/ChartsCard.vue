@@ -1,8 +1,6 @@
 <template>
   <div class="charts-card base-container w-full p-4">
-    <!-- Surge-style stat cards -->
     <div class="charts-card-grid grid grid-cols-2 gap-3">
-      <!-- Upload Speed -->
       <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
         <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
           {{ $t('upload') }}
@@ -25,7 +23,6 @@
         <div class="text-base-content/50 text-xs">{{ $t('total') }} {{ ulTotalStr }}</div>
       </div>
 
-      <!-- Download Speed -->
       <div class="bg-base-200/30 flex flex-col gap-1.5 rounded-xl p-4">
         <div class="text-base-content/60 text-xs font-semibold tracking-wider uppercase">
           {{ $t('download') }}
@@ -47,7 +44,6 @@
         <div class="text-base-content/50 text-xs">{{ $t('total') }} {{ dlTotalStr }}</div>
       </div>
 
-      <!-- Active Connections -->
       <div
         class="charts-card-connections bg-base-200/30 col-span-2 flex flex-col gap-1.5 rounded-xl p-4"
       >

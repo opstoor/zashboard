@@ -1,5 +1,3 @@
-// 组装层 · rules 门面。持有 rules / ruleProviderList 统一状态与渲染派生,
-// 拉取转交 clash 实现。
 import { toggleRuleDisabledAPI, toggleRuleDisabledRefindAPI } from '@/api/clash'
 import { RULE_TAB_TYPE } from '@/constant'
 import { toSearchRegex } from '@/helper/search'
@@ -39,13 +37,9 @@ export const renderRulesProvider = computed(() => {
 
 export const fetchRules = () => clash.fetchRules()
 
-// 规则启用切换有两套端点: reFind 的规则带稳定 uuid(PUT /rules/{uuid}),
-// mihomo 按索引批量切换(PATCH /rules/disable)。用哪套由响应数据自己决定 ——
-// rule.uuid 是确定信息,比 core 轴的版本字符串嗅探可靠,故不走能力表。
 export const toggleRuleDisabled = (rule: Rule, disabled: boolean) =>
   rule.uuid
     ? toggleRuleDisabledRefindAPI(rule.uuid)
     : toggleRuleDisabledAPI({ [rule.index]: disabled })
 
-// 规则集更新动作(Clash 专属),经 rules 域门面暴露给 view。
 export { updateRuleProviderAPI } from '@/api/clash'

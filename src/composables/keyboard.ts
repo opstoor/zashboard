@@ -17,10 +17,6 @@ export enum KEYBOARD_SHORTCUT_ACTION {
   PAGE_6 = 'page:6',
 }
 
-// 移除一个功能后,用户本地仍存着绑定到它的自定义键位。这条记录本身是惰性的
-// (按键分发只遍历 KEYBOARD_SHORTCUTS 里已知的动作,认不出的键根本进不了表),
-// 但 config/keyboard-shortcuts 会随设置一起导出和同步 —— 不清掉就会把死键位
-// 一路带到其他设备上,而且越积越多。启动时按当前的动作表裁一次。
 const pruneOrphanedShortcuts = () => {
   const known = new Set<string>(Object.values(KEYBOARD_SHORTCUT_ACTION))
   const entries = Object.entries(keyboardShortcuts.value)
@@ -243,7 +239,6 @@ export const useKeyboard = () => {
 
       event.preventDefault()
       const direction = action === KEYBOARD_SHORTCUT_ACTION.BACKEND_NEXT ? 1 : -1
-      // 切到哪个后端、连不连得上,由 BackendSwitchToast 统一提示。
       switchActiveBackend(direction)
       return
     }

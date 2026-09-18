@@ -71,8 +71,6 @@ const contrastRatio = (foreground: Rgb, background: Rgb) => {
 const ensureContrast = (color: Rgb, background: Rgb, target: Rgb): Rgb => {
   if (contrastRatio(color, background) >= MIN_CONTRAST_RATIO) return color
 
-  // Find the smallest adjustment that reaches WCAG AA contrast so that ANSI
-  // colours retain as much of their original hue as possible.
   let low = 0
   let high = 1
   for (let i = 0; i < 12; i++) {
@@ -99,8 +97,6 @@ const foregroundColor = (color: Rgb, colorScheme: ThemeColorScheme) =>
   )
 
 const backgroundColor = (color: Rgb, colorScheme: ThemeColorScheme) => {
-  // ANSI backgrounds need to contrast with the theme's default foreground,
-  // which is dark in light mode and light in dark mode.
   const foreground = colorScheme === 'dark' ? WHITE : BLACK
   const target = colorScheme === 'dark' ? BLACK : WHITE
 

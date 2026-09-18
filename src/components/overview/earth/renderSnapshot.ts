@@ -46,8 +46,6 @@ export const createEarthRenderSnapshot = (incomingRoutes: readonly EarthRoute[])
           topHosts: point.role === 'destination' ? [...route.topHosts] : [],
           latitude: point.latitude,
           longitude: point.longitude,
-          // The snapshot stays projection-agnostic; `endpointLayer` fills this in
-          // for whichever projection is active.
           position: new THREE.Vector3(),
         })
       }

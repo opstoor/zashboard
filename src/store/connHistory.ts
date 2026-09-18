@@ -29,8 +29,6 @@ const allHistoryTypes: ConnectionHistoryType[] = [
 
 type AggregationMaps = Record<ConnectionHistoryType, Map<string, ConnectionHistoryData>>
 
-// 内存态:每类型一个 Map,关闭连接到达时原地累加。非响应式 —— 原实现每拍对 5 张表
-// 全量克隆 merge + JSON.stringify + IndexedDB 事务,这是常驻 CPU/磁盘的最大项之一。
 const createAggregationMaps = (): AggregationMaps => ({
   [ConnectionHistoryType.SourceIP]: new Map<string, ConnectionHistoryData>(),
   [ConnectionHistoryType.Destination]: new Map<string, ConnectionHistoryData>(),
@@ -49,13 +47,10 @@ const emptyView = (): Record<ConnectionHistoryType, ConnectionHistoryData[]> => 
   [ConnectionHistoryType.ProxyGroup]: [],
 })
 
-// 展示态:由内存态每 5s 重建数组的视图,整体换引用(shallowRef 语义)。
 export const aggregatedDataMap = shallowRef(emptyView())
 
 const VIEW_REFRESH_MS = 5_000
-// 6 个视图节拍落一次盘 = 30s;hidden/pagehide 兜底 flush。
 const FLUSH_EVERY_TICKS = 6
-// 与 init 修剪同规则:超过 2000 键按下载量保留前 1500,运行期同样执行,防会话内无界增长。
 const TRIM_THRESHOLD = 2000
 const TRIM_KEEP = 1500
 
@@ -158,8 +153,6 @@ const flushCurrentSession = () => {
     }
   }
 
-  // 在第一个 await 之前同时捕获 UUID 与全部数据,避免切后端时从共享 Map
-  // 读到新会话的部分状态。对象也要克隆,因为后续累加会原地修改它们。
   const targetUuid = sessionUuid
   const targetGeneration = sessionGeneration
   const snapshot = snapshotMaps(aggMaps)
@@ -310,8 +303,6 @@ export const clearConnectionHistory = async () => {
   currentContext = context
   resetCurrentSession(context.uuid)
 
-  // 清理与所有已排队的落盘/加载串行:先前的写入最多先完成,随后会被这次 clear
-  // 统一删除,不会在 clear 之后又把旧快照写回。
   await enqueuePersistence(() => clearConnectionHistoryFromIndexedDB())
 
   if (context.epoch !== initEpoch) {
@@ -380,8 +371,6 @@ export const mergeAggregatedData = (
 ): ConnectionHistoryData[] => {
   const map = new Map<string, ConnectionHistoryData>()
 
-  // 历史项直接复用引用,仅 key 碰撞项克隆 —— 全量克隆是无谓 GC,
-  // 而就地叠加会把当拍数据写坏进历史对象(按秒复利),两个坑都要躲。
   for (const item of historical) {
     map.set(item.key, item)
   }
@@ -412,7 +401,6 @@ export const saveConnectionHistory = (newClosedConnections: Connection[]) => {
   const targetUuid = uuid()
 
   if (!ready || targetUuid !== sessionUuid) {
-    // init 加载期间到达的关闭连接先缓冲,加载完成后统一并入,不丢数据
     if (currentContext?.uuid === targetUuid) {
       currentContext.pending.push(...newClosedConnections)
     }

@@ -76,8 +76,6 @@ const createObserver = () => {
   if (!topBarRef.value) return
   observer = new IntersectionObserver(([entry]) => (isStuck.value = entry.intersectionRatio < 1), {
     threshold: [1],
-    // Offset the detection boundary by the height of the (fixed/sticky) ctrls bar
-    // so the top bar registers as "stuck" once it pins right below the ctrls.
     rootMargin: `-${Math.max(ctrlsBottom.value, 0)}px 0px 0px 0px`,
   })
   observer.observe(topBarRef.value)
@@ -85,7 +83,6 @@ const createObserver = () => {
 
 onMounted(createObserver)
 
-// Recreate the observer when the ctrls bar height changes (resize / orientation).
 watch(ctrlsBottom, createObserver)
 
 onBeforeUnmount(() => observer?.disconnect())

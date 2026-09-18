@@ -138,7 +138,6 @@ const backgroundImageSource = computed(() => {
   return `${customBackgroundURL.value}${querySeparator}v=${date}`
 })
 
-// 只有背景图实际加载成功时,才启用自定义背景相关的透明度和毛玻璃样式。
 export const backgroundImageLoaded = ref(false)
 type BackgroundLoadCache = Record<string, { date: string }>
 const backgroundLoadCache = useStorage<BackgroundLoadCache>(

@@ -29,8 +29,6 @@ const ROLE_GLOW_COLORS = {
 } as const
 const DIRECT_COLOR = new THREE.Color(ENDPOINT_PALETTE.direct)
 const DIRECT_GLOW_COLOR = new THREE.Color('#ff7a1a')
-// The user's own location is the anchor of every arc, so it gets a slightly
-// wider bead and halo than the destinations radiating out of it.
 const ROLE_SCALES = {
   origin: 1.18,
   destination: 1,
@@ -66,10 +64,6 @@ export interface EndpointLayer {
 
 export const createEndpointLayer = (options: EndpointLayerOptions): EndpointLayer => {
   const { camera, parent } = options
-  // Endpoints are unlit beads, so their volume has to be faked in the shader:
-  // `facing` is 1 at the point of the sphere aimed straight at the camera and 0
-  // along the silhouette, which drives both the specular-like hot core and the
-  // rim light that separates the bead from the globe behind it.
   const endpointPulse = uniform(1)
   const endpointFacing = positionWorld
     .sub(cameraPosition)
@@ -93,8 +87,6 @@ export const createEndpointLayer = (options: EndpointLayerOptions): EndpointLaye
     output.a,
   )
 
-  // A halo shell around each bead. Combining a wide and a tight falloff in one
-  // shader gives a dense centre that fades out smoothly, without a second mesh.
   const endpointGlowGeometry = new THREE.SphereGeometry(ENDPOINT_GLOW_RADIUS, 16, 12)
   const endpointGlowMaterial = new THREE.MeshBasicNodeMaterial({
     transparent: true,
@@ -130,8 +122,6 @@ export const createEndpointLayer = (options: EndpointLayerOptions): EndpointLaye
     topHosts: endpoint.topHosts.map((host) => ({ ...host })),
   })
 
-  // Beads sit just above the surface. `cityLabelLayer` reads the very same
-  // Vector3 instances, so these are updated in place rather than replaced.
   const projectEndpoints = () => {
     const morph = projectionMorph(view.projection)
 
@@ -182,8 +172,6 @@ export const createEndpointLayer = (options: EndpointLayerOptions): EndpointLaye
     endpointGlowMesh.instanceMatrix.needsUpdate = true
     if (endpointMesh.instanceColor) endpointMesh.instanceColor.needsUpdate = true
     if (endpointGlowMesh.instanceColor) endpointGlowMesh.instanceColor.needsUpdate = true
-    // Draw the beads above the arcs and the halos last, so the additive glow
-    // blends over everything already on screen.
     endpointMesh.renderOrder = 5
     endpointGlowMesh.renderOrder = 6
     parent.add(endpointMesh, endpointGlowMesh)
@@ -250,8 +238,6 @@ export const createEndpointLayer = (options: EndpointLayerOptions): EndpointLaye
       pointer.x = ((clientX - bounds.left) / bounds.width) * 2 - 1
       pointer.y = -((clientY - bounds.top) / bounds.height) * 2 + 1
       raycaster.setFromCamera(pointer, camera)
-      // The halo shares the bead's instance order and is a far easier target to
-      // hit than the core.
       const hit = raycaster.intersectObject(endpointGlowMesh, false)[0]
 
       if (hit?.instanceId == null) return null

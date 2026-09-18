@@ -25,9 +25,7 @@ const MAX_INITIAL_LATITUDE = 15
 const ORBIT_MIN_DISTANCE = 2.65
 const ORBIT_MAX_DISTANCE = 7.5
 const MORPH_DURATION = 0.8
-// A little breathing room so the map's edges are not flush with the viewport.
 const MAP_FIT_MARGIN = 1.05
-// The flat map starts zoomed in a touch past its fitted distance.
 const MAP_DEFAULT_ZOOM = 1.2
 
 type Cleanup = () => void
@@ -93,8 +91,6 @@ export const createEarthRenderer = async (
     controls.enableDamping = true
     controls.rotateSpeed = 0.55
     controls.zoomSpeed = 0.75
-    // Keep browser scrolling/navigation gestures inside the canvas from competing
-    // with OrbitControls on touch devices.
     renderer.domElement.style.touchAction = 'none'
     registerCleanup(() => controls.dispose())
 
@@ -102,9 +98,6 @@ export const createEarthRenderer = async (
     scene.add(earthGroup)
     registerCleanup(() => scene.remove(earthGroup))
 
-    // Everything that is not the globe itself lives here. The overlays do not
-    // take part in the sphere/plane morph, so the transition simply hides this
-    // group and rebuilds its contents in the target projection once it settles.
     const overlayGroup = new THREE.Group()
     earthGroup.add(overlayGroup)
     registerCleanup(() => earthGroup.remove(overlayGroup))
@@ -128,13 +121,9 @@ export const createEarthRenderer = async (
     let morphing = false
     let rotationFrom = 0
     let rotationTo = 0
-    // Where the globe was left when the map took over, so switching back returns
-    // to the same view instead of snapping to the prime meridian.
     let orbitRotation = 0
     const cameraFrom = new THREE.Vector3()
     const cameraTo = new THREE.Vector3()
-    // Panning the flat map moves the orbit target, which has to travel back to
-    // the origin over the transition rather than snapping at the end of it.
     const targetFrom = new THREE.Vector3()
     const orbitCameraPosition = camera.position.clone()
     const clock = new THREE.Clock()
@@ -176,8 +165,6 @@ export const createEarthRenderer = async (
     })
     registerCleanup(() => cityLabelLayer.dispose())
 
-    // Distance at which the whole 2:1 map fits, whichever of the two axes is the
-    // binding constraint for the current viewport.
     const mapDistance = () => {
       const halfFov = THREE.MathUtils.degToRad(camera.fov) / 2
       const fitHeight = PLANE_HALF_HEIGHT / Math.tan(halfFov)
@@ -186,7 +173,6 @@ export const createEarthRenderer = async (
       return Math.max(fitHeight, fitWidth) * MAP_FIT_MARGIN
     }
 
-    // Where the camera rests when the flat map is entered or refitted.
     const mapViewDistance = () => mapDistance() / MAP_DEFAULT_ZOOM
 
     const applyControls = () => {
@@ -317,8 +303,6 @@ export const createEarthRenderer = async (
       renderer.setAnimationLoop(null)
       clock.stop()
 
-      // Without a running loop there is nothing to drive the morph, so settle it
-      // immediately rather than leaving the overlays hidden mid-transition.
       if (morphing && (reducedMotion || !visible || !intersecting)) finishMorph()
 
       if (!visible || !intersecting) return
@@ -336,8 +320,6 @@ export const createEarthRenderer = async (
     }
 
     const startMorph = (next: EarthProjection) => {
-      // Only a settled globe is worth remembering: reversing mid-transition must
-      // keep the view the user actually left, not a half-unrolled camera.
       if (projection === '3d' && !morphing) {
         orbitCameraPosition.copy(camera.position)
         orbitRotation = earthGroup.rotation.y
@@ -396,8 +378,6 @@ export const createEarthRenderer = async (
       const width = Math.max(1, entry.contentRect.width)
       const height = Math.max(1, entry.contentRect.height)
 
-      // How far the settled map is zoomed in relative to its fitted distance, so
-      // the viewport can change without the camera drifting to another zoom.
       const zoomRatio =
         projection === '2d' && !morphing
           ? camera.position.distanceTo(controls.target) / mapDistance()
@@ -408,8 +388,6 @@ export const createEarthRenderer = async (
       renderer.setSize(width, height, false)
       labelRenderer.setSize(width, height)
 
-      // The fitted map distance depends on the aspect ratio, so the zoom range —
-      // and the pending morph destination — have to follow the viewport.
       if (projection === '2d') {
         applyControls()
         if (morphing) {
@@ -485,15 +463,11 @@ export const createEarthRenderer = async (
         }
 
         initialLocationSet = true
-        // Centring the world on the user applies to both projections: it is what
-        // puts them in the middle of the flat map, and it moves the seam to their
-        // antipode so their busiest routes are not the ones cut in half.
         view = { ...view, centerLongitude: location.longitude }
         globeLayer.setCenterLongitude(view.centerLongitude)
         updateSunForTime()
         applyView()
 
-        // Aiming the camera, on the other hand, only means anything on a globe.
         if (projection === '2d' || morphing) pendingInitialLocation = location
         else applyInitialLocation(location)
 
@@ -537,9 +511,7 @@ export const createEarthRenderer = async (
   } catch (error) {
     try {
       disposeResources()
-    } catch {
-      // Preserve the initialization error while still attempting every cleanup.
-    }
+    } catch {}
     throw error
   }
 }

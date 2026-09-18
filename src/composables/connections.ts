@@ -5,8 +5,6 @@ import { nextTick, ref, watch } from 'vue'
 const infoConn = ref<Connection | null>(null)
 const connectionDetailModalShow = ref(false)
 
-// 详情框持有的是某个后端的原始连接对象,换后端后它会被新后端的访问器读取而抛错
-// (同 store/connections 的注释),所以切换时连同弹窗一起丢弃。
 watch(activeBackend, () => {
   connectionDetailModalShow.value = false
   infoConn.value = null

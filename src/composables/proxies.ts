@@ -49,7 +49,6 @@ const getRenderProxyGroups = () => {
     return filterProxyGroups(proxyGroupList.value)
   }
 
-  // 并非所有内核都有 GLOBAL 组,仅在其确实存在时才追加,避免渲染空组崩溃。
   const globalGroups = proxyMap.value[GLOBAL] ? [GLOBAL] : []
   return filterProxyGroups([...proxyGroupList.value, ...globalGroups])
 }

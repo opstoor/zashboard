@@ -81,8 +81,6 @@ export default defineComponent({
     const { showTip, updateTip } = useTooltip()
     const { isLargeCtrlsBar } = useCtrlsBar(() => (isConnectionCard.value ? 860 : 720))
 
-    // 「升序 / 降序」对不同字段含义完全不同,按字段类型说人话:文本 A → Z、
-    // 流量从大到小、时间最新在前。
     const sortDirectionLabel = () =>
       t(
         SORT_DIRECTION_LABEL_KEY[SORT_TYPE_VALUE_KIND[connectionSortType.value]][
@@ -101,8 +99,6 @@ export default defineComponent({
               const sortType = value as SORT_TYPE
 
               connectionSortType.value = sortType
-              // 换字段就落回该字段的自然方向,否则选完「下载速度」还停在升序,
-              // 顶上全是 0 B 的连接。
               connectionSortDirection.value = naturalSortDirection(sortType)
             }}
             options={SORT_TYPE_GROUPS.flatMap((sortGroup) =>
@@ -151,7 +147,6 @@ export default defineComponent({
         />
       )
 
-      // 分组后卡片默认全折叠，逐个点开太慢，控制栏给一个整体展开 / 折叠的开关。
       const toggleGroupsLabel = () =>
         hasExpandedConnectionCardGroups.value ? t('collapseAllGroups') : t('expandAllGroups')
       const toggleGroupsButton =

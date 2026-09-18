@@ -14,8 +14,6 @@ const EMPTY_GEOIP_INFO: IPInfo = {
   longitude: null,
 }
 
-// This small facade is safe to import from the global connection assembly. The
-// databases, Buffer polyfill and MMDB parser stay in a separate async chunk.
 const enabled = ref(false)
 const lookup = shallowRef<GeoIPLookup>()
 let loadPromise: Promise<void> | undefined
@@ -30,7 +28,6 @@ const loadLookup = () => {
       lookup.value = module.getConnectionGeoIPInfoSync
     })
     .catch(() => {
-      // Let a later activation retry a failed chunk load.
       if (loadPromise === currentLoad) {
         loadPromise = undefined
       }

@@ -1,5 +1,3 @@
-// 组装层 · proxies 门面。
-// 持有代理的「视图状态」与纯读取 helper,拉取与动作转交 clash 组装实现。
 import { can } from '@/assembly/backend'
 import { NOT_CONNECTED, PROXY_TAB_TYPE, PROXY_TYPE, TEST_URL } from '@/constant'
 import { notifyRequestError } from '@/helper/requestError'
@@ -46,28 +44,10 @@ export const getLatencyFromHistory = (history?: Proxy['history']) => {
   return last(history)?.delay ?? NOT_CONNECTED
 }
 
-/*
- * 全局延迟表。
- *
- * 单看一个节点的延迟并不便宜:要顺着 now 链一路走到真正出网的那个节点,独立延迟测试下
- * 还要按组的测速 url 分桶。过去这件事由每张组卡片各做各的,150 个组就把同一批节点
- * 重复解析上百遍,还只能自己用。
- *
- * 这里改成按测速 url 建一张覆盖 proxyMap 的全量表:一趟 O(节点数) 建好,卡片、排序、
- * 筛选、预览、可用计数全部 O(1) 查表,口径也只剩一个。
- *
- * 依赖是自动的 —— 建表时读到了每个节点的 history 与 now,任何一次测速写入或选择变更
- * 都会让表整体作废、下次读取时重算。
- *
- * 缓存按 url 存,url 集合就是「默认测速地址 + 各组自定义地址」,数量有限;没人读的表
- * (比如切了后端之后不再用到的 url)只是留着不算,不必回收。
- */
 const DEFAULT_TEST_URL_BUCKET = ''
 
 const latencyMapCache = new Map<string, ComputedRef<LatencyMap>>()
 
-// getHistoryByName 会顺手把缺失的 extra 桶补出来,那是个写操作,不能放进 computed。
-// 建表用这个只读版本,语义与之相同:extra 存在就只认对应 url 的桶,否则回到 now 链末端。
 const readHistory = (proxyName: string, testUrl: string) => {
   const proxyNode = proxyMap.value[proxyName]
 
@@ -84,8 +64,6 @@ const readHistory = (proxyName: string, testUrl: string) => {
   return proxyMap.value[getNowProxyNodeName(proxyName)]?.history
 }
 
-// 表是全局的,但第一次用到它的往往是某张卡片的 setup。不放进独立 scope 的话,
-// 这个 computed 会被那张卡片的 scope 收走,卡片一卸载它就被 stop,从此每次读都重算全表。
 const latencyScope = effectScope(true)
 
 const getLatencyMap = (testUrl: string) => {
@@ -109,7 +87,6 @@ const getLatencyMap = (testUrl: string) => {
   return latencyMap
 }
 
-// 独立延迟测试关掉时全站共用一张表,开着时每个测速 url 一张
 const getTestUrlBucket = (groupName?: string) => {
   if (groupName && independentLatencyTest.value && can('independentLatency')) {
     return getTestUrl(groupName)
@@ -118,10 +95,6 @@ const getTestUrlBucket = (groupName?: string) => {
   return DEFAULT_TEST_URL_BUCKET
 }
 
-/*
- * 供「一次要读一批节点延迟」的地方使用(筛选、排序、预览、计数):
- * 拿到表本身,循环里就不必每个节点重新判一遍该查哪张表。
- */
 export const latencyMapOf = (groupName?: MaybeRefOrGetter<string | undefined>) =>
   computed(() => getLatencyMap(getTestUrlBucket(toValue(groupName))).value)
 
@@ -209,12 +182,8 @@ export const hasSmartGroup = computed(() => {
   )
 })
 
-// ---------- 按后端路由的组装动作 ----------
-
 export const fetchProxies = () => clash.fetchProxies()
 
-// 切换节点只会由用户点击触发,且调用点都是模板里的 @click(没有 catch 的落点),
-// 所以在门面里兜住:失败弹提示,否则 UI 会停在旧选择上一声不吭。
 export const handlerProxySelect = async (proxyGroupName: string, proxyName: string) => {
   try {
     return await clash.handlerProxySelect(proxyGroupName, proxyName)
@@ -231,7 +200,6 @@ export const proxyGroupLatencyTest = (proxyGroupName: string) =>
 
 export const allProxiesLatencyTest = () => clash.allProxiesLatencyTest()
 
-// 代理集 / smart 权重动作(Clash 专属),经 proxies 域门面暴露给 view 与 store/smart。
 export {
   fetchSmartWeightsAPI,
   flushSmartGroupWeightsAPI,

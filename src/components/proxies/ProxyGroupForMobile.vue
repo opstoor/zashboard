@@ -6,10 +6,6 @@
     ref="cardWrapperRef"
     @click="handlerGroupClick"
   >
-    <!--
-      压暗强度与 .modal 的遮罩一致（daisyUI 默认 40%），淡入淡出也和弹窗遮罩同一条；
-      卡片自己的展开比这个快半拍，两条曲线都在 utilities/motion.css。
-    -->
     <Transition name="proxy-group-backdrop">
       <div
         v-if="modalMode"
@@ -80,7 +76,6 @@ const displayContent = ref(false)
 const showAllContent = ref(modalMode.value)
 const contentOpacity = ref(0)
 
-// 压暗层要连 iOS PWA 的状态栏一起暗下去，见 App.vue 的 setThemeColor。
 useOverlayDimState(modalMode)
 
 const cardWrapperRef = ref()

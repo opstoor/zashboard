@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 
-// State for the single page-level proxy-group-chain modal.
 export const proxyGroupChainTarget = ref('')
 export const proxyGroupChainModalOpen = ref(false)
 

@@ -1,8 +1,4 @@
 <template>
-  <!--
-    DialogWrapper 会 teleport 到 #app-content,而那正是挂载本组件的 App 根节点 ——
-    首帧它还没进 DOM。等挂载完再渲染,与同处 App 根下的 BackendManager 一致。
-  -->
   <DialogWrapper
     v-if="isReady"
     v-model="modalValue"
@@ -86,7 +82,6 @@ const isCoreUpgrading = ref(false)
 const handlerClickUpgradeCore = async (type: 'release' | 'alpha' | 'auto') => {
   if (isCoreUpgrading.value) return
 
-  // 升级会重启内核,误点的代价不小 —— 先问一句。
   const { confirmed } = await showConfirmDialog({
     title: t(UPGRADE_LABELS[type]),
     message: t('upgradeCoreConfirm'),
@@ -96,7 +91,6 @@ const handlerClickUpgradeCore = async (type: 'release' | 'alpha' | 'auto') => {
 
   upgradingType.value = type
   isCoreUpgrading.value = true
-  // 弹窗点完就关,按钮上的转圈跟着一起消失 —— 得留一条提示说明动作还在跑。
   const notifyKey = notifyActionPending(UPGRADE_LABELS[type])
   try {
     await upgradeCoreAPI(type)

@@ -1,5 +1,3 @@
-// Clash REST/WS 后端的代理「组装逻辑」:从 /proxies、/providers/proxies 拉取并
-// 组装视图状态,以及选择/测速等动作。写入门面 index.ts 的共享状态。
 import {
   deleteFixedProxyAPI,
   fetchProxiesAPI,
@@ -87,7 +85,6 @@ export const fetchProxies = async () => {
       if (nextIndex === -1) {
         return -1
       }
-      // 都在 sortIndex 中，按索引排序
       return prevIndex - nextIndex
     })
     .map((proxy) => proxy.name)
@@ -131,7 +128,6 @@ export const handlerProxySelect = async (proxyGroupName: string, proxyName: stri
   if (automaticDisconnection.value) {
     activeConnections.value
       .filter((c) => getConnectionChains(c).includes(proxyGroupName))
-      // 切换节点的顺带动作,失败不该盖掉「已切换」这件主事
       .forEach((c) => disconnectByIdAPI(c.id).catch(() => {}))
   }
   fetchProxies()
@@ -151,8 +147,6 @@ const getProviderNameByProxy = (proxyName: string) => {
   )
 }
 
-// provider 节点走 provider 作用域的 healthcheck 端点,避免节点不在
-// 全局 /proxies 映射(或同名冲突)导致测速失败
 const fetchNodeLatency = (proxyName: string, url: string, timeout: number) => {
   const providerName = getProviderNameByProxy(proxyName)
 
@@ -192,7 +186,6 @@ export const proxyLatencyTest = async (
   url = speedtestUrlWithDefault.value,
   timeout = speedtestTimeout.value,
 ) => {
-  // 测速失败就是「这个节点不通」,用统一的 testFailedTip 说明,比抛出 HTTP 报文有用。
   try {
     await latencyTestForSingle(proxyName, url, timeout)
   } catch {
@@ -208,8 +201,6 @@ export const proxyLatencyTest = async (
   }
 }
 
-// 面板测速模式下没有 fetchProxies 兜底,延迟全靠这里的乐观写入刷新 UI,
-// 所以必须写进卡片实际读取的那个桶(独立延迟测试下是组 url 对应的 extra)。
 const setHistory = (proxyName: string, delay: number, groupName?: string) => {
   const history = getHistoryByName(proxyName, groupName)
   const now = new Date()
@@ -229,7 +220,6 @@ const isLatencyTestable = (name: string) => {
   return !type || !untestableProxyTypes.has(type)
 }
 
-// tipName 只用于提示文案(可能是 i18n 的「全部」),groupName 才是延迟落桶用的真实组名。
 const testLatencyOneByOneWithTip = async (
   tipName: string,
   nodes: string[],
@@ -243,7 +233,6 @@ const testLatencyOneByOneWithTip = async (
   await Promise.allSettled(
     nodes.map((name) =>
       limiter(async () => {
-        // 批量测速里单个节点失败是常态,只计数,不逐个弹提示,末尾汇总成一条。
         try {
           const { data } = await latencyTestForSingle(
             name,
@@ -273,7 +262,6 @@ const testLatencyOneByOneWithTip = async (
     ),
   )
 
-  // 逐个测速期间只有本地的乐观写入,结束后拉一次真实状态兜底(拉取失败不影响汇总提示)。
   await fetchProxies().catch(() => {})
 
   showNotification({
@@ -302,7 +290,6 @@ export const proxyGroupLatencyTest = async (proxyGroupName: string) => {
     )
   ) {
     if (proxyNode.fixed) {
-      // 测速前的准备动作,失败也照常往下测
       deleteFixedProxyAPI(proxyGroupName).catch(() => {})
     }
     return testLatencyOneByOneWithTip(proxyGroupName, all, url, proxyGroupName)

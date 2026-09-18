@@ -18,7 +18,6 @@ const restructWeights = (proxyName: string, weights: NodeRank[]) => {
   smartOrderMap.value[proxyName] = smartOrder
 }
 
-// 权重是拉取代理列表时顺带取的,不是用户点出来的,失败一律静默。
 export const initSmartWeights = async () => {
   let smartWeights: Record<string, NodeRank[]> | null = null
 

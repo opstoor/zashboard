@@ -9,7 +9,6 @@ export interface HistoryPoint {
 }
 
 export const timeSaved = 60
-// 额外保留屏幕外缓冲点：最老的点在 grid 左缘外被删除,左缘滑出时才不会出现可见断线
 const bufferPoints = 2
 const savedPoints = timeSaved + bufferPoints
 
@@ -80,8 +79,6 @@ export const initSatistic = () => {
 
       downloadSpeed.value = data.down
       uploadSpeed.value = data.up
-      // 总量由连接 WS 消息携带,在 store/connections 写入;
-      // 统计流带上这两个字段时才以它为准,缺失时不覆盖。
       if (data.downTotal != null && data.upTotal != null) {
         downloadTotal.value = data.downTotal
         uploadTotal.value = data.upTotal
@@ -109,8 +106,6 @@ export const initSatistic = () => {
   }
 }
 
-// 结束流时一并归零。这些标量原先谁也不重置,只被下一条消息覆盖 —— 新后端连不上时,
-// 侧栏与概览会一直显示上一个后端的速率 / 内存(见 store/connections 的同类注释)。
 export const stopSatistic = () => {
   cancel?.()
   cancel = undefined

@@ -62,9 +62,6 @@ export const createRouteLayer = (options: RouteLayerOptions): RouteLayer => {
   const lines = new LineSegments2(lineGeometry, lineMaterial)
   lineGlow.frustumCulled = false
   lines.frustumCulled = false
-  // InstancedBufferGeometry defaults instanceCount to Infinity. Rendering the empty
-  // placeholder before the first route snapshot makes WebGPU pass Infinity to
-  // drawIndexed(), which is invalid. Only reveal it after finite segment data exists.
   lineGlow.visible = false
   lines.visible = false
   lineGlow.renderOrder = 1
@@ -114,8 +111,6 @@ export const createRouteLayer = (options: RouteLayerOptions): RouteLayer => {
   const flowStart = new THREE.Vector3()
   const flowEnd = new THREE.Vector3()
 
-  // The flat map keeps the same restrained look as the flat globe style, so the
-  // additive glow passes are off in 2D regardless of the selected style.
   const isFlatLook = () => visualMode === 'flat' || view.projection === '2d'
 
   const applyVisualMode = () => {

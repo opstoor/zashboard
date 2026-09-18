@@ -46,7 +46,6 @@ const sourceIPs = computed(() => {
 const sourceIPOpts = ref<{ label: string; value: string[] }[]>([])
 const sourceIPsKey = computed(() => sourceIPs.value.join('\u0000'))
 
-// do not use computed here for firefox
 watch(
   [sourceIPsKey, reverseDNSRevision, resolveClientHostname, activeUuid],
   () => {

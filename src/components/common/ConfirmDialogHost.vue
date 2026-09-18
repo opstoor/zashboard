@@ -66,7 +66,6 @@ onMounted(() => {
   isReady.value = true
 })
 
-// 每次弹出新的对话框都重置复选框
 watch(confirmDialogState, () => {
   checked.value = false
 })

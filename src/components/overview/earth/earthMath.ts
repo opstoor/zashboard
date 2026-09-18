@@ -21,10 +21,6 @@ export const toEarthVector = (
   )
 }
 
-// NOAA's fractional-year approximation gives the current solar declination and
-// equation of time. The resulting vector is expressed in the globe's local
-// longitude/latitude coordinate system, so the day/night boundary stays attached
-// to real geography even while the presentation group slowly rotates.
 export const getRealtimeSunDirection = (
   date = new Date(),
   target = new THREE.Vector3(),
@@ -67,8 +63,6 @@ export const getRealtimeSunDirection = (
     .normalize()
 }
 
-// Quaternion interpolation follows the shortest spherical path, including paths that
-// cross +/-180 degrees longitude. It also has a deterministic antipodal fallback.
 export const createGreatCircle = (
   from: Pick<EarthLocation, 'latitude' | 'longitude'>,
   to: Pick<EarthLocation, 'latitude' | 'longitude'>,

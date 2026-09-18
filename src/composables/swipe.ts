@@ -16,8 +16,6 @@ const DIRECTION_LOCK_DISTANCE = 12
 const HORIZONTAL_SWIPE_THRESHOLD = 90
 const HORIZONTAL_DOMINANCE_RATIO = 1.25
 
-// Most conflicts can be identified from native semantics. Custom gesture surfaces
-// opt out declaratively so they do not need to coordinate a shared global flag.
 const SWIPE_CONFLICT_SELECTOR = [
   'input',
   'textarea',
@@ -204,7 +202,6 @@ export const useSwipeRouter = () => {
     const distanceY = Math.abs(endY - startY)
     if (Math.max(distanceX, distanceY) < DIRECTION_LOCK_DISTANCE) return
 
-    // Once an axis wins, keep the gesture in that lane for its entire lifetime.
     if (distanceX >= distanceY * HORIZONTAL_DOMINANCE_RATIO) {
       gestureState = 'horizontal'
     } else if (distanceY >= distanceX * HORIZONTAL_DOMINANCE_RATIO) {
@@ -231,8 +228,6 @@ export const useSwipeRouter = () => {
 
     if (!isHorizontal || !canSwipeNow()) return
 
-    // 设置的二级页面盖在分类列表上,这里的手势语义是"返回"而不是换顶级页面。
-    // PWA 下没有浏览器自带的边缘返回手势来吞掉这个滑动,不拦就会飞到隔壁页面去。
     if (isSettingsSubPage.value) {
       if (swipeDirection === 'right') exitSection()
       return

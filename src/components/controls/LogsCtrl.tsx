@@ -57,7 +57,6 @@ export default defineComponent({
 
     watch(logFilter, insertLogSearchHistory)
 
-    // 可选级别由内核决定,收敛在组装层(见 assembly/logs)。
     const logLevels = supportedLogLevels
 
     const logFilterOptions = computed(() => {

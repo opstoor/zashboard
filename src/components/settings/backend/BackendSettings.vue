@@ -189,7 +189,6 @@ const isVisibleDnsQuery = useIsSettingVisible(k.DNSQuery)
 const canShowTunMode = computed(
   () => isVisibleTunMode.value && !activeBackend.value?.disableTunMode,
 )
-// 只有核心在 /configs 里回报了 stack 才展示，避免对不支持该字段的核心下发无效 PATCH。
 const canShowTunStack = computed(
   () =>
     !!configs.value?.tun?.stack && isVisibleTunStack.value && !activeBackend.value?.disableTunMode,
@@ -244,7 +243,6 @@ const tunStackOptions = computed<SelectOption<string>[]>(() => {
   }))
   const current = configs.value?.tun?.stack
 
-  // 核心可能返回列表外的写法（大小写不同或新增的 stack），保留原值避免显示为空。
   if (current && !options.some((option) => option.value === current)) {
     options.unshift({ value: current, label: current })
   }
@@ -259,7 +257,6 @@ const tunStack = computed<string>({
     handlerTunStackChange(stack)
   },
 })
-// mihomo 的 PATCH /configs 里 tun.enable 不是指针，缺省会被当成 false，所以必须一起回传。
 const handlerTunStackChange = async (stack: string) => {
   try {
     await updateConfigs({ tun: { enable: configs.value?.tun.enable, stack } })

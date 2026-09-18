@@ -1,4 +1,3 @@
-// 规则行为共用逻辑,卡片视图与表格视图都走这里,避免两套实现跑偏。
 import { disconnectByIdAPI } from '@/assembly/connections'
 import { fetchRules, ruleProviderList, toggleRuleDisabled } from '@/assembly/rules'
 import { getConnectionRulePayload } from '@/helper'
@@ -17,7 +16,6 @@ export const isRuleDisabled = (rule: Rule) => {
   return rule.disabled
 }
 
-// RuleSet 的条目数要去 provider 里取,普通规则用自带的 size。
 export const getRuleSize = (rule: Rule) => {
   if (rule.type === 'RuleSet') {
     return ruleProviderList.value.find((provider) => provider.name === rule.payload)?.ruleCount
@@ -53,21 +51,17 @@ export const toggleRuleDisabledWithSideEffects = async (rule: Rule) => {
       return ruleTypeMatches && rulePayloadMatches
     })
 
-    // 禁用规则的顺带动作,失败不该盖掉「规则已禁用」这件主事
     matchingConnections.forEach((conn) => disconnectByIdAPI(conn.id).catch(() => {}))
   }
 
   await fetchRules()
 }
 
-// 空值在表格里统一用破折号,别让 0 / '-' / 空白三种写法在同一张表里并存。
 export const EMPTY_CELL = '—'
 
-// 命中数满屏是 0 的时候最难读,零一律降级成破折号,让真正有流量的规则自己跳出来。
 export const formatRuleHitCount = (count: number | undefined) =>
   count ? count.toLocaleString() : EMPTY_CELL
 
-// 命中/未命中的次数与时间共四条,表格里塞不下,统一收进 tooltip,卡片视图也走这份。
 export const useRuleHitTooltip = () => {
   const { t } = useI18n()
   const { showTip } = useTooltip()
@@ -80,7 +74,6 @@ export const useRuleHitTooltip = () => {
     return line
   }
 
-  // 从没命中过时后端给的是空串或零值时间,交给 dayjs 会凭空编出一个像模像样的最后命中时间
   const formatHitTime = (count: number, at: string) => {
     if (!count || !at) return t('unknown')
 

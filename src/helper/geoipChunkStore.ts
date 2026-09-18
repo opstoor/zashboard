@@ -36,8 +36,6 @@ const openDatabase = (): Promise<IDBDatabase> => {
     let settled = false
 
     request.onupgradeneeded = () => {
-      // Version 1 stored one complete ArrayBuffer. Drop it without reading it,
-      // otherwise the migration itself recreates the memory spike we remove.
       if (request.result.objectStoreNames.contains('mmdb')) {
         request.result.deleteObjectStore('mmdb')
       }
@@ -51,8 +49,6 @@ const openDatabase = (): Promise<IDBDatabase> => {
     request.onsuccess = () => {
       const database = request.result
 
-      // A blocked upgrade already rejected; the connection that eventually
-      // opened has no owner, so close it instead of leaking it.
       if (settled) {
         database.close()
         return
@@ -76,9 +72,6 @@ const openDatabase = (): Promise<IDBDatabase> => {
       if (databasePromise === opening) databasePromise = undefined
       reject(request.error)
     }
-    // An older tab holding a version 1 connection blocks the upgrade. Without
-    // this handler the promise never settles and stays cached, which silently
-    // disables GeoIP in this tab for the rest of its lifetime.
     request.onblocked = () => {
       if (settled) return
       settled = true
@@ -109,8 +102,6 @@ const isManifest = (value: unknown): value is GeoIPFileManifest => {
   )
 }
 
-// Generations this tab is still writing or holding as a candidate. They have no
-// manifest entry yet, so a sweep would otherwise mistake them for orphans.
 const stagedGenerations = new Set<string>()
 const sweptKeys = new Set<string>()
 
@@ -126,10 +117,6 @@ const getManifest = async (key: string): Promise<GeoIPFileManifest | undefined> 
     request.onerror = () => reject(request.error)
   })
 
-  // A staged generation whose tab closed before activation leaves a complete
-  // orphan copy behind. Reclaim it once per key per session; without a manifest
-  // there is no way to tell an orphan from an in-flight candidate, so only
-  // sweep when an active generation is known.
   if (manifest && !sweptKeys.has(key)) {
     sweptKeys.add(key)
     void deleteInactiveGenerations(key, manifest.generation, manifest.previousGeneration).catch(
@@ -344,7 +331,6 @@ export const geoIPChunkStore = {
     const generation =
       globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`
 
-    // Protected until the caller activates or discards it.
     stagedGenerations.add(generation)
 
     const reader = stream.getReader()
@@ -461,8 +447,6 @@ export const geoIPChunkStore = {
 
     if (!committed) throw new GeoIPChunkStoreError('storage')
 
-    // The candidate is the active generation now, so it no longer needs the
-    // staging guard to keep the sweep off it.
     stagedGenerations.delete(committed.generation)
     sweptKeys.add(key)
 

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// 后端会话(内核探测 + 首屏数据 + 常驻流)自己跟着 activeBackend 走,
-// 这里只需保证模块被加载,不依赖任何页面挂载。
 import './assembly/session'
 import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
@@ -34,7 +32,6 @@ const toast = ref<HTMLElement>()
 
 initNotification(toast as Ref<HTMLElement>)
 
-// 字体类名映射表
 const FONT_CLASS_MAP = {
   [EMOJIS.TWEMOJI]: {
     [FONTS.MI_SANS]: 'font-MiSans-Twemoji',
@@ -133,13 +130,8 @@ useKeyboard()
     <BackendSwitchToast />
     <BackendConnectionError />
     <BackendManager />
-    <!-- 后端维护动作的弹窗:侧边栏菜单和设置页都会拉起,挂在这里两处入口才都有效。 -->
     <UpgradeCoreModal v-model="showUpgradeCoreModal" />
     <UpdateConfigModal v-model="showUpdateConfigModal" />
-    <!--
-      确认弹窗排在所有弹窗之后:它们都 teleport 到 #app-content 且同一层 z-index,
-      谁后插进 DOM 谁在上面。升级内核的确认是从弹窗里拉起的,排前面就会被压在底下。
-    -->
     <ConfirmDialogHost />
     <div
       ref="toast"

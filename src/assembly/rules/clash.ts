@@ -1,4 +1,3 @@
-// Clash REST 后端的 rules 组装:拉取 /rules 与 /providers/rules,写入门面状态。
 import { fetchRuleProvidersAPI, fetchRulesAPI } from '@/api/clash'
 import { ruleProviderList, rules } from './index'
 

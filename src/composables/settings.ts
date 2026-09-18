@@ -4,7 +4,6 @@ import { hiddenSettingsItems, settingsMenuOrder } from '@/store/settings'
 import type { MaybeRef } from 'vue'
 import { computed, ref, unref } from 'vue'
 
-/** 当前实际渲染且可操作的设置项。搜索据此排除平台、能力和依赖条件不满足的项目。 */
 const renderedSettingCounts = ref<Record<string, number>>({})
 
 export function registerRenderedSetting(key: string): () => void {
@@ -26,22 +25,14 @@ export function isSettingRendered(key: string): boolean {
   return !!renderedSettingCounts.value[key]
 }
 
-/**
- * Returns true when the setting item with the given key is visible.
- * Use inside computed() for reactivity. For templates, use useIsSettingVisible(key) instead.
- */
 export function isSettingVisible(key: string): boolean {
   return !hiddenSettingsItems.value[key]
 }
 
-/**
- * Returns the raw hidden state of a setting key.
- */
 export function isSettingHidden(key: string): boolean {
   return !!hiddenSettingsItems.value[key]
 }
 
-/** Toggle the hidden state of a setting key. */
 export function toggleSettingHidden(key: string): void {
   hiddenSettingsItems.value = {
     ...hiddenSettingsItems.value,
@@ -49,29 +40,19 @@ export function toggleSettingHidden(key: string): void {
   }
 }
 
-/**
- * Returns a computed that is true when the setting item with the given key is visible.
- * Use in templates for reactive visibility checks.
- */
 export function useIsSettingVisible(key: MaybeRef<string>) {
   return computed(() => !hiddenSettingsItems.value[unref(key)])
 }
 
-/**
- * Returns a computed that is true when at least one of the given setting keys is visible.
- * Use for "has any visible item" in a settings section.
- */
 export function useHasAnyVisibleSetting(keys: MaybeRef<string[]>) {
   return computed(() => unref(keys).some((k) => !hiddenSettingsItems.value[k]))
 }
 
-/** 应用「全部显示」预设 */
 export function applyShowAllPreset(): void {
   hiddenSettingsItems.value = {}
   settingsMenuOrder.value = [...DEFAULT_SETTINGS_MENU_ORDER]
 }
 
-/** 应用「精简显示」预设 */
 export function applyMinimalPreset(): void {
   const allKeys = getAllSettingKeys()
   const minimalHiddenKeys: string[] = [SETTINGS_MENU_KEY.proxies, SETTINGS_MENU_KEY.connections]
@@ -110,7 +91,6 @@ export function applyMinimalPreset(): void {
   settingsMenuOrder.value = [...DEFAULT_SETTINGS_MENU_ORDER]
 }
 
-/** 调整大类在设置菜单中的顺序。 */
 export function moveSettingsCategory(key: SETTINGS_MENU_KEY, direction: -1 | 1): void {
   const order = [
     ...settingsMenuOrder.value,

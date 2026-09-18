@@ -5,25 +5,19 @@ import * as ipaddr from 'ipaddr.js'
 import { reactive, ref } from 'vue'
 
 interface HostnameEntry {
-  // null represents a completed lookup without a PTR answer.
   name: string | null
   ts: number
 }
 
-// Positive results are useful across reloads. Negative results are deliberately
-// shorter lived and memory-only so a new DHCP lease can acquire a name quickly.
 const POSITIVE_TTL = 45 * 60 * 1000
 const NEGATIVE_TTL = 10 * 60 * 1000
 const CACHE_KEY = 'cache/reverse-dns-hostnames'
 const CACHE_CAP = 200
 
-// Private IPs can identify different devices on different backends.
 const memoryCache = new Map<string, HostnameEntry>()
 const inflight = new Map<string, Promise<string | null>>()
 const hostnameState = reactive<Record<string, string>>({})
 
-// Consumers whose labels are built outside a computed/render effect can watch
-// this revision to rebuild when an asynchronous hostname arrives.
 export const reverseDNSRevision = ref(0)
 
 const parseIP = (ip: string): ipaddr.IPv4 | ipaddr.IPv6 | null => {
@@ -41,9 +35,6 @@ const parseIP = (ip: string): ipaddr.IPv4 | ipaddr.IPv6 | null => {
   }
 }
 
-// Skip addresses that cannot provide a useful client hostname. Private and
-// public unicast addresses remain eligible; the configured core DNS decides
-// which reverse zones it can answer.
 export function isResolvableIP(ip: string | undefined): boolean {
   if (!ip) return false
 
@@ -109,9 +100,7 @@ function writePersistedCache(cache: PersistedCache): void {
       .slice(-CACHE_CAP)
 
     localStorage.setItem(CACHE_KEY, JSON.stringify(Object.fromEntries(entries)))
-  } catch {
-    // Resolution is best-effort; storage quota and serialization failures are harmless.
-  }
+  } catch {}
 }
 
 function persistPositive(key: string, entry: HostnameEntry): void {

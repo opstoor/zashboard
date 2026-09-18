@@ -1,6 +1,3 @@
-// 组装层 · logs 门面。持有完整的 logs ref 与流控状态(暂停 / 级别),
-// 经累加器把内核的原生日志批次组装进 logs ref。
-// store 直接引用这里导出的 logs / initLogs,不再参与组装。
 import { can, core, Core } from '@/assembly/backend'
 import { LOG_LEVEL } from '@/constant'
 import { useStorage } from '@/helper/storage'
@@ -14,8 +11,6 @@ export const logs = shallowRef<LogWithSeq[]>([])
 export const isPaused = ref(false)
 export const logLevel = useStorage<string>('config/log-level', LOG_LEVEL.Info)
 
-// 各内核认的 /logs?level= 取值不同(mihomo 无 trace,honk 无 silent),
-// 传了不认的级别会被直接 400,WS 随后陷入无限重连,所以逐档按能力表拼。
 export const supportedLogLevels = computed(() => {
   const levels = [LOG_LEVEL.Debug, LOG_LEVEL.Info, LOG_LEVEL.Warning, LOG_LEVEL.Error]
 
@@ -25,8 +20,6 @@ export const supportedLogLevels = computed(() => {
   return levels
 })
 
-// logLevel 是跨后端持久化的,切到不认该级别的内核后必须退档,否则流永远起不来。
-// 后端为空或内核未探测出结论(Core.Unknown)时不动它 —— 那时候的能力表还不是最终答案。
 watch(supportedLogLevels, (levels) => {
   if (!activeBackend.value || core.value === Core.Unknown) return
   if (levels.includes(logLevel.value as LOG_LEVEL)) return
@@ -49,9 +42,6 @@ export const initLogs = () => {
   }
 }
 
-// 结束流时一并丢掉日志。日志形态在累加器里已经归一化,不会像连接那样把渲染打崩
-// (见 store/connections),但把上一个后端的日志留在屏幕上同样是错的 —— 新后端连不上时,
-// 它们会一直冒充新后端的日志。
 export const stopLogs = () => {
   cancel?.()
   cancel = undefined

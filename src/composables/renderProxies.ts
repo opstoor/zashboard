@@ -47,7 +47,6 @@ export const groupProxiesByProviderName = (proxies: string[]): ProxiesProviderSe
   }))
 }
 
-// 延迟一律取自 assembly 的全局延迟表(按测速 url 分桶),这里只负责筛选与排序。
 export function useRenderProxyList(proxies: ComputedRef<string[]>, groupName?: string) {
   const latencyMap = latencyMapOf(groupName)
 

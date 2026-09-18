@@ -266,14 +266,12 @@ const hasVisibleInteractionItems = computed(
     (showDisplayAllFeatures.value && isVisibleDisplayAllFeatures.value),
 )
 
-// honk 没有 /upgrade/ui,按钮点了必然 404。
 const showDashboardUpgrade = computed(() => can('dashboardUpgrade'))
 
 const isUIUpgrading = ref(false)
 const handlerClickUpgradeUI = async () => {
   if (isUIUpgrading.value) return
   isUIUpgrading.value = true
-  // 升级请求可能跑好一会儿,按钮只是轻轻闪一下 —— 先弹一条「执行中」,结果出来再顶掉。
   const notifyKey = notifyActionPending('upgradeDashboard')
   try {
     await upgradeUIAPI()

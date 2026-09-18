@@ -1,4 +1,3 @@
-// 组装层 · config 门面。持有统一的 configs 状态,转交 clash 实现。
 import type { Config } from '@/types'
 import { ref } from 'vue'
 import * as clash from './clash'
@@ -29,7 +28,6 @@ export const fetchConfigs = () => clash.fetchConfigs()
 export const updateConfigs = (cfg: Record<string, string | boolean | object | number>) =>
   clash.updateConfigs(cfg)
 
-// 配置 / 缓存 / DNS 维护动作(Clash 专属),经 config 域门面暴露给 view。
 export {
   flushDNSCacheAPI,
   flushFakeIPAPI,

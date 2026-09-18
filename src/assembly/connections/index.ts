@@ -1,5 +1,3 @@
-// 组装层 · connections 门面。连接流、断连/封锁动作,以及「原始连接数据 → view 字段」的
-// 访问器与 getConnectionDisplayValue,统一转交 clash 实现。
 import { CONNECTIONS_TABLE_ACCESSOR_KEY } from '@/constant'
 import type { Connection } from '@/types'
 import type { ConnectionDisplayOptions, ConnectionsSnapshot } from './accessor'
@@ -13,7 +11,6 @@ export const disconnectAllAPI = () => clash.disconnectAllAPI()
 
 export const fetchConnectionsAPI = () => clash.fetchConnectionsAPI()
 
-// 连接字段访问器(直接读取原始数据)。
 export const connectionAccessor = () => clash.connectionAccessor
 
 export const getConnectionDisplayValue = (
@@ -28,5 +25,4 @@ export const getConnectionVisibleSearchValues = (
   options: ConnectionDisplayOptions,
 ) => clash.getConnectionVisibleSearchValues(connection, keys, options)
 
-// 连接封锁动作(Clash 专属),经 connections 域门面暴露给 view。
 export { blockConnectionByIdAPI } from '@/api/clash'

@@ -127,9 +127,6 @@ watch(
 
 const documentVisible = useDocumentVisibility()
 
-// 息屏 / 切走期间后端可能已经没了(睡眠、换网、内核重启)。回到前台先确认一次,
-// 连不上就重开会话 —— 探测失败会把 BackendConnectionError 顶出来,
-// 由它给出诊断、重试和切换后端,这里不再自己弹一个只能二选一的对话框。
 watch(
   documentVisible,
   async () => {
@@ -138,7 +135,6 @@ watch(
     const uuid = activeBackend.value.uuid
 
     if (await isBackendAvailable(activeBackend.value)) return
-    // 探测期间用户可能已经自己切走了,别把新后端的会话也重开一遍。
     if (uuid === activeUuid.value) startBackendSession()
   },
   {

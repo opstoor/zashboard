@@ -206,9 +206,7 @@ const handlerFileChange = (e: Event) => {
 
     try {
       confirmApplyThemeByBackgroundTone(await detectBackgroundTone(imageURL))
-    } catch {
-      // Keep the current theme if tone detection fails.
-    }
+    } catch {}
 
     customBackgroundURL.value = LOCAL_IMAGE + '-' + Date.now()
     saveBase64ToIndexedDB(imageURL)

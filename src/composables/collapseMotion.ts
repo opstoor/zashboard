@@ -56,13 +56,11 @@ export const useCollapseMotion = (open: Ref<boolean>) => {
     const body = bodyRef.value
     if (!body) return
 
-    // 取消旧动画前读取当前画面。使用布局高度，避免卡片入场的 scale 影响测量。
     const fromHeight = getComputedStyle(body).height
     const fromPreview = previewRef.value ? getComputedStyle(previewRef.value).opacity : '0'
     const fromContent = contentRef.value ? getComputedStyle(contentRef.value).opacity : '0'
     const contentReady = phase.value === 'animating'
 
-    // 准备新内容的几帧也保持当前画面，取消 WAAPI 后不能闪回 CSS 的旧终点。
     if (previewRef.value) previewRef.value.style.opacity = fromPreview
     if (contentRef.value) contentRef.value.style.opacity = fromContent
     operation?.abort()
@@ -76,8 +74,6 @@ export const useCollapseMotion = (open: Ref<boolean>) => {
       phase.value = 'preparing'
       body.style.height = fromHeight
       await nextTick()
-      // 展开需要等虚拟列表拿到容器尺寸并挂载可视行；收起只需等预览挂载。
-      // 中途反向时两份内容已经挂好，可在同一帧接续，不暂停当前视觉进度。
       if (!contentReady) await waitFrames(value ? 2 : 1, signal)
       signal.throwIfAborted()
 
@@ -101,7 +97,6 @@ export const useCollapseMotion = (open: Ref<boolean>) => {
         fill: 'both' as const,
       }
 
-      // 所有布局读取完成后，才写入占位和目标位移。
       if (rowShift && placeholder && row) {
         shiftBaseHeight = baseHeight
         rowShift.begin(row, headerHeight + targetHeight - baseHeight, timing, releaseShift)
@@ -127,7 +122,6 @@ export const useCollapseMotion = (open: Ref<boolean>) => {
       await Promise.all(animations.map((animation) => animation.finished))
       signal.throwIfAborted()
 
-      // 先让最终内容回到自然布局，再交还占位，协调器量到的就是最终尺寸。
       phase.value = 'settling'
       body.style.height = ''
       await nextTick()
@@ -135,7 +129,6 @@ export const useCollapseMotion = (open: Ref<boolean>) => {
       cancelAnimations()
       if (rowShift && shiftRow) await rowShift.end(shiftRow)
 
-      // 同列交接完成后先绘制一帧，再恢复屏外节点的预渲染。
       await waitFrames(2, signal)
       phase.value = 'idle'
     } catch (error) {

@@ -408,8 +408,6 @@ let refreshQueued = false
 let disposed = false
 let originRequestID = 0
 
-// 初始化 Worker 与 three/webgpu 渲染器开销较大,先让路由切换动画跑完(0.35s)再在空闲时段执行,
-// 否则移动端切到概览页时主线程被占满,页面要卡一两秒才出现。
 const INIT_DELAY = 400
 const INIT_IDLE_TIMEOUT = 1000
 let initTimer: ReturnType<typeof setTimeout> | null = null
@@ -441,8 +439,6 @@ const maskIP = (value: string) => {
 }
 
 const isFlatMap = computed(() => earthProjection.value === '2d')
-// The 2D map always uses the flat palette, so it shares the light chrome that
-// the flat globe style uses.
 const flatLook = computed(() => isFlatMap.value || earthVisualMode.value === 'flat')
 
 const displayedOriginIP = computed(() => {
@@ -519,9 +515,7 @@ const resolveHostname = (hostname: string) => {
           })
           return ip
         }
-      } catch {
-        // Automatic DNS lookups are best-effort; one failed family may still leave the other usable.
-      }
+      } catch {}
     }
 
     dnsCache.set(hostname, { ip: null, expiresAt: Date.now() + 30_000 })

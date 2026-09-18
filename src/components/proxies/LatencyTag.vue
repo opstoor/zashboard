@@ -74,8 +74,6 @@ const props = defineProps<{
 const latencyRef = ref<HTMLElement | null>(null)
 const latency = computed(() => getLatencyByName(props.name ?? '', props.groupName))
 let countUp: CountUp | null = null
-// 数字节点测速期间会被卸载,CountUp 实例跟着丢。记住上一次真正显示出来的数字,
-// 节点重新挂载时从它滚到新值,滚动效果才不会在每次测速后消失。
 let shownLatency = latency.value
 
 const createCountUp = (el: HTMLElement) => {
@@ -89,13 +87,6 @@ const createCountUp = (el: HTMLElement) => {
   return countUp
 }
 
-/*
- * 由节点自身的挂载来驱动重建:flush: 'post' 保证 DOM 已经补好,
- * 且在这一帧绘制前就把文本压回起始值,不会闪一下最终值。
- *
- * 值和上次显示出来的一样就先不建实例 —— 卡片首次挂载几乎都是这种,而一次展开要挂几十张,
- * 省下的是几十次实例创建加 innerHTML 写入。真要滚的时候下面那个 watch 会补上。
- */
 watch(
   latencyRef,
   (el) => {
@@ -109,7 +100,6 @@ watch(
   { flush: 'post' },
 )
 
-// 节点还挂着的时候(比如自动测速刷新)直接滚过去,不用重建实例。
 watch(latency, (value) => {
   const el = latencyRef.value
 

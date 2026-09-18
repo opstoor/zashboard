@@ -1,13 +1,3 @@
-// 后端维护动作的单一来源。
-//
-// 同一批动作现在有两个入口:设置页的「后端」分组,和侧边栏后端菜单里的二级菜单。
-// 各写一遍必然两边跑偏 —— 能力门控、进行中状态、成功提示都得对齐,所以收成一张表。
-//
-// 进行中状态放在模块级而不是组件里:两个入口打的是同一个后端,从侧边栏点了重启,
-// 设置页那颗按钮也该是转的,更不该被并发点第二次。
-//
-// 需要先收集参数的两个动作(升级内核、更新配置)走弹窗。弹窗的开关也在这里,
-// 弹窗本体挂在 App.vue —— 侧边栏常驻但设置页不常驻,挂在设置页里侧边栏就拉不起来。
 import { can } from '@/assembly/backend'
 import {
   fetchConfigs,
@@ -39,14 +29,10 @@ import { computed, ref, type Component, type Ref } from 'vue'
 const k = BACKEND_ITEM_KEYS
 
 export type BackendAction = {
-  /** 该动作在设置项显隐配置里的 key,两个入口共用同一份配置 */
   key: string
-  /** i18n key */
   label: string
   icon: Component
-  /** 请求在飞 —— 按钮转圈并拒绝第二次点击 */
   running: boolean
-  /** true 表示这个动作会拉起弹窗,菜单该让位 */
   opensModal: boolean
   run: () => void
 }
@@ -68,13 +54,11 @@ const isFakeIPFlushing = ref(false)
 const isSmartWeightsFlushing = ref(false)
 
 const runOnce = async (
-  /** 动作名的 i18n key,用来写「执行中」那条提示 */
   label: string,
   running: Ref<boolean>,
   request: () => Promise<unknown>,
   successMessage: string,
   afterSuccess?: () => void,
-  /** 会打断代理服务的动作先问一句(i18n key)。确认弹窗的遮罩盖住了两处入口,不怕重入。 */
   confirm?: { title: string; message: string },
 ) => {
   if (running.value) return
@@ -86,8 +70,6 @@ const runOnce = async (
     if (!confirmed) return
   }
   running.value = true
-  // 清缓存这类动作几十毫秒就回来,按钮上的转圈只是闪一下 —— 先弹提示占住位置,
-  // 结果出来再用同一个 key 顶掉它。
   const notifyKey = notifyActionPending(label)
   try {
     await request()
@@ -104,7 +86,6 @@ const runOnce = async (
   }
 }
 
-/** 当前后端/内核下真正能执行的动作,顺序即两处入口的展示顺序 */
 export const backendActions = computed<BackendAction[]>(() => {
   if (!activeBackend.value) return []
 
@@ -128,7 +109,6 @@ export const backendActions = computed<BackendAction[]>(() => {
       icon: ArrowPathRoundedSquareIcon,
       running: isCoreRestarting.value,
       opensModal: false,
-      // 内核重启完才有东西可拉,立刻打过去只会撞在重启的空档上。
       run: () =>
         runOnce(
           'restartCore',
@@ -148,7 +128,6 @@ export const backendActions = computed<BackendAction[]>(() => {
       icon: ArrowPathIcon,
       running: isConfigReloading.value,
       opensModal: false,
-      // 重载配置不动连接、也不重启内核,代价小到不值得一次确认。
       run: () =>
         runOnce(
           'reloadConfigs',
@@ -228,10 +207,6 @@ export const backendActions = computed<BackendAction[]>(() => {
   return actions
 })
 
-/**
- * 菜单入口用的子集。设置页那边靠 SettingItem 自己过显隐(编辑模式下还要把隐藏项显出来
- * 好让人点回去),菜单里没有编辑模式,直接按用户藏起来的配置扣掉。
- */
 export const menuBackendActions = computed(() =>
   backendActions.value.filter((action) => !isSettingHidden(action.key)),
 )

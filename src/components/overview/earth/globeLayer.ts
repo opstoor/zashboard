@@ -98,8 +98,6 @@ export const createGlobeLayer = async (options: GlobeLayerOptions): Promise<Glob
   dayTexture.anisotropy = 8
   nightTexture.anisotropy = 8
   surfaceTexture.anisotropy = 8
-  // Recentring shifts the geographic frame, so texture lookups run past the edges
-  // of the equirectangular images and have to wrap around instead of clamping.
   dayTexture.wrapS = THREE.RepeatWrapping
   nightTexture.wrapS = THREE.RepeatWrapping
   surfaceTexture.wrapS = THREE.RepeatWrapping
@@ -121,8 +119,6 @@ export const createGlobeLayer = async (options: GlobeLayerOptions): Promise<Glob
     atmosphereDayColor,
     sunOrientation.smoothstep(-0.25, 0.75),
   )
-  // Undoes the view's recentring, so the same vertex that now sits at local
-  // longitude zero still samples the user's actual longitude in the imagery.
   const centerOffset = uniform(0)
   const geoUV = vec2(uv().x.add(centerOffset), uv().y)
   const cloudsStrength = texture(surfaceTexture, geoUV).b.smoothstep(0.2, 1)
@@ -143,8 +139,6 @@ export const createGlobeLayer = async (options: GlobeLayerOptions): Promise<Glob
   globeMaterial.outputNode = vec4(finalOutput, output.a)
   globeMaterial.normalNode = bumpMap(max(texture(surfaceTexture, geoUV).r, cloudsStrength))
 
-  // The surface texture separates land (green channel) from water (blue channel),
-  // which lets the flat renderer keep the same coastline without photo shading.
   const flatOceanColor = uniform(new THREE.Color())
   const flatLandColor = uniform(new THREE.Color())
   const flatSurface = texture(surfaceTexture, geoUV)
@@ -154,11 +148,6 @@ export const createGlobeLayer = async (options: GlobeLayerOptions): Promise<Glob
   flatGlobeMaterial.colorNode = mix(flatOceanColor, flatLandColor, flatLandMask)
   flatGlobeMaterial.toneMapped = false
 
-  // SphereGeometry's uv maps straight onto the equirectangular rectangle:
-  // latitude = (uv.y - 0.5) * 180 and longitude = (uv.x - 0.5) * 360, matching
-  // `projectEarthSample`. The duplicated seam vertices carry different uv.x, so
-  // the sphere splits cleanly into the map's left and right edges, and the polar
-  // fans spread out along the top and bottom edges.
   const globeMorph = uniform(0)
   const globePlanePosition = vec3(
     uv()
@@ -176,18 +165,10 @@ export const createGlobeLayer = async (options: GlobeLayerOptions): Promise<Glob
   const globe = new THREE.Mesh<THREE.SphereGeometry, THREE.Material>(sphereGeometry, globeMaterial)
   earthGroup.add(globe)
 
-  // A sphere flattened by the morph still carries its polar triangle fans, whose
-  // apexes leave a saw-toothed north and south edge. Once the transition lands on
-  // the map, a real plane takes over: clean edges, and wide enough to carry the
-  // extra half-world on each side.
   const mapHalfWidth = PLANE_HALF_WIDTH + PLANE_EDGE_EXTENSION
-  // How many whole worlds the plane spans, which is also how many times the
-  // equirectangular texture has to repeat across it.
   const mapWorlds = mapHalfWidth / PLANE_HALF_WIDTH
   const mapGeometry = new THREE.PlaneGeometry(mapHalfWidth * 2, PLANE_HALF_HEIGHT * 2)
   const mapMaterial = new THREE.MeshBasicNodeMaterial()
-  // Same longitude-to-uv relation as the flattened sphere, just stretched over a
-  // wider plane, so the central world stays pixel-aligned with it across the swap.
   const mapUV = vec2(
     uv()
       .x.mul(mapWorlds)
@@ -232,13 +213,8 @@ export const createGlobeLayer = async (options: GlobeLayerOptions): Promise<Glob
     flatLandColor.value.set(palette.land)
   }
 
-  // Anything but a pristine sphere is rendered with the flat material: the
-  // photoreal shading is driven by surface normals, which stop meaning anything
-  // once the sphere starts unrolling.
   const applyVisualMode = () => {
     const flat = visualMode === 'flat' || morph > 0
-    // Fully flattened: hand over to the plane. Anywhere in between the sphere is
-    // still the thing being bent, so it stays on screen.
     const flattened = morph >= 1
 
     scene.background = flat ? null : backgroundTexture

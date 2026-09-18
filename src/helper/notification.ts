@@ -91,7 +91,6 @@ const setTimer = (
   if (timeout !== 0) {
     if (progressBar) {
       progressBar.style.animation = 'none'
-      // 读取布局以确保复用同一条提示时，倒计时动画能够从头开始。
       void progressBar.offsetWidth
       progressBar.style.animation = `progressBar ${timeout}ms linear forwards`
     }
@@ -188,7 +187,6 @@ const setAlert = (
   return progressBar
 }
 
-/** 收掉一条还挂着的提示 —— 动作结束却没有自己的结果提示时用(如已被内部提示接手)。 */
 export const dismissNotification = (key: string) => {
   const alertData = alertMap.get(key)
 
@@ -197,16 +195,6 @@ export const dismissNotification = (key: string) => {
   closeAlert(alertData.alert, key)
 }
 
-/**
- * 用户点下动作时立刻弹一条「执行中」。
- *
- * 按钮转圈是唯一反馈时,清缓存这类几十毫秒就回来的动作只会让按钮闪一下 ——
- * 看不出到底点没点上。这条提示不自动消失(timeout 0),等成功或失败的提示
- * 用同一个 key 顶掉它,一次动作从头到尾只占一条 toast。
- *
- * @param label 动作名的 i18n key
- * @returns 后续成功/失败提示要复用的 key
- */
 export const notifyActionPending = (label: string) => {
   const key = `action:${label}`
 

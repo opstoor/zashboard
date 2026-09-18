@@ -98,9 +98,6 @@ export const createCityLabelLayer = (options: CityLabelLayerOptions): CityLabelL
     }
   }
 
-  // CSS labels do not share the globe's depth buffer. First discard cities past
-  // the tangent horizon, then choose a zoom-dependent number of high-priority
-  // labels whose screen-space rectangles do not overlap.
   const updateVisibility = () => {
     if (disposed) return
 
@@ -120,7 +117,6 @@ export const createCityLabelLayer = (options: CityLabelLayerOptions): CityLabelL
       label.visible = false
       label.getWorldPosition(labelWorldPosition)
 
-      // The flat map has no far side, so the horizon test only applies to the globe.
       if (view.projection === '3d') {
         labelSurfaceNormal.subVectors(labelWorldPosition, earthWorldPosition).normalize()
         labelToCamera.subVectors(cameraWorldPosition, labelWorldPosition)
@@ -199,8 +195,6 @@ export const createCityLabelLayer = (options: CityLabelLayerOptions): CityLabelL
     setView(nextView) {
       if (disposed) return
       view = nextView
-      // `endpointLayer` has already reprojected the shared Vector3 instances;
-      // this just copies the new positions across to the labels.
       syncLabels()
     },
     setVisible(visible) {

@@ -12,7 +12,6 @@ export const importSettingsUrl = useStorage(IMPORT_SETTINGS_URL_KEY, DEFAULT_SET
 export const autoImportSettings = useStorage('config/auto-import-settings', false)
 export const autoSyncSettings = useStorage('config/auto-sync-settings', false)
 
-// 用户在确认框里勾选"不再提示"后置为 true，之后直接应用。仅本机生效，不参与导入/同步
 export const skipImportSettingsConfirm = useStorage('cache/skip-import-settings-confirm', false)
 export const skipSyncSettingsConfirm = useStorage('cache/skip-sync-settings-confirm', false)
 
@@ -31,7 +30,6 @@ const calculateSettingsHash = async (settings: Record<string, unknown>) => {
   return Math.abs(hash).toString(16).padStart(8, '0')
 }
 
-// 弹窗确认是否用即将写入的设置覆盖本地。无 key 会被实际覆盖时视为无需应用(返回 false)。
 const confirmSettingsOverride = async (
   overriddenKeys: string[],
   messageKey: 'importSettingsConfirm' | 'syncSettingsConfirm',
@@ -43,7 +41,6 @@ const confirmSettingsOverride = async (
   const isSync = messageKey === 'syncSettingsConfirm'
   const skipConfirm = isSync ? skipSyncSettingsConfirm : skipImportSettingsConfirm
 
-  // 用户选择过"不再提示"，直接应用
   if (skipConfirm.value) {
     return true
   }
@@ -56,7 +53,6 @@ const confirmSettingsOverride = async (
     checkboxText: i18n.global.t('dontAskAgainAlwaysApply'),
   })
 
-  // 取消时勾选无意义(不再提示的是"自动应用"),仅确认时记住
   if (confirmed && checked) {
     skipConfirm.value = true
   }
@@ -64,7 +60,6 @@ const confirmSettingsOverride = async (
   return confirmed
 }
 
-// 找出后端设置中真正会覆盖本地的 config/ key(仅 applyDashboardSettingsToStorage 会写入的那些)
 const getOverriddenSettingKeys = (settings: Record<string, unknown>) => {
   return Object.keys(settings).filter(
     (key) => key.startsWith('config/') && localStorage.getItem(key) !== (settings[key] as string),
@@ -95,7 +90,6 @@ export const syncSettingsFromCore = async ({
     return false
   }
 
-  // 记录 hash 避免对相同内容重复提示;用户拒绝(或无 key 变动)时保留本地设置
   if (
     confirm &&
     !(await confirmSettingsOverride(getOverriddenSettingKeys(data), 'syncSettingsConfirm'))
@@ -117,7 +111,6 @@ export const syncSettingsFromCore = async ({
   location.reload()
   return true
 }
-// 找出 URL 导入的设置里真正会覆盖本地的 key(与 import 写入逻辑保持一致)
 const getImportOverriddenKeys = (settings: Record<string, unknown>) => {
   return Object.keys(settings).filter((key) => {
     if (key === IMPORT_SETTINGS_URL_KEY && !settings[key]) {
@@ -165,7 +158,6 @@ export const importSettingsFromUrl = async ({
     return false
   }
 
-  // 记录 hash 避免对相同内容重复提示;用户拒绝(或无 key 变动)时保留本地设置
   if (
     confirm &&
     !(await confirmSettingsOverride(getImportOverriddenKeys(settings), 'importSettingsConfirm'))

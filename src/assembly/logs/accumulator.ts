@@ -1,6 +1,3 @@
-// 组装层 · 日志累加器。
-// 后端一次产出一条 Log,这里统一做与后端无关的加工:source-ip 标签替换、seq 编号、时间、暂停门控、保留上限与节流落表,
-// 维护完整的 logs ref。store 直接引用该 ref,不再参与组装。
 import { logRetentionLimit, sourceIPLabelList } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
 import type { Log, LogWithSeq } from '@/types'
@@ -9,7 +6,6 @@ import { throttle } from 'lodash'
 import { watch, type Ref } from 'vue'
 
 export interface LogsAccumulator {
-  // 后端产出的一批原始日志(已是 { type, payload } 形态)投递入表。
   push: (batch: Log[]) => void
   dispose: () => void
 }
@@ -26,7 +22,6 @@ export const createLogsAccumulator = (
     logsTemp = []
   }, 500)
 
-  // source-ip 标签替换规则,随 sourceIPLabelList / 当前后端变化重建。
   const ipSourceMatchs: [RegExp, string][] = []
   const restructMatchs = () => {
     ipSourceMatchs.length = 0
@@ -52,7 +47,6 @@ export const createLogsAccumulator = (
 
   const push = (batch: Log[]) => {
     for (const data of batch) {
-      // 暂停时丢弃该条但仍推进 seq,与既有行为一致。
       if (isPaused()) {
         idx++
         continue

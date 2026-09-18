@@ -3,7 +3,6 @@ import { readonly, ref } from 'vue'
 export type ConfirmDialogOptions = {
   title?: string
   message: string
-  /** 在正文下方显示的可选说明链接 */
   link?: {
     text: string
     url: string
@@ -11,7 +10,6 @@ export type ConfirmDialogOptions = {
   confirmText?: string
   cancelText?: string
   confirmButtonClass?: string
-  /** 传入后在对话框内显示一个复选框，其勾选状态随结果一起返回 */
   checkboxText?: string
 }
 

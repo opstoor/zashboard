@@ -1,6 +1,3 @@
-// 组装层 · 版本与升级。
-// 版本字符串是 core 轴(assembly/backend.ts)的唯一来源:这里探测完成后写入 core,
-// 后端切换的瞬间先重置为 'unknown',避免沿用上一个后端的结论。
 import { fetchClashVersion, restartCoreAPI, upgradeCoreAPI, upgradeUIAPI } from '@/api/clash'
 import HonkLogo from '@/assets/images/honk.svg'
 import MetacubexLogo from '@/assets/images/metacubex.jpg'
@@ -16,26 +13,21 @@ export const version = ref()
 export const isCoreUpdateAvailable = ref(false)
 export const zashboardVersion = ref(__APP_VERSION__)
 
-// 切后端时本来就要打一次 /version,顺手把它的结果暴露成连通性状态,
-// 给切换提示用 —— 不额外发探测请求,量的也正是实际在用的那条 API。
 export type BackendProbe = {
   uuid: string
   status: 'probing' | 'connected' | 'failed'
-  // 拿到 /version 响应的耗时(ms),failed 时无意义。
   latency: number
   message: string
 }
 
 export const backendProbe = ref<BackendProbe | undefined>()
 
-// honk 的 /version 返回 "honk <semver>"(见 honk-core/src/clash_api.rs 的 version handler)。
 const detectCore = (versionString: string): Core => {
   if (!versionString) return Core.Unknown
   if (/\bhonk\b/i.test(versionString)) return Core.Honk
   return Core.Mihomo
 }
 
-// 内核品牌的展示信息(logo / 官网链接)。纯展示,不是能力门控,故允许 view 使用。
 export const coreBrand = computed(() => {
   switch (core.value) {
     case Core.Honk:
@@ -84,7 +76,6 @@ const probeBackend = async (backend: Backend) => {
     throw e
   }
 
-  // 探测期间用户可能又切了后端,过期结果直接丢弃。
   if (activeBackend.value?.uuid !== backend.uuid) return
 
   version.value = data?.version || ''
@@ -101,23 +92,17 @@ const probeBackend = async (backend: Backend) => {
   isCoreUpdateAvailable.value = await fetchBackendUpdateAvailableAPI()
 
   if (isCoreUpdateAvailable.value && autoUpgradeCore.value) {
-    // 自动升级不是用户点的,失败静默
     upgradeCoreAPI('auto').catch(() => {})
   }
 }
 
-// 当前后端的内核探测。core 未就绪前依赖它的判断都不可信,
-// 需要等结论的调用方(如登录后的设置同步)用 coreReady() 等待。
 let probe: Promise<void> = Promise.resolve()
 
 export const coreReady = async () => {
-  // 先让会话的 watcher 跑完,确保拿到的是新后端的探测,而非上一次的残留。
   await nextTick()
   await probe
 }
 
-// 由 assembly/session 在每次会话开始时调用:先把上一个后端的结论清干净,
-// 再对当前后端重新探测。返回的 promise 只给 coreReady 用,调用方不必等。
 export const probeActiveBackend = () => {
   const backend = activeBackend.value
 
@@ -198,16 +183,13 @@ export const fetchBackendUpdateAvailableAPI = async () => {
   )
 }
 
-// 仪表盘(UI)更新检查,迁自 composables/settings.ts 的 useSettings。
 export const isUIUpdateAvailable = ref(false)
 
 export const checkUIUpdate = async () => {
   isUIUpdateAvailable.value = await fetchIsUIUpdateAvailable()
   if (isUIUpdateAvailable.value && autoUpgradeDashboard.value) {
-    // 自动升级不是用户点的,失败静默
     upgradeUIAPI().catch(() => {})
   }
 }
 
-// 内核 / UI 维护动作(Clash 专属,无后端分支),经版本域门面暴露给 view。
 export { restartCoreAPI, upgradeCoreAPI, upgradeUIAPI }
