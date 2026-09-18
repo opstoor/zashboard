@@ -132,6 +132,7 @@
 </template>
 
 <script setup lang="ts">
+import { activeConnections } from '@/assembly/connections'
 import { ConnectionHistoryType } from '@/helper/indexeddb'
 import SelectInput from '@/components/common/SelectInput.vue'
 import { showNotification } from '@/helper/notification'
@@ -146,7 +147,6 @@ import {
   clearConnectionHistory,
   mergeAggregatedData,
 } from '@/store/connHistory'
-import { activeConnections } from '@/store/connections'
 import { QuestionMarkCircleIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import type { ColumnDef } from '@tanstack/vue-table'
 import dayjs from 'dayjs'

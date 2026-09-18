@@ -1,4 +1,4 @@
-import { probeBackend } from '@/assembly/backend'
+import { probeBackend } from '@/assembly/probe'
 import { backendProbe } from '@/assembly/version'
 import type { ReachabilityStatus } from '@/composables/backendReachability'
 import { backendList } from '@/store/setup'

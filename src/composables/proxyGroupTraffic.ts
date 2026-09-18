@@ -1,5 +1,5 @@
+import { activeConnections } from '@/assembly/connections'
 import { getConnectionChains } from '@/helper'
-import { activeConnections } from '@/store/connections'
 import { computed } from 'vue'
 
 export const downloadSpeedByProxyGroup = computed(() => {

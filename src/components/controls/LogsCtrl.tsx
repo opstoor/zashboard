@@ -1,17 +1,8 @@
+import { initLogs, isPaused, logLevel, logs, supportedLogLevels } from '@/assembly/logs'
 import { useCtrlsBar } from '@/composables/useCtrlsBar'
 import { LIST_DISPLAY_STYLE, LOG_LEVEL } from '@/constant'
 import { useTooltip } from '@/helper/tooltip'
-import {
-  initLogs,
-  isPaused,
-  logFilter,
-  logFilterEnabled,
-  logFilterRegex,
-  logLevel,
-  logTypeFilter,
-  logs,
-  supportedLogLevels,
-} from '@/store/logs'
+import { logFilter, logFilterEnabled, logFilterRegex, logTypeFilter } from '@/store/logs'
 import { logDisplayStyle, logRetentionLimit, logSearchHistory } from '@/store/settings'
 import {
   ArrowDownTrayIcon,

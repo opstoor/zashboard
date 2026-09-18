@@ -1,4 +1,10 @@
-import { latencyMapOf, proxyMap, proxyProviederList, type LatencyMap } from '@/assembly/proxies'
+import {
+  latencyMapOf,
+  proxyMap,
+  proxyProviederList,
+  smartOrderMap,
+  type LatencyMap,
+} from '@/assembly/proxies'
 import { NOT_CONNECTED, PROXY_SORT_TYPE } from '@/constant'
 import { isProxyGroup } from '@/helper'
 import {
@@ -7,7 +13,6 @@ import {
   proxySortType,
   useSmartGroupSort,
 } from '@/store/settings'
-import { smartOrderMap } from '@/store/smart'
 import { computed, type ComputedRef } from 'vue'
 import { isProxyNodeSearchMode, matchProxySearchKeyword, proxySearchKeyword } from './proxySearch'
 

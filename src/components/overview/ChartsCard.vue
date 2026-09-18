@@ -72,14 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import SparklineChart from '@/components/charts/SparklineChart.vue'
-import {
-  formatHistoryTooltipParam,
-  formatTimeSeriesTooltipParam,
-} from '@/components/charts/chartTooltip'
-import type { ChartTooltipParam } from '@/components/charts/chartTypes'
-import { prettyBytesHelper } from '@/helper/utils'
-import { activeConnections, downloadTotal, uploadTotal } from '@/store/connections'
+import { activeConnections, downloadTotal, uploadTotal } from '@/assembly/connections'
 import {
   connectionsHistory,
   downloadSpeed,
@@ -88,7 +81,14 @@ import {
   timeSaved,
   uploadSpeed,
   uploadSpeedHistory,
-} from '@/store/overview'
+} from '@/assembly/overview'
+import SparklineChart from '@/components/charts/SparklineChart.vue'
+import {
+  formatHistoryTooltipParam,
+  formatTimeSeriesTooltipParam,
+} from '@/components/charts/chartTooltip'
+import type { ChartTooltipParam } from '@/components/charts/chartTypes'
+import { prettyBytesHelper } from '@/helper/utils'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 

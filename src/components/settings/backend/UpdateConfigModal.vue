@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { updateConfigsAPI } from '@/assembly/config'
+import { loadConfigs } from '@/assembly/config'
 import { notifyActionPending, showNotification } from '@/helper/notification'
 import { notifyRequestError } from '@/helper/requestError'
 import { fetchConfigs } from '@/assembly/config'
@@ -86,10 +86,7 @@ const handleUpdateConfigs = async () => {
   isUpdating.value = true
   const notifyKey = notifyActionPending('updateConfigs')
   try {
-    await updateConfigsAPI(
-      { path: configPath.value, payload: configPayload.value },
-      forceUpdate.value,
-    )
+    await loadConfigs({ path: configPath.value, payload: configPayload.value }, forceUpdate.value)
     reloadAll()
     modalValue.value = false
     showNotification({

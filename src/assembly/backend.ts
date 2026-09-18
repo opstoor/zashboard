@@ -1,8 +1,5 @@
-import { probeClashChannel } from '@/api/clash'
-import type { ProbeResult } from '@/helper/connectivity'
 import { displayAllFeatures } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
-import type { Backend } from '@/types'
 import { computed, ref } from 'vue'
 
 export enum Core {
@@ -54,12 +51,3 @@ export const can = (cap: Cap): boolean => {
 
   return soft.value[cap]
 }
-
-export const probeBackend = async (
-  backend: Backend,
-  timeout: number = 10000,
-  signal?: AbortSignal,
-): Promise<ProbeResult> => probeClashChannel(backend, timeout, signal)
-
-export const isBackendAvailable = (backend: Backend, timeout: number = 10000) =>
-  probeBackend(backend, timeout).then((result) => result.ok)

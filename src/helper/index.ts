@@ -1,7 +1,8 @@
 import { connectionAccessor } from '@/assembly/connections'
-import { hiddenGroupMap, proxyMap } from '@/assembly/proxies'
+import { proxyMap } from '@/assembly/proxies'
 import { NOT_CONNECTED, PROXY_CHAIN_DIRECTION, PROXY_TYPE, ROUTE_NAME } from '@/constant'
 import { showNotification } from '@/helper/notification'
+import { hiddenGroupMap } from '@/store/proxies'
 import {
   customCSS,
   customThemes,

@@ -16,6 +16,7 @@ import axios from 'axios'
 import { debounce } from 'lodash'
 import ReconnectingWebSocket from 'reconnectingwebsocket'
 import { shallowRef } from 'vue'
+import './http'
 
 export const fetchClashVersion = () => axios.get<{ version: string }>('/version')
 

@@ -95,13 +95,14 @@
 </template>
 
 <script setup lang="ts">
+import { activeConnections } from '@/assembly/connections'
 import { escapeChartHtml } from '@/components/charts/chartTooltip'
 import { useChartTheme, useEChart, type EChartOption } from '@/composables/useEChart'
 import { getConnectionChains, getConnectionRule, getConnectionSourceIP } from '@/helper'
 import { backgroundImage } from '@/helper/indexeddb'
 import { getIPLabelFromMap } from '@/helper/sourceip'
 import { isMiddleScreen } from '@/helper/utils'
-import { activeConnections, filteredActiveConnections } from '@/store/connections'
+import { filteredActiveConnections } from '@/store/connections'
 import { topologyApplyConnectionFilter } from '@/store/settings'
 import {
   ArrowsPointingInIcon,

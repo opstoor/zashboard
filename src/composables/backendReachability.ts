@@ -1,4 +1,4 @@
-import { probeBackend } from '@/assembly/backend'
+import { probeBackend } from '@/assembly/probe'
 import { describeProbeFailure } from '@/helper/connectivity'
 import { getBackendProbeUrl } from '@/helper/utils'
 import type { Backend } from '@/types'

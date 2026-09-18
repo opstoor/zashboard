@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { upgradeCoreAPI } from '@/assembly/version'
+import { upgradeCore } from '@/assembly/version'
 import { handlerUpgradeSuccess } from '@/helper'
 import { showConfirmDialog } from '@/helper/confirmDialog'
 import { notifyActionPending } from '@/helper/notification'
@@ -93,7 +93,7 @@ const handlerClickUpgradeCore = async (type: 'release' | 'alpha' | 'auto') => {
   isCoreUpgrading.value = true
   const notifyKey = notifyActionPending(UPGRADE_LABELS[type])
   try {
-    await upgradeCoreAPI(type)
+    await upgradeCore(type)
     reloadAll()
     modalValue.value = false
     handlerUpgradeSuccess(notifyKey)

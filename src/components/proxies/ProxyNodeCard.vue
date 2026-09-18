@@ -43,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
+import { smartWeightsMap } from '@/assembly/proxies'
 import { PROXY_CARD_SIZE, PROXY_SORT_TYPE } from '@/constant'
 import { checkTruncation } from '@/helper/tooltip'
 import {
@@ -53,7 +54,6 @@ import {
 import { proxyLatencyTest } from '@/assembly/proxies'
 import { getIPv6ByName, getTestUrl, proxyMap } from '@/assembly/proxies'
 import { IPv6test, proxyCardSize, proxySortType, truncateProxyName } from '@/store/settings'
-import { smartWeightsMap } from '@/store/smart'
 import { computed, inject, nextTick, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import LatencyTag from './LatencyTag.vue'

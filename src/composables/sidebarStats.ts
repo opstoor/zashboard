@@ -1,6 +1,6 @@
+import { activeConnections, downloadTotal, uploadTotal } from '@/assembly/connections'
+import { downloadSpeed, memory, uploadSpeed } from '@/assembly/overview'
 import { prettyBytesHelper, prettySpeedHelper } from '@/helper/utils'
-import { activeConnections, downloadTotal, uploadTotal } from '@/store/connections'
-import { downloadSpeed, memory, uploadSpeed } from '@/store/overview'
 import {
   ArrowDownIcon,
   ArrowsRightLeftIcon,

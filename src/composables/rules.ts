@@ -1,8 +1,7 @@
-import { disconnectByIdAPI } from '@/assembly/connections'
+import { activeConnections, disconnectById } from '@/assembly/connections'
 import { fetchRules, ruleProviderList, toggleRuleDisabled } from '@/assembly/rules'
 import { getConnectionRulePayload } from '@/helper'
 import { useTooltip } from '@/helper/tooltip'
-import { activeConnections } from '@/store/connections'
 import { disconnectOnRuleDisable } from '@/store/settings'
 import type { Rule } from '@/types'
 import dayjs from 'dayjs'
@@ -51,7 +50,7 @@ export const toggleRuleDisabledWithSideEffects = async (rule: Rule) => {
       return ruleTypeMatches && rulePayloadMatches
     })
 
-    matchingConnections.forEach((conn) => disconnectByIdAPI(conn.id).catch(() => {}))
+    matchingConnections.forEach((conn) => disconnectById(conn.id).catch(() => {}))
   }
 
   await fetchRules()

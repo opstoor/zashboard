@@ -1,3 +1,4 @@
+import { closedBatch } from '@/assembly/connections'
 import {
   getConnectionChains,
   getConnectionDownload,
@@ -15,7 +16,7 @@ import {
 } from '@/helper/indexeddb'
 import type { Connection } from '@/types'
 import ipaddr from 'ipaddr.js'
-import { shallowRef } from 'vue'
+import { shallowRef, watch } from 'vue'
 import { activeBackend } from './setup'
 
 const uuid = () => activeBackend.value?.uuid || ''
@@ -409,3 +410,13 @@ export const saveConnectionHistory = (newClosedConnections: Connection[]) => {
 
   accumulateCurrent(newClosedConnections)
 }
+
+watch(
+  activeBackend,
+  (backend) => {
+    if (backend) initAggregatedDataMap()
+  },
+  { immediate: true },
+)
+
+watch(closedBatch, (batch) => saveConnectionHistory(batch))

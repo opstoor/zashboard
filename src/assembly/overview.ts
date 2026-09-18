@@ -1,6 +1,12 @@
-import { fetchMemoryAPI, fetchTrafficAPI } from '@/assembly/overview'
-import { ref, watch } from 'vue'
+import type { HonkStats } from '@/types'
+import { ref, shallowRef, watch } from 'vue'
+import { can } from './backend'
 import { activeConnections, downloadTotal, uploadTotal } from './connections'
+import { driver } from './driver'
+
+const trafficStream = () => driver().metrics.traffic()
+
+const memoryStream = () => driver().metrics.memory()
 
 export interface HistoryPoint {
   name: number
@@ -36,9 +42,7 @@ let cancel: (() => void) | undefined
 export const initSatistic = () => {
   stopSatistic()
 
-  const { data: memoryWsData, close: memoryWsClose } = fetchMemoryAPI<{
-    inuse: number
-  }>()
+  const { data: memoryWsData, close: memoryWsClose } = memoryStream()
   const unwatchMemory = watch(
     () => memoryWsData.value,
     (data) => {
@@ -64,12 +68,7 @@ export const initSatistic = () => {
     },
   )
 
-  const { data: trafficWsData, close: trafficWsClose } = fetchTrafficAPI<{
-    down: number
-    up: number
-    downTotal?: number
-    upTotal?: number
-  }>()
+  const { data: trafficWsData, close: trafficWsClose } = trafficStream()
   const unwatchTraffic = watch(
     () => trafficWsData.value,
     (data) => {
@@ -116,4 +115,38 @@ export const stopSatistic = () => {
   uploadSpeedHistory.value = makeInitValue()
   memoryHistory.value = makeInitValue()
   connectionsHistory.value = makeInitValue()
+}
+
+export const honkStats = shallowRef<HonkStats>()
+
+const POLL_INTERVAL = 5000
+
+let timer: ReturnType<typeof setInterval> | undefined
+
+export const fetchHonkStats = async () => {
+  if (!can('runtimeStats')) {
+    honkStats.value = undefined
+    return
+  }
+
+  try {
+    honkStats.value = await driver().metrics.fetchRuntimeStats()
+  } catch {
+    honkStats.value = undefined
+  }
+}
+
+export const startHonkStats = () => {
+  if (timer) return
+
+  fetchHonkStats()
+  timer = setInterval(fetchHonkStats, POLL_INTERVAL)
+}
+
+export const stopHonkStats = () => {
+  if (timer) {
+    clearInterval(timer)
+    timer = undefined
+  }
+  honkStats.value = undefined
 }

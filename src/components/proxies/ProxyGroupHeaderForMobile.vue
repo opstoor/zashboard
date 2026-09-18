@@ -57,10 +57,11 @@
 </template>
 
 <script setup lang="ts">
+import { hiddenGroupMap } from '@/store/proxies'
 import { KEYBOARD_SHORTCUT_ACTION, useKeyboardShortcuts } from '@/composables/keyboard'
 import { getDownloadSpeedByProxyGroup } from '@/composables/proxyGroupTraffic'
 import { isHiddenGroup } from '@/helper'
-import { hiddenGroupMap, proxyMap } from '@/assembly/proxies'
+import { proxyMap } from '@/assembly/proxies'
 import { useTooltip } from '@/helper/tooltip'
 import { prettyBytesHelper } from '@/helper/utils'
 import { manageHiddenGroup, twoColumnProxyGroup } from '@/store/settings'

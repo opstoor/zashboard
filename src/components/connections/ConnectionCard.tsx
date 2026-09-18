@@ -1,6 +1,6 @@
 import {
-  blockConnectionByIdAPI,
-  disconnectByIdAPI,
+  blockConnectionById,
+  disconnectById,
   getConnectionDisplayValue,
 } from '@/assembly/connections'
 import { useBounceOnVisible } from '@/composables/bouncein'
@@ -184,7 +184,7 @@ export default defineComponent<{
               class="btn btn-circle btn-xs"
               onClick={(e) => {
                 e.stopPropagation()
-                disconnectByIdAPI(conn.id).catch(notifyRequestError)
+                disconnectById(conn.id).catch(notifyRequestError)
               }}
             >
               <XMarkIcon class="h-4 w-4" />
@@ -197,7 +197,7 @@ export default defineComponent<{
                 class="btn btn-circle btn-xs"
                 onClick={(e) => {
                   e.stopPropagation()
-                  blockConnectionByIdAPI(conn.id).catch(notifyRequestError)
+                  blockConnectionById(conn.id).catch(notifyRequestError)
                 }}
               >
                 <NoSymbolIcon class="h-4 w-4" />

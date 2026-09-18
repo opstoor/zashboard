@@ -216,8 +216,8 @@
 
 <script setup lang="ts">
 import {
-  blockConnectionByIdAPI,
-  disconnectByIdAPI,
+  blockConnectionById,
+  disconnectById,
   getConnectionDisplayValue,
 } from '@/assembly/connections'
 import { useConnections } from '@/composables/connections'
@@ -346,7 +346,7 @@ const columnDefinitions: ColumnDef<Connection>[] = [
             const connection = row.original
 
             e.stopPropagation()
-            disconnectByIdAPI(connection.id).catch(notifyRequestError)
+            disconnectById(connection.id).catch(notifyRequestError)
           },
         },
         [
@@ -365,7 +365,7 @@ const columnDefinitions: ColumnDef<Connection>[] = [
               const connection = row.original
 
               e.stopPropagation()
-              blockConnectionByIdAPI(connection.id).catch(notifyRequestError)
+              blockConnectionById(connection.id).catch(notifyRequestError)
             },
           },
           [

@@ -38,12 +38,13 @@
 </template>
 
 <script setup lang="ts">
+import { hiddenGroupMap } from '@/store/proxies'
 import { KEYBOARD_SHORTCUT_ACTION, useKeyboardShortcuts } from '@/composables/keyboard'
 import { getDownloadSpeedByProxyGroup } from '@/composables/proxyGroupTraffic'
 import { isHiddenGroup } from '@/helper'
 import { checkTruncation, useTooltip } from '@/helper/tooltip'
 import { prettyBytesHelper } from '@/helper/utils'
-import { hiddenGroupMap, proxyMap } from '@/assembly/proxies'
+import { proxyMap } from '@/assembly/proxies'
 import { manageHiddenGroup, proxyGroupIconMargin, proxyGroupIconSize } from '@/store/settings'
 import { twMerge } from 'tailwind-merge'
 import { computed } from 'vue'

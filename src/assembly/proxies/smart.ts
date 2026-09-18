@@ -1,4 +1,4 @@
-import { fetchSmartWeightsAPI } from '@/assembly/proxies'
+import { driver } from '@/assembly/driver'
 import type { NodeRank } from '@/types'
 import { ref } from 'vue'
 
@@ -22,7 +22,7 @@ export const initSmartWeights = async () => {
   let smartWeights: Record<string, NodeRank[]> | null = null
 
   try {
-    smartWeights = (await fetchSmartWeightsAPI()).data.weights
+    smartWeights = await driver().proxies.fetchSmartWeights()
   } catch {
     smartWeights = null
   }

@@ -1,15 +1,15 @@
-import { toggleRuleDisabledAPI, toggleRuleDisabledRefindAPI } from '@/api/clash'
+import { ruleProviderList, rules } from '@/assembly/rules'
 import { RULE_TAB_TYPE } from '@/constant'
 import { toSearchRegex } from '@/helper/search'
-import type { Rule, RuleProvider } from '@/types'
-import { computed, ref } from 'vue'
-import * as clash from './clash'
+import { computed, ref, watch } from 'vue'
+import { activeBackend } from './setup'
 
 export const rulesFilter = ref('')
 export const rulesTabShow = ref(RULE_TAB_TYPE.RULES)
 
-export const rules = ref<Rule[]>([])
-export const ruleProviderList = ref<RuleProvider[]>([])
+watch(activeBackend, (backend) => {
+  if (backend) rulesTabShow.value = RULE_TAB_TYPE.RULES
+})
 
 export const renderRules = computed(() => {
   const searchRegex = toSearchRegex(rulesFilter.value)
@@ -34,12 +34,3 @@ export const renderRulesProvider = computed(() => {
     return searchRegex.testAny([ruleProvider.name, ruleProvider.behavior, ruleProvider.vehicleType])
   })
 })
-
-export const fetchRules = () => clash.fetchRules()
-
-export const toggleRuleDisabled = (rule: Rule, disabled: boolean) =>
-  rule.uuid
-    ? toggleRuleDisabledRefindAPI(rule.uuid)
-    : toggleRuleDisabledAPI({ [rule.index]: disabled })
-
-export { updateRuleProviderAPI } from '@/api/clash'

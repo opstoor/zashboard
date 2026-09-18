@@ -1,14 +1,14 @@
 import { can } from '@/assembly/backend'
 import {
   fetchConfigs,
-  flushDNSCacheAPI,
-  flushFakeIPAPI,
-  reloadConfigsAPI,
-  updateGeoDataAPI,
+  flushDNSCache,
+  flushFakeIP,
+  reloadConfigs,
+  updateGeoData,
 } from '@/assembly/config'
-import { fetchProxies, flushSmartGroupWeightsAPI, hasSmartGroup } from '@/assembly/proxies'
+import { fetchProxies, flushSmartGroupWeights, hasSmartGroup } from '@/assembly/proxies'
 import { fetchRules } from '@/assembly/rules'
-import { restartCoreAPI } from '@/assembly/version'
+import { restartCore } from '@/assembly/version'
 import { isSettingHidden } from '@/composables/settings'
 import { BACKEND_ITEM_KEYS } from '@/config/settingsItems'
 import { showConfirmDialog } from '@/helper/confirmDialog'
@@ -113,7 +113,7 @@ export const backendActions = computed<BackendAction[]>(() => {
         runOnce(
           'restartCore',
           isCoreRestarting,
-          restartCoreAPI,
+          restartCore,
           'restartCoreSuccess',
           () => setTimeout(reloadAll, 500),
           { title: 'restartCore', message: 'restartCoreConfirm' },
@@ -132,7 +132,7 @@ export const backendActions = computed<BackendAction[]>(() => {
         runOnce(
           'reloadConfigs',
           isConfigReloading,
-          reloadConfigsAPI,
+          reloadConfigs,
           'reloadConfigsSuccess',
           reloadAll,
         ),
@@ -158,13 +158,7 @@ export const backendActions = computed<BackendAction[]>(() => {
       running: isGeoUpdating.value,
       opensModal: false,
       run: () =>
-        runOnce(
-          'updateGeoDatabase',
-          isGeoUpdating,
-          updateGeoDataAPI,
-          'updateGeoSuccess',
-          reloadAll,
-        ),
+        runOnce('updateGeoDatabase', isGeoUpdating, updateGeoData, 'updateGeoSuccess', reloadAll),
     })
   }
 
@@ -174,8 +168,7 @@ export const backendActions = computed<BackendAction[]>(() => {
     icon: TrashIcon,
     running: isDNSCacheFlushing.value,
     opensModal: false,
-    run: () =>
-      runOnce('flushDNSCache', isDNSCacheFlushing, flushDNSCacheAPI, 'flushDNSCacheSuccess'),
+    run: () => runOnce('flushDNSCache', isDNSCacheFlushing, flushDNSCache, 'flushDNSCacheSuccess'),
   })
 
   actions.push({
@@ -184,7 +177,7 @@ export const backendActions = computed<BackendAction[]>(() => {
     icon: TrashIcon,
     running: isFakeIPFlushing.value,
     opensModal: false,
-    run: () => runOnce('flushFakeIP', isFakeIPFlushing, flushFakeIPAPI, 'flushFakeIPSuccess'),
+    run: () => runOnce('flushFakeIP', isFakeIPFlushing, flushFakeIP, 'flushFakeIPSuccess'),
   })
 
   if (hasSmartGroup.value) {
@@ -198,7 +191,7 @@ export const backendActions = computed<BackendAction[]>(() => {
         runOnce(
           'flushSmartWeights',
           isSmartWeightsFlushing,
-          flushSmartGroupWeightsAPI,
+          flushSmartGroupWeights,
           'flushSmartWeightsSuccess',
         ),
     })

@@ -1,4 +1,4 @@
-import { getStorageAPI } from '@/assembly/storage'
+import { getSyncedSettings } from '@/assembly/storage'
 import { showConfirmDialog } from '@/helper/confirmDialog'
 import { showNotification } from '@/helper/notification'
 import { useStorage } from '@/helper/storage'
@@ -76,7 +76,7 @@ export const syncSettingsFromCore = async ({
   confirm?: boolean
   preserveAutoSyncSetting?: boolean
 } = {}) => {
-  const { data } = await getStorageAPI()
+  const data = await getSyncedSettings()
 
   if (!data || isEmpty(data)) {
     return false

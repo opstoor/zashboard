@@ -42,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+import { proxiesTabShow } from '@/store/proxies'
 import VirtualColumn from '@/components/common/VirtualColumn.vue'
 import ProxiesCtrl from '@/components/controls/ProxiesCtrl'
 import FolderManagerPanel from '@/components/proxies/folders/FolderManagerPanel.vue'
@@ -55,7 +56,6 @@ import { disableProxiesPageScroll, renderProxiesPageItems } from '@/composables/
 import { PROXY_TAB_TYPE } from '@/constant'
 import { isMiddleScreen } from '@/helper/utils'
 import { fetchProxies } from '@/assembly/proxies'
-import { proxiesTabShow } from '@/assembly/proxies'
 import { disableProxiesPageTextSelect, twoColumnProxyGroup } from '@/store/settings'
 import { folderManagerOpen, isProxyFolderModeActive } from '@/store/proxyFolders'
 import { useResizeObserver, useSessionStorage } from '@vueuse/core'

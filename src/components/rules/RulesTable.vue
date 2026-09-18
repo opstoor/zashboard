@@ -43,21 +43,14 @@
 </template>
 
 <script setup lang="ts">
+import { renderRules, renderRulesProvider, rulesFilter, rulesTabShow } from '@/store/rules'
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
 import HighlightText from '@/components/common/HighlightText.vue'
 import ProxyChainPath from '@/components/common/ProxyChainPath.vue'
 import VirtualTable from '@/components/common/VirtualTable.vue'
 import ProxyGroup from '@/components/proxies/ProxyGroup.vue'
 import { proxyGroupList } from '@/assembly/proxies'
-import {
-  fetchRules,
-  renderRules,
-  renderRulesProvider,
-  rules,
-  rulesFilter,
-  rulesTabShow,
-  updateRuleProviderAPI,
-} from '@/assembly/rules'
+import { fetchRules, rules, updateRuleProvider } from '@/assembly/rules'
 import {
   EMPTY_CELL,
   formatRuleHitCount,
@@ -128,7 +121,7 @@ const updateProviderHandler = async (name: string) => {
 
   updatingProviders.value.push(name)
   try {
-    await updateRuleProviderAPI(name)
+    await updateRuleProvider(name)
     await fetchRules()
   } catch (e) {
     notifyRequestError(e)

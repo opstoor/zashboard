@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { probeBackend } from '@/assembly/backend'
+import { probeBackend } from '@/assembly/probe'
 import { startBackendSession } from '@/assembly/session'
 import { backendProbe } from '@/assembly/version'
 import { ROUTE_NAME } from '@/constant'

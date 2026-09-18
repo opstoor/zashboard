@@ -1,6 +1,6 @@
 import {
-  disconnectByIdAPI,
-  fetchConnectionsAPI,
+  activeConnections,
+  closedConnections,
   getConnectionVisibleSearchValues,
 } from '@/assembly/connections'
 import {
@@ -14,7 +14,6 @@ import {
 import {
   getChainsStringFromConnection,
   getConnectionDownload,
-  getConnectionNetwork,
   getConnectionRule,
   getConnectionSourceIP,
   getConnectionStart,
@@ -26,13 +25,8 @@ import {
 import { toSearchRegex } from '@/helper/search'
 import { useStorage } from '@/helper/storage'
 import type { Connection } from '@/types'
-import { watchOnce } from '@vueuse/core'
-import dayjs from 'dayjs'
-import { computed, ref, shallowRef, watch } from 'vue'
-import { initAggregatedDataMap, saveConnectionHistory } from './connHistory'
+import { computed, ref } from 'vue'
 import {
-  autoDisconnectIdleUDP,
-  autoDisconnectIdleUDPTime,
   connectionCardLines,
   connectionTableColumns,
   isConnectionCard,
@@ -66,69 +60,6 @@ export const quickFilterEnabled = useStorage<boolean>('config/quick-filter-enabl
 export const connectionFilter = ref('')
 export const searchHiddenColumns = useStorage<boolean>('config/search-hidden-columns', false)
 export const sourceIPFilter = ref<string[] | null>(null)
-
-export const activeConnections = shallowRef<Connection[]>([])
-export const closedConnections = shallowRef<Connection[]>([])
-export const isPaused = ref(false)
-
-export const downloadTotal = ref(0)
-export const uploadTotal = ref(0)
-
-let cancel: (() => void) | undefined
-
-export const initConnections = () => {
-  stopConnections()
-  initAggregatedDataMap()
-  const ws = fetchConnectionsAPI()
-  const unwatch = watch(ws.data, (snapshot) => {
-    if (!snapshot) return
-
-    if (snapshot.downloadTotal != null && snapshot.uploadTotal != null) {
-      downloadTotal.value = snapshot.downloadTotal
-      uploadTotal.value = snapshot.uploadTotal
-    }
-
-    if (isPaused.value) {
-      return
-    }
-
-    activeConnections.value = snapshot.active
-
-    if (snapshot.closed.length > 0) {
-      closedConnections.value = closedConnections.value.concat(snapshot.closed).slice(-500)
-      saveConnectionHistory(snapshot.closed)
-    }
-  })
-
-  if (autoDisconnectIdleUDP.value) {
-    watchOnce(activeConnections, () => {
-      activeConnections.value
-        .filter((conn) => getConnectionNetwork(conn) !== 'tcp')
-        .forEach((conn) => {
-          const now = dayjs()
-          const start = dayjs(getConnectionStart(conn))
-
-          if (now.diff(start, 'minute') > autoDisconnectIdleUDPTime.value) {
-            disconnectByIdAPI(conn.id).catch(() => {})
-          }
-        })
-    })
-  }
-
-  cancel = () => {
-    unwatch()
-    ws.close()
-  }
-}
-
-export const stopConnections = () => {
-  cancel?.()
-  cancel = undefined
-  activeConnections.value = []
-  closedConnections.value = []
-  downloadTotal.value = 0
-  uploadTotal.value = 0
-}
 
 const isDesc = computed(() => {
   return connectionSortDirection.value === SORT_DIRECTION.DESC

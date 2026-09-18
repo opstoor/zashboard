@@ -333,15 +333,15 @@
 </template>
 
 <script setup lang="ts">
+import { activeConnections } from '@/assembly/connections'
 import SegmentedControl from '@/components/common/SegmentedControl.vue'
 import SelectInput from '@/components/common/SelectInput.vue'
-import { queryDNSAPI } from '@/assembly/config'
+import { queryDNS } from '@/assembly/config'
 import { getPublicIPInfo, type IPInfo } from '@/api/geoip'
 import { getCachedPublicIPInfo } from '@/composables/overview'
 import { IP_INFO_API } from '@/constant'
 import { themeColorScheme } from '@/helper/theme'
 import { prettyBytesHelper } from '@/helper/utils'
-import { activeConnections } from '@/store/connections'
 import { earthIPInfoAPI, earthProjection, earthVisualMode, language, theme } from '@/store/settings'
 import {
   ArrowPathIcon,
@@ -502,7 +502,7 @@ const resolveHostname = (hostname: string) => {
       { type: 'AAAA', answerType: 28 },
     ]) {
       try {
-        const { data } = await queryDNSAPI({ name: hostname, type })
+        const data = await queryDNS({ name: hostname, type })
 
         for (const answer of data.Answer ?? []) {
           const ip = answer.type === answerType ? normalizeIP(answer.data) : null

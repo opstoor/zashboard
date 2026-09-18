@@ -204,7 +204,7 @@
 </template>
 
 <script setup lang="ts">
-import { deleteStorageAPI, setStorageAPI } from '@/assembly/storage'
+import { deleteSyncedSettings, setSyncedSettings } from '@/assembly/storage'
 import { can } from '@/assembly/backend'
 import {
   autoImportSettings,
@@ -306,7 +306,7 @@ const handlerClickUploadSettings = async () => {
       delete settings['config/icon-reflect-list']
     }
 
-    await setStorageAPI(settings)
+    await setSyncedSettings(settings)
     showNotification({
       key: notifyKey,
       content: 'uploadSettingsSuccess',
@@ -351,7 +351,7 @@ const handlerClickDeleteUploadedSettings = async () => {
   isStorageSubmitting.value = true
   const notifyKey = notifyActionPending('deleteUploadedSettings')
   try {
-    await deleteStorageAPI()
+    await deleteSyncedSettings()
     dashboardSettingsDialogShow.value = false
     showNotification({
       key: notifyKey,

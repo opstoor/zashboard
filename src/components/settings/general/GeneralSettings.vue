@@ -194,7 +194,7 @@
 
 <script setup lang="ts">
 import { can, showDisplayAllFeatures } from '@/assembly/backend'
-import { upgradeUIAPI } from '@/assembly/version'
+import { upgradeUI } from '@/assembly/version'
 import DashboardSettings from '@/components/common/DashboardSettings.vue'
 import SelectInput from '@/components/common/SelectInput.vue'
 import TextInput from '@/components/common/TextInput.vue'
@@ -274,7 +274,7 @@ const handlerClickUpgradeUI = async () => {
   isUIUpgrading.value = true
   const notifyKey = notifyActionPending('upgradeDashboard')
   try {
-    await upgradeUIAPI()
+    await upgradeUI()
     handlerUpgradeSuccess(notifyKey)
     setTimeout(() => window.location.reload(), 1000)
   } catch (error) {

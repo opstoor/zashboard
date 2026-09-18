@@ -73,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { isBackendAvailable } from '@/assembly/backend'
+import { isBackendAvailable } from '@/assembly/probe'
 import { startBackendSession } from '@/assembly/session'
 import SideBar from '@/components/sidebar/SideBar.vue'
 import { dockTop } from '@/composables/paddingViews'

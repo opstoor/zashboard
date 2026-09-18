@@ -1,4 +1,4 @@
-import { queryDNSAPI } from '@/assembly/config'
+import { queryDNS } from '@/assembly/config'
 import { resolveClientHostname } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
 import * as ipaddr from 'ipaddr.js'
@@ -154,7 +154,7 @@ async function fetchHostname(ip: string): Promise<string | null> {
   if (!name) return null
 
   try {
-    const { data: result } = await queryDNSAPI({ name, type: 'PTR' })
+    const result = await queryDNS({ name, type: 'PTR' })
 
     if (!result) return null
 

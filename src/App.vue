@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import './assembly/session'
+import './store/connHistory'
 import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import BackendConnectionError from './components/common/BackendConnectionError.vue'

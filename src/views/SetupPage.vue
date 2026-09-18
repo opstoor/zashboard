@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { probeBackend } from '@/assembly/backend'
+import { probeBackend } from '@/assembly/probe'
 import DashboardSettings from '@/components/common/DashboardSettings.vue'
 import ReachabilityIndicator from '@/components/common/ReachabilityIndicator.vue'
 import BackendForm from '@/components/settings/backend/BackendForm.vue'

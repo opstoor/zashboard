@@ -1,16 +1,18 @@
-import { fetchClashVersion, restartCoreAPI, upgradeCoreAPI, upgradeUIAPI } from '@/api/clash'
 import HonkLogo from '@/assets/images/honk.svg'
 import MetacubexLogo from '@/assets/images/metacubex.jpg'
 import { MIHOMO, MIHOMO_CHANNEL } from '@/constant'
+import { fetchWithLocalCache } from '@/helper/cache'
 import { getRequestErrorMessage } from '@/helper/requestError'
 import { autoUpgradeCore, autoUpgradeDashboard, checkUpgradeCore } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
 import type { Backend } from '@/types'
 import { computed, nextTick, ref } from 'vue'
 import { can, core, Core, resetCore } from './backend'
+import { driver } from './driver'
 
 export const version = ref()
 export const isCoreUpdateAvailable = ref(false)
+export const isUIUpdateAvailable = ref(false)
 export const zashboardVersion = ref(__APP_VERSION__)
 
 export type BackendProbe = {
@@ -56,14 +58,19 @@ export const mihomo = computed<[MIHOMO, string] | undefined>(() => {
   }
 })
 
-export const fetchVersionAPI = () => fetchClashVersion()
+export const restartCore = () => driver().system.restartCore()
 
-const probeBackend = async (backend: Backend) => {
+export const upgradeCore = (channel: 'release' | 'alpha' | 'auto') =>
+  driver().system.upgradeCore(channel)
+
+export const upgradeUI = () => driver().system.upgradeUI()
+
+const probeBackendVersion = async (backend: Backend) => {
   const startAt = Date.now()
-  let data
+  let versionString: string
 
   try {
-    ;({ data } = await fetchVersionAPI())
+    versionString = await driver().system.fetchVersion()
   } catch (e) {
     if (activeBackend.value?.uuid === backend.uuid) {
       backendProbe.value = {
@@ -78,7 +85,7 @@ const probeBackend = async (backend: Backend) => {
 
   if (activeBackend.value?.uuid !== backend.uuid) return
 
-  version.value = data?.version || ''
+  version.value = versionString
   core.value = detectCore(version.value)
   backendProbe.value = {
     uuid: backend.uuid,
@@ -89,10 +96,10 @@ const probeBackend = async (backend: Backend) => {
 
   if (!can('coreUpdateCheck') || !checkUpgradeCore.value || backend.disableUpgradeCore) return
 
-  isCoreUpdateAvailable.value = await fetchBackendUpdateAvailableAPI()
+  isCoreUpdateAvailable.value = await fetchIsCoreUpdateAvailable()
 
   if (isCoreUpdateAvailable.value && autoUpgradeCore.value) {
-    upgradeCoreAPI('auto').catch(() => {})
+    upgradeCore('auto').catch(() => {})
   }
 }
 
@@ -113,83 +120,29 @@ export const probeActiveBackend = () => {
     ? { uuid: backend.uuid, status: 'probing', latency: 0, message: '' }
     : undefined
 
-  probe = backend ? probeBackend(backend).catch(() => {}) : Promise.resolve()
+  probe = backend ? probeBackendVersion(backend).catch(() => {}) : Promise.resolve()
   return probe
 }
 
-const CACHE_DURATION = 1000 * 60 * 60
+const fetchIsCoreUpdateAvailable = async () => {
+  const versionNumber = mihomo.value?.[1] ?? version.value
+  const { assets } = await fetchWithLocalCache<{ assets: { name: string }[] }>(
+    MIHOMO_CHANNEL[mihomo.value?.[0] ?? MIHOMO.Meta].check_update_url,
+    versionNumber,
+  )
 
-interface CacheEntry<T> {
-  timestamp: number
-  version: string
-  data: T
+  return !assets.some(({ name }) => name.includes(versionNumber))
 }
 
-async function fetchWithLocalCache<T>(url: string, version: string): Promise<T> {
-  const cacheKey = 'cache/' + url
-  const cacheRaw = localStorage.getItem(cacheKey)
-
-  if (cacheRaw) {
-    try {
-      const cache: CacheEntry<T> = JSON.parse(cacheRaw)
-      const now = Date.now()
-
-      if (now - cache.timestamp < CACHE_DURATION && cache.version === version) {
-        return cache.data
-      } else {
-        localStorage.removeItem(cacheKey)
-      }
-    } catch (e) {
-      console.warn('Failed to parse cache for', url, e)
-    }
-  }
-
-  const response = await fetch(url)
-  if (!response.ok) {
-    throw new Error(`Fetch failed: ${response.status} ${response.statusText}`)
-  }
-
-  const data: T = await response.json()
-  const newCache: CacheEntry<T> = {
-    timestamp: Date.now(),
-    version,
-    data,
-  }
-
-  localStorage.setItem(cacheKey, JSON.stringify(newCache))
-  return data
-}
-
-export const fetchIsUIUpdateAvailable = async () => {
+export const checkUIUpdate = async () => {
   const { tag_name } = await fetchWithLocalCache<{ tag_name: string }>(
     'https://api.github.com/repos/Zephyruso/zashboard/releases/latest',
     zashboardVersion.value,
   )
 
-  return Boolean(tag_name && tag_name !== `v${zashboardVersion.value}`)
-}
+  isUIUpdateAvailable.value = Boolean(tag_name && tag_name !== `v${zashboardVersion.value}`)
 
-const check = async (url: string, versionNumber: string) => {
-  const { assets } = await fetchWithLocalCache<{ assets: { name: string }[] }>(url, versionNumber)
-  const alreadyLatest = assets.some(({ name }) => name.includes(versionNumber))
-
-  return !alreadyLatest
-}
-
-export const fetchBackendUpdateAvailableAPI = async () => {
-  return await check(
-    MIHOMO_CHANNEL[mihomo.value?.[0] ?? MIHOMO.Meta].check_update_url,
-    mihomo.value?.[1] ?? version.value,
-  )
-}
-
-export const isUIUpdateAvailable = ref(false)
-
-export const checkUIUpdate = async () => {
-  isUIUpdateAvailable.value = await fetchIsUIUpdateAvailable()
   if (isUIUpdateAvailable.value && autoUpgradeDashboard.value) {
-    upgradeUIAPI().catch(() => {})
+    upgradeUI().catch(() => {})
   }
 }
-
-export { restartCoreAPI, upgradeCoreAPI, upgradeUIAPI }

@@ -125,7 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import { probeBackend } from '@/assembly/backend'
+import { probeBackend } from '@/assembly/probe'
 import BackendStatusDot from '@/components/common/BackendStatusDot.vue'
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
 import ReachabilityIndicator from '@/components/common/ReachabilityIndicator.vue'
