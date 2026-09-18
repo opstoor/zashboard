@@ -96,8 +96,9 @@
   }
 }
 
-.nav-item:active {
-  background-color: color-mix(in srgb, var(--color-base-content) 8%, transparent);
+.nav-item:not([aria-current='page'], [aria-selected='true']):active {
+  background-color: color-mix(in srgb, var(--color-base-content) 10%, transparent);
+  transition-duration: 0s;
 }
 
 .nav-item:focus-visible {
