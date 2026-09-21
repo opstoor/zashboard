@@ -20,6 +20,10 @@
     );
   }
 
+  .proxy-active-card .latency-tag {
+    @apply bg-base-100;
+  }
+
   .bg-base-150 {
     background-color: color-mix(
       in oklab,
