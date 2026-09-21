@@ -30,6 +30,14 @@ export const fromNow = (timestamp: string | number) => {
   return dayjs(timestamp).fromNow()
 }
 
+export const prettyUptimeHelper = (seconds: number) => {
+  if (!Number.isFinite(seconds) || seconds < 0) return '-'
+
+  const uptime = dayjs.duration(seconds, 'seconds')
+
+  return uptime.days() > 0 ? uptime.format('D[d] HH:mm:ss') : uptime.format('HH:mm:ss')
+}
+
 export const getDashboardSettingsFromStorage = () => {
   const settings: Record<string, string> = {}
 
@@ -113,8 +121,10 @@ export const getBackendFromUrl = () => {
   )
 
   if (query.has('hostname')) {
+    const type = query.get('type') === 'dae' ? 'dae' : 'clash'
+
     return {
-      type: 'clash' as BackendType,
+      type: type as BackendType,
       protocol: getProtocolFromQuery(query),
       secondaryPath: query.get('secondaryPath') || '',
       host: query.get('hostname') as string,
