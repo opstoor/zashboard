@@ -26,7 +26,7 @@ export const useOverscrollLock = () => {
   let ignored = false
 
   const onTouchStart = (event: TouchEvent) => {
-    ignored = (event.target as Element | null)?.closest?.('input[type="range"]') != null
+    ignored = (event.target as Element | null)?.closest?.('input[type="range"], .tab-bar') != null
     if (ignored) return
     startX = event.touches[0].clientX
     startY = event.touches[0].clientY

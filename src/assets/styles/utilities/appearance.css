@@ -32,7 +32,7 @@
     );
   }
 
-  :is(.bg-base-200, .dock) {
+  :is(.bg-base-200, .tab-bar) {
     background-color: color-mix(
       in oklab,
       var(--color-base-200) var(--app-surface-alpha),
@@ -78,13 +78,13 @@
     backdrop-filter: var(--app-glass, none);
   }
 
-  :is(.modal-box, .dock, .floating-menu-panel, .overlay-glass) {
+  :is(.modal-box, .tab-bar, .floating-menu-panel, .overlay-glass) {
     --app-glass: var(--app-glass-overlay);
     -webkit-backdrop-filter: var(--app-glass-overlay);
     backdrop-filter: var(--app-glass-overlay);
   }
 
-  .dock {
+  .tab-bar {
     -webkit-backdrop-filter: var(--app-glass-overlay) saturate(180%);
     backdrop-filter: var(--app-glass-overlay) saturate(180%);
   }
