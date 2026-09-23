@@ -156,6 +156,7 @@ checkUIUpdate()
 }
 
 .dock {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid color-mix(in srgb, var(--color-base-content) 8%, transparent);
   box-shadow:
