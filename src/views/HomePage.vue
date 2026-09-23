@@ -18,10 +18,14 @@
         class="relative flex-1 overflow-hidden"
         ref="swiperRef"
       >
-        <div class="absolute flex h-full w-full flex-col overflow-y-auto">
+        <div
+          ref="pageRef"
+          class="absolute flex h-full w-full flex-col overflow-y-auto"
+        >
           <Transition
             :name="pageTransitionName"
             :mode="pageTransitionMode"
+            @before-leave="onPageBeforeLeave"
           >
             <Component :is="Component" />
           </Transition>
@@ -96,7 +100,7 @@ import { ref, watch } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
 
 const router = useRouter()
-const { swiperRef } = useSwipeRouter()
+const { swiperRef, pageRef, onPageBeforeLeave } = useSwipeRouter()
 const sidebarLayoutCollapsed = ref(isSidebarCollapsed.value)
 
 const dockRef = ref<HTMLDivElement>()
@@ -264,26 +268,26 @@ checkUIUpdate()
 }
 
 .slide-left-enter-from {
-  transform: translateX(100%);
+  transform: translateX(calc(100% + var(--swipe-offset, 0px)));
 }
 .slide-left-enter-to {
   transform: translateX(0);
 }
 .slide-left-leave-from {
-  transform: translateX(0);
+  transform: translateX(var(--swipe-offset, 0px));
 }
 .slide-left-leave-to {
   transform: translateX(-100%);
 }
 
 .slide-right-enter-from {
-  transform: translateX(-100%);
+  transform: translateX(calc(-100% + var(--swipe-offset, 0px)));
 }
 .slide-right-enter-to {
   transform: translateX(0);
 }
 .slide-right-leave-from {
-  transform: translateX(0);
+  transform: translateX(var(--swipe-offset, 0px));
 }
 .slide-right-leave-to {
   transform: translateX(100%);
